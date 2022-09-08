@@ -1,0 +1,55 @@
+.tab-outlet{
+    background-color: #333f48;
+    width: 100%;
+    display: flex;
+
+}
+
+.nav-link.active{
+    border-radius: 0px ;
+    background-color: #f6f6f6 !important;
+    position: relative;
+}
+.nav-link.active::before{
+    content: "";
+    display: block;
+    background: #da291c;
+    border-radius: 5px;
+    height: 3px;
+    width: 16px;
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nav-link{
+    line-height: 48px;
+    border: none !important;
+    color:white;
+    font-size: 15px;
+    padding: 0;
+    transition: none;
+}
+.nav-link:hover{
+    color: white;
+}
+.nav-item{
+    flex: 1 !important;
+    text-align: center;
+}
+
+.tab-price__link{
+    line-height: 48px;
+    display: block;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+}
+.tab-price__link:hover{
+    color: #333f48;
+}
+
+.tab-price__link.active{
+    background: #da291c;
+    color: #fff;
+}

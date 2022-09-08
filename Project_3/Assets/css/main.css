@@ -1,0 +1,97 @@
+.endow-img{
+    width: 100%;
+}
+
+
+/*block contact*/
+.block-subscribe{
+    background-color: #f6f6f6;
+    height: 120px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    padding: 0 55px 0 60px;
+    border-radius: 20px 0 0 0;
+
+}
+.block-social{
+    background-color: #f6f6f6;
+    height: 120px;
+    padding: 0 55px 0 60px;
+    border-radius: 0px 0 20px 0;
+}
+.block-subscribe p,.block-social p{
+    font-size: 20px;
+    margin-right: 20px;
+    font-weight: 700;
+    color: #333f48;
+}
+
+.form-subscribe{
+    height: 48px;
+    padding: 5px 15px;
+}
+
+.form-subscribe  button{
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-image: url(../img/send-icon.svg);
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+}
+
+
+.block-social a{
+    width: 40px;
+    height: 40px;
+    margin-left: 33px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 4px;
+}
+.facebook-icon{
+    background-image: url(../img/fb-icon.svg);
+}
+
+.instagram-icon{
+    background-image: url(../img/insta-icon.svg);
+}
+
+.youtube-icon{
+    background-image: url(../img/youtube-icon.svg);
+
+}
+
+/*news*/
+.news-name{
+    font-weight: 600;
+    cursor: pointer;
+    margin: 25px 0 10px 0;
+    display: block;
+    display: -webkit-box;
+    height: 42px;
+    font-size: 16px;
+    line-height: 20px;
+    -webkit-line-clamp: 2;  /* số dòng hiển thị */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 20px;
+}
+.news-img{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding-top: 50%;
+}
+.news-name:hover{
+    color: #DA291C;
+}
+.news-time{
+    color: #c8c7cc;
+}

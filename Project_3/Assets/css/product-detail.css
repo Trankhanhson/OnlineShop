@@ -1,0 +1,131 @@
+.detail-img-side img{
+    width: 100%;
+}   
+.list-img{
+    width: 100px;
+    min-width: 100px;
+    margin: -2px 0;
+}
+.main-img{
+    transform-origin: var(--x) var(--y);
+}
+
+.main-img:hover{
+    transform: scale(2);
+}
+
+.list-img-item{
+    width: 100px;
+    height: 146px;
+    opacity: 0.5;
+    margin: 2px  0;
+    cursor: pointer;
+}
+.list-img-item.slick-current{
+    opacity: 1;
+    border: 1px solid #333f48;
+}
+.slick-slide.product{
+    padding: 0 3px !important;
+}
+.product-color.detail-color{
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+}
+.detail-list-color p,.detail-list-size p{
+    color:#71797f;
+    font-size: 13px;
+}
+.detail-list-color span,.detail-list-size span{
+    color:#71797f;
+    font-size: 13px;
+}
+.size-guide{
+    color:#63B1BC;
+    font-size: 13px;
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.btn-addCart{
+    width: 100%;
+    line-height: 46px;
+    text-align: center;
+    color: white;
+    background-color: #333f48;
+    font-weight: 600;
+}
+.btn-find-store{
+    width: 100%;
+    line-height: 46px;
+    text-align: center;
+    color: var(--primary-text-color);
+    background-color: white;
+    border: 1px solid #000; 
+    font-weight: 600;
+}
+
+.detail-like,.detail-share{
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.card-header{
+    padding: 0;
+
+}
+
+.collapsed-btn{
+    width: 100% !important;
+    text-align: start;
+    background-color: white;
+    outline: none; 
+    color: #71797f;
+    font-weight: 500;
+    position: relative;
+}
+.card-body{
+    font-weight: 400;
+    font-size: 14px;
+    color:#71797f;
+}
+.card.card-detail{
+    border: none;
+}
+.btn-check:focus+.btn, .btn:focus{
+    box-shadow:none;
+
+}
+.card-header{
+    border-bottom: none;
+}
+
+.related-products{
+    background-color: #f9f9f9;
+    padding: 40px 40px 40px 0;
+    margin-top: 80px;
+    margin-bottom: 100px;
+}
+.related-products h3{
+    color:#71797f;
+    margin-bottom: 30px;
+    font-weight: 400;
+    font-size: 36px;
+}
+
+.collapsed-btn::before{
+    content: "-";
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.collapsed-btn.collapsed::before{
+    content: "+";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}

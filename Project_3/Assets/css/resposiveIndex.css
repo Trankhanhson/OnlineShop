@@ -1,0 +1,38 @@
+
+/*xl*/
+@media (max-width:1400px){
+    .active.header-link::before{
+        width: 100%;
+    }
+    .header-link{
+        padding: 5px 0;
+    }
+}
+/*lg*/
+@media (max-width:1199px){
+    .container-main{
+        padding: 0 60px;
+    }
+
+}
+/*md*/
+@media (max-width:991px){
+    h2.section-heading{
+        font-weight: 600;
+
+    }
+    .container-main{
+        padding: 0 30px;
+    }
+}
+
+/*sm*/
+@media (max-width:767px){
+    .container-main{
+        padding: 0 10px;
+    }
+}
+
+
+
+

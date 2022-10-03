@@ -1,0 +1,135 @@
+﻿@model Models.Framework.Product
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section jsFooter{
+    <script src="~/Assets/Admin/js/productController.js"></script>
+}
+
+<div style="padding: 0 50px;">
+    <h4 class="text-primary font-weight-bold mb-5">Thêm sản phẩm</h4>
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data", id = "formCreate" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <label for="" class="text-primary mb-0 font-weight-bold">Tên sản phẩm <i class="fa-solid fa-circle-exclamation"></i></label>
+            <div class="input-wrap  active">
+                <input type="text" id="name" class="input-create text-dark" autofocus>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <label for="" class="text-primary mb-0 font-weight-bold">Chất liệu <i class="fa-solid fa-circle-exclamation"></i></label>
+            <div class="input-wrap">
+                <input type="text" id="material" class="input-create text-dark">
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <label for="" class="text-primary mb-0 font-weight-bold">Mô tả</label>
+            <div class="input-wrap">
+                <input type="text" id="description" class="input-create text-dark">
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Loại <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        @Html.DropDownListFor(model => model.CatId, ViewBag.Parents as SelectList, new { @class = "form-control input-create", @style = "cursor:pointer", @id = "catid" })
+                        @Html.ValidationMessageFor(model => model.CatId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá nhập <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        <input type="text" id="importPrice" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá bán <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        <input type="text" id="Price" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá khuyến mãi</label>
+                    <div class="input-wrap">
+                        <input type="text" id="pricePromotion" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Bắt đầu khuyến mại</label>
+                    <div class="input-wrap">
+                        <input type="text" id="startPromotion" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Kết thúc khuyến mại</label>
+                    <div class="input-wrap">
+                        <input type="text" id="stopPromotion" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between px-3 py-2 mt-3 align-items-center text-primary font-weight-bold method-header" data-bs-toggle="collapse" href="#method" aria-expanded="false" aria-controls="method">
+            <span>Thuộc tính</span>
+            <span><i class="fa-solid fa-chevron-up"></i></span>
+        </div>
+        <div class="collapse method-content px-4 pt-4 p2-3" id="method">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <label for="" class="text-primary mb-0 font-weight-bold">Màu sắc</label>
+                <div class="input-wrap wrap-color d-flex">
+                    <div class="dropdown method-dropdown__wrap">
+                        <button class="btn dropdown-toggle method-dropdown" type="button" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nhấn để chọn màu
+                        </button>
+                        <ul class="dropdown-menu method-dropdown__list" aria-labelledby="dropdownColor">
+                            @foreach (var color in ViewBag.ListColor)
+                            {
+                                <li class="method-dropdown__item"><a class="dropdown-item method-dropdown__item-link " href="#" data-idColor="@color.ProColorID"><div class="method-image-color" style="background-image: url('https://media.canifa.com/attribute/swatch/images/sm095.png');"></div><p>@color.NameColor </p></a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-imgItem">
+
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <label for="" class="text-primary mb-0 font-weight-bold">Kích thước</label>
+                <div class="input-wrap d-flex wrap-size">
+                    <div class="dropdown method-dropdown__wrap">
+                        <button class="btn dropdown-toggle method-dropdown" type="button" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nhấn để chọn màu
+                        </button>
+                        <ul class="dropdown-menu method-dropdown__list" aria-labelledby="dropdownColor">
+                            @foreach(var size in ViewBag.ListSize)
+                            {
+                                <li class="method-dropdown__item"><a class="dropdown-item method-dropdown__item-link" data-idSize="@size.ProSizeID" href="#"><p>@size.NameSize</p></a></li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- <input type="text" id="size-input" class="input-create text-dark" placeholder="Nhập giá trị và nhấn enter"> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="box-options mt-4 mb-4">
+
+        </div>
+        <div class="text-end"><botton class="btn-save btn btn-primary">Lưu</botton></div>
+    }
+</div>

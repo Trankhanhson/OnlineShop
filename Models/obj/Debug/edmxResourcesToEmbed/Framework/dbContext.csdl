@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClothesShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CatId" />
+    </Key>
+    <Property Name="CatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ParentID" Type="Int32" />
+    <Property Name="CatName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Slug" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_Product_Category" FromRole="Category" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="ImportBill">
+    <Key>
+      <PropertyRef Name="ImpId" />
+    </Key>
+    <Property Name="ImpId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ImpDate" Type="DateTime" Precision="3" />
+    <Property Name="StaffId" Type="Int32" />
+    <Property Name="MoneyTotal" Type="Int32" />
+    <NavigationProperty Name="ImportBillDetails" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBill" ToRole="ImportBillDetail" />
+    <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_ImportBill_User1" FromRole="ImportBill" ToRole="User" />
+  </EntityType>
+  <EntityType Name="ImportBillDetail">
+    <Key>
+      <PropertyRef Name="ProVariationID" />
+      <PropertyRef Name="ImpId" />
+    </Key>
+    <Property Name="ProVariationID" Type="Int64" Nullable="false" />
+    <Property Name="ImpId" Type="Int64" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="ImportPrice" Type="Int32" />
+    <NavigationProperty Name="ImportBill" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBillDetail" ToRole="ImportBill" />
+    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_ImportBillDetail_ProductVariation" FromRole="ImportBillDetail" ToRole="ProductVariation" />
+  </EntityType>
+  <EntityType Name="News">
+    <Key>
+      <PropertyRef Name="NewID" />
+    </Key>
+    <Property Name="NewID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PublicDate" Type="DateTime" Precision="3" />
+    <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_News_User" FromRole="News" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrdID" />
+    </Key>
+    <Property Name="OrdID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int64" />
+    <Property Name="IDPromotionOrder" Type="Int64" />
+    <Property Name="ReceivingAddress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MoneyTotal" Type="Int32" />
+    <Property Name="OrderDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+    <NavigationProperty Name="PromotionOrder" Relationship="Self.FK_Order_PromotionOrder1" FromRole="Order" ToRole="PromotionOrder" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="ProVariationID" />
+      <PropertyRef Name="OrdID" />
+    </Key>
+    <Property Name="ProVariationID" Type="Int64" Nullable="false" />
+    <Property Name="OrdID" Type="Int64" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
+    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="OrderDetail" ToRole="ProductVariation" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProId" />
+    </Key>
+    <Property Name="ProId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CatId" Type="Int32" />
+    <Property Name="ProName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Material" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="PromotionPrice" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="StartPromotion" Type="DateTime" Precision="3" />
+    <Property Name="StopPromotion" Type="DateTime" Precision="3" />
+    <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
+    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
+    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="Product" ToRole="ProductVariation" />
+  </EntityType>
+  <EntityType Name="ProductColor">
+    <Key>
+      <PropertyRef Name="ProColorID" />
+    </Key>
+    <Property Name="ProColorID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ImageColor" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_ProductColor" FromRole="ProductColor" ToRole="ProductImage" />
+    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_ProductColor" FromRole="ProductColor" ToRole="ProductVariation" />
+  </EntityType>
+  <EntityType Name="ProductSize">
+    <Key>
+      <PropertyRef Name="ProSizeID" />
+    </Key>
+    <Property Name="ProSizeID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_ProductSize" FromRole="ProductSize" ToRole="ProductVariation" />
+  </EntityType>
+  <EntityType Name="PromotionOrder">
+    <Key>
+      <PropertyRef Name="IDPromotionOrder" />
+    </Key>
+    <Property Name="IDPromotionOrder" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PromotionPrice" Type="Int32" />
+    <Property Name="AmountPromotion" Type="Int32" />
+    <Property Name="StartPromotion" Type="DateTime" Precision="3" />
+    <Property Name="StopPromotion" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Order_PromotionOrder1" FromRole="PromotionOrder" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Product_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CatId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImportBillDetail_ImportBill">
+    <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="1" />
+    <End Role="ImportBillDetail" Type="Self.ImportBillDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ImportBill">
+        <PropertyRef Name="ImpId" />
+      </Principal>
+      <Dependent Role="ImportBillDetail">
+        <PropertyRef Name="ImpId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_PromotionOrder1">
+    <End Role="PromotionOrder" Type="Self.PromotionOrder" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PromotionOrder">
+        <PropertyRef Name="IDPromotionOrder" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="IDPromotionOrder" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderDetail_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="1" />
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrdID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrdID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ClothesShopEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="ImportBills" EntityType="Self.ImportBill" />
+    <EntitySet Name="ImportBillDetails" EntityType="Self.ImportBillDetail" />
+    <EntitySet Name="News" EntityType="Self.News" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="ProductColors" EntityType="Self.ProductColor" />
+    <EntitySet Name="ProductSizes" EntityType="Self.ProductSize" />
+    <EntitySet Name="PromotionOrders" EntityType="Self.PromotionOrder" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImportBillDetail_ImportBill" Association="Self.FK_ImportBillDetail_ImportBill">
+      <End Role="ImportBill" EntitySet="ImportBills" />
+      <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_PromotionOrder1" Association="Self.FK_Order_PromotionOrder1">
+      <End Role="PromotionOrder" EntitySet="PromotionOrders" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <EntitySet Name="Users" EntityType="ClothesShopModel.User" />
+    <AssociationSet Name="FK_ImportBill_User1" Association="ClothesShopModel.FK_ImportBill_User1">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ImportBill" EntitySet="ImportBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="News" EntitySet="News" />
+    </AssociationSet>
+    <EntitySet Name="ProductImages" EntityType="ClothesShopModel.ProductImage" />
+    <AssociationSet Name="FK_ProductImage_Product" Association="ClothesShopModel.FK_ProductImage_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductImage" EntitySet="ProductImages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductImage_ProductColor" Association="ClothesShopModel.FK_ProductImage_ProductColor">
+      <End Role="ProductColor" EntitySet="ProductColors" />
+      <End Role="ProductImage" EntitySet="ProductImages" />
+    </AssociationSet>
+    <EntitySet Name="ProductVariations" EntityType="ClothesShopModel.ProductVariation" />
+    <AssociationSet Name="FK_ImportBillDetail_ProductVariation" Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+      <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderDetail_ProductVariation" Association="ClothesShopModel.FK_OrderDetail_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductVariation_Product" Association="ClothesShopModel.FK_ProductVariation_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductVariation_ProductColor" Association="ClothesShopModel.FK_ProductVariation_ProductColor">
+      <End Role="ProductColor" EntitySet="ProductColors" />
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductVariation_ProductSize" Association="ClothesShopModel.FK_ProductVariation_ProductSize">
+      <End Role="ProductSize" EntitySet="ProductSizes" />
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserAdress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="UserPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="UserEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="Boolean" />
+    <NavigationProperty Name="ImportBills" Relationship="ClothesShopModel.FK_ImportBill_User1" FromRole="User" ToRole="ImportBill" />
+    <NavigationProperty Name="News" Relationship="ClothesShopModel.FK_News_User" FromRole="User" ToRole="News" />
+  </EntityType>
+  <Association Name="FK_ImportBill_User1">
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ImportBill" Role="ImportBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ImportBill">
+        <PropertyRef Name="StaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_News_User">
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.News" Role="News" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="News">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductImage">
+    <Key>
+      <PropertyRef Name="ProColorID" />
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProColorID" Type="Int64" Nullable="false" />
+    <Property Name="ProID" Type="Int64" Nullable="false" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DetailImage1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DetailImage2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DetailImage3" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DetailImage4" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DetailImage5" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="ProductImage" ToRole="Product" />
+    <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductImage_ProductColor" FromRole="ProductImage" ToRole="ProductColor" />
+  </EntityType>
+  <Association Name="FK_ProductImage_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductImage">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductImage_ProductColor">
+    <End Type="ClothesShopModel.ProductColor" Role="ProductColor" Multiplicity="1" />
+    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductColor">
+        <PropertyRef Name="ProColorID" />
+      </Principal>
+      <Dependent Role="ProductImage">
+        <PropertyRef Name="ProColorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductVariation">
+    <Key>
+      <PropertyRef Name="ProVariationID" />
+    </Key>
+    <Property Name="ProVariationID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProId" Type="Int64" />
+    <Property Name="ProSizeID" Type="Int64" />
+    <Property Name="ProColorID" Type="Int64" />
+    <Property Name="Quantity" Type="Int32" />
+    <NavigationProperty Name="ImportBillDetails" Relationship="ClothesShopModel.FK_ImportBillDetail_ProductVariation" FromRole="ProductVariation" ToRole="ImportBillDetail" />
+    <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="ProductVariation" ToRole="OrderDetail" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
+    <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductVariation_ProductColor" FromRole="ProductVariation" ToRole="ProductColor" />
+    <NavigationProperty Name="ProductSize" Relationship="ClothesShopModel.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
+  </EntityType>
+  <Association Name="FK_ImportBillDetail_ProductVariation">
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
+    <End Type="ClothesShopModel.ImportBillDetail" Role="ImportBillDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="ImportBillDetail">
+        <PropertyRef Name="ProVariationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderDetail_ProductVariation">
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
+    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="ProVariationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductVariation_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductVariation">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductVariation_ProductColor">
+    <End Type="ClothesShopModel.ProductColor" Role="ProductColor" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductColor">
+        <PropertyRef Name="ProColorID" />
+      </Principal>
+      <Dependent Role="ProductVariation">
+        <PropertyRef Name="ProColorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductVariation_ProductSize">
+    <End Type="ClothesShopModel.ProductSize" Role="ProductSize" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductSize">
+        <PropertyRef Name="ProSizeID" />
+      </Principal>
+      <Dependent Role="ProductVariation">
+        <PropertyRef Name="ProSizeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

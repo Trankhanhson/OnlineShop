@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bfe46e6ff3f2427fbf9d3c5cedb3b7c7" Name="Diagram1">
+        <EntityTypeShape EntityType="ClothesShopModel.Category" Width="1.5" PointX="1.5" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.Customer" Width="1.5" PointX="3.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.ImportBill" Width="1.5" PointX="6" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.ImportBillDetail" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.News" Width="1.5" PointX="6" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.Order" Width="1.5" PointX="6" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.OrderDetail" Width="1.5" PointX="8.25" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.Product" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductColor" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductSize" Width="1.5" PointX="3.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.PromotionOrder" Width="1.5" PointX="3.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothesShopModel.sysdiagram" Width="1.5" PointX="8.75" PointY="9" IsExpanded="true" />
+        <AssociationConnector Association="ClothesShopModel.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothesShopModel.FK_Order_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ImportBill" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothesShopModel.FK_Order_PromotionOrder1" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_Order" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ClothesShopModel.User" Width="1.5" PointX="3.75" PointY="18" />
+        <AssociationConnector Association="ClothesShopModel.FK_ImportBill_User1" />
+        <AssociationConnector Association="ClothesShopModel.FK_News_User" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductImage" Width="1.5" PointX="6" PointY="0.75" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_ProductColor" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductVariation" Width="1.5" PointX="6" PointY="4.625" />
+        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" />
+        <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_ProductVariation" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

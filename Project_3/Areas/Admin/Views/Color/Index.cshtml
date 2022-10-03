@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Models.Framework.ProductColor>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameColor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageColor)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameColor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageColor)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProColorID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProColorID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProColorID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>

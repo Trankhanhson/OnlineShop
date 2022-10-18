@@ -3,6 +3,9 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+@section jsFooter{
+    <script src="~/Assets/Admin/js/productController.js"></script>
+}
 <!DOCTYPE html>
 
 <html>
@@ -11,36 +14,48 @@
     <title>Create</title>
 </head>
 <body>
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Create", "Color",FormMethod.Post, new { @enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>ProductColor</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.NameColor, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NameColor, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NameColor, "", new { @class = "text-danger" })
-                </div>
+    <div class="form-horizontal">
+        <h4>ProductColor</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.NameColor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NameColor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NameColor, "", new { @class = "text-danger" })
             </div>
+        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.ImageColor, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ImageColor, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ImageColor, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+        <div class="form-group">
+            <div class="col-md-10">
+                <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                    <div class="image-upload-wrap">
+                        <input class="input-file" id="fileimage" name="fileimage" type='file' onchange="uploadImg(this)" />
+                        <div class="drag-text">
+                            <p>ảnh màu</p>
+                        </div>
+                    </div>
+                    <div class="file-upload-content text-start">
+                        <img class="file-upload-image" src="#" alt="your image" />
+                        <div class="image-title-wrap">
+                            <button type="button" class="remove-image" onclick="removeimg(this)">xóa</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
     }
 
     <div>

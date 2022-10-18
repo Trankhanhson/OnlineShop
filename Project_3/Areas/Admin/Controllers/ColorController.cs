@@ -2,6 +2,7 @@
 using Models.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,19 +32,35 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/Color/Create
         [HttpPost]
-        public ActionResult Create(ProductColor proColor)
+        public ActionResult Create(ProductColor proColor,HttpPostedFileBase fileImage)
         {
+            string _fileName = "";
+            string _path = "";
             try
             {
-                ProductColorDAO dao = new ProductColorDAO();
-                dao.Insert(proColor);
-
-                return RedirectToAction("Index");
+                if (fileImage!=null)
+                {
+                    _fileName = Path.GetFileName(fileImage.FileName);
+                    _path = Path.Combine(Server.MapPath("/Upload/ColorImage"), _fileName);
+                    fileImage.SaveAs(_path);
+                    proColor.ImageColor = "/Upload/ColorImage/" + _fileName;
+                }
+                else
+                {
+                    proColor.ImageColor = "/Upload/ColorImage/no-img.jpg";
+                }
             }
             catch
             {
-                return View();
             }
+
+            if (ModelState.IsValid)
+            {
+                ProductColorDAO dao = new ProductColorDAO();
+                dao.Insert(proColor);
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
         // GET: Admin/Color/Edit/5
@@ -68,26 +85,16 @@ namespace Project_3.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/Color/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: Admin/Color/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public JsonResult Delete(int id)
         {
-            try
+            ProductColorDAO productColorDAO = new ProductColorDAO();
+            bool check = productColorDAO.Delete(id);
+            return Json(new
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                result = check
+            });
         }
     }
 }

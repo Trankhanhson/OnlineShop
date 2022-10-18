@@ -17,15 +17,16 @@ namespace Models.Framework
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Category()
         {
-            this.Products = new HashSet<Product>();
+            this.ProductCats = new HashSet<ProductCat>();
         }
     
-        public int CatId { get; set; }
-        public int ParentID { get; set; }
-        public string CatName { get; set; }
+        public int CatID { get; set; }
+        public string Name { get; set; }
         public string Slug { get; set; }
+        public string type { get; set; }
+        public bool Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductCat> ProductCats { get; set; }
     }
 }

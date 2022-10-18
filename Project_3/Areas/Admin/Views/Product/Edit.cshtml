@@ -1,0 +1,280 @@
+﻿@model Models.Framework.Product
+@using Models.Framework
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section jsFooter{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Assets/Admin/js/Product.js"></script>
+    <script src="~/Assets/Admin/js/EditProduct.js"></script>
+}
+
+<div style="padding: 50px;background:#fff;" class="shadow wrap-edit" data-idPro="@Model.ProId">
+    <h4 class="text-primary font-weight-bold mb-5">Sửa sản phẩm</h4>
+    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data", id = "formProduct" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="d-flex align-items-start justify-content-between">
+            <label for="" class="text-primary mb-0 font-weight-bold">Tên sản phẩm</label>
+            <div class="input-wrap  active">
+                <input type="text" name="name" value="@Model.ProName" id="name" class="input-create text-dark" autofocus>
+            </div>
+        </div>
+        <div class="d-flex align-items-start justify-content-between">
+            <label for="" class="text-primary mb-0 font-weight-bold">Chất liệu <i class="fa-solid fa-circle-exclamation"></i></label>
+            <div class="input-wrap">
+                <input type="text" id="material" value="@Model.Material" name="material" class="input-create text-dark">
+            </div>
+        </div>
+        <div class="d-flex align-items-start justify-content-between ">
+            <label for="" class="text-primary mb-0 font-weight-bold">Mô tả</label>
+            <div class="input-wrap">
+                <input type="text" id="description" value="@Model.Description" name="description" class="input-create text-dark">
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-start justify-content-between">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Loại <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        @Html.DropDownListFor(model => model.ProCatId, ViewBag.Categories as SelectList, new { @class = "input-create", @style = "cursor:pointer; ", @id = "catid" })
+                        @Html.ValidationMessageFor(model => model.ProCatId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-start justify-content-between">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá nhập <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        <input type="number" id="importPrice" value="@Model.ImportPrice" name="importPrice" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-start justify-content-between">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá bán <i class="fa-solid fa-circle-exclamation"></i></label>
+                    <div class="input-wrap">
+                        <input type="number" id="Price" name="Price" value="@Model.Price" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-start justify-content-between ">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Giá khuyến mãi</label>
+                    <div class="input-wrap">
+                        <input type="number" id="pricePromotion" value="@Model.PromotionPrice" name="pricePromotion" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pe-4">
+                <div class="d-flex align-items-start justify-content-between ">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Bắt đầu khuyến mại</label>
+                    <div class="input-wrap">
+                        <input type="text" id="startPromotion" value="@Model.StartPromotion" name="startPromotion" class="input-create text-dark" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 ps-4">
+                <div class="d-flex align-items-start justify-content-between">
+                    <label for="" class="text-primary mb-0 font-weight-bold">Kết thúc khuyến mại</label>
+                    <div class="input-wrap">
+                        <input type="text" id="stopPromotion" value="@Model.StopPromotion" name="stopPromotion" class="input-create text-dark">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between px-3 py-2 mt-3 align-items-center text-primary font-weight-bold method-header" data-bs-toggle="collapse" href="#method" aria-expanded="false" aria-controls="method">
+            <span>Thuộc tính</span>
+            <span><i class="fa-solid fa-chevron-up"></i></span>
+        </div>
+        <div class="collapse method-content px-4 pt-4 p2-3" id="method">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <label for="" class="text-primary mb-0 font-weight-bold">Màu sắc</label>
+                <div class="flex-grow-1 wrap-color wrap-property d-flex">
+                    @foreach (var item in Model.ProductVariations)
+                    {
+                        <span data-idColor="@item.ProductColor.ProColorID" class="method-values">@item.ProductColor.NameColor<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
+                    }
+                    <div class="dropdown method-dropdown__wrap">
+                        <button class="btn dropdown-toggle method-dropdown" style="border-bottom: 2px solid rgb(202, 202, 202); border-radius: 0px;" type="button" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nhấn để chọn màu
+                        </button>
+                        <ul class="dropdown-menu method-dropdown__list shadow" aria-labelledby="dropdownColor">
+                            @foreach (var color in ViewBag.ListColor)
+                            {
+                                <li class=""><a class="dropdown-item method-dropdown__item-link " href="#" data-idColor="@color.ProColorID"><div class="method-image-color" style="background-image: url(@color.ImageColor);"></div><p>@color.NameColor </p></a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-imgItem">
+                @foreach (var item in Model.ProductImages)
+                {
+                    <div class="d-flex justify-content-between mb-4" data-idColor="@item.ProColorID">
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file__main input-file" type="file" accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.Image" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file__detail1 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.DetailImage1" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file__detail2 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.DetailImage2" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file input-file__detail3" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.DetailImage3" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file input-file__detail4" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.DetailImage4" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                            <div class="image-upload-wrap">
+                                <input class="input-file input-file__detail5" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                <div class="drag-text">
+                                    <p>Ảnh @item.ProductColor.NameColor</p>
+
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="/Upload/Product/@item.DetailImage5" alt="your image" />
+                                <div class="image-title-wrap">
+                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mb-4 mt-5">
+                <label for="" class="text-primary mb-0 font-weight-bold">Kích thước</label>
+                <div class="flex-grow-1 d-flex wrap-size wrap-property">
+                    @foreach (var item in Model.ProductVariations)
+                    {
+                        <span class="method-values" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
+                    }
+                    <div class="dropdown method-dropdown__wrap">
+                        <button class="btn dropdown-toggle method-dropdown" style="border-bottom: 2px solid rgb(202, 202, 202);border-radius:0px;" type="button" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nhấn để chọn màu
+                        </button>
+                        <ul class="dropdown-menu method-dropdown__list shadow" aria-labelledby="dropdownColor">
+                            @foreach (var size in ViewBag.ListSize)
+                            {
+                                <li class="method-dropdown__item"><a class="dropdown-item method-dropdown__item-link" data-idSize="@size.ProSizeID" href="#"><p>@size.NameSize</p></a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="box-options mt-4 mb-4">
+            <div class=" px-3 py-2  text-primary font-weight-bold options-header">
+                <span>Danh sách các hàng hóa cùng loại</span>
+            </div>
+            <div class="options-content px-4">
+                <table class="table table-create table-borderless">
+                    <thead>
+                        <tr class="text-primary">
+                            <th style="width:10%">Màu</th>
+                            <th>Kích thước</th>
+                            <th>Tồn kho</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ProductVariations)
+                        {
+                            <tr>
+                                <td>
+                                    <p class="colorOption text-dark" data-idColor="@item.ProColorID">@item.ProductColor.NameColor</p>
+                                </td>
+                                <td>
+                                    <p class="sizeOption text-dark" data-idSize="@item.ProSizeID">@item.ProductSize.NameSize</p>
+                                </td>
+                                <td>
+                                    <div class=" d-flex">
+                                        <input type="number" name="Quantity" value="@item.Quantity" class="input-create input-quantity text-dark" readonly>
+                                    </div>
+                                </td>
+                                <td class="text-end"><span class="delete-option"><i class="fa-solid fa-trash-can"></i></span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table><div class="text-end mb-4 pe-4"></div>
+            </div>
+        </div>
+            <div class="text-end">
+                <div class="btn btn-primary me-3" onclick="SaveClick('/Admin/Product/Edit')"><i class="fa-solid fa-floppy-disk"></i> Lưu</div>
+                <div class="btn-cancel btn bg-danger text-white" onclick="CancelClick()"><i class="fa-solid fa-delete-left"></i> Hủy</div>
+
+            </div>
+    }
+<div class="position-fixed top-0 end-0 bg-white" style="z-index: 11">
+    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body text-dark">
+            Đã sửa phẩm thành công
+        </div>
+    </div>
+</div>

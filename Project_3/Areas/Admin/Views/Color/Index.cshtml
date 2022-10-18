@@ -3,7 +3,9 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
+@section jsFooter{
+    <script src="~/Assets/Admin/js/ColorColntroller.js"></script>
+}
 <!DOCTYPE html>
 
 <html>
@@ -28,17 +30,17 @@
 
         @foreach (var item in Model)
         {
-            <tr>
+            <tr id="row_@item.ProColorID">
                 <td>
                     @Html.DisplayFor(modelItem => item.NameColor)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ImageColor)
+                    <img src="@item.ImageColor" style="border-radius:50%; text-align:center;width:30px;height:30px;" />
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.ProColorID }) |
                     @Html.ActionLink("Details", "Details", new { id = item.ProColorID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProColorID })
+                    <a class="btn-deleteColor" id="@item.ProColorID"> Delete</a>
                 </td>
             </tr>
         }

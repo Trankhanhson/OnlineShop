@@ -1,0 +1,169 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main" ng-app="ProCatApp" ng-controller="ProCatController">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <div class="text-end mb-3">
+                            <a ng-click="Add()" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#AddProCat"><i class="fa-solid fa-plus"></i> Thêm loại sản phẩm</a>
+                        </div>
+                        <table class="table table-striped table-hover table-bordered pt-4" id="dataTable">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Hình ảnh</th>
+                                    <th>
+                                        Tên loại sản phẩm
+                                    </th>
+                                    <th>
+                                        Danh mục cha
+                                    </th>
+                                    <th>
+                                        Trạng thái
+                                    </th>
+                                    <th>
+                                        Tùy chỉnh
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="category-wrap">
+                                <tr ng-repeat="pc in ProCatList">
+                                    <td>{{$index}}</td>
+                                    <td class="text-center"><img src="~/Upload/CatPro/{{pc.ProCatId}}/{{pc.Image}}" alt="" style="width: 50px;height:50px;" /></td>
+                                    <td>
+                                        {{pc.Name}}
+                                    </td>
+                                    <td>
+                                        {{pc.Category.Name}}
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" ng-click="ChangeStatusProCat(pc.ProCatId)" ng-checked="{{pc.Status}}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a class="btn-update" ng-click="Edit(pc,$index)" data-bs-toggle="modal" data-bs-target="#Editcategory" href=""><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                        <a class="btn-delete btn-deleteHome" ng-click="Delete(pc)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Thêm loại sản phẩm-->
+    <div class="modal fade" id="AddProCat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-horizontal">
+
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Tên loại sản phẩm</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="proCat.Name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Select</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" aria-label="Default select example" ng-model="proCat.CatID">
+                                        @foreach (var item in ViewBag.CatList)
+                                        {
+                                            <option value="@item.CatID">@item.Name</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)" ng-model="proCat.Image">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary" ng-click="SaveAdd(true)">Lưu</button>
+                    <button class="btn btn-primary" ng-click="SaveAdd(false)">Lưu và thêm mới</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--sửa loại sản phẩm-->
+    <div class="modal fade" id="Editcategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sửa danh mục</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-horizontal">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Tên danh mục</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="proCat.Name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Select</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" aria-label="Default select example" ng-model="proCat.CatID">
+                                        @foreach (var item in ViewBag.CatList)
+                                        {
+                                            <option value="@item.CatID">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary" ng-click="SaveEdit()">Lưu</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+@section scripts{
+    <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
+    <script src="~/Scripts/ng-file-upload.min.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/ProCatAngularjs.js"></script>
+}

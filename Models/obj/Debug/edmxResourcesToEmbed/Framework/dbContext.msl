@@ -1,16 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ClothesShopModelStoreContainer" CdmEntityContainer="ClothesShopEntities">
-    <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="ClothesShopModel.Category">
-        <MappingFragment StoreEntitySet="Category">
-          <ScalarProperty Name="CatId" ColumnName="CatId" />
-          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-          <ScalarProperty Name="CatName" ColumnName="CatName" />
-          <ScalarProperty Name="Slug" ColumnName="Slug" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Customers">
       <EntityTypeMapping TypeName="ClothesShopModel.Customer">
         <MappingFragment StoreEntitySet="Customer">
@@ -77,22 +67,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Products">
-      <EntityTypeMapping TypeName="ClothesShopModel.Product">
-        <MappingFragment StoreEntitySet="Product">
-          <ScalarProperty Name="ProId" ColumnName="ProId" />
-          <ScalarProperty Name="CatId" ColumnName="CatId" />
-          <ScalarProperty Name="ProName" ColumnName="ProName" />
-          <ScalarProperty Name="Material" ColumnName="Material" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
-          <ScalarProperty Name="StartPromotion" ColumnName="StartPromotion" />
-          <ScalarProperty Name="StopPromotion" ColumnName="StopPromotion" />
-          <ScalarProperty Name="Slug" ColumnName="Slug" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ProductColors">
       <EntityTypeMapping TypeName="ClothesShopModel.ProductColor">
         <MappingFragment StoreEntitySet="ProductColor">
@@ -102,11 +76,37 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ProductImages">
+      <EntityTypeMapping TypeName="ClothesShopModel.ProductImage">
+        <MappingFragment StoreEntitySet="ProductImage">
+          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
+          <ScalarProperty Name="ProID" ColumnName="ProID" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="DetailImage1" ColumnName="DetailImage1" />
+          <ScalarProperty Name="DetailImage2" ColumnName="DetailImage2" />
+          <ScalarProperty Name="DetailImage3" ColumnName="DetailImage3" />
+          <ScalarProperty Name="DetailImage4" ColumnName="DetailImage4" />
+          <ScalarProperty Name="DetailImage5" ColumnName="DetailImage5" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ProductSizes">
       <EntityTypeMapping TypeName="ClothesShopModel.ProductSize">
         <MappingFragment StoreEntitySet="ProductSize">
           <ScalarProperty Name="ProSizeID" ColumnName="ProSizeID" />
           <ScalarProperty Name="NameSize" ColumnName="NameSize" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductVariations">
+      <EntityTypeMapping TypeName="ClothesShopModel.ProductVariation">
+        <MappingFragment StoreEntitySet="ProductVariation">
+          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+          <ScalarProperty Name="ProId" ColumnName="ProId" />
+          <ScalarProperty Name="ProSizeID" ColumnName="ProSizeID" />
+          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -137,39 +137,66 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="ClothesShopModel.User">
         <MappingFragment StoreEntitySet="User">
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
-          <ScalarProperty Name="UserPhone" ColumnName="UserPhone" />
-          <ScalarProperty Name="UserAdress" ColumnName="UserAdress" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserAdress" ColumnName="UserAdress" />
+          <ScalarProperty Name="UserPhone" ColumnName="UserPhone" />
+          <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ProductImages">
-      <EntityTypeMapping TypeName="ClothesShopModel.ProductImage">
-        <MappingFragment StoreEntitySet="ProductImage">
-          <ScalarProperty Name="DetailImage5" ColumnName="DetailImage5" />
-          <ScalarProperty Name="DetailImage4" ColumnName="DetailImage4" />
-          <ScalarProperty Name="DetailImage3" ColumnName="DetailImage3" />
-          <ScalarProperty Name="DetailImage2" ColumnName="DetailImage2" />
-          <ScalarProperty Name="DetailImage1" ColumnName="DetailImage1" />
+    <EntitySetMapping Name="Slides">
+      <EntityTypeMapping TypeName="ClothesShopModel.Slide">
+        <MappingFragment StoreEntitySet="Slide">
+          <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="ProID" ColumnName="ProID" />
-          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="Link" ColumnName="Link" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ProductVariations">
-      <EntityTypeMapping TypeName="ClothesShopModel.ProductVariation">
-        <MappingFragment StoreEntitySet="ProductVariation">
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
-          <ScalarProperty Name="ProSizeID" ColumnName="ProSizeID" />
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="ClothesShopModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="Slug" ColumnName="Slug" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CatID" ColumnName="CatID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="ClothesShopModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Slug" ColumnName="Slug" />
+          <ScalarProperty Name="StopPromotion" ColumnName="StopPromotion" />
+          <ScalarProperty Name="StartPromotion" ColumnName="StartPromotion" />
+          <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
+          <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Material" ColumnName="Material" />
+          <ScalarProperty Name="ProName" ColumnName="ProName" />
+          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
           <ScalarProperty Name="ProId" ColumnName="ProId" />
-          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductCats">
+      <EntityTypeMapping TypeName="ClothesShopModel.ProductCat">
+        <MappingFragment StoreEntitySet="ProductCat">
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CatID" ColumnName="CatID" />
+          <ScalarProperty Name="Slug" ColumnName="Slug" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,9 +1,11 @@
 ﻿using Models.Framework;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +23,16 @@ namespace Models.DAO
         {
             List<User> users = _dbContext.Users.ToList();
             return users;
+        }
+
+        public IEnumerable<User> getPage(string searchResult,int page,int pageSize)
+        {
+            IQueryable<User> model = _dbContext.Users;
+            if (!string.IsNullOrEmpty(searchResult))
+            {
+                model = model.Where(x=>x.UserName.Contains(searchResult) || x.Name.Contains(searchResult));
+            }
+            return model.OrderByDescending(x => x.Name).ToPagedList(page,pageSize);
         }
 
         public User getByUserName(string username)

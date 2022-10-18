@@ -20,17 +20,27 @@ namespace Models
             return _dbContext.ProductImages.ToList();
         }
 
+        public List<ProductImage> getByIdPro(long idPro)
+        {
+            List<ProductImage> list = _dbContext.ProductImages.Where(i=>i.ProID==idPro).ToList();
+            return list;
+        }
+
+        public ProductImage getByKey(long ProId,int ProColorId)
+        {
+            return _dbContext.ProductImages.Where(x=>x.ProID==ProId && x.ProColorID==ProColorId).FirstOrDefault();
+        }
         public void Insert(ProductImage ps)
         {
             _dbContext.ProductImages.Add(ps);
-            try
-            {
-                _dbContext.SaveChanges();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            _dbContext.SaveChanges();
+        }
+
+        public void Delete(long ProId)
+        {
+            var list = _dbContext.ProductImages.Where(x => x.ProID == ProId).ToList();
+            _dbContext.ProductImages.RemoveRange(list);
+            _dbContext.SaveChanges();
         }
     }
 }

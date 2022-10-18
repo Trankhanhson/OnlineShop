@@ -1,106 +1,121 @@
-﻿using Models.Framework;
-using Models;
+﻿using Models.DAO;
+using Models.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class CategoryController : BaseController
+    public class CategoryController : Controller
     {
         // GET: Admin/Category
         public ActionResult Index()
         {
-            CategoryDAO model = new CategoryDAO();
-            List<Category> categories = model.ListAll();
-            return View(categories);
-        }
+            //Danh sách dối tượng
+            var listType = new List<string>()
+            {
+                "Nam","Nữ","Bé trai","Bé gái"
+            };
+            ViewBag.TypeSelect = listType;
 
-        // GET: Admin/Category/Details/5
-        public ActionResult Details(int id)
-        {
             return View();
         }
 
-        // GET: Admin/Category/Create
-        public ActionResult Create()
+        public JsonResult getAllData()
         {
-            var ListCategory = new CategoryDAO().ListAll();
-            ViewBag.Parents = new SelectList(ListCategory, "CatId", "CatName");
-            return View();
+            List<Category> categories = new CategoryDAO().getAll();
+            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var result = JsonConvert.SerializeObject(categories, Formatting.Indented, jss);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
+
 
         // POST: Admin/Category/Create
+
         [HttpPost]
-        [ValidateAntiForgeryToken] //tránh bị hack post liên tục
-        public ActionResult Create(Category collection)
+        public JsonResult Create(Category category)
         {
             try
             {
-                if (ModelState.IsValid)
+                category.Slug = common.MethodCommnon.ToUrlSlug(category.Name);
+                CategoryDAO categoryDAO=new CategoryDAO();
+                Category cat = categoryDAO.Insert(category);
+
+                return Json(new
                 {
-                    CategoryDAO model = new CategoryDAO();
-                    model.Create(collection.CatId, collection.CatName, collection.ParentID);
-                    return RedirectToAction("Index");
-                }
-                else{
-                    ModelState.AddModelError("", "Dữ liệu không đúng");
-                    return View();
-                }
+                    message = true,
+                    cat = cat
+                });
             }
             catch
             {
-                return View(collection);
+                return Json(new
+                {
+                    message = false
+                });
             }
-        }
-
-        // GET: Admin/Category/Edit/5
-        public ActionResult Edit()
-        {
-            var ListCategory = new CategoryDAO().ListAll();
-            ViewBag.Parents = new SelectList(ListCategory, "CatId", "CatName");
-            return View();
         }
 
         // POST: Admin/Category/Edit/5
         [HttpPost]
-        public ActionResult Edit(Category category)
+        public JsonResult Edit(Category category)
         {
+            bool check = true;
             try
             {
-                CategoryDAO model = new CategoryDAO();
-                model.Edit(category);
-                return RedirectToAction("Index");
+                CategoryDAO categoryDAO = new CategoryDAO();
+                check = categoryDAO.Update(category);
+                return Json(check);
             }
             catch
             {
-                return View();
+                return Json(check);
             }
+            
         }
-
-        // GET: Admin/Category/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: Admin/Category/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id)
         {
+            string message = "";
+            bool check = true;
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                CategoryDAO categoryDAO = new CategoryDAO();
+                check = categoryDAO.Delete(id);
+                if (check)
+                {
+                    message = "Xóa thành công";
+                }
+                else
+                {
+                    message = "Danh mục này đang được dùng ở danh mục con";
+                }
             }
             catch
             {
-                return View();
+                message = "Xóa thất bại";
             }
+            return Json(new
+            {
+                message = message,
+                check = check
+            }) ;
         }
+
+
+        [HttpPost]
+        public JsonResult ChangeStatus(long id)
+        {
+            CategoryDAO categoryDAO = new CategoryDAO();
+            bool check = categoryDAO.ChangeSattus(id);
+            return Json(check);
+        }
+
     }
 }

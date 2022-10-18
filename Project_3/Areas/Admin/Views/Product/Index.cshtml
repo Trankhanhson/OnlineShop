@@ -1,83 +1,101 @@
-﻿@model IEnumerable<Models.Framework.Product>
+﻿@model PagedList.IPagedList<Models.Framework.Product>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Tạo mới", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ProName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Material)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PromotionPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartPromotion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StopPromotion)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Slug)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CatId)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Material)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PromotionPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartPromotion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StopPromotion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Slug)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CatId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProId })
-        </td>
-    </tr>
+@section HeaderCss{
+    <link href="~/Assets/Admin/css/Product.css" rel="stylesheet" />
 }
+@section jsFooter{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Assets/Admin/js/Product.js"></script>
+    <script>
 
-</table>
+    </script>
+}
+@section formSearch{
+    <!-- Topbar Search -->
+    @using (Html.BeginForm("Index", "Product", FormMethod.Post, new { @class = "d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" }))
+    {
+        <div class="input-group">
+            <input type="text" class="form-control bg-light border-0 small" placeholder="Tìm kiếm theo tên"
+                   aria-label="Search" aria-describedby="basic-addon2" name="searchResult" value="@ViewBag.searchResult">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </div>
+    }
+}
+<div style="padding: 0 20px 0 0;">
+    <div class="text-end">
+        <a href="/Admin/Category/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm danh mục</a>
+        <a href="/Admin/ProductCat/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm loại sản phẩm</a>
+        <button class="btn btn-primary me-2"><i class="fa-solid fa-file-import"></i> Import</button>
+        <button class="btn btn-primary"><i class="fa-solid fa-file-export"></i> Xuất file</button>
+    </div>
+    <table class="table bg-white shadow mt-3">
+        <thead class="text-dark">
+            <tr>
+                <th class="col-id">Mã hàng</th>
+                <th>Tên hàng</th>
+                <th>Giá vốn</th>
+                <th>Giá bán</th>
+                <th>Giá khuyến mãi</th>
+                <th>Thời gian khuyến mãi</th>
+                <th>Tồn kho</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="row-product" id="@item.ProId">
+                    <td class="col-id">@item.ProId</td>
+                    <td class="col-name">@item.ProName</td>
+                    <td class="col-price">@item.Price</td>
+                    <td class="col-importPrice">@item.ImportPrice</td>
+                    <td class="col-promotion">@item.PromotionPrice</td>
+                    <td class="col-datePromotion">@item.StartPromotion-@item.StopPromotion</td>
+                    <td class="col-quantity"></td>
+                    <td>
+                        <a class="btn-update" href="/Admin/Product/Edit/@item.ProId"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                        <a  class="btn-delete btn-deleteHome" data-idPro="@item.ProId"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                    </td>
+                </tr>
+                <tr class="row-variation-@item.ProId row-variation">
+                    <td colspan="8" class="ps-4 py-0 pb-4">
+                        @foreach (var variation in item.ProductVariations)
+                        {
+                            <ul class=" d-flex mb-0 border-start border-bottom">
+                                <li class="col-id">SP0 @variation.ProVariationID</li>
+                                <li class="col-name">@variation.ProductColor.NameColor - @variation.ProductSize.NameSize</li>
+                                <li class="col-price"></li>
+                                <li class="col-importPrice"></li>
+                                <li class="col-promotion"></li>
+                                <li class="col-datePromotion"></li>
+                                <li class="col-quantity">@variation.Quantity</li>
+                            </ul>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchResult = @ViewBag.searchResult }))
+
+</div>
+
+<!--toaast-->
+<div class="position-fixed top-0 end-0 p-3 shadow" style="z-index: 11">
+    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body toast-success">
+            Đã thêm sản phẩm thành công
+        </div>
+    </div>
+</div>
+

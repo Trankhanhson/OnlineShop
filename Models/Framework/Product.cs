@@ -22,20 +22,22 @@ namespace Models.Framework
         }
     
         public long ProId { get; set; }
-        public Nullable<int> CatId { get; set; }
+        public Nullable<int> ProCatId { get; set; }
         public string ProName { get; set; }
         public string Material { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
+        public Nullable<decimal> ImportPrice { get; set; }
         public Nullable<decimal> PromotionPrice { get; set; }
         public Nullable<System.DateTime> StartPromotion { get; set; }
         public Nullable<System.DateTime> StopPromotion { get; set; }
         public string Slug { get; set; }
+        public Nullable<bool> Status { get; set; }
     
-        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductVariation> ProductVariations { get; set; }
+        public virtual ProductCat ProductCat { get; set; }
     }
 }

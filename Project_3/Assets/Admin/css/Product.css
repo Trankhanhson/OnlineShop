@@ -1,0 +1,65 @@
+﻿.col-id {
+    width: 8%;
+    padding-left:15px !important;
+}
+
+.col-name {
+    width: 30%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-price {
+    width: 10%;
+}
+
+.col-importPrice {
+    width: 10%;
+}
+
+.col-promotion {
+    width: 10%;
+}
+
+.col-datePromotion {
+    width: 15%;
+}
+
+.col-quantity {
+    width: 10%;
+}
+
+.row-variation li {
+    padding: 0 5px;
+    margin: auto 0;
+}
+
+.row-variation {
+    display: none;
+}
+
+.row-product:hover {
+    background-color: rgba(155, 218, 156,0.2);
+    cursor: pointer;
+}
+
+.row-variation ul {
+    height: 45px;
+    padding: 5px 0;
+}
+
+table tr {
+    height: 50px;
+}
+
+
+.row-product.active {
+    background-color: rgba(155, 218, 156,0.2);
+}
+
+.table td, .table th {
+    padding: 8px 5px;
+    vertical-align: middle !important;
+    font-size: 14px;
+}

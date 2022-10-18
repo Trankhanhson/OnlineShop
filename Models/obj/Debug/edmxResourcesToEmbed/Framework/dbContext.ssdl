@@ -2,12 +2,13 @@
 <Schema Namespace="ClothesShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Category">
     <Key>
-      <PropertyRef Name="CatId" />
+      <PropertyRef Name="CatID" />
     </Key>
-    <Property Name="CatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ParentID" Type="int" />
-    <Property Name="CatName" Type="nvarchar" MaxLength="250" />
-    <Property Name="Slug" Type="varchar" MaxLength="250" />
+    <Property Name="CatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Slug" Type="varchar" MaxLength="100" />
+    <Property Name="type" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="bit" />
   </EntityType>
   <EntityType Name="Customer">
     <Key>
@@ -76,15 +77,28 @@
       <PropertyRef Name="ProId" />
     </Key>
     <Property Name="ProId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CatId" Type="int" />
-    <Property Name="ProName" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="ProCatId" Type="int" />
+    <Property Name="ProName" Type="nvarchar" MaxLength="300" />
     <Property Name="Material" Type="nvarchar" MaxLength="300" />
     <Property Name="Description" Type="nvarchar(max)" />
-    <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="ImportPrice" Type="decimal" Precision="18" Scale="0" />
     <Property Name="PromotionPrice" Type="decimal" Precision="18" Scale="0" />
     <Property Name="StartPromotion" Type="datetime" />
     <Property Name="StopPromotion" Type="datetime" />
     <Property Name="Slug" Type="varchar" MaxLength="300" />
+    <Property Name="Status" Type="bit" />
+  </EntityType>
+  <EntityType Name="ProductCat">
+    <Key>
+      <PropertyRef Name="ProCatId" />
+    </Key>
+    <Property Name="ProCatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Slug" Type="varchar" MaxLength="100" />
+    <Property Name="CatID" Type="int" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Image" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="ProductColor">
     <Key>
@@ -92,7 +106,7 @@
     </Key>
     <Property Name="ProColorID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NameColor" Type="nvarchar" MaxLength="50" />
-    <Property Name="ImageColor" Type="varchar" MaxLength="200" />
+    <Property Name="ImageColor" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="ProductImage">
     <Key>
@@ -101,12 +115,12 @@
     </Key>
     <Property Name="ProColorID" Type="bigint" Nullable="false" />
     <Property Name="ProID" Type="bigint" Nullable="false" />
-    <Property Name="Image" Type="varchar(max)" />
-    <Property Name="DetailImage1" Type="varchar(max)" />
-    <Property Name="DetailImage2" Type="varchar(max)" />
-    <Property Name="DetailImage3" Type="varchar(max)" />
-    <Property Name="DetailImage4" Type="varchar(max)" />
-    <Property Name="DetailImage5" Type="varchar(max)" />
+    <Property Name="Image" Type="nvarchar(max)" />
+    <Property Name="DetailImage1" Type="nvarchar(max)" />
+    <Property Name="DetailImage2" Type="nvarchar(max)" />
+    <Property Name="DetailImage3" Type="nvarchar(max)" />
+    <Property Name="DetailImage4" Type="nvarchar(max)" />
+    <Property Name="DetailImage5" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="ProductSize">
     <Key>
@@ -124,6 +138,7 @@
     <Property Name="ProSizeID" Type="bigint" />
     <Property Name="ProColorID" Type="bigint" />
     <Property Name="Quantity" Type="int" />
+    <Property Name="Status" Type="bit" />
   </EntityType>
   <EntityType Name="PromotionOrder">
     <Key>
@@ -135,6 +150,18 @@
     <Property Name="AmountPromotion" Type="int" />
     <Property Name="StartPromotion" Type="datetime" />
     <Property Name="StopPromotion" Type="datetime" />
+    <Property Name="Status" Type="bit" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Slide">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Image" Type="nvarchar" MaxLength="250" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="Link" Type="nvarchar" MaxLength="250" />
     <Property Name="Status" Type="bit" />
   </EntityType>
   <EntityType Name="sysdiagrams">
@@ -160,6 +187,18 @@
     <Property Name="UserEmail" Type="varchar" MaxLength="100" />
     <Property Name="Status" Type="bit" />
   </EntityType>
+  <Association Name="FK__Product__ProCatI__6AEFE058">
+    <End Role="ProductCat" Type="Self.ProductCat" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductCat">
+        <PropertyRef Name="ProCatId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ProCatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ImportBill_User1">
     <End Role="User" Type="Self.User" Multiplicity="0..1" />
     <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="*" />
@@ -256,15 +295,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Product_Category">
+  <Association Name="FK_ProductCat_Category">
     <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <End Role="ProductCat" Type="Self.ProductCat" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Category">
-        <PropertyRef Name="CatId" />
+        <PropertyRef Name="CatID" />
       </Principal>
-      <Dependent Role="Product">
-        <PropertyRef Name="CatId" />
+      <Dependent Role="ProductCat">
+        <PropertyRef Name="CatID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -337,6 +376,7 @@
     <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductCat" EntityType="Self.ProductCat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductColor" EntityType="Self.ProductColor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSize" EntityType="Self.ProductSize" Schema="dbo" store:Type="Tables" />
@@ -344,6 +384,19 @@
     <EntitySet Name="PromotionOrder" EntityType="Self.PromotionOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Slide" EntityType="Self.Slide" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Slide].[ID] AS [ID], 
+    [Slide].[Image] AS [Image], 
+    [Slide].[DisplayOrder] AS [DisplayOrder], 
+    [Slide].[Link] AS [Link], 
+    [Slide].[Status] AS [Status]
+    FROM [dbo].[Slide] AS [Slide]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="Self.FK__Product__ProCatI__6AEFE058">
+      <End Role="ProductCat" EntitySet="ProductCat" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
     <AssociationSet Name="FK_ImportBill_User1" Association="Self.FK_ImportBill_User1">
       <End Role="User" EntitySet="User" />
       <End Role="ImportBill" EntitySet="ImportBill" />
@@ -376,9 +429,9 @@
       <End Role="ProductVariation" EntitySet="ProductVariation" />
       <End Role="OrderDetail" EntitySet="OrderDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+    <AssociationSet Name="FK_ProductCat_Category" Association="Self.FK_ProductCat_Category">
       <End Role="Category" EntitySet="Category" />
-      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductCat" EntitySet="ProductCat" />
     </AssociationSet>
     <AssociationSet Name="FK_ProductImage_Product" Association="Self.FK_ProductImage_Product">
       <End Role="Product" EntitySet="Product" />

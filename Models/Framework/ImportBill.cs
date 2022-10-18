@@ -25,8 +25,8 @@ namespace Models.Framework
         public Nullable<int> StaffId { get; set; }
         public Nullable<int> MoneyTotal { get; set; }
     
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportBillDetail> ImportBillDetails { get; set; }
-        public virtual User User { get; set; }
     }
 }

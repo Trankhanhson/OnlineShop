@@ -9,21 +9,57 @@ namespace Models
 {
     public class ProductColorDAO
     {
-        ClothesShopEntities _ClothesShopEntities = null;
+        ClothesShopEntities _dbContext = null;
         public ProductColorDAO()
         {
-            _ClothesShopEntities = new ClothesShopEntities();
+            _dbContext = new ClothesShopEntities();
         }
 
         public List<ProductColor> getAll()
         {
-            return _ClothesShopEntities.ProductColors.ToList();
+            return _dbContext.ProductColors.ToList();
         }
 
+        public ProductColor getById(long id)
+        {
+            return _dbContext.ProductColors.Find(id);
+        }
         public void Insert(ProductColor ps)
         {
-            _ClothesShopEntities.ProductColors.Add(ps);
-            _ClothesShopEntities.SaveChanges();
+            _dbContext.ProductColors.Add(ps);
+            _dbContext.SaveChanges();
+        }
+
+        public bool Delete(int id)
+        {
+            try
+            {
+                ProductColor p = _dbContext.ProductColors.Find(id);
+                _dbContext.ProductColors.Remove(p);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Update(ProductColor pnew)
+        {
+            try
+            {
+                ProductColor p = _dbContext.ProductColors.Find(pnew.ProColorID);
+                p.NameColor = pnew.NameColor;
+                p.ImageColor = pnew.ImageColor;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
     }
 }

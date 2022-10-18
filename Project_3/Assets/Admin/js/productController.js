@@ -2,21 +2,6 @@
     $(".method-header").toggleClass("active")
 })
 
-$(".input-wrap").each(function (index, value) {
-    $(value).click((e) => {
-        $(".input-wrap").removeClass("active")
-        $(value).addClass("active")
-    })
-})
-
-$(".box-options").click((e) => {
-    var item = $(e.target).parent()
-    if (item.hasClass("input-wrap")) {
-        $(".input-wrap").removeClass("active")
-        $(item).addClass("active")
-    }
-})
-
 
 /**handle method */
 /**add value */
@@ -484,12 +469,15 @@ function UploadImgToServer(idColor,idProduct) {
         formData.append("ProColorId",idColor)
         $.ajax({
             type: 'POST',
-            url: '/Product/UploadImg',
+            url: '/Admin/Product/UploadImg',
             contentType: false, //Không có header
             processData: false, //không xử lý dữ liệu
             data:formData,
             success: function (urlImage) {
-
+                $.ajax({
+                    type: 'GET',
+                    url: '/Admin/Product/Index'
+                })
             },
             error: function (err) {
                 alert('có lỗi khi upload: ' + err.statusText);
@@ -497,3 +485,12 @@ function UploadImgToServer(idColor,idProduct) {
         })
     }
 }
+
+//handle list product
+$(".row-product").click((e) => {
+    let rowProduct = $(e.target).parents(".row-product");
+    let id = $(rowProduct).attr("id")
+    $(`.row-variation-${id}`).toggle()
+    rowProduct.toggleClass("active")
+})
+

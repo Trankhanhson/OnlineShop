@@ -25,20 +25,22 @@ namespace Models.Framework
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<ImportBill> ImportBills { get; set; }
         public virtual DbSet<ImportBillDetail> ImportBillDetails { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductColor> ProductColors { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<ProductSize> ProductSizes { get; set; }
+        public virtual DbSet<ProductVariation> ProductVariations { get; set; }
         public virtual DbSet<PromotionOrder> PromotionOrders { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<ProductImage> ProductImages { get; set; }
-        public virtual DbSet<ProductVariation> ProductVariations { get; set; }
+        public virtual DbSet<Slide> Slides { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductCat> ProductCats { get; set; }
     }
 }

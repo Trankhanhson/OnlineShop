@@ -69,26 +69,16 @@ namespace Project_3.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/Size/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: Admin/Size/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public JsonResult Delete(int id)
         {
-            try
+            ProductSizeDAO dao = new ProductSizeDAO();
+            bool check = dao.Delete(id);
+            return Json(new
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                result = check
+            });
         }
     }
 }

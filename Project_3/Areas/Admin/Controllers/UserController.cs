@@ -16,11 +16,12 @@ namespace Project_3.Areas.Admin.Controllers
     {
 
         // GET: Admin/User2
-        public ActionResult Index()
+        public ActionResult Index(string searchResult,int page = 1,int pageSize = 8)
         {
             UserDAO userDAO = new UserDAO();
-            List<User> list = userDAO.getAll();
-            return View(list);
+            var model = userDAO.getPage(searchResult, page, pageSize);
+            ViewBag.searchResult=searchResult;
+            return View(model);
         }
 
         // GET: Admin/User2/Create

@@ -1,59 +1,77 @@
-﻿@model List<Models.Framework.User>
+﻿@model PagedList.IPagedList<Models.Framework.User>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-@section jsFooter{
+@section scripts{
     <script src="~/Assets/Admin/js/userController.js"></script>
 }
-<table class="table">
-    <tr>
-        <th>Tên đăng nhập</th>
-        <th>Tên hiển thị</th>
-        <th>Địa chỉ</th>
-        <th>Email</th>
-        <th>Số điện thoại</th>
-        <th>Trạng thái</th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr id="row_@item.UserID">
-            <td>
-                @item.UserName
-            </td>
-            <td>
-                @item.Name
-            </td>
-            <td>
-                @item.UserAdress
-            </td>
-            <td>
-                @item.UserEmail
-            </td>
-            <td>
-                @item.UserPhone
-            </td>
-            <td>
-                <a href="#" class="btn-ChangeStatusUser" data-id="@item.UserID">
-                    @(@item.Status ? "Kích hoạt" : "Khóa")
-                </a>
-            </td>
-            <td class="d-flex justify-content-around">
-                @Html.ActionLink("Edit", "Edit", new { id = item.UserID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.UserID }) |
-                @Ajax.ActionLink("Delete", "Delete", new { id = item.UserID }, new AjaxOptions
-           {
-               Confirm = "Bạn có muốn xóa nhân viên này không",
-               OnComplete = "$('#row_" + @item.UserID + "').remove()",
-               HttpMethod = "delete"
-           })
-            </td>
-        </tr>
-    }
 
-</table>
-<p>
-    @Html.ActionLink("Thêm mới", "Create")
-</p>
+@Html.ActionLink("Thêm mới", "Create", new { @class = "btn btn-primary" })
+
+
+<main id="main" class="main" >
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <table class="table">
+                            <tr>
+                                <th>Tên đăng nhập</th>
+                                <th>Tên hiển thị</th>
+                                <th>Địa chỉ</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Trạng thái</th>
+                            </tr>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.UserID">
+                                    <td>
+                                        @item.UserName
+                                    </td>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @item.UserAdress
+                                    </td>
+                                    <td>
+                                        @item.UserEmail
+                                    </td>
+                                    <td>
+                                        @item.UserPhone
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn-ChangeStatusUser" data-id="@item.UserID">
+                                            @(@item.Status ? "Kích hoạt" : "Khóa")
+                                        </a>
+                                    </td>
+                                    <td class="d-flex justify-content-around">
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.UserID }) |
+                                        @Html.ActionLink("Details", "Details", new { id = item.UserID }) |
+                                        @Ajax.ActionLink("Delete", "Delete", new { id = item.UserID }, new AjaxOptions
+                                        {
+                                            Confirm = "Bạn có muốn xóa nhân viên này không",
+                                            OnComplete = "$('#row_" + @item.UserID + "').remove()",
+                                            HttpMethod = "delete"
+                                        })
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchResult = @ViewBag.searchResult }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>

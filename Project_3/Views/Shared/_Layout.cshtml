@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="/Assets/css/main.css" />
     <link rel="stylesheet" href="/Assets/css/base.css" />
     <link rel="stylesheet" href="/Assets/css/resposiveIndex.css">
-    @RenderSection("styleSubindex",required:false)
-    @RenderSection("styleCart",required:false)
-    @RenderSection("styleOutlet",required:false)
+    @RenderSection("styleSubindex", required: false)
+    @RenderSection("styleCart", required: false)
+    @RenderSection("styleOutlet", required: false)
 </head>
 
 <body>
@@ -24,84 +24,8 @@
             <a class="header-brand me-auto me-xl-0 ms-xl-0 ms-sm-5" href="/Home/Index/">
                 <img src="/Assets/img/logo.svg" alt="" />
             </a>
-            <!-- Offcanvas Sidebar -->
-            <div class="offcanvas offcanvas-start" id="sidebar">
-                <div class="offcanvas-header pt-4">
-                    <a class="offcanvas-title header-brand" href="/Home/Index/">
-                        <img src="/Assets/img/logo.svg" alt="" />
-                    </a>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="mb-3">
-                        <li class="header-item">
-                            <a class="header-link active" href="/Home/Index/">TRANG CHỦ</a>
-                        </li>
-                        <li class="header-item">
-                            <a class="header-link " href="/Home/man/">NAM</a>
-                        </li>
-                        <li class="header-item">
-                            <a class="header-link " href="/Home/women/">NỮ</a>
-                        </li>
-                        <li class="header-item">
-                            <a class="header-link" href="/Home/baby_girl/">BÉ GÁI</a>
-                        </li>
-                        <li class="header-item">
-                            <a class="header-link " href="/Home/baby_boy/">BÉ TRAI</a>
-                        </li>
-                        <li class="header-item">
-                            <a class="header-link" href="/Home/outlet/">OUTLET</a>
-                        </li>
-                    </ul>
-                    <div class="sidebar-form-wrap ">
-                        <form class="d-flex sidebar-form">
-                            <button class="search-btn">
-                                <span></span>
-                            </button>
-                            <input type="text"
-                                   placeholder="Bạn tìm gì"
-                                   id="input-sidebar-search"
-                                   autocomplete="off" />
-                        </form>
-                        <div class="search-history">
-                            <div class="d-flex justify-content-between search-history__header">
-                                <p>Lịch sử tìm kiếm</p>
-                                <span style="cursor: pointer;">Xóa</span>
-                            </div>
-                            <div class="search-history-body pt-2">
-                                <span>áo polo</span>
-                            </div>
-                        </div>
+            @RenderSection("Menu",required:false)
 
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Button to open the offcanvas sidebar -->
-            <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <ul class="header-list d-none d-xl-flex me-auto ms-5">
-                <li class="header-item">
-                    <a class="header-link active" href="/Home/index/">TRANG CHỦ</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Home/man/">NAM</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Home/women/">NỮ</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link" href="/Home/baby_girl/">BÉ GÁI</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Home/baby_boy/">BÉ TRAI</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link" href="/Home/outlet/">OUTLET</a>
-                </li>
-            </ul>
             <div class="header-form-wrap d-none d-xl-block">
                 <form class="d-flex sidebar-form">
                     <button class="search-btn">
@@ -272,8 +196,33 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="/Assets/js/base.js"></script>
-    @RenderSection("scriptSubindex",required:false)
-    @RenderSection("scriptCart",required:false)
+    <script src="~/Assets/js/BaseHome.js"></script>
+    <script>
+        /*ADD CART*/
+        function addCart(input) {
+            let parent = $(input).parents(".product")
+            let proId = $(parent).data("proid")
+            let proSizeId = $($(parent).find(".product-size.active")).data("idsize")
+            let proColorId = $($(parent).find(".product-color.active")).data("idcolor")
+
+            $.ajax({
+                url: '/Cart/AddItem',
+                type: 'POST',
+                data: { ProId: proId, ProColorId: proColorId, ProSizeId: proSizeId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response) {
+
+                    }
+                    else {
+
+                    }
+                }
+
+            })
+        }
+    </script>
+    @RenderSection("scriptSubindex", required: false)
+    @RenderSection("scriptCart", required: false)
 </body>
 </html>

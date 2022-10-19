@@ -142,9 +142,13 @@ namespace Project_3.Areas.Admin.Controllers
             if (file != null)
             {
                 var _fileName = Path.GetFileName(file.FileName);
-                var _path = Path.Combine(Server.MapPath("/Upload/Product"), _fileName);
-                file.SaveAs(_path);
-                productImage.Image = _fileName; //ảnh chính
+                var _path = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                if (!Directory.Exists(_path))
+                {
+                    Directory.CreateDirectory(_path);
+                }
+                file.SaveAs(_path + ProColorId + "0" + _fileName);
+                productImage.Image = ProColorId + "0" + _fileName; //ảnh chính
             }
             else
             {
@@ -155,9 +159,9 @@ namespace Project_3.Areas.Admin.Controllers
             if (file1 != null)
             {
                 var _file1Name = Path.GetFileName(file1.FileName);
-                var _path1 = Path.Combine(Server.MapPath("/Upload/Product"), _file1Name);
-                file1.SaveAs(_path1);
-                productImage.DetailImage1 = _file1Name; //ảnh chi tiết
+                var _path1 = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                file1.SaveAs(_path1 + ProColorId + "1" + _file1Name);
+                productImage.DetailImage1 = ProColorId + "1" + _file1Name; //ảnh chi tiết
             }
             else
             {
@@ -168,9 +172,9 @@ namespace Project_3.Areas.Admin.Controllers
             if (file2 != null)
             {
                 var _file2Name = Path.GetFileName(file2.FileName);
-                var _path2 = Path.Combine(Server.MapPath("/Upload/Product"), _file2Name);
-                file2.SaveAs(_path2);
-                productImage.DetailImage2 = _file2Name; //ảnh chi tiết
+                var _path2 = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                file1.SaveAs(_path2 + ProColorId + "2" + _file2Name);
+                productImage.DetailImage2 = ProColorId + "2" + _file2Name; //ảnh chi tiết
             }
             else
             {
@@ -182,9 +186,9 @@ namespace Project_3.Areas.Admin.Controllers
             if (file3 != null)
             {
                 var _file3Name = Path.GetFileName(file3.FileName);
-                var _path3 = Path.Combine(Server.MapPath("/Upload/Product"), _file3Name);
-                file3.SaveAs(_path3);
-                productImage.DetailImage3 = _file3Name; //ảnh chi tiết
+                var _path3 = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                file1.SaveAs(_path3 + ProColorId + "3" + _file3Name);
+                productImage.DetailImage3 = ProColorId + "3" + _file3Name; //ảnh chi tiết
             }
             else
             {
@@ -196,9 +200,9 @@ namespace Project_3.Areas.Admin.Controllers
             if (file4 != null)
             {
                 var _file4Name = Path.GetFileName(file4.FileName);
-                var _path4 = Path.Combine(Server.MapPath("/Upload/Product"), _file4Name);
-                file4.SaveAs(_path4);
-                productImage.DetailImage4 = _file4Name; //ảnh chi tiết
+                var _path4 = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                file1.SaveAs(_path4 + ProColorId + "4" + _file4Name);
+                productImage.DetailImage4 = ProColorId + "4" + _file4Name; //ảnh chi tiết
             }
             else
             {
@@ -210,9 +214,9 @@ namespace Project_3.Areas.Admin.Controllers
             if (file5 != null)
             {
                 var _file5Name = Path.GetFileName(file5.FileName);
-                var _path5 = Path.Combine(Server.MapPath("/Upload/Product"), _file5Name);
-                file5.SaveAs(_path5);
-                productImage.DetailImage5 = _file5Name; //ảnh chi tiết
+                var _path5 = Server.MapPath("~/Upload/Product/" + ProId + "/");
+                file1.SaveAs(_path5 + ProColorId + "5" + _file5Name);
+                productImage.DetailImage5 = ProColorId + "5" + _file5Name; //ảnh chi tiết
             }
             else
             {

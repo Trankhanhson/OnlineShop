@@ -113,16 +113,21 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/ProductCat/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(ProductCat proCat)
         {
             string message = "";
             bool check = true;
             try
             {
                 ProductCategoryDAO dao = new ProductCategoryDAO();
-                check = dao.Delete(id);
+                check = dao.Delete(proCat.ProCatId);
                 if (check)
                 {
+
+                    //xóa ảnh trong folder
+                    string path = Server.MapPath("~/Upload/CatPro/" + proCat.ProCatId + "/" + proCat.Image);
+                    System.IO.File.Delete(path);
+
                     message = "Xóa thành công";
                 }
                 else

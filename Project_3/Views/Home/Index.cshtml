@@ -1,4 +1,4 @@
-﻿@model List<Models.Framework.Product>
+﻿@model IEnumerable<Models.Framework.Product>
 @{
     ViewBag.Title = "Home Page";
 }
@@ -138,8 +138,8 @@
                         {
                             <div class="product" data-ProId="@item.ProId">
                                 <div class="product-img">
-                                    <a href="./product-detail.html">
-                                        <img src="~/Upload/Product/@item.ProductImages.First().Image" width="100%" alt="">
+                                    <a href="/Home/Detail/@item.ProId" style="background-image:url('/Upload/Product/@item.ProId/@item.ProductImages.First().Image')">
+                                        @*<img src="~/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">*@
                                     </a>
                                     <div class="product-size-wrap">
                                         <div class="d-flex justify-content-center flex-wrap pt-3">
@@ -148,18 +148,18 @@
                                                 <div class="product-size" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
                                             }
                                         </div>
-                                        <a  class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</a>
+                                        <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</a>
                                     </div>
                                 </div>
                                 <div class="product-color-list d-flex pt-3 pb-2">
                                     @foreach (var color in item.ProductImages)
                                     {
-                                        <div class="product-color" data-idColor="@color.ProColorID" data="~/Upload/Product/@color.Image">
-                                            <span  style='background-image: url(@color.ProductColor.ImageColor);'></span>
+                                        <div class="product-color" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
+                                            <span style='background-image: url(@color.ProductColor.ImageColor);'></span>
                                         </div>
                                     }
                                 </div>
-                                <a href="./product-detail.html" class="product-name">
+                                <a href="/Home/Detail/@item.ProId" class="product-name">
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">

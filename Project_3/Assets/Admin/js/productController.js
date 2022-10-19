@@ -391,8 +391,7 @@ $('.image-upload-wrap').bind('dragleave', function () {
 });
 
 //submit form
-$(".btn-save").click((e)=>{
-    e.preventDefault();
+function SaveClick() {
     //lấy dữ liệu của product
     var ProName = $("#name").val()
     var Material = $("#material").val()
@@ -442,7 +441,7 @@ $(".btn-save").click((e)=>{
             }
         }
     })
-})
+}
 
 function UploadImgToServer(idColor,idProduct) {
     //upload img

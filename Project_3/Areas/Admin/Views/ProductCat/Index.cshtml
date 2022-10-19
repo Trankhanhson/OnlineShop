@@ -37,7 +37,7 @@
                             <tbody class="category-wrap">
                                 <tr ng-repeat="pc in ProCatList">
                                     <td>{{$index}}</td>
-                                    <td class="text-center"><img src="~/Upload/CatPro/{{pc.ProCatId}}/{{pc.Image}}" alt="" style="width: 50px;height:50px;" /></td>
+                                    <td class="text-center"><img src="/Upload/CatPro/{{pc.ProCatId}}/{{pc.Image}}" alt="" style="width: 50px;height:50px;" /></td>
                                     <td>
                                         {{pc.Name}}
                                     </td>
@@ -95,7 +95,7 @@
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)" ng-model="proCat.Image">
+                                    <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)">
                                 </div>
                             </div>
                         </div>
@@ -165,5 +165,5 @@
 @section scripts{
     <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
     <script src="~/Scripts/ng-file-upload.min.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/ProCatAngularjs.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/ProCatAngular.js"></script>
 }

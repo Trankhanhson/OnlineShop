@@ -12,9 +12,7 @@
     <link rel="stylesheet" href="/Assets/css/main.css" />
     <link rel="stylesheet" href="/Assets/css/base.css" />
     <link rel="stylesheet" href="/Assets/css/resposiveIndex.css">
-    @RenderSection("styleSubindex", required: false)
-    @RenderSection("styleCart", required: false)
-    @RenderSection("styleOutlet", required: false)
+    @RenderSection("styles", required: false)
 </head>
 
 <body>
@@ -175,7 +173,7 @@
     <!--toast add cart-->
     <div class="toast toast-addCart position-fixed rounded-0" style="top:30px; right:20px;z-index: 101;" data-bs-animation="true" data-bs-autohide="true" data-bs-delay="5000">
         <div class="toast-header">
-            <a href="/Home/cart" class="me-auto text-decoration-underline">Xem giỏ hàng</a>
+            <a href="/Cart/Index" class="me-auto text-decoration-underline">Xem giỏ hàng</a>
             <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
         </div>
         <div class="toast-body bg-white">
@@ -211,18 +209,11 @@
                 data: { ProId: proId, ProColorId: proColorId, ProSizeId: proSizeId },
                 dataType: 'json',
                 success: function (response) {
-                    if (response) {
-
-                    }
-                    else {
-
-                    }
                 }
 
             })
         }
     </script>
-    @RenderSection("scriptSubindex", required: false)
-    @RenderSection("scriptCart", required: false)
+    @RenderSection("scripts", required:false)
 </body>
 </html>

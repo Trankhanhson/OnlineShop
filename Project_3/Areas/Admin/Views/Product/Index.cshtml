@@ -5,31 +5,14 @@
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-@section HeaderCss{
+@section styles{
     <link href="~/Assets/Admin/css/Product.css" rel="stylesheet" />
 }
-@section jsFooter{
+@section scripts{
     <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Assets/Admin/js/Product.js"></script>
-    <script>
+    <script src="~/Assets/Admin/js/productController.js"></script>
+}
 
-    </script>
-}
-@section formSearch{
-    <!-- Topbar Search -->
-    @using (Html.BeginForm("Index", "Product", FormMethod.Post, new { @class = "d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" }))
-    {
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Tìm kiếm theo tên"
-                   aria-label="Search" aria-describedby="basic-addon2" name="searchResult" value="@ViewBag.searchResult">
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    }
-}
 <div style="padding: 0 20px 0 0;">
     <div class="text-end">
         <a href="/Admin/Category/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm danh mục</a>
@@ -63,7 +46,7 @@
                     <td class="col-quantity"></td>
                     <td>
                         <a class="btn-update" href="/Admin/Product/Edit/@item.ProId"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
-                        <a  class="btn-delete btn-deleteHome" data-idPro="@item.ProId"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                        <a class="btn-delete btn-deleteHome" data-idPro="@item.ProId"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
                     </td>
                 </tr>
                 <tr class="row-variation-@item.ProId row-variation">

@@ -3,7 +3,7 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-@section jsFooter{
+@section scripts{
     <script src="~/Assets/Admin/js/productController.js"></script>
 }
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
                     <div class="file-upload-content text-start">
                         <img class="file-upload-image" src="#" alt="your image" />
                         <div class="image-title-wrap">
-                            <button type="button" class="remove-image" onclick="removeimg(this)">xóa</button>
+                            <button type="button" class="remove-image" onclick="removeImg(this)">xóa</button>
                         </div>
                     </div>
                 </div>

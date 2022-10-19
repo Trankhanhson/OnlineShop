@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Models.DAO;
+using Newtonsoft.Json;
 
 namespace Project_3.Controllers
 {
@@ -14,8 +16,14 @@ namespace Project_3.Controllers
         public ActionResult Index()
         {
             ProductDAO productDAO = new ProductDAO();
-            return View(productDAO.getAll());
+            List<Product> list = productDAO.getAll();
+            return View(list);
         }
 
+        public ActionResult Detail(long id)
+        {
+            Product product = new ProductDAO().getById(id);
+            return View(product);
+        }
     }
 }

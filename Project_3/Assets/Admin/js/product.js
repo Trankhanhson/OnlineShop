@@ -500,4 +500,3 @@ $(".row-product").click((e) => {
     $(`.row-variation-${id}`).toggle()
     rowProduct.toggleClass("active")
 })
-

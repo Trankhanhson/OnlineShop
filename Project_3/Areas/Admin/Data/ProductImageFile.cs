@@ -9,11 +9,11 @@ namespace Project_3.Areas.Admin.Data
     {
         public long ProColorID { get; set; }
         public long ProID { get; set; }
-        public HttpPostedFileBase Image { get; set; }
-        public HttpPostedFileBase DetailImage1 { get; set; }
-        public HttpPostedFileBase DetailImage2 { get; set; }
-        public HttpPostedFileBase DetailImage3 { get; set; }
-        public HttpPostedFileBase DetailImage4 { get; set; }
-        public HttpPostedFileBase DetailImage5 { get; set; }
+        public HttpPostedFileBase file { get; set; }
+        public HttpPostedFileBase file1 { get; set; }
+        public HttpPostedFileBase file2 { get; set; }
+        public HttpPostedFileBase file3 { get; set; }
+        public HttpPostedFileBase file4 { get; set; }
+        public HttpPostedFileBase file5 { get; set; }
     }
 }

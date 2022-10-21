@@ -44,7 +44,7 @@ $('.method-dropdown__item-link').click(function (e) {
             //thêm 1 size vào box nếu value chưa tồn tại
             $(".wrap-size").prepend(`<span class="method-values" data-idSize="${idSize}">${valueInput}<span class="method-remove" ><i class="fa-solid fa-xmark"></i></span></sp>`)
         }
-        addVariation(idSize,valueInput, "size")
+        addVariation(idSize, valueInput, "size")
     }
 
 });
@@ -191,7 +191,7 @@ function addImgBox(idColor, colorValue) {
     $(".wrap-imgItem").append(result)
 }
 
-function addVariation(valueId,valueInput, sizeOrColor) {
+function addVariation(valueId, valueInput, sizeOrColor) {
     //lấy danh sách màu
     let listSpanColor = $(".wrap-color").children("span")
     let listColor = []
@@ -200,7 +200,7 @@ function addVariation(valueId,valueInput, sizeOrColor) {
             textColor: $(value).text(),
             idColor: $(value).attr("data-idColor")
         }
-        
+
         listColor.push(color)
     })
     //lấy danh sách size
@@ -208,7 +208,7 @@ function addVariation(valueId,valueInput, sizeOrColor) {
     let listSpanSize = $(".wrap-size").children("span")
     listSpanSize.each((index, value) => {
         var size = {
-            textSize : $(value).text(),
+            textSize: $(value).text(),
             idSize: $(value).attr("data-idSize")
         }
         listSize.push(size)
@@ -396,7 +396,7 @@ function SaveClick() {
     var ProName = $("#name").val()
     var Material = $("#material").val()
     var Description = $("#description").val()
-    var CatId = $("#catid").val()
+    var ProCatId = $("#ProCatId").val()
     var ImportPrice = $("#importPrice").val()
     var Price = $("#Price").val()
     var PricePromotion = $("#pricePromotion").val()
@@ -406,7 +406,7 @@ function SaveClick() {
         ProName: ProName,
         Material: Material,
         Description: Description,
-        CatId: CatId,
+        ProCatId: ProCatId,
         ImportPrice: ImportPrice,
         Price: Price,
         PrPricePromotion: PricePromotion,
@@ -416,7 +416,7 @@ function SaveClick() {
 
     var listVariation = [] //danh sách biến thể
     var variationWrap = $(".table-create tbody tr")
-    var listColorId = []
+
     variationWrap.each((index, value) => {
         let colorId = $($(value).find(".colorOption")).attr("data-idColor")
         let variation = {
@@ -426,7 +426,13 @@ function SaveClick() {
             Quantity: $($(value).find(".input-create")).val()
         }
         listVariation.push(variation)
-        listColorId.push(colorId)
+    })
+
+    //Lấy list Color
+    var listColorId = []
+    let listSpanColor = $(".wrap-color").children("span")
+    listSpanColor.each((index, value) => {
+        listColorId.push($(value).attr("data-idColor"))
     })
 
     //thêm sản phẩm và danh sách biến thể bằng ajax và lấy về idproduct mới
@@ -436,47 +442,50 @@ function SaveClick() {
         dataType: "json",
         type: "POST",
         success: function (response) {
-            for (var i = 0; i < listColorId.length; i++) {
-                UploadImgToServer(listColorId[i], response.Proid)
-            }
+            UploadImgToServer(listColorId, response.Proid)
+            $("#successToast .text-toast").text("Đã thêm sản phẩm thành công")
+            $("#successToast").toast("show") //hiển thị thông báo thành công
         }
     })
 }
 
-function UploadImgToServer(idColor,idProduct) {
-    //upload img
+function UploadImgToServer(listColorId, idProduct) {
+    let listProductImageFile = []
     //kiểm tra trình duyệt có hỗ trợ FormData oject không
     if (window.FormData != undefined) {
-        //Lấy dữ liệu trên file upload
-        //lấy thẻ input theo idcolor
-        var fileMain = $(`div[data-idColor=${idColor}]`).find('.input-file__main').get(0).files;
-        var fileDetail1 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail1').get(0).files;
-        var fileDetail2 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail2').get(0).files;
-        var fileDetail3 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail3').get(0).files;
-        var fileDetail4 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail4').get(0).files;
-        var fileDetail5 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail5').get(0).files;
-        //Tạo đối trượng formData
-        var formData = new FormData(document.getElementById('formCreate'));
-        //tạo các key,value cho data
-        formData.append("file", fileMain[0])
-        formData.append("file1", fileDetail1[0])
-        formData.append("file2", fileDetail2[0])
-        formData.append("file3", fileDetail3[0])
-        formData.append("file4", fileDetail4[0])
-        formData.append("file5", fileDetail5[0])
-        formData.append("ProId", idProduct)
-        formData.append("ProColorId",idColor)
+        for (let i = 0; i < listColorId.length; i++) {
+            //Lấy các file thông qua colorId
+            var fileMain = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__main').get(0).files;
+            var fileDetail1 = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__detail1').get(0).files;
+            var fileDetail2 = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__detail2').get(0).files;
+            var fileDetail3 = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__detail3').get(0).files;
+            var fileDetail4 = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__detail4').get(0).files;
+            var fileDetail5 = $(`div[data-idColor=${listColorId[i]}]`).find('.input-file__detail5').get(0).files;
+
+            //Tạo đối tượng ProductImageFile
+            let ProductImageFile = {
+                ProColorID: listColorId[i],
+                ProID: JSON.parse(idProduct),
+                file: fileMain[0],
+                file1: fileDetail1[0],
+                file2: fileDetail2[0],
+                file3: fileDetail3[0],
+                file4: fileDetail4[0],
+                file5: fileDetail5[0]
+            }
+
+            listProductImageFile.push(ProductImageFile)
+        }
+        var fileData = new FormData();
+        fileData.append("listProductImageFile", listProductImageFile)
         $.ajax({
             type: 'POST',
             url: '/Admin/Product/UploadImg',
-            contentType: false, //Không có header
-            processData: false, //không xử lý dữ liệu
-            data:formData,
+            contentType: false,
+            processData: false, 
+            data: fileData,
             success: function (urlImage) {
-                $.ajax({
-                    type: 'GET',
-                    url: '/Admin/Product/Index'
-                })
+
             },
             error: function (err) {
                 alert('có lỗi khi upload: ' + err.statusText);

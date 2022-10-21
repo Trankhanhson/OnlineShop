@@ -19,7 +19,7 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult Index(string searchResult, int page = 1, int pageSize = 8)
         {
             ProductDAO model = new ProductDAO();
-            var list = model.getPage(searchResult,page,pageSize);
+            var list = model.getPage(searchResult, page, pageSize);
             ViewBag.searchResult = searchResult;
             return View(list);
         }
@@ -44,7 +44,7 @@ namespace Project_3.Areas.Admin.Controllers
         // POST: Admin/Product/Create
         [HttpPost]
         [validateantiforgerytoken]
-        public JsonResult Create(Product product,List<ProductVariation> listVariation)
+        public JsonResult Create(Product product, List<ProductVariation> listVariation)
         {
             //thêm sản phẩm
             ProductDAO pModel = new ProductDAO();
@@ -85,10 +85,10 @@ namespace Project_3.Areas.Admin.Controllers
                 ProductDAO productDAO = new ProductDAO();
                 ProductImagesDAO productImagesDAO = new ProductImagesDAO();
                 ProductVariationDAO productVariationDAO = new ProductVariationDAO();
-                if (productDAO.Edit(product))
+                if (productDAO.Edit(product)) 
                 {
                     productVariationDAO.Edit(listVariation);
-                    productImagesDAO.Delete(product.ProId);
+                    productImagesDAO.Delete(product.ProId); 
                 }
             }
             catch
@@ -120,7 +120,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             catch
             {
-                
+
             }
             return Json(new
             {
@@ -129,10 +129,8 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public string UploadImg(string ProId,string ProColorId,HttpPostedFileBase file, HttpPostedFileBase file1, HttpPostedFileBase file2, HttpPostedFileBase file3, HttpPostedFileBase file4, HttpPostedFileBase file5)
+        public string UploadImg(string ProId, string ProColorId, HttpPostedFileBase file, HttpPostedFileBase file1, HttpPostedFileBase file2, HttpPostedFileBase file3, HttpPostedFileBase file4, HttpPostedFileBase file5)
         {
-            //validate
-
             //xử lý upload
             ProductImage productImage = new ProductImage();
             productImage.ProID = long.Parse(ProId);
@@ -152,7 +150,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.Image = "no-img.jpg";
+                productImage.Image = "";
             }
 
             //ảnh detail1
@@ -165,7 +163,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.DetailImage1 = "no-img.jpg";
+                productImage.DetailImage1 = "";
             }
 
             //ảnh detail2
@@ -178,7 +176,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.DetailImage2 = "no-img.jpg";
+                productImage.DetailImage2 = "";
 
             }
 
@@ -192,7 +190,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.DetailImage3 = "no-img.jpg";
+                productImage.DetailImage3 = "";
 
             }
 
@@ -206,7 +204,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.DetailImage4 = "no-img.jpg";
+                productImage.DetailImage4 = "";
 
             }
 
@@ -220,7 +218,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             else
             {
-                productImage.DetailImage5 = "no-img.jpg";
+                productImage.DetailImage5 = "";
 
             }
 
@@ -228,6 +226,31 @@ namespace Project_3.Areas.Admin.Controllers
             ProductImagesDAO productsDAO = new ProductImagesDAO();
             productsDAO.Insert(productImage);
             return "";
+        }
+
+
+        public void DeleteAllImgByIdPro(long idPro)
+        {
+            string path = Server.MapPath("~/Upload/Product/" + idPro);
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo directory = new DirectoryInfo(path);
+                EmptyFolder(directory);
+            }
+        }
+
+        public void EmptyFolder(DirectoryInfo directory)
+        {
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            {
+                EmptyFolder(subdirectory);
+                subdirectory.Delete();
+            }
         }
     }
 }

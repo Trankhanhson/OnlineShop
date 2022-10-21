@@ -30,9 +30,9 @@ namespace Models
         {
             return _dbContext.ProductImages.Where(x=>x.ProID==ProId && x.ProColorID==ProColorId).FirstOrDefault();
         }
-        public void Insert(ProductImage ps)
+        public void Insert(ProductImage proImg)
         {
-            _dbContext.ProductImages.Add(ps);
+            _dbContext.ProductImages.Add(proImg);
             _dbContext.SaveChanges();
         }
 

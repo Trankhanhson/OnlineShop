@@ -54,8 +54,8 @@ namespace Models
             try
             {
                 List<ProductVariation> oldVariations = _dbContext.ProductVariations.Where(x => x.ProId == variations[0].ProId).ToList();
-                _dbContext.ProductVariations.RemoveRange(oldVariations);
-                _dbContext.ProductVariations.AddRange(variations);
+                _dbContext.ProductVariations.RemoveRange(oldVariations); //xóa các biến thê cũ
+                _dbContext.ProductVariations.AddRange(variations); //thêm danh sách biến thể mới
                 _dbContext.SaveChanges();
                 return true;
             }

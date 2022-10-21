@@ -66,8 +66,8 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult Edit(long id)
         {
             //các danh sách dùng để select
-            var ListCategory = new ProductCategoryDAO().getAll();
-            ViewBag.Categories = new SelectList(ListCategory, "CatId", "CatName");
+            var listpỏCat = new ProductCategoryDAO().getAll();
+            ViewBag.ProCats = new SelectList(listpỏCat, "ProCatId", "Name");
             ViewBag.ListSize = new ProductSizeDAO().getAll();
             ViewBag.ListColor = new ProductColorDAO().getAll();
 
@@ -88,7 +88,8 @@ namespace Project_3.Areas.Admin.Controllers
                 if (productDAO.Edit(product)) 
                 {
                     productVariationDAO.Edit(listVariation);
-                    productImagesDAO.Delete(product.ProId); 
+                    productImagesDAO.Delete(product.ProId); //xóa các đối tượng proImg
+                    DeleteAllImgByIdPro(product.ProId); //xóa các Img của ProId
                 }
             }
             catch
@@ -135,16 +136,19 @@ namespace Project_3.Areas.Admin.Controllers
             ProductImage productImage = new ProductImage();
             productImage.ProID = long.Parse(ProId);
             productImage.ProColorID = long.Parse(ProColorId);
-            //lưu file ảnh vào thư mục /Upload/Product
+
+            //tạo đường dẫn có mục là idproduct
+            var _path = Server.MapPath("~/Upload/Product/" + ProId + "/");
+            if (!Directory.Exists(_path))
+            {
+                Directory.CreateDirectory(_path);
+            }
+
             //check ảnh chính
             if (file != null)
             {
                 var _fileName = Path.GetFileName(file.FileName);
-                var _path = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                if (!Directory.Exists(_path))
-                {
-                    Directory.CreateDirectory(_path);
-                }
+
                 file.SaveAs(_path + ProColorId + "0" + _fileName);
                 productImage.Image = ProColorId + "0" + _fileName; //ảnh chính
             }
@@ -157,8 +161,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file1 != null)
             {
                 var _file1Name = Path.GetFileName(file1.FileName);
-                var _path1 = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                file1.SaveAs(_path1 + ProColorId + "1" + _file1Name);
+                file1.SaveAs(_path + ProColorId + "1" + _file1Name);
                 productImage.DetailImage1 = ProColorId + "1" + _file1Name; //ảnh chi tiết
             }
             else
@@ -170,8 +173,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file2 != null)
             {
                 var _file2Name = Path.GetFileName(file2.FileName);
-                var _path2 = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                file1.SaveAs(_path2 + ProColorId + "2" + _file2Name);
+                file1.SaveAs(_path + ProColorId + "2" + _file2Name);
                 productImage.DetailImage2 = ProColorId + "2" + _file2Name; //ảnh chi tiết
             }
             else
@@ -184,8 +186,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file3 != null)
             {
                 var _file3Name = Path.GetFileName(file3.FileName);
-                var _path3 = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                file1.SaveAs(_path3 + ProColorId + "3" + _file3Name);
+                file1.SaveAs(_path + ProColorId + "3" + _file3Name);
                 productImage.DetailImage3 = ProColorId + "3" + _file3Name; //ảnh chi tiết
             }
             else
@@ -198,8 +199,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file4 != null)
             {
                 var _file4Name = Path.GetFileName(file4.FileName);
-                var _path4 = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                file1.SaveAs(_path4 + ProColorId + "4" + _file4Name);
+                file1.SaveAs(_path + ProColorId + "4" + _file4Name);
                 productImage.DetailImage4 = ProColorId + "4" + _file4Name; //ảnh chi tiết
             }
             else
@@ -212,8 +212,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file5 != null)
             {
                 var _file5Name = Path.GetFileName(file5.FileName);
-                var _path5 = Server.MapPath("~/Upload/Product/" + ProId + "/");
-                file1.SaveAs(_path5 + ProColorId + "5" + _file5Name);
+                file1.SaveAs(_path + ProColorId + "5" + _file5Name);
                 productImage.DetailImage5 = ProColorId + "5" + _file5Name; //ảnh chi tiết
             }
             else

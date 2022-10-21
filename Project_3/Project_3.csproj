@@ -193,8 +193,9 @@
     <Content Include="Assets\Admin\img\slides-3.jpg" />
     <Content Include="Assets\Admin\js\ColorColntroller.js" />
     <Content Include="Assets\Admin\js\main.js" />
-    <Content Include="Assets\Admin\js\product.js" />
-    <Content Include="Assets\Admin\js\productController.js" />
+    <Content Include="Assets\Admin\js\product\Createproduct.js" />
+    <Content Include="Assets\Admin\js\product\EditProduct.js" />
+    <Content Include="Assets\Admin\js\product\product.js" />
     <Content Include="Assets\Admin\js\SizeController.js" />
     <Content Include="Assets\Admin\js\userController.js" />
     <Content Include="Assets\Admin\scss\Readme.txt" />

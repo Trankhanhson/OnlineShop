@@ -7,8 +7,8 @@
 
 @section jsFooter{
     <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Assets/Admin/js/Product.js"></script>
-    <script src="~/Assets/Admin/js/EditProduct.js"></script>
+    <script src="~/Assets/Admin/js/product/product.js"></script>
+    <script src="~/Assets/Admin/js/product/EditProduct.js"></script>
 }
 
 <div style="padding: 50px;background:#fff;" class="shadow wrap-edit" data-idPro="@Model.ProId">
@@ -22,6 +22,7 @@
                 <input type="text" name="name" value="@Model.ProName" id="name" class="input-create text-dark" autofocus>
             </div>
         </div>
+
         <div class="d-flex align-items-start justify-content-between">
             <label for="" class="text-primary mb-0 font-weight-bold">Chất liệu <i class="fa-solid fa-circle-exclamation"></i></label>
             <div class="input-wrap">

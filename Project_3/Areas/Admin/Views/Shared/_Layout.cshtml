@@ -360,6 +360,28 @@
         });
     </script>
 
+    <!--Convert price-->
+    <script>
+        /*hiển thị giá*/
+        $(".price").each((index, value) => {
+            let tg = "";
+            let textPrice = $(value).text();
+            if (textPrice.length!=0) {
+                let length = textPrice.length;
+                let count = 0;
+                for (var i = length - 1; i >= 0; --i) {
+                    if (count % 3 == 0 && count != 0) {
+                        tg = textPrice[i] + '.' + tg;
+                    }
+                    else {
+                        tg = textPrice[i] + tg;
+                    }
+                    count++;
+                }
+                $(value).text(tg + "đ")
+            }
+        })
+    </script>
     <!--angular file-->
     <script src="~/Scripts/angular.min.js"></script>
 

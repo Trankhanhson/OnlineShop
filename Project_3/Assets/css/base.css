@@ -393,13 +393,6 @@ body::before{
     position: relative;
 
 }
-.product-img a{
-    width:100%;
-    padding-top:130%;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
-}
 .product-size{
     line-height: 36px;
     text-align: center;

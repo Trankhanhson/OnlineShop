@@ -18,7 +18,7 @@ namespace Models.DAO
 
         public List<ProductCat> getAll()
         {
-            List<ProductCat> ProductCats = _dbContext.ProductCats.ToList();
+            List<ProductCat> ProductCats = _dbContext.ProductCats.Include(x=>x.Category).ToList();
             return ProductCats;
         }
       
@@ -35,6 +35,7 @@ namespace Models.DAO
         public ProductCat Insert(ProductCat ProductCat)
         {
             ProductCat proc =_dbContext.ProductCats.Add(ProductCat);
+            proc.Category = _dbContext.Categories.Where(x => x.CatID == proc.CatID).FirstOrDefault(); //lấy thêm category khi trả về trên view
             _dbContext.SaveChanges();
             return proc;
         }

@@ -8,7 +8,6 @@
         <EntityTypeShape EntityType="ClothesShopModel.Customer" Width="1.5" PointX="3.75" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ImportBill" Width="1.5" PointX="6" PointY="15.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ImportBillDetail" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClothesShopModel.News" Width="1.5" PointX="6" PointY="19.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.Order" Width="1.5" PointX="6" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.OrderDetail" Width="1.5" PointX="8.25" PointY="1.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductColor" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
@@ -23,7 +22,6 @@
         <AssociationConnector Association="ClothesShopModel.FK_ImportBill_User1" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ImportBill" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" ManuallyRouted="false" />
-        <AssociationConnector Association="ClothesShopModel.FK_News_User" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_PromotionOrder1" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_Order" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_ProductVariation" ManuallyRouted="false" />
@@ -37,6 +35,8 @@
         <EntityTypeShape EntityType="ClothesShopModel.ProductCat" Width="1.5" PointX="11" PointY="7.75" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductCat_Category" />
         <AssociationConnector Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058" />
+        <EntityTypeShape EntityType="ClothesShopModel.New" Width="1.5" PointX="6" PointY="19.5" />
+        <AssociationConnector Association="ClothesShopModel.FK_News_User" />
       </Diagram>
       <Diagram DiagramId="b3a46f2332c64c989370a0f902c91d0a" Name="Diagram2" >
       </Diagram>

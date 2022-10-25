@@ -33,6 +33,8 @@ namespace Models.Framework
         public Nullable<System.DateTime> StopPromotion { get; set; }
         public string Slug { get; set; }
         public Nullable<bool> Status { get; set; }
+
+        public string firstImage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }

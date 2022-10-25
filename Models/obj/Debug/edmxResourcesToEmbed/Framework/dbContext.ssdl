@@ -39,7 +39,7 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="ImportPrice" Type="int" />
   </EntityType>
-  <EntityType Name="News">
+  <EntityType Name="New">
     <Key>
       <PropertyRef Name="NewID" />
     </Key>
@@ -49,6 +49,7 @@
     <Property Name="Content" Type="nvarchar(max)" />
     <Property Name="PublicDate" Type="datetime" />
     <Property Name="Image" Type="nvarchar" MaxLength="200" />
+    <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
@@ -237,12 +238,12 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
   </Association>
   <Association Name="FK_News_User">
     <End Role="User" Type="Self.User" Multiplicity="0..1" />
-    <End Role="News" Type="Self.News" Multiplicity="*" />
+    <End Role="New" Type="Self.New" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="UserID" />
       </Principal>
-      <Dependent Role="News">
+      <Dependent Role="New">
         <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
@@ -372,7 +373,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportBill" EntityType="Self.ImportBill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportBillDetail" EntityType="Self.ImportBillDetail" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="New" EntityType="Self.New" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
@@ -411,7 +412,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     </AssociationSet>
     <AssociationSet Name="FK_News_User" Association="Self.FK_News_User">
       <End Role="User" EntitySet="User" />
-      <End Role="News" EntitySet="News" />
+      <End Role="New" EntitySet="New" />
     </AssociationSet>
     <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
       <End Role="Customer" EntitySet="Customer" />

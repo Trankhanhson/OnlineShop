@@ -34,18 +34,6 @@
     <NavigationProperty Name="ImportBill" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBillDetail" ToRole="ImportBill" />
     <NavigationProperty Name="ProductVariation" Relationship="Self.FK_ImportBillDetail_ProductVariation" FromRole="ImportBillDetail" ToRole="ProductVariation" />
   </EntityType>
-  <EntityType Name="News">
-    <Key>
-      <PropertyRef Name="NewID" />
-    </Key>
-    <Property Name="NewID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserID" Type="Int32" />
-    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PublicDate" Type="DateTime" Precision="3" />
-    <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="User" Relationship="Self.FK_News_User" FromRole="News" ToRole="User" />
-  </EntityType>
   <EntityType Name="Order">
     <Key>
       <PropertyRef Name="OrdID" />
@@ -159,7 +147,7 @@
     <Property Name="UserEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="ImportBills" Relationship="Self.FK_ImportBill_User1" FromRole="User" ToRole="ImportBill" />
-    <NavigationProperty Name="News" Relationship="Self.FK_News_User" FromRole="User" ToRole="News" />
+    <NavigationProperty Name="News" Relationship="ClothesShopModel.FK_News_User" FromRole="User" ToRole="New" />
   </EntityType>
   <EntityType Name="Slide">
     <Key>
@@ -216,18 +204,6 @@
       </Principal>
       <Dependent Role="ImportBillDetail">
         <PropertyRef Name="ProVariationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_News_User">
-    <End Role="User" Type="Self.User" Multiplicity="0..1" />
-    <End Role="News" Type="Self.News" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="News">
-        <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -307,7 +283,6 @@
     <EntitySet Name="Customers" EntityType="Self.Customer" />
     <EntitySet Name="ImportBills" EntityType="Self.ImportBill" />
     <EntitySet Name="ImportBillDetails" EntityType="Self.ImportBillDetail" />
-    <EntitySet Name="News" EntityType="Self.News" />
     <EntitySet Name="Orders" EntityType="Self.Order" />
     <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
     <EntitySet Name="ProductColors" EntityType="Self.ProductColor" />
@@ -333,10 +308,6 @@
     <AssociationSet Name="FK_ImportBillDetail_ProductVariation" Association="Self.FK_ImportBillDetail_ProductVariation">
       <End Role="ProductVariation" EntitySet="ProductVariations" />
       <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_News_User" Association="Self.FK_News_User">
-      <End Role="User" EntitySet="Users" />
-      <End Role="News" EntitySet="News" />
     </AssociationSet>
     <AssociationSet Name="FK_Order_PromotionOrder1" Association="Self.FK_Order_PromotionOrder1">
       <End Role="PromotionOrder" EntitySet="PromotionOrders" />
@@ -380,6 +351,11 @@
     <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
       <End Role="ProductCat" EntitySet="ProductCats" />
       <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <EntitySet Name="News" EntityType="ClothesShopModel.New" />
+    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="New" EntitySet="News" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
@@ -471,6 +447,31 @@
       </Principal>
       <Dependent Role="Product">
         <PropertyRef Name="ProCatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="New">
+    <Key>
+      <PropertyRef Name="NewID" />
+    </Key>
+    <Property Name="NewID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PublicDate" Type="DateTime" Precision="3" />
+    <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_News_User" FromRole="New" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_News_User">
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.New" Role="New" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="New">
+        <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

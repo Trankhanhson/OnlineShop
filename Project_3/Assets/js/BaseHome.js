@@ -238,3 +238,48 @@ $(".price").each((index, value) => {
     $(value).text(tg + "đ")
 })
 
+/**loại các size bị trung trên giao diện*/
+/**cách dùng : đưa class filter-sameValue và thẻ bọc các size và class filter-value vào các thẻ có data-idSize*/
+var parentSizes = $(".filter-sameValue") //danh sách các element chứa các size
+parentSizes.each((index, wrapSize) => {
+    let listSize = $(wrapSize).find(".filter-value") //danh sách size
+    let newList = [] //chứa list idSize đã được filter
+    listSize.each((index1, sizeElement) => {
+        let idSize = $(sizeElement).attr("data-idSize")
+
+        //nếu idSize chưa tồn tại trong newList
+        if (newList.indexOf(idSize) == -1) {
+            newList.push(idSize)
+        }
+        else {
+            $(sizeElement).remove() //xóa phần element nếu đã tồn tại
+        }
+    })
+})
+
+
+//Add class active vào phần tử đầu tiền
+var parentAddActives = $(".wrapActiveToFirstChild")
+parentAddActives.each((index, wrapItem) => {
+    let listValue = $(wrapItem).children(".addActiveItem")
+    $(listValue[0]).addClass("active")
+})
+
+
+/*ADD CART*/
+function addCart(input) {
+    let parent = $(input).parents(".product")
+    let proId = $(parent).data("proid")
+    let proSizeId = $($(parent).find(".product-size.active")).data("idsize")
+    let proColorId = $($(parent).find(".product-color.active")).data("idcolor")
+
+    $.ajax({
+        url: '/Cart/AddItem',
+        type: 'POST',
+        data: { ProId: proId, ProColorId: proColorId, ProSizeId: proSizeId },
+        dataType: 'json',
+        success: function (response) {
+        }
+
+    })
+}

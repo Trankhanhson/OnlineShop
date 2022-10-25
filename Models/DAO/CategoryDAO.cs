@@ -18,7 +18,7 @@ namespace Models.DAO
 
         public List<Category> getAll()
         {
-            _dbContext.Configuration.ProxyCreationEnabled = false;
+            //_dbContext.Configuration.ProxyCreationEnabled = false;
             List<Category> categories = _dbContext.Categories.ToList();
             return categories;
         }

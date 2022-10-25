@@ -9,6 +9,7 @@ using System.Data.Entity;
 
 namespace Models
 {
+    [Serializable]
     public class ProductDAO
     {
         private ClothesShopEntities _dbContext = null;
@@ -41,6 +42,10 @@ namespace Models
             return product.ProId;
         }
 
+        public List<Product> get10ByProCat(int? proCatId)
+        {
+            return _dbContext.Products.Where(x => x.ProCatId == proCatId).Include(pi => pi.ProductImages).Include(pv => pv.ProductVariations).OrderByDescending(p=>p.ProId).Take(10).ToList();
+        }
         public bool Delete(long id)
         {
             try
@@ -60,13 +65,33 @@ namespace Models
         {
             return _dbContext.Products.Include(pi => pi.ProductImages).Include(pv=>pv.ProductVariations).Where(p=>p.ProId==id).FirstOrDefault();
         }
-        
+
+        public void EditPrice(List<Product> products)
+        {
+            foreach(var product in products)
+            {
+                Product p = _dbContext.Products.Find(product.ProId);
+                p.Price = product.Price;
+                p.ImportPrice = product.ImportPrice;
+            }
+            _dbContext.SaveChanges();
+        }
+
         public bool Edit(Product product)
         {
             try
             {
                 Product p = _dbContext.Products.Find(product.ProId);
-                p = product;
+                p.ProName = product.ProName;
+                p.Material = product.Material;
+                p.Description = product.Description;
+                p.ProCatId = product.ProCatId;
+                p.ImportPrice = product.ImportPrice;
+                p.Price = product.Price;
+                p.PromotionPrice = product.PromotionPrice;
+                p.StartPromotion = product.StartPromotion;
+                p.StopPromotion = product.StopPromotion;
+                _dbContext.SaveChanges();
                 return true;
             }
             catch

@@ -1,22 +1,25 @@
-﻿function SaveClick() {
+﻿function SaveData() {
+
     //lấy dữ liệu của product
+    var ProId = $("#main").attr("data-idPro")
     var ProName = $("#name").val()
     var Material = $("#material").val()
     var Description = $("#description").val()
     var ProCatId = $("#ProCatId").val()
     var ImportPrice = $("#importPrice").val()
     var Price = $("#Price").val()
-    var PricePromotion = $("#pricePromotion").val()
+    var PromotionPrice = $("#pricePromotion").val()
     var StartPromotion = $("#startPromotion").val()
     var StopPromotion = $("#stopPromotion").val()
     var product = {
+        ProId: ProId,
         ProName: ProName,
         Material: Material,
         Description: Description,
         ProCatId: ProCatId,
         ImportPrice: ImportPrice,
         Price: Price,
-        PrPricePromotion: PricePromotion,
+        PromotionPrice: PromotionPrice,
         StartPromotion: StartPromotion,
         StopPromotion: StopPromotion
     }
@@ -27,7 +30,7 @@
     variationWrap.each((index, value) => {
         let colorId = $($(value).find(".colorOption")).attr("data-idColor")
         let variation = {
-            ProId: null,
+            ProId: ProId,
             ProColorID: colorId,
             ProSizeID: $($(value).find(".sizeOption")).attr("data-idSize"),
             Quantity: $($(value).find(".input-create")).val()
@@ -44,15 +47,15 @@
 
     //thêm sản phẩm và danh sách biến thể bằng ajax và lấy về idproduct mới
     $.ajax({
-        url: "/Admin/Product/Create",
+        url: "/Admin/Product/Edit",
         data: { product: product, listVariation: listVariation },
         dataType: "json",
         type: "POST",
         success: function (response) {
             for (var i = 0; i < listColorId.length; i++) {
-                UploadImgToServer(listColorId[i], response.Proid)
+                UploadImgToServer(listColorId[i], response.Proid) //upload ảnh mới của product
             }
-            $("#successToast .text-toast").text("Đã thêm sản phẩm thành công")
+            $("#successToast .text-toast").text("Đã cập nhật sản phẩm thành công")
             $("#successToast").toast("show") //hiển thị thông báo thành công
         }
     })
@@ -64,12 +67,13 @@ function UploadImgToServer(idColor, idProduct) {
     if (window.FormData != undefined) {
         //Lấy dữ liệu trên file upload
         //lấy thẻ input theo idcolor
-        var fileMain = $(`div[data-idColor=${idColor}]`).find('.input-file__main').get(0).files;
-        var fileDetail1 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail1').get(0).files;
-        var fileDetail2 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail2').get(0).files;
-        var fileDetail3 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail3').get(0).files;
-        var fileDetail4 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail4').get(0).files;
-        var fileDetail5 = $(`div[data-idColor=${idColor}]`).find('.input-file__detail5').get(0).files;
+        var imgItem = $(`.imgItem[data-idColor=${idColor}]`)
+        var fileMain = $(imgItem).find('.input-file__main').get(0).files;
+        var fileDetail1 = $(imgItem).find('.input-file__detail1').get(0).files;
+        var fileDetail2 = $(imgItem).find('.input-file__detail2').get(0).files;
+        var fileDetail3 = $(imgItem).find('.input-file__detail3').get(0).files;
+        var fileDetail4 = $(imgItem).find('.input-file__detail4').get(0).files;
+        var fileDetail5 = $(imgItem).find('.input-file__detail5').get(0).files;
         //Tạo đối trượng formData
         var formData = new FormData();
         //tạo các key,value cho data
@@ -82,6 +86,7 @@ function UploadImgToServer(idColor, idProduct) {
         formData.append("ProId", idProduct)
         formData.append("ProColorId", idColor)
         $.ajax({
+            async: true,
             type: 'POST',
             url: '/Admin/Product/UploadImg',
             contentType: false, //Không có header
@@ -99,3 +104,51 @@ function UploadImgToServer(idColor, idProduct) {
         })
     }
 }
+
+$(".btn-edit").click((e) => {
+    //kiểm tra giá khuyến mại phải nhỏ hơn giá bán
+    var Price = $("#Price").val()
+    var PricePromotion = $("#pricePromotion").val()
+    if (PricePromotion <= Price) {
+        var variationWrap = $(".table-create tbody tr")
+        //kiểm tra xem đã thêm variation chưa
+        if (variationWrap.length > 0) {
+            if ($('#formProduct').valid()) {
+                SaveData()
+            }
+        }
+        else {
+            $("#errorToast .text-toast").text("Bạn chưa thêm biến thể nào")
+            $("#errorToast").toast("show")
+        }
+    }
+    else {
+        $("#errorToast .text-toast").text("Giá khuyến mại phải nhỏ hơn giá bán")
+        $("#errorToast").toast("show")
+    }
+})
+
+
+//hiển thị ảnh khi load
+$('.file-upload-content').show();
+$('.image-upload-wrap').hide();
+
+
+/**loại các size bị trung trên giao diện*/
+/**cách dùng : đưa class filter-sameValue và thẻ bọc các size và class filter-value vào các thẻ có data-idSize*/
+var parentSizes = $(".filter-sameValue") //danh sách các element chứa các size
+parentSizes.each((index, wrapSize) => {
+    let listSize = $(wrapSize).find(".filter-value") //danh sách size
+    let newList = [] //chứa list idSize đã được filter
+    listSize.each((index1, sizeElement) => {
+        let idSize = $(sizeElement).attr("data-idSize")
+
+        //nếu idSize chưa tồn tại trong newList
+        if (newList.indexOf(idSize) == -1) {
+            newList.push(idSize)
+        }
+        else {
+            $(sizeElement).remove() //xóa phần element nếu đã tồn tại
+        }
+    })
+})

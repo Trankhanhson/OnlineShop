@@ -4,81 +4,85 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int index = 0;
 }
 @section styles{
     <link href="~/Assets/Admin/css/Product.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Assets/Admin/js/productController.js"></script>
+    <script src="~/Assets/Admin/js/product/product.js"></script>
+    <script src="~/Assets/Admin/js/product/DeleteProduct.js"></script>
 }
 
-<div style="padding: 0 20px 0 0;">
-    <div class="text-end">
-        <a href="/Admin/Category/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm danh mục</a>
-        <a href="/Admin/ProductCat/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm loại sản phẩm</a>
-        <button class="btn btn-primary me-2"><i class="fa-solid fa-file-import"></i> Import</button>
-        <button class="btn btn-primary"><i class="fa-solid fa-file-export"></i> Xuất file</button>
-    </div>
-    <table class="table bg-white shadow mt-3">
-        <thead class="text-dark">
-            <tr>
-                <th class="col-id">Mã hàng</th>
-                <th>Tên hàng</th>
-                <th>Giá vốn</th>
-                <th>Giá bán</th>
-                <th>Giá khuyến mãi</th>
-                <th>Thời gian khuyến mãi</th>
-                <th>Tồn kho</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="row-product" id="@item.ProId">
-                    <td class="col-id">@item.ProId</td>
-                    <td class="col-name">@item.ProName</td>
-                    <td class="col-price">@item.Price</td>
-                    <td class="col-importPrice">@item.ImportPrice</td>
-                    <td class="col-promotion">@item.PromotionPrice</td>
-                    <td class="col-datePromotion">@item.StartPromotion-@item.StopPromotion</td>
-                    <td class="col-quantity"></td>
-                    <td>
-                        <a class="btn-update" href="/Admin/Product/Edit/@item.ProId"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
-                        <a class="btn-delete btn-deleteHome" data-idPro="@item.ProId"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
-                    </td>
-                </tr>
-                <tr class="row-variation-@item.ProId row-variation">
-                    <td colspan="8" class="ps-4 py-0 pb-4">
-                        @foreach (var variation in item.ProductVariations)
-                        {
-                            <ul class=" d-flex mb-0 border-start border-bottom">
-                                <li class="col-id">SP0 @variation.ProVariationID</li>
-                                <li class="col-name">@variation.ProductColor.NameColor - @variation.ProductSize.NameSize</li>
-                                <li class="col-price"></li>
-                                <li class="col-importPrice"></li>
-                                <li class="col-promotion"></li>
-                                <li class="col-datePromotion"></li>
-                                <li class="col-quantity">@variation.Quantity</li>
-                            </ul>
-                        }
-                    </td>
-                </tr>
-            }
 
-        </tbody>
-    </table>
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchResult = @ViewBag.searchResult }))
+<main id="main" class="main">
 
-</div>
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <div class="text-end">
+                            <a href="/Admin/Product/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm sản phẩm</a>
+                            <button class="btn btn-primary me-2"><i class="fa-solid fa-file-import"></i> Import</button>
+                            <button class="btn btn-primary"><i class="fa-solid fa-file-export"></i> Xuất file</button>
+                        </div>
+                        <table class="table bg-white shadow mt-3">
+                            <thead class="text-dark">
+                                <tr>
+                                    <th class="col-id">STT</th>
+                                    <th>Tên hàng</th>
+                                    <th>Giá vốn</th>
+                                    <th>Giá bán</th>
+                                    <th>Giá khuyến mãi</th>
+                                    <th>Thời gian khuyến mãi</th>
+                                    <th>Tồn kho</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="row-product" id="@item.ProId">
+                                        <td class="col-id">@(index++)</td>
+                                        <td class="col-name">@item.ProName</td>
+                                        <td class="col-price price">@item.Price</td>
+                                        <td class="col-importPrice price">@item.ImportPrice</td>
+                                        <td class="col-promotion price">@item.PromotionPrice</td>
+                                        <td class="col-datePromotion">@Html.FormatValue(@item.StartPromotion, "{0:dd/MM/yyyy}") - @Html.FormatValue(@item.StopPromotion, "{0:dd/MM/yyyy}")</td>
+                                        <td class="col-quantity"></td>
+                                        <td>
+                                            <a class="btn-update" href="/Admin/Product/Edit/@item.ProId"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                            <a class="btn-delete" onclick="deleteProduct(@item.ProId)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-variation-@item.ProId row-variation">
+                                        <td colspan="8" class="ps-4 py-0 pb-4">
+                                            @foreach (var variation in item.ProductVariations)
+                                            {
+                                                <ul class=" d-flex mb-0 border-start border-bottom">
+                                                    <li class="col-id"></li>
+                                                    <li class="col-name">@variation.ProductColor.NameColor - @variation.ProductSize.NameSize</li>
+                                                    <li class="col-price"></li>
+                                                    <li class="col-importPrice"></li>
+                                                    <li class="col-promotion"></li>
+                                                    <li class="col-datePromotion"></li>
+                                                    <li class="col-quantity">@variation.Quantity</li>
+                                                    @*<li><a class="btn-delete" onclick="deleteVariation(this,@variation.ProVariationID)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a></li>*@
+                                                </ul>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
 
-<!--toaast-->
-<div class="position-fixed top-0 end-0 p-3 shadow" style="z-index: 11">
-    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body toast-success">
-            Đã thêm sản phẩm thành công
+                            </tbody>
+                        </table>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchResult = @ViewBag.searchResult }))
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
 
+</main>

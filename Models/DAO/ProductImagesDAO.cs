@@ -26,7 +26,7 @@ namespace Models
             return list;
         }
 
-        public ProductImage getByKey(long ProId,int ProColorId)
+        public ProductImage getByKey(long ProId,long ProColorId)
         {
             return _dbContext.ProductImages.Where(x=>x.ProID==ProId && x.ProColorID==ProColorId).FirstOrDefault();
         }

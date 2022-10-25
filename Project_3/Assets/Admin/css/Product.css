@@ -4,7 +4,7 @@
 }
 
 .col-name {
-    width: 30%;
+    width: 25%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -19,7 +19,7 @@
 }
 
 .col-promotion {
-    width: 10%;
+    width: 12%;
 }
 
 .col-datePromotion {

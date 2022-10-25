@@ -1,0 +1,77 @@
+﻿@model Models.Framework.New
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
+    <script src="~/Scripts/ng-file-upload.min.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/New/EditNewAngular.js"></script>
+    <script src="/Assets/Plugin/ckeditor/ckeditor.js"></script>
+    <script>
+
+        CKEDITOR.replace('Content')
+
+    </script>
+}
+
+<main id="main" class="main" ng-app="NewApp" ng-controller="NewController" ng-init="New = {Title : '@Model.Title',UserID : '@Model.UserID'}" >
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <form name="editForm" novalidate>
+                            <div class="form-horizontal">
+                                <div class="row mb-3">
+                                    <label for="inputText" class="col-sm-2 col-form-label">Tiêu đề</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="Title" ng-model="New.Title" required>
+                                        <span ng-show="editForm.$submitted || editForm.Title.$dirty">
+                                            <span class="error" ng-show="editForm.Title.$error.required">Tiêu đề không được để trống</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Nhân viên</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-select" id="select-cat" aria-label="Default select example" ng-model="New.UserID">
+                                            @foreach (var item in ViewBag.ListUser)
+                                            {
+                                                <option value="@item.UserID">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">Ảnh</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputText" class="col-sm-2 col-form-label" >Content</label>
+                                    <div class="col-sm-10 " id="Content-wrap">
+                                        <div class="d-none">
+                                            @Html.Raw(@Model.Content)
+                                        </div>
+                                        <textarea type="text" class="form-control" id="Content" value="@Model.Content" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button class="btn btn-primary" ng-click="SaveEdit()">Lưu</button>
+                            <a class="btn btn-primary" href="/Admin/New/Index">Trang chủ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+

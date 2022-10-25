@@ -44,7 +44,7 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="ImportPrice" Type="int" />
         </EntityType>
-        <EntityType Name="News">
+        <EntityType Name="New">
           <Key>
             <PropertyRef Name="NewID" />
           </Key>
@@ -54,6 +54,7 @@
           <Property Name="Content" Type="nvarchar(max)" />
           <Property Name="PublicDate" Type="datetime" />
           <Property Name="Image" Type="nvarchar" MaxLength="200" />
+          <Property Name="Status" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -242,12 +243,12 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
         </Association>
         <Association Name="FK_News_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="News" Type="Self.News" Multiplicity="*" />
+          <End Role="New" Type="Self.New" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="News">
+            <Dependent Role="New">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -377,7 +378,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportBill" EntityType="Self.ImportBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportBillDetail" EntityType="Self.ImportBillDetail" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="New" EntityType="Self.New" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
@@ -416,7 +417,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           </AssociationSet>
           <AssociationSet Name="FK_News_User" Association="Self.FK_News_User">
             <End Role="User" EntitySet="User" />
-            <End Role="News" EntitySet="News" />
+            <End Role="New" EntitySet="New" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
             <End Role="Customer" EntitySet="Customer" />
@@ -496,18 +497,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="ImportPrice" Type="Int32" />
           <NavigationProperty Name="ImportBill" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBillDetail" ToRole="ImportBill" />
           <NavigationProperty Name="ProductVariation" Relationship="Self.FK_ImportBillDetail_ProductVariation" FromRole="ImportBillDetail" ToRole="ProductVariation" />
-        </EntityType>
-        <EntityType Name="News">
-          <Key>
-            <PropertyRef Name="NewID" />
-          </Key>
-          <Property Name="NewID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PublicDate" Type="DateTime" Precision="3" />
-          <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_News_User" FromRole="News" ToRole="User" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -622,7 +611,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="UserEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="ImportBills" Relationship="Self.FK_ImportBill_User1" FromRole="User" ToRole="ImportBill" />
-          <NavigationProperty Name="News" Relationship="Self.FK_News_User" FromRole="User" ToRole="News" />
+          <NavigationProperty Name="News" Relationship="ClothesShopModel.FK_News_User" FromRole="User" ToRole="New" />
         </EntityType>
         <EntityType Name="Slide">
           <Key>
@@ -679,18 +668,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Principal>
             <Dependent Role="ImportBillDetail">
               <PropertyRef Name="ProVariationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_News_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="News" Type="Self.News" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="News">
-              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -770,7 +747,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="ImportBills" EntityType="Self.ImportBill" />
           <EntitySet Name="ImportBillDetails" EntityType="Self.ImportBillDetail" />
-          <EntitySet Name="News" EntityType="Self.News" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="ProductColors" EntityType="Self.ProductColor" />
@@ -796,10 +772,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <AssociationSet Name="FK_ImportBillDetail_ProductVariation" Association="Self.FK_ImportBillDetail_ProductVariation">
             <End Role="ProductVariation" EntitySet="ProductVariations" />
             <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_News_User" Association="Self.FK_News_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="News" EntitySet="News" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_PromotionOrder1" Association="Self.FK_Order_PromotionOrder1">
             <End Role="PromotionOrder" EntitySet="PromotionOrders" />
@@ -843,6 +815,11 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
             <End Role="ProductCat" EntitySet="ProductCats" />
             <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="News" EntityType="ClothesShopModel.New" />
+          <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="New" EntitySet="News" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
@@ -937,6 +914,31 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="New">
+          <Key>
+            <PropertyRef Name="NewID" />
+          </Key>
+          <Property Name="NewID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublicDate" Type="DateTime" Precision="3" />
+          <Property Name="Image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_News_User" FromRole="New" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_News_User">
+          <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.New" Role="New" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="New">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -971,18 +973,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
                 <ScalarProperty Name="ImpId" ColumnName="ImpId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="News">
-            <EntityTypeMapping TypeName="ClothesShopModel.News">
-              <MappingFragment StoreEntitySet="News">
-                <ScalarProperty Name="NewID" ColumnName="NewID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="PublicDate" ColumnName="PublicDate" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1139,6 +1129,19 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
                 <ScalarProperty Name="Slug" ColumnName="Slug" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="ClothesShopModel.New">
+              <MappingFragment StoreEntitySet="New">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PublicDate" ColumnName="PublicDate" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="NewID" ColumnName="NewID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

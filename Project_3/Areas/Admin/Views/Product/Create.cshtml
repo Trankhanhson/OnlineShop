@@ -44,8 +44,13 @@
                                 <div class="d-flex mb-3 col-6">
                                     <label class="label-create col-form-label">Loại sản phẩm</label>
                                     <div class="flex-grow-1">
-                                        @Html.DropDownListFor(model => model.ProCatId, ViewBag.Categories as SelectList, new { @class = "form-select", @style = "cursor:pointer; ", @id = "ProCatId" })
-
+                                        @*@Html.DropDownListFor(model => model.ProCatId, ViewBag.listproCat as SelectList, new { @class = "form-select", @style = "cursor:pointer; ", @id = "ProCatId" })*@
+                                        <select class="form-select" style="cursor:pointer;" id="ProCatId">
+                                            @foreach (var item in ViewBag.listproCat)
+                                            {
+                                                <option value="@item.ProCatId">@item.Name < @item.Category.Name < @item.Category.type</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="d-flex mb-3 col-6">
@@ -94,7 +99,7 @@
                                             <ul class="dropdown-menu method-dropdown__list shadow" aria-labelledby="dropdownColor">
                                                 @foreach (var color in ViewBag.ListColor)
                                                 {
-                                                    <li class=""><a class="dropdown-item method-dropdown__item-link " href="#" data-idColor="@color.ProColorID"><div class="method-image-color" style="background-image: url(@color.ImageColor);"></div><p>@color.NameColor </p></a></li>
+                                                    <li class=""><a class="dropdown-item method-dropdown__item-link " href="#" data-idColor="@color.ProColorID"><div class="method-image-color" style="background-image: url('@color.ImageColor');"></div><p>@color.NameColor </p></a></li>
                                                 }
                                             </ul>
                                         </div>

@@ -32,18 +32,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="News">
-      <EntityTypeMapping TypeName="ClothesShopModel.News">
-        <MappingFragment StoreEntitySet="News">
-          <ScalarProperty Name="NewID" ColumnName="NewID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="Content" ColumnName="Content" />
-          <ScalarProperty Name="PublicDate" ColumnName="PublicDate" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Orders">
       <EntityTypeMapping TypeName="ClothesShopModel.Order">
         <MappingFragment StoreEntitySet="Order">
@@ -197,6 +185,19 @@
           <ScalarProperty Name="Slug" ColumnName="Slug" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="News">
+      <EntityTypeMapping TypeName="ClothesShopModel.New">
+        <MappingFragment StoreEntitySet="New">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="PublicDate" ColumnName="PublicDate" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="NewID" ColumnName="NewID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

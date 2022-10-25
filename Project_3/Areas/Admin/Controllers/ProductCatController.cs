@@ -27,7 +27,12 @@ namespace Project_3.Areas.Admin.Controllers
             List<ProductCat> list = new ProductCategoryDAO().getAll();
             JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var result = JsonConvert.SerializeObject(list, Formatting.Indented, jss);
-            return Json(result,JsonRequestBehavior.AllowGet);
+            var firstCatId = new CategoryDAO().getAll().First().CatID;
+            return Json(new
+            {
+                result = result,
+                firstCatId = firstCatId
+            },JsonRequestBehavior.AllowGet);
         }
 
         // POST: Admin/ProductCat/Create
@@ -107,7 +112,8 @@ namespace Project_3.Areas.Admin.Controllers
             }
             return Json(new
             {
-                UpdateSuccess = UpdateSuccess,
+                checkExistImg = checkExistImg,
+                UpdateSuccess = UpdateSuccess
             });
         }
 

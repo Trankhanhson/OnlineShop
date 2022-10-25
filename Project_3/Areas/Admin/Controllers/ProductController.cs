@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -24,18 +26,33 @@ namespace Project_3.Areas.Admin.Controllers
             return View(list);
         }
 
-        // GET: Admin/Product/Details/5
-        public ActionResult Details(int id)
+        public JsonResult getAllData()
         {
-            return View();
+            List<Product> products = new ProductDAO().getAll();
+            ProductImagesDAO productImagesDAO = new ProductImagesDAO();
+            foreach(var p in products)
+            {
+                foreach(var pv in p.ProductVariations)
+                {
+                    pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
+                }
+            }
+            
+            //Ignore loopHanding
+            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var result = JsonConvert.SerializeObject(products, Formatting.Indented, jss);
+
+            //set maxJsonLangth for ressult
+            var jsonResult = Json(result, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         // GET: Admin/Product/Create
         public ActionResult Create()
         {
             //các danh sách dùng để select
-            var ListCategory = new ProductCategoryDAO().getAll();
-            ViewBag.Categories = new SelectList(ListCategory, "ProCatId", "Name");
+            ViewBag.listproCat = new ProductCategoryDAO().getAll();
             ViewBag.ListSize = new ProductSizeDAO().getAll();
             ViewBag.ListColor = new ProductColorDAO().getAll();
             return View();
@@ -66,8 +83,8 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult Edit(long id)
         {
             //các danh sách dùng để select
-            var listpỏCat = new ProductCategoryDAO().getAll();
-            ViewBag.ProCats = new SelectList(listpỏCat, "ProCatId", "Name");
+            var listproCat = new ProductCategoryDAO().getAll();
+            ViewBag.listproCat = new SelectList(listproCat, "ProCatId", "Name");
             ViewBag.ListSize = new ProductSizeDAO().getAll();
             ViewBag.ListColor = new ProductColorDAO().getAll();
 
@@ -104,7 +121,7 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/Product/Delete/5
         [HttpPost]
-        public JsonResult Delete(int id)
+        public JsonResult Delete(long id)
         {
             var check = false;
             try
@@ -114,8 +131,9 @@ namespace Project_3.Areas.Admin.Controllers
                 ProductImagesDAO productImgDAO = new ProductImagesDAO();
                 if (productVariationDAO.DeleteByProId(id))
                 {
-                    productDAO.Delete(id);
                     productImgDAO.Delete(id);
+                    productDAO.Delete(id);
+                    DeleteAllImgByIdPro(id); //xóa các Img của ProId từ folder
                     check = true;
                 }
             }
@@ -123,6 +141,17 @@ namespace Project_3.Areas.Admin.Controllers
             {
 
             }
+            return Json(new
+            {
+                check = check
+            },JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteVariation(long idVariation)
+        {
+            ProductVariationDAO dao = new ProductVariationDAO();
+            bool check = dao.Delete(idVariation);
             return Json(new
             {
                 check = check
@@ -173,7 +202,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file2 != null)
             {
                 var _file2Name = Path.GetFileName(file2.FileName);
-                file1.SaveAs(_path + ProColorId + "2" + _file2Name);
+                file2.SaveAs(_path + ProColorId + "2" + _file2Name);
                 productImage.DetailImage2 = ProColorId + "2" + _file2Name; //ảnh chi tiết
             }
             else
@@ -186,7 +215,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file3 != null)
             {
                 var _file3Name = Path.GetFileName(file3.FileName);
-                file1.SaveAs(_path + ProColorId + "3" + _file3Name);
+                file3.SaveAs(_path + ProColorId + "3" + _file3Name);
                 productImage.DetailImage3 = ProColorId + "3" + _file3Name; //ảnh chi tiết
             }
             else
@@ -199,7 +228,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file4 != null)
             {
                 var _file4Name = Path.GetFileName(file4.FileName);
-                file1.SaveAs(_path + ProColorId + "4" + _file4Name);
+                file4.SaveAs(_path + ProColorId + "4" + _file4Name);
                 productImage.DetailImage4 = ProColorId + "4" + _file4Name; //ảnh chi tiết
             }
             else
@@ -212,7 +241,7 @@ namespace Project_3.Areas.Admin.Controllers
             if (file5 != null)
             {
                 var _file5Name = Path.GetFileName(file5.FileName);
-                file1.SaveAs(_path + ProColorId + "5" + _file5Name);
+                file5.SaveAs(_path + ProColorId + "5" + _file5Name);
                 productImage.DetailImage5 = ProColorId + "5" + _file5Name; //ảnh chi tiết
             }
             else
@@ -226,7 +255,6 @@ namespace Project_3.Areas.Admin.Controllers
             productsDAO.Insert(productImage);
             return "";
         }
-
 
         public void DeleteAllImgByIdPro(long idPro)
         {
@@ -251,5 +279,6 @@ namespace Project_3.Areas.Admin.Controllers
                 subdirectory.Delete();
             }
         }
+
     }
 }

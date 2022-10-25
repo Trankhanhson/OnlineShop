@@ -69,7 +69,7 @@ namespace Models.DAO
             }
         }
 
-        public bool ChangeSattus(int id)
+        public bool? ChangeSattus(int id)
         {
             User user = _dbContext.Users.Find(id);
             user.Status=!user.Status;

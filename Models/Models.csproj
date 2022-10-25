@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\CategoryDAO.cs" />
+    <Compile Include="DAO\ImportBillDAO.cs" />
+    <Compile Include="DAO\ImportBillDetailDAO.cs" />
+    <Compile Include="DAO\NewDAO.cs" />
     <Compile Include="DAO\ProductCategoryDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="DAO\ProductColorDAO.cs" />
@@ -94,7 +97,7 @@
     <Compile Include="Framework\ImportBillDetail.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Framework\News.cs">
+    <Compile Include="Framework\New.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Order.cs">

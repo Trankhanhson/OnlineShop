@@ -56,7 +56,7 @@ $(".wrap-color").click(deleteValue)
 $(".wrap-size").click(deleteValue)
 
 function deleteImgBox(idColor) {
-    let boxImg = $(`div[data-idColor="${idColor}"]`)
+    let boxImg = $(`.imgItem[data-idColor="${idColor}"]`)
     boxImg.remove()
 }
 
@@ -101,7 +101,7 @@ function deleteValue(e) {
 }
 
 function addImgBox(idColor, colorValue) {
-    let result = `<div class="d-flex justify-content-between mb-4" data-idColor="${idColor}">                                  
+    let result = `<div class="d-flex justify-content-between mb-4 imgItem" data-idColor="${idColor}">                                  
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
                     <div class="image-upload-wrap">
                         <input class="input-file__main input-file" type='file' " accept="image/*" onchange="uploadImg(this)"/>
@@ -303,10 +303,10 @@ function addVariation(valueId, valueInput, sizeOrColor) {
     }
 }
 
-$(".box-options").click((e) => {
-    let item = $(e.target)
+function deleteVariation(item) {
     if (item.hasClass("delete-option")) {
 
+        //trường hợp chỉ còn 1 variation
         if ($(".table-create tbody tr").length == 1) {
             $(".box-options").html('')
         }
@@ -314,13 +314,13 @@ $(".box-options").click((e) => {
             item.parents("tr").remove()
         }
 
-        //remove from method
+        //remove from property
         let listColor = $(".colorOption") //take option from table
         let listSize = $(".sizeOption")
         let wrapSpanColor = $(".wrap-color > span")
         let wrapSpanSize = $(".wrap-size > span")
 
-        //check color exist
+        //kiểm tra từng color ở property nếu vẫn tồn tại ở variation thì không xóa ngược lại sẽ xóa
         wrapSpanColor.each((index2, valueMethod) => {
             let checkColor = false
             listColor.each((index, value) => {
@@ -330,10 +330,13 @@ $(".box-options").click((e) => {
                 }
             })
             if (!checkColor) {
-                $(valueMethod).remove()
+                $(valueMethod).remove() //xóa color trên property
+                let idColor = $(valueMethod).attr("data-idColor")
+                deleteImgBox(idColor) //xóa boximg có idColor
             }
         })
 
+        //kiểm tra từng size ở property nếu vẫn tồn tại ở variation thì không xóa ngược lại sẽ xóa
         wrapSpanSize.each((index2, valueMethod) => {
             let checkSize = false
             listSize.each((index, value) => {
@@ -347,7 +350,11 @@ $(".box-options").click((e) => {
             }
         })
     }
+}
 
+$(".box-options").click((e) => {
+    let item = $(e.target)
+    deleteVariation(item)
 })
 
 
@@ -378,11 +385,11 @@ function uploadImg(input) {
 
 function removeImg(input) {
     let parentBox = $(input).parents(".wrap-file-box")
-    $(parentBox).find('.input-file').replaceWith($('.input-file').clone());
+    let file = $(parentBox).find('.input-file')
+    $(file).val('')
     $(parentBox).find('.file-upload-content').hide();
     $(parentBox).find('.image-upload-wrap').show();
 }
-
 $('.image-upload-wrap').bind('dragover', function () {
     $('.image-upload-wrap').addClass('image-dropping');
 });
@@ -398,6 +405,7 @@ $(".row-product").click((e) => {
     rowProduct.toggleClass("active")
 })
 
+
 //validate form create and edit
 $('#formProduct').validate({
 
@@ -408,22 +416,32 @@ $('#formProduct').validate({
         },
         importPrice: {
             required: true,
-            min : 0
+            min: 0
         },
         Price: {
             required: true,
             min: 0
         },
         pricePromotion: {
-            required: true,
-            max: $("#Price").val()
+            min: 0
         }
 
     },
-    message: {
+    messages: {
         name: {
-            required: "Bạn phải nhập tên sản phẩm",
+            required: "Bạn chưa nhập tên sản phẩm",
             maxlength: "Không được nhập quá 300 kí tự"
         },
+        importPrice: {
+            required: "Bạn chưa nhập giá nhập",
+            min: "Giá nhập phải lớn hơn 0"
+        },
+        Price: {
+            required: "Bạn chưa nhập giá bán",
+            min: "Giá bán phải lớn hơn 0"
+        },
+        pricePromotion: {
+            min: "Giá khuyến mại phải lớn hơn 0"
+        }
     }
 })

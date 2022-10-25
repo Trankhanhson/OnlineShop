@@ -1,10 +1,11 @@
-﻿var proCatApp = angular.module("ProCatApp", ['ngFileUpload']);
+﻿var proCatApp = angular.module("ProCatApp", ['ngFileUpload', 'angularUtils.directives.dirPagination']);
 
 proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
 
     /** Lấy danh sách loại sản phẩm*/
     $http.get("/Admin/ProductCat/getAllData").then(function (res) {
-        $scope.ProCatList = JSON.parse(res.data)
+        $scope.ProCatList = JSON.parse(res.data.result)
+        $scope.firstCatId = res.data.firstCatId
     }, function (error) {
         alert("failed")
     })
@@ -12,7 +13,6 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
     //lưu file người dùng upload
     $scope.SelectImage = function (file) {
         $scope.fileImage = file
-
     }
 
     ///**Thêm loại sản phẩm */
@@ -36,52 +36,55 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
     //khi người dùng nhấn thêm
     $scope.Add = function () {
         $scope.proCat = null
+        $scope.proCat = { CatID: JSON.stringify($scope.firstCatId) }
     }
 
     //khi người dung nhấn lưu thêm mới danh mục
     $scope.SaveAdd = function (closeOrNew) {
-        //upload ảnh trước khi thêm để chống lỗi đường dẫn ảnh
-        $http({
-            method: "POST",
-            url: "/Admin/ProductCat/Create",
-            datatype: 'Json',
-            data: { proCat: $scope.proCat, nameImg: $scope.fileImage[0].name }
-        }).then(function (res) {
-            if (res.data.check) //tạo mới thành công
-            {
-                var productCat = res.data.pc
-                $scope.ProCatList.push(productCat) //hiển thị thêm đối tượng vừa thêm
-                //upload ảnh khi thêm đối tượng thành công
-                $scope.UploadFiles($scope.fileImage, res.data.pc.ProCatId)
-                if (checkUpload === false) {
-                    //khi upload fail thì xóa đối tượng vừa tạo
-                    $http({
-                        method: 'Post',
-                        url: '/Admin/ProductCat/Delete',
-                        data: { id: res.data.pc.ProCatId }
-                    })
+        if ($scope.createForm.$valid) {
+            $http({
+                method: "POST",
+                url: "/Admin/ProductCat/Create",
+                datatype: 'Json',
+                data: { proCat: $scope.proCat, nameImg: $scope.fileImage[0].name }
+            }).then(function (res) {
+                if (res.data.check) //tạo mới thành công
+                {
+                    var productCat = res.data.pc
+                    $scope.ProCatList.push(productCat) //hiển thị thêm đối tượng vừa thêm
+                    //upload ảnh khi thêm đối tượng thành công
+                    $scope.UploadFiles($scope.fileImage, res.data.pc.ProCatId)
+                    if (checkUpload === false) {
+                        //khi upload fail thì xóa đối tượng vừa tạo
+                        $http({
+                            method: 'Post',
+                            url: '/Admin/ProductCat/Delete',
+                            data: { id: res.data.pc.ProCatId }
+                        })
+                    }
+                    else {
+
+                    }
+
+                    //nếu người dùng chỉ nhấn lưu
+                    if (closeOrNew) {
+                        $(".btn-close").trigger('click') //đóng modal thêm
+                    }
+
+                    //reset lại dữ liệu vừa thêm
+                    $scope.proCat = null;
+
+                    //hiển thị thông báo thành công
+                    $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
+                    $("#successToast").toast("show")
                 }
                 else {
-
+                    $("#errorToast .text-toast").text("Thêm thất bại")
+                    $("#errorToast").toast("show")
                 }
-
-                //nếu người dùng chỉ nhấn lưu
-                if (closeOrNew) {
-                    $(".btn-close").trigger('click') //đóng modal thêm
-                }
-
-                //reset lại dữ liệu vừa thêm
-                $scope.proCat = null;
-
-                //hiển thị thông báo thành công
-                $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
-                $("#successToast").toast("show")
-            }
-            else {
-                $("#errorToast .text-toast").text("Thêm thất bại")
-                $("#errorToast").toast("show")
-            }
-        })
+            })
+        }
+        
     }
 
     /** Sửa danh mục*/
@@ -89,38 +92,45 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
     let nameOldImg = "" //biến chứa tên Image cũ để xóa đi và thêm Image mới vào
     $scope.Edit = function (proCat, index) {
         nameOldImg = proCat.Image //image cũ
-        $scope.proCat = { ProCatId: proCat.ProCatId, Name: proCat.Name, CatID: JSON.stringify(proCat.CatID), Status: proCat.Status, Image: $scope.fileImage[0].name }
+        $scope.proCat = { ProCatId: proCat.ProCatId, Name: proCat.Name, CatID: JSON.stringify(proCat.CatID), Status: proCat.Status, Image: proCat.Image }
         indexEdit = index
     }
 
     $scope.SaveEdit = function () {
-        $http({
-            method: "POST",
-            url: "/Admin/ProductCat/Edit",
-            datatype: 'Json',
-            data: { proCat: $scope.proCat, nameOldImg: nameOldImg }
-        }).then(function (res) {
-            if (res.data.UpdateSuccess === true) //nếu update thành công
-            {
-                if (res.data.checkExistImg == false) //ảnh chưa tồn tại
+        if ($scope.editForm.$valid) {
+            //nếu upload file mới thì gán tên file mới vào proCat
+            if ($scope.fileImage != undefined) {
+                $scope.proCat.Image = $scope.fileImage[0].name
+            }
+            $http({
+                method: "POST",
+                url: "/Admin/ProductCat/Edit",
+                datatype: 'Json',
+                data: { proCat: $scope.proCat, nameOldImg: nameOldImg }
+            }).then(function (res) {
+                if (res.data.UpdateSuccess === true) //nếu update thành công
                 {
-                    //upload ảnh khi update thành công
-                    $scope.UploadFiles($scope.fileImage, $scope.proCat.ProCatId)
+                    if (res.data.checkExistImg == false) //ảnh chưa tồn tại
+                    {
+                        //upload ảnh khi update thành công
+                        $scope.UploadFiles($scope.fileImage, $scope.proCat.ProCatId)
+                    }
+
+                    //Tìm phần tử vừa được sửa trong danh sách và thay thế 
+                    var newProCat = $scope.proCat
+                    $scope.ProCatList.splice(indexEdit, 1, newProCat)
+
+                    $("#successToast .text-toast").text("Sửa loại sản phẩm thành công")
+                    $("#successToast").toast("show") //hiển thị thông báo thành công
                 }
-
-                //Tìm phần tử vừa được sửa trong danh sách và thay thế 
-                var newProCat = $scope.proCat
-                $scope.ProCatList.splice(indexEdit, 1, newProCat)
-
-                $("#successToast .text-toast").text("Sửa loại sản phẩm thành công")
-                $("#successToast").toast("show") //hiển thị thông báo thành công
-            }
-            else {
-                $("#errorToast .text-toast").text("Sửa thất bại")
-                $("#errorToast").toast("show") //hiển thị thông báo thành công
-            }
-            $(".btn-close").trigger('click') //đóng modal sửa
-        })
+                else {
+                    $("#errorToast .text-toast").text("Sửa thất bại")
+                    $("#errorToast").toast("show") //hiển thị thông báo thành công
+                }
+                $(".btn-close").trigger('click') //đóng modal sửa
+            })
+        }
+        
     }
 
     /**Xóa danh mục*/
@@ -165,5 +175,31 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
         })
     }
 
+
+    //sắp xếp
+    $scope.sortColumn = 'Name'
+    $scope.reverse = 'false'
+    $scope.SortData = function (column) {
+        if ($scope.sortColumn == column) {
+            $scope.reverse = !$scope.reverse
+        }
+        else {
+            $scope.reverse = false //sort increase
+        }
+        $scope.sortColumn = column
+    }
+    $scope.getSortClass = function (column) {
+        //khi reverse thay doi thi nd-class dc kich hoat
+        if ($scope.sortColumn == column) {
+            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
+        }
+        return ''
+    }
+
+    //paging
+    $scope.pageSize = "5"
+    $scope.getPageSize = function (pageSize) {
+        $scope.pageSize = pageSize
+    }
 
 });

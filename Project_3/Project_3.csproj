@@ -137,8 +137,9 @@
     <Compile Include="Areas\Admin\Controllers\BaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ColorController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ImportBillController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
-    <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NewController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductCatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SizeController.cs" />
@@ -165,8 +166,13 @@
   <ItemGroup>
     <Content Include="Assets\Admin\css\base.css" />
     <Content Include="Assets\Admin\css\BaseAdmin.css" />
+    <Content Include="Assets\Admin\css\ImportBill.css" />
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\ImportBillAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\New\EditNewAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\New\IndexNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\ProCatAngular.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
@@ -192,10 +198,13 @@
     <Content Include="Assets\Admin\img\slides-2.jpg" />
     <Content Include="Assets\Admin\img\slides-3.jpg" />
     <Content Include="Assets\Admin\js\ColorColntroller.js" />
+    <Content Include="Assets\Admin\js\ImportBill.js" />
     <Content Include="Assets\Admin\js\main.js" />
     <Content Include="Assets\Admin\js\product\Createproduct.js" />
+    <Content Include="Assets\Admin\js\product\DeleteProduct.js" />
     <Content Include="Assets\Admin\js\product\EditProduct.js" />
     <Content Include="Assets\Admin\js\product\product.js" />
+    <Content Include="Assets\Admin\js\product\product2.js" />
     <Content Include="Assets\Admin\js\SizeController.js" />
     <Content Include="Assets\Admin\js\userController.js" />
     <Content Include="Assets\Admin\scss\Readme.txt" />
@@ -3263,7 +3272,6 @@
     <Content Include="Areas\Admin\Views\Product\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Category\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ProductCat\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductCat\Create.cshtml" />
     <Content Include="Assets\Plugin\ckeditor\bender-runner.config.json" />
     <Content Include="Assets\Plugin\ckeditor\CHANGES.md" />
     <Content Include="Assets\Plugin\ckeditor\LICENSE.md" />
@@ -3383,7 +3391,12 @@
     <Content Include="Assets\Admin\vendor\tinymce\composer.json" />
     <Content Include="Assets\Admin\vendor\tinymce\package.json" />
     <Content Include="Assets\Admin\vendor\tinymce\README.md" />
+    <Content Include="Areas\Admin\Views\New\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\New\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\New\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ImportBill\Create.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dirPagination.js" />
     <Content Include="Scripts\FileAPI.flash.swf" />
     <Content Include="Scripts\FileAPI.js" />
     <Content Include="Scripts\FileAPI.min.js" />
@@ -3431,6 +3444,7 @@
     <Folder Include="Areas\Admin\Views\Base\" />
     <Folder Include="Upload\CatPro\" />
     <Folder Include="Upload\ColorImage\" />
+    <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
   </ItemGroup>
   <ItemGroup>

@@ -25,17 +25,17 @@ namespace Models
         {
             return _dbContext.ProductSizes.Find(id);
         }
-        public bool Insert(ProductSize ps)
+        public ProductSize Insert(ProductSize ps)
         {
             try
             {
-                _dbContext.ProductSizes.Add(ps);
+                var result = _dbContext.ProductSizes.Add(ps);
                 _dbContext.SaveChanges();
-                return true;
+                return result;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
@@ -50,7 +50,6 @@ namespace Models
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 return false;
             }
         }

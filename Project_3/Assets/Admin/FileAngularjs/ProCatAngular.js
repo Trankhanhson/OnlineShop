@@ -39,52 +39,56 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
         $scope.proCat = { CatID: JSON.stringify($scope.firstCatId) }
     }
 
+    $scope.errorImage = false
     //khi người dung nhấn lưu thêm mới danh mục
     $scope.SaveAdd = function (closeOrNew) {
         if ($scope.createForm.$valid) {
-            $http({
-                method: "POST",
-                url: "/Admin/ProductCat/Create",
-                datatype: 'Json',
-                data: { proCat: $scope.proCat, nameImg: $scope.fileImage[0].name }
-            }).then(function (res) {
-                if (res.data.check) //tạo mới thành công
-                {
-                    var productCat = res.data.pc
-                    $scope.ProCatList.push(productCat) //hiển thị thêm đối tượng vừa thêm
-                    //upload ảnh khi thêm đối tượng thành công
-                    $scope.UploadFiles($scope.fileImage, res.data.pc.ProCatId)
-                    if (checkUpload === false) {
-                        //khi upload fail thì xóa đối tượng vừa tạo
-                        $http({
-                            method: 'Post',
-                            url: '/Admin/ProductCat/Delete',
-                            data: { id: res.data.pc.ProCatId }
-                        })
+            if ($scope.fileImage !== undefined) {
+                $scope.proCat.Image = $scope.fileImage[0].name
+                $http({
+                    method: "POST",
+                    url: "/Admin/ProductCat/Create",
+                    datatype: 'Json',
+                    data: { proCat: $scope.proCat}
+                }).then(function (res) {
+                    if (res.data.check) //tạo mới thành công
+                    {
+                        var productCat = JSON.parse(res.data.pc)
+                        $scope.ProCatList.push(productCat) //hiển thị thêm đối tượng vừa thêm
+                        //upload ảnh khi thêm đối tượng thành công
+                        $scope.UploadFiles($scope.fileImage, productCat.ProCatId)
+                        if (checkUpload === false) {
+                            //khi upload fail thì xóa đối tượng vừa tạo
+                            $http({
+                                method: 'Post',
+                                url: '/Admin/ProductCat/Delete',
+                                data: { id: productCat.ProCatId }
+                            })
+                        }
+                        else {
+
+                        }
+
+                        //nếu người dùng chỉ nhấn lưu
+                        if (closeOrNew) {
+                            $(".btn-close").trigger('click') //đóng modal thêm
+                        }
+
+                        //hiển thị thông báo thành công
+                        $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
+                        $("#successToast").toast("show")
                     }
                     else {
-
+                        $("#errorToast .text-toast").text("Thêm thất bại")
+                        $("#errorToast").toast("show")
                     }
-
-                    //nếu người dùng chỉ nhấn lưu
-                    if (closeOrNew) {
-                        $(".btn-close").trigger('click') //đóng modal thêm
-                    }
-
-                    //reset lại dữ liệu vừa thêm
-                    $scope.proCat = null;
-
-                    //hiển thị thông báo thành công
-                    $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
-                    $("#successToast").toast("show")
-                }
-                else {
-                    $("#errorToast .text-toast").text("Thêm thất bại")
-                    $("#errorToast").toast("show")
-                }
-            })
+                })
+            }
+            else {
+                $scope.errorImage = true
+            }
         }
-        
+
     }
 
     /** Sửa danh mục*/
@@ -130,7 +134,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                 $(".btn-close").trigger('click') //đóng modal sửa
             })
         }
-        
+
     }
 
     /**Xóa danh mục*/

@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.DAO;
 using Models.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,62 +11,49 @@ namespace Project_3.Areas.Admin.Controllers
 {
     public class SizeController : Controller
     {
-        // GET: Admin/Size
-        public ActionResult Index()
+        ClothesShopEntities db = new ClothesShopEntities();
+        public JsonResult getAllData()
         {
-            List<ProductSize> list = new ProductSizeDAO().getAll();
-
-            return View(list);
+            return Json(db.ProductSizes.Select(x => new { x.ProSizeID, x.NameSize}).ToList(), JsonRequestBehavior.AllowGet);
         }
-
-        // GET: Admin/Size/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Admin/Size/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Admin/Size/Create
         [HttpPost]
         public ActionResult Create(ProductSize pz)
         {
             try
             {
-                ProductSizeDAO dao = new ProductSizeDAO();
-                dao.Insert(pz);
+                
+                
 
-                return RedirectToAction("Index");
+                return Json(new
+                {
+                    message = true,
+                    
+                });
             }
             catch
             {
-                return View();
+                return Json(new
+                {
+                    message = false
+                });
             }
-        }
-
-        // GET: Admin/Size/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
         }
 
         // POST: Admin/Size/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
+            bool check = true;
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                //CategoryDAO categoryDAO = new CategoryDAO();
+                //check = categoryDAO.Update(category);
+                return Json(check);
             }
             catch
             {
-                return View();
+                return Json(check);
             }
         }
 
@@ -73,11 +61,29 @@ namespace Project_3.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            ProductSizeDAO dao = new ProductSizeDAO();
-            bool check = dao.Delete(id);
+            string message = "";
+            bool check = true;
+            try
+            {
+                CategoryDAO categoryDAO = new CategoryDAO();
+                check = categoryDAO.Delete(id);
+                if (check)
+                {
+                    message = "Xóa thành công";
+                }
+                else
+                {
+                    message = "Danh mục này đang được dùng ở danh mục con";
+                }
+            }
+            catch
+            {
+                message = "Xóa thất bại";
+            }
             return Json(new
             {
-                result = check
+                message = message,
+                check = check
             });
         }
     }

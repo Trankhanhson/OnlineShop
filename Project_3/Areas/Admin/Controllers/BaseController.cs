@@ -14,7 +14,7 @@ namespace Project_3.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var session = (UserLogin)Session[CommonConstants.USER_SESSION];
-            if (session == null)
+            if (session != null)
             {
                 filterContext.Result = new RedirectToRouteResult(new
                     RouteValueDictionary(new { controller = "Login", action = "Index", Area = "Admin" }));

@@ -19,15 +19,22 @@ namespace Models
         {
             return _dbContext.ProductColors.ToList();
         }
-
         public ProductColor getById(long id)
         {
             return _dbContext.ProductColors.Find(id);
         }
-        public void Insert(ProductColor ps)
+        public ProductColor Insert(ProductColor ps)
         {
-            _dbContext.ProductColors.Add(ps);
-            _dbContext.SaveChanges();
+            try
+            {
+                var result = _dbContext.ProductColors.Add(ps);
+                _dbContext.SaveChanges();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public bool Delete(int id)

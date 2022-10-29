@@ -170,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Admin\css\base.css" />
-    <Content Include="Assets\Admin\css\BaseAdmin.css" />
     <Content Include="Assets\Admin\css\ImportBill.css" />
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
@@ -179,6 +178,9 @@
     <Content Include="Assets\Admin\FileAngularjs\New\EditNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\IndexNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\ProCatAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Color.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Size.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Product\C_ProcatInProduct.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
     <Content Include="Assets\Admin\img\favicon.png" />
@@ -3220,10 +3222,6 @@
     <Content Include="Areas\Admin\Views\User\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Color\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Color\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Size\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Size\Create.cshtml" />
     <Content Include="Assets\fonts\fonts\fontawesome-free-6.0.0-web\less\brands.less" />
     <Content Include="Assets\fonts\fonts\fontawesome-free-6.0.0-web\less\fontawesome.less" />
     <Content Include="Assets\fonts\fonts\fontawesome-free-6.0.0-web\less\regular.less" />

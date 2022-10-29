@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -37,16 +38,16 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/ProductCat/Create
         [HttpPost]
-        public JsonResult Create(ProductCat proCat, string nameImg)
+        public JsonResult Create(ProductCat proCat)
         {
-            bool check = true;
             try
             {
                 proCat.Slug = common.MethodCommnon.ToUrlSlug(proCat.Name);
                 proCat.Status = true; //khi thêm vào thì mặc định là true
-                proCat.Image = nameImg;
                 ProductCategoryDAO dao = new ProductCategoryDAO();
-                ProductCat pc = dao.Insert(proCat); //lấy loại sản phẩm vừa được insert thành công
+                ProductCat procat = dao.Insert(proCat);
+                JsonSerializerSettings js = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                var pc = JsonConvert.SerializeObject(procat, Formatting.Indented, js);
                 return Json(new
                 {
                     check = true,
@@ -132,8 +133,10 @@ namespace Project_3.Areas.Admin.Controllers
 
                     //xóa ảnh trong folder
                     string path = Server.MapPath("~/Upload/CatPro/" + proCat.ProCatId + "/" + proCat.Image);
-                    System.IO.File.Delete(path);
-
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
                     message = "Xóa thành công";
                 }
                 else

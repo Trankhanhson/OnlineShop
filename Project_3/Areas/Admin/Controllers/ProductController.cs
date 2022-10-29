@@ -58,6 +58,9 @@ namespace Project_3.Areas.Admin.Controllers
         // GET: Admin/Product/Create
         public ActionResult Create()
         {
+            //Danh sách danh mục
+            CategoryDAO categoryDAO = new CategoryDAO();
+            ViewBag.CatList = categoryDAO.getAll();
             //các danh sách dùng để select
             ViewBag.listproCat = new ProductCategoryDAO().getAll();
             ViewBag.ListSize = new ProductSizeDAO().getAll();

@@ -412,3 +412,16 @@ label {
     background: none;
     
 }
+.btn-cancel {
+    background-color: #898c8d;
+    border-color: transparent;
+    color: #fff;
+}
+
+.select-procat:focus {
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+.select-procat {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}

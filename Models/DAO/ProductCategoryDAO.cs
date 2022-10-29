@@ -35,6 +35,7 @@ namespace Models.DAO
         }
         public ProductCat Insert(ProductCat ProductCat)
         {
+            _dbContext.Configuration.ProxyCreationEnabled = false;
             ProductCat proc =_dbContext.ProductCats.Add(ProductCat);
             proc.Category = _dbContext.Categories.Where(x => x.CatID == proc.CatID).FirstOrDefault(); //lấy thêm category khi trả về trên view
             _dbContext.SaveChanges();

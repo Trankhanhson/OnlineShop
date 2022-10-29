@@ -155,7 +155,7 @@
                                     @foreach (var color in item.ProductImages)
                                     {
                                         <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                            <span style='background-image: url(@color.ProductColor.ImageColor);'></span>
+                                            <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
                                         </div>
                                     }
                                 </div>
@@ -163,8 +163,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.Price</div>
-                                    <div class="curent-old price">@item.PromotionPrice</div>
+                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
+                                    <div class="curent-old price">@item.Price</div>
                                 </div>
                                 <div class="product-like">
                                     <span>Yêu thích</span>
@@ -206,7 +206,8 @@
                         {
                             <div class="product" data-ProId="@item.ProId">
                                 <div class="product-img">
-                                    <a href="/Home/Detail/@item.ProId" style="background-image:url('/Upload/Product/@item.ProId/@item.ProductImages.First().Image')">
+                                    <a href="/Home/Detail/@item.ProId">
+                                        <img src="/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">
                                     </a>
                                     <div class="product-size-wrap">
                                         <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
@@ -222,7 +223,7 @@
                                     @foreach (var color in item.ProductImages)
                                     {
                                         <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                            <span style='background-image: url(@color.ProductColor.ImageColor);'></span>
+                                            <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
                                         </div>
                                     }
                                 </div>
@@ -230,8 +231,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.Price</div>
-                                    <div class="curent-old price">@item.PromotionPrice</div>
+                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
+                                    <div class="curent-old price">@item.Price</div>
                                 </div>
                                 <div class="product-like">
                                     <span>Yêu thích</span>
@@ -295,8 +296,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.Price</div>
-                                    <div class="curent-old price">@item.PromotionPrice</div>
+                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
+                                    <div class="curent-old price">@item.Price</div>
                                 </div>
                                 <div class="product-like">
                                     <span>Yêu thích</span>

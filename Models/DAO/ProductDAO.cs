@@ -9,7 +9,6 @@ using System.Data.Entity;
 
 namespace Models
 {
-    [Serializable]
     public class ProductDAO
     {
         private ClothesShopEntities _dbContext = null;

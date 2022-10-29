@@ -34,7 +34,7 @@ namespace Project_3.Areas.Admin.Controllers
                     userSession.UserName = user.UserName;
                     userSession.UserID = user.UserID;
                     Session.Add(CommonConstants.USER_SESSION, userSession);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "HomeAdmin");
                 }
                 else if (result == 0)
                 {

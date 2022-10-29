@@ -10,6 +10,16 @@ function addActive(input) {
     $(input).toggleClass("active")
 }
 
+function countTotalBill() {
+    let listSubtotal = $(".importDetail-item .col-subtotal")
+    let toTalBill = 0
+    listSubtotal.each((index, value) => {
+        let subtotal = JSON.parse($(value).text())
+        toTalBill += subtotal
+    })
+    $("#totalImportBill").text(toTalBill)
+}
+
 function selectProduct(input) {
     let idPro = $(input).attr("data-proId")
     let wrapVariations = $(`.row-variation-${idPro}`)
@@ -53,7 +63,7 @@ function selectProduct(input) {
             })
 
             //chuỗi cần thêm vào import table
-            let result = `<tr class="row-product row-product-import-${idPro}" data-proId="1" onclick="showImportDetail(${idPro})">
+            let result = `<tr class="row-product row-product-import-${idPro}" data-proId="${idPro}" onclick="showImportDetail(${idPro})">
                             <td class="col-name">${proName}</td>
                             <td class="col-quantity"></td>
                             <td class="col-importPrice">
@@ -115,6 +125,7 @@ function selectProduct(input) {
 
             //them importdetail
             $($(rowImportDetailId).children("td")).append(result)
+            countTotalBill()
         }
     }
     $(`.row-variation-${idPro}`).find(".variation-item").removeClass("active")
@@ -125,21 +136,11 @@ function deleteImportDetail(input) {
     let parent = $(input).parents(".importDetail-item")
     $(parent).remove()
 }
+
 function deleteProductImport(idPro) {
     $(`.row-product-import-${idPro}`).remove()
     $(`.row-importDetail-${idPro}`).remove()
 }
-
-function countTotalBill() {
-    let listSubtotal = $(".importDetail-item .col-subtotal")
-    let toTalBill = 0
-    listSubtotal.each((index, value) => {
-        let subtotal = JSON.parse($(value).text())
-        toTalBill += subtotal
-    })
-    $("#totalImportBill").text(toTalBill)
-}
-countTotalBill()
 
 function countSubTotal(input,importPrice) {
     let quantity = $(input).val()

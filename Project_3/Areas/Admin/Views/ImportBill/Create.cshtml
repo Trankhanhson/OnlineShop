@@ -9,8 +9,8 @@
 }
 @section scripts{
     <script src="~/Scripts/dirPagination.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/ImportBillAngular.js"></script>
     <script src="~/Assets/Admin/js/ImportBill.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/ImportBillAngular.js"></script>
 }
 <main id="main" class="main" ng-app="importBillApp" ng-controller="importBillController">
 
@@ -24,7 +24,7 @@
                                 <div class="bg-white shadow p-4">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="mb-3">
-                                            <select class="form-select" aria-label="Default select example">
+                                            <select class="form-select" aria-label="Default select example" id="StaffId">
                                                 @foreach (var user in ViewBag.listUser)
                                                 {
                                                     <option value="@user.UserID">@user.Name</option>
@@ -32,7 +32,7 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <input type="date" class="form-control">
+                                            <input type="date" id="ImpDate" class="form-control">
                                         </div>
                                         <div>
                                             Tổng tiền: <span id="totalImportBill"></span>
@@ -40,7 +40,7 @@
 
                                         <a class="btn-print"><i class="fa-solid fa-print"></i></a>
 
-                                        <button class="btn btn-primary" ng-click="saveClick()">Nhaap</button>
+                                        <button class="btn btn-primary" ng-click="saveClick()">Nhập</button>
                                     </div>
                                     <div>
                                         <table class="mt-3 cart-list w-100 table table-importBill">
@@ -54,42 +54,42 @@
                                                     <th class="col col-action"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody >
-                                               @*<tr class="row-product row-product-import-1 " data-proid="1" onclick="showimportdetail(1)">
-                                                    <td class="col-name">áo phông nữ</td>
-                                                    <td class="col-quantity"></td>
-                                                    <td class="col-importprice">
-                                                        <input type="number" class="input-price">
-                                                    </td>
-                                                    <td class="col-price">
-                                                        <input type="number" class="input-price">
-                                                    </td>
-                                                    <td class="col-subtotal"></td>
-                                                    <td class="col-action">
-                                                        <a class="btn-delete" onclick="deleteproductimport(1)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr class="row-importdetail-1 row-importdetail">
-                                                    <td colspan="10" class=" pb-4" style="padding: 0;">
-                                                            <ul class="d-flex mb-0 importdetail-item" data-idvariation="1001">
-                                                                <li class="col-name  ps-4">
-                                                                    <div class="d-flex py-1 ps-3 align-items-start border-bottom border-start">
-                                                                        <img src="./imgs/8ls22s005-sb128-1-thumb.jpg" class="me-2" alt="" width="30px">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <span class="item-size">m</span>
-                                                                            <span>&nbsp;/&nbsp;</span>
-                                                                            <span >xám</span>
+                                            <tbody>
+                                                @*<tr class="row-product row-product-import-1 " data-proid="1" onclick="showimportdetail(1)">
+                                                        <td class="col-name">áo phông nữ</td>
+                                                        <td class="col-quantity"></td>
+                                                        <td class="col-importprice">
+                                                            <input type="number" class="input-price">
+                                                        </td>
+                                                        <td class="col-price">
+                                                            <input type="number" class="input-price">
+                                                        </td>
+                                                        <td class="col-subtotal"></td>
+                                                        <td class="col-action">
+                                                            <a class="btn-delete" onclick="deleteproductimport(1)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row-importdetail-1 row-importdetail">
+                                                        <td colspan="10" class=" pb-4" style="padding: 0;">
+                                                                <ul class="d-flex mb-0 importdetail-item" data-idvariation="1001">
+                                                                    <li class="col-name  ps-4">
+                                                                        <div class="d-flex py-1 ps-3 align-items-start border-bottom border-start">
+                                                                            <img src="./imgs/8ls22s005-sb128-1-thumb.jpg" class="me-2" alt="" width="30px">
+                                                                            <div class="d-flex align-items-center">
+                                                                                <span class="item-size">m</span>
+                                                                                <span>&nbsp;/&nbsp;</span>
+                                                                                <span >xám</span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </li>
-                                                                <li class="col-quantity p-2 d-flex align-items-center border-bottom"> <input type="number" onchange="countSubTotal(this,200000)" class="input-quantity"></li>
-                                                                <li class="col-importprice p-2 price border-bottom"></li>
-                                                                <li class="col-price p-2 price border-bottom"></li>
-                                                                <li class="col-subtotal p-2 price border-bottom" data-subTotal=""></li>
-                                                                <li class="border-bottom col-action p-2"><a class="btn-delete" onclick="deleteimportdetail(this)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a></li>
-                                                            </ul>
-                                                    </td>
-                                                </tr>*@
+                                                                    </li>
+                                                                    <li class="col-quantity p-2 d-flex align-items-center border-bottom"> <input type="number" onchange="countSubTotal(this,200000)" class="input-quantity"></li>
+                                                                    <li class="col-importprice p-2 price border-bottom"></li>
+                                                                    <li class="col-price p-2 price border-bottom"></li>
+                                                                    <li class="col-subtotal p-2 price border-bottom" data-subTotal=""></li>
+                                                                    <li class="border-bottom col-action p-2"><a class="btn-delete" onclick="deleteimportdetail(this)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a></li>
+                                                                </ul>
+                                                        </td>
+                                                    </tr>*@
                                             </tbody>
                                         </table>
                                     </div>

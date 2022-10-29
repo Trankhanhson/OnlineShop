@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         // GET: Admin/Category
         public ActionResult Index()
@@ -30,7 +30,6 @@ namespace Project_3.Areas.Admin.Controllers
             List<Category> categories = new CategoryDAO().getAll();
             JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var result = JsonConvert.SerializeObject(categories, Formatting.Indented, jss);
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

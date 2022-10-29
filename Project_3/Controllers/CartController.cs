@@ -24,6 +24,26 @@ namespace Project_3.Controllers
             return View(list);
         }
 
+        public ActionResult deleteCartItem(long id)
+        {
+            var cart = Session[CartSession];
+            List<CartItem> list = new List<CartItem>();
+            if (cart != null)
+            {
+                list = (List<CartItem>)cart;
+                foreach(var item in list)
+                {
+                    if(item.ProVariation.ProVariationID==id)
+                    {
+                        list.Remove(item);
+                        break;
+                    }    
+                }
+            }
+            Session[CartSession] = list;
+            return RedirectToAction("Index");
+        }
+
         public ActionResult AddItem(long ProId,int ProColorId, int ProSizeId)
         {
             //Lấy biến thể vừa thêm 

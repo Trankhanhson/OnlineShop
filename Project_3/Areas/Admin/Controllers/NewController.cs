@@ -103,19 +103,19 @@ namespace Project_3.Areas.Admin.Controllers
         public JsonResult Edit(New n, string nameOldImg)
         {
             bool UpdateSuccess = true;
-            bool checkExistImg = true;
             try
             {
-                //kiểm tra xem đã tồn tại đường dẫn với ảnh mưới chưa
-                string pathNew = Path.Combine("~/Upload/New/" + n.NewID + "/" + n.Image);
-                if (!(System.IO.File.Exists(pathNew))) //nếu ảnh cũ chưa tồn tại
-                {
-                    //xóa ảnh cũ để thêm ảnh mới
-                    string path = Server.MapPath("~/Upload/New/" + n.NewID + "/" + nameOldImg);
-                    System.IO.File.Delete(path);
+                ////kiểm tra xem đã tồn tại đường dẫn với ảnh mưới chưa
+                //string pathNew = Path.Combine("~/Upload/New/" + n.NewID + "/" + n.Image);
+                //if (!(System.IO.File.Exists(pathNew))) //nếu ảnh cũ chưa tồn tại
+                //{
+                //    //xóa ảnh cũ để thêm ảnh mới
+                //    string path = Server.MapPath("~/Upload/New/" + n.NewID + "/" + nameOldImg);
+                //    System.IO.File.Delete(path);
 
-                    checkExistImg = false; //sẽ upload ảnh mới
-                }
+                //    checkExistImg = false; //sẽ upload ảnh mới
+                //}
+                DeleteAllImgByIdPro(n.NewID);
                 NewDAO dao = new NewDAO();
                 UpdateSuccess = dao.Update(n); //update đối tượng
                 //khi update thành công thành công thì upload ảnh
@@ -126,8 +126,32 @@ namespace Project_3.Areas.Admin.Controllers
             }
             return Json(new
             {
-                UpdateSuccess = UpdateSuccess,
+                UpdateSuccess = UpdateSuccess
             });
+        }
+
+        public void DeleteAllImgByIdPro(long idNew)
+        {
+            string path = Server.MapPath("~/Upload/New/" + idNew);
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo directory = new DirectoryInfo(path);
+                EmptyFolder(directory);
+            }
+        }
+
+        public void EmptyFolder(DirectoryInfo directory)
+        {
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            {
+                EmptyFolder(subdirectory);
+                subdirectory.Delete();
+            }
         }
 
         // POST: Admin/New/Delete/5

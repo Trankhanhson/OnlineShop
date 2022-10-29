@@ -12,6 +12,7 @@ namespace Project_3.Controllers
         // GET: Girl
         public ActionResult Index()
         {
+
             return View();
         }
 

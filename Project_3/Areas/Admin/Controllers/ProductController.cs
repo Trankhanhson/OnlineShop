@@ -16,12 +16,19 @@ namespace Project_3.Areas.Admin.Controllers
 {
     public class ProductController : BaseController
     {
-
         // GET: Admin/Product
-        public ActionResult Index(string searchResult, int page = 1, int pageSize = 8)
+        public ActionResult Index(string searchResult, int page = 1, int pageSize = 4)
         {
             ProductDAO model = new ProductDAO();
             var list = model.getPage(searchResult, page, pageSize);
+            ProductImagesDAO productImagesDAO = new ProductImagesDAO();
+            foreach (var p in list)
+            {
+                foreach (var pv in p.ProductVariations)
+                {
+                    pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
+                }
+            }
             ViewBag.searchResult = searchResult;
             return View(list);
         }

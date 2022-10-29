@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class ProductCatController : Controller
+    public class ProductCatController : BaseController
     {
         // GET: Admin/ProductCat
         public ActionResult Index()

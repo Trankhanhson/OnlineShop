@@ -161,7 +161,7 @@
                                         <span class="price">@(item.ProVariation.Product.Price * item.Quantity)</span>
                                     </td>
                                     <td class="actions">
-                                        <span class="cart-item__remove"></span>
+                                        <a class="cart-item__remove" href="/Cart/deleteCartItem/@item.ProVariation.ProVariationID"></a>
                                     </td>
                                 </tr>
                             }

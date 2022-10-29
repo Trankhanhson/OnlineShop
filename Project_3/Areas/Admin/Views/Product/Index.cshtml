@@ -47,8 +47,8 @@
                                     <tr class="row-product" id="@item.ProId">
                                         <td class="col-id">@(index++)</td>
                                         <td class="col-name">@item.ProName</td>
-                                        <td class="col-price price">@item.Price</td>
                                         <td class="col-importPrice price">@item.ImportPrice</td>
+                                        <td class="col-price price">@item.Price</td>
                                         <td class="col-promotion price">@item.PromotionPrice</td>
                                         <td class="col-datePromotion">@Html.FormatValue(@item.StartPromotion, "{0:dd/MM/yyyy}") - @Html.FormatValue(@item.StopPromotion, "{0:dd/MM/yyyy}")</td>
                                         <td class="col-quantity"></td>
@@ -63,9 +63,12 @@
                                             {
                                                 <ul class=" d-flex mb-0 border-start border-bottom">
                                                     <li class="col-id"></li>
-                                                    <li class="col-name">@variation.ProductColor.NameColor - @variation.ProductSize.NameSize</li>
-                                                    <li class="col-price"></li>
+                                                    <li class="col-name d-flex h-100 align-content-center">
+                                                        <img src="/Upload/Product/@variation.ProId/@variation.DisplayImage" class="me-2 variation-image" alt="" width="30px">
+                                                        <div>@variation.ProductColor.NameColor - @variation.ProductSize.NameSize</div>
+                                                    </li>
                                                     <li class="col-importPrice"></li>
+                                                    <li class="col-price"></li>
                                                     <li class="col-promotion"></li>
                                                     <li class="col-datePromotion"></li>
                                                     <li class="col-quantity">@variation.Quantity</li>

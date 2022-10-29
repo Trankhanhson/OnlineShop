@@ -195,7 +195,7 @@
                             @foreach (var item in Model.ProductImages)
                             {
                                 <div class="product-color detail-color addActiveItem" data-nameColor="@item.ProductColor.NameColor" data-idColor="@item.ProColorID" data-Images='{"MainImage":"/Upload/Product/@Model.ProId/@item.Image","Detail1":"/Upload/Product/@Model.ProId/@item.DetailImage1","Detail2":"/Upload/Product/@Model.ProId/@item.DetailImage2","Detail3":"/Upload/Product/@Model.ProId/@item.DetailImage3","Detail4":"/Upload/Product/@Model.ProId/@item.DetailImage4","Detail5":"/Upload/Product/@Model.ProId/@item.DetailImage5"}'>
-                                    <span data="" style="background-image: url(@item.ProductColor.ImageColor);pointer-events:none;"></span>
+                                    <span data="" style="background-image: url('@item.ProductColor.ImageColor');pointer-events:none;"></span>
                                 </div>
                             }
 
@@ -302,7 +302,9 @@
                 {
                     <div class="product" data-ProId="@item.ProId">
                         <div class="product-img">
-                            <a href="/Home/Detail/@item.ProId" style="background-image:url('/Upload/Product/@item.ProId/@item.firstImage')">
+
+                            <a href="/Home/Detail/@item.ProId">
+                                <img src = "/Upload/Product/@item.ProId/@item.firstImage" width="100%" alt="">
                             </a>
                             <div class="product-size-wrap">
                                 <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
@@ -318,7 +320,7 @@
                             @foreach (var color in item.ProductImages)
                             {
                                 <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                    <span style='background-image: url(@color.ProductColor.ImageColor);'></span>
+                                    <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
                                 </div>
                             }
                         </div>

@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Models.Framework.Product>
 @{
     ViewBag.Title = "women";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -109,48 +109,16 @@
         <section class="pt-lg-5 pt-4 pb-5 border-bottom border-1">
             <h2 class="section-heading mb-4">Danh mục sản phẩm</h2>
             <div class="category-slider">
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639497541.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo phông</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639497503.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo polo</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639531301.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Bộ mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530678.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Váy liền thân</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1629478506.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Quần mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530755.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530445.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Quần shorts</a>
-                </div>
+                @foreach (var item in ViewBag.ProductCategory)
+                {
+                    <div class="text-center category-item">
+                        <a href="#">
+                            <img width="100%" class="rounded-circle" src="~/Upload/CatPro/@item.ProCatId/@item.Image" alt="">
+                        </a>
+                        <a href="#" class="mt-3" style="color: var(--primary-text-color);">@item.Name</a>
+                    </div>
+                }
+ 
             </div>
         </section>
 
@@ -166,157 +134,46 @@
                 </div>
                 <div class="col-lg-9 col-12">
                     <div class="product-slider">
-                        <div class="product">
-                            <div class="product-img">
-                                <a href="./product-detail.html">
-                                    <img src="https://canifa.com/img/486/733/resize/2/l/2ls22s018-sy038-2-thumb.jpg" width="100%" alt="">
-                                </a>
-                                <div class="product-size-wrap">
-                                    <div class="d-flex justify-content-center flex-wrap pt-3">
-                                        <div class="product-size active">110</div>
-                                        <div class="product-size">120</div>
-                                        <div class="product-size">130</div>
-                                        <div class="product-size">140</div>
-                                        <div class="product-size">150</div>
-                                        <div class="product-size">160</div>
+                        @foreach (var item in Model)
+                        {
+                            <div class="product" data-ProId="@item.ProId">
+                                <div class="product-img">
+                                    <a href="/Home/Detail/@item.ProId">
+                                        <img src="/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">
+                                    </a>
+                                    <div class="product-size-wrap">
+                                        <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
+                                            @foreach (var size in item.ProductVariations)
+                                            {
+                                                <div class="product-size filter-value addActiveItem" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+                                            }
+                                        </div>
+                                        <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</a>
                                     </div>
-                                    <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
                                 </div>
-                            </div>
-                            <div class="product-color-list d-flex pt-3 pb-2">
-                                <div class="product-color active">
-                                    <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sy038.png');"></span>
+                                <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
+                                    @foreach (var color in item.ProductImages)
+                                    {
+                                        <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
+                                            <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
+                                        </div>
+                                    }
                                 </div>
-                            </div>
-                            <a href="./product-detail.html" class="product-name">
-                                Bộ mặc nhà nam
-                            </a>
-                            <div class="d-flex mt-1">
-                                <div class="curent-price me-3">249.000 đ</div>
-                                <div class="curent-old">329.000 đ</div>
-                            </div>
-                            <div class="product-like">
-                                <span>Yêu thích</span>
-                                <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                <i class="product-like-img2 fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-
-                        <div class="product">
-                            <div class="product-img">
-                                <a href="#">
-                                    <img src="https://canifa.com/img/486/733/resize/6/l/6ls22s010-sa026-1-thumb.jpg" width="100%" alt="">
+                                <a href="/Home/Detail/@item.ProId" class="product-name">
+                                    @item.ProName
                                 </a>
-                                <div class="product-size-wrap">
-                                    <div class="d-flex justify-content-center flex-wrap pt-3">
-                                        <div class="product-size active">110</div>
-                                        <div class="product-size">120</div>
-                                        <div class="product-size">130</div>
-                                        <div class="product-size">140</div>
-                                        <div class="product-size">150</div>
-                                        <div class="product-size">160</div>
-                                    </div>
-                                    <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
+                                <div class="d-flex mt-1">
+                                    <div class="curent-price price me-3">@item.Price</div>
+                                    <div class="curent-old price">@item.PromotionPrice</div>
+                                </div>
+                                <div class="product-like">
+                                    <span>Yêu thích</span>
+                                    <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                    <i class="product-like-img2 fa-solid fa-heart"></i>
                                 </div>
                             </div>
-                            <div class="product-color-list d-flex pt-3 pb-2">
-                                <div class="product-color active" data="https://canifa.com/img/1000/1500/resize/6/l/6ls22s010-sa026-1-thumb.jpg">
-                                    <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sa026.png');"></span>
-                                </div>
-                                <div class="product-color" data="https://canifa.com/img/1000/1500/resize/6/l/6ls22s010-sw001-1.jpg">
-                                    <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sw001.png');"></span>
-                                </div>
+                        }
 
-                            </div>
-                            <a href="" class="product-name">
-                                Bộ mặc nhà nam
-                            </a>
-                            <div class="d-flex mt-1">
-                                <div class="curent-price me-3">249.000 đ</div>
-                                <div class="curent-old">329.000 đ</div>
-                            </div>
-
-                            <div class="product-like">
-                                <span>Yêu thích</span>
-                                <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                <i class="product-like-img2 fa-solid fa-heart"></i>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product-img">
-                                <a href="#">
-                                    <img src="https://canifa.com/img/486/733/resize/2/l/2ls22s017-sw001-2-thumb.jpg" width="100%" alt="">
-                                </a>
-                                <div class="product-size-wrap">
-                                    <div class="d-flex justify-content-center flex-wrap pt-3">
-                                        <div class="product-size active">110</div>
-                                        <div class="product-size">120</div>
-                                        <div class="product-size">130</div>
-                                        <div class="product-size">140</div>
-                                        <div class="product-size">150</div>
-                                        <div class="product-size">160</div>
-                                    </div>
-                                    <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                                </div>
-                            </div>
-                            <div class="product-color-list d-flex pt-3 pb-2">
-                                <div class="product-color active">
-                                    <span style="background-image: url('	https://media.canifa.com/attribute/swatch/images/sw001.png');"></span>
-                                </div>
-
-                            </div>
-                            <a href="" class="product-name">
-                                Bộ mặc nhà nam
-                            </a>
-                            <div class="d-flex mt-1">
-                                <div class="curent-price me-3">249.000 đ</div>
-                                <div class="curent-old">329.000 đ</div>
-                            </div>
-
-                            <div class="product-like">
-                                <span>Yêu thích</span>
-                                <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                <i class="product-like-img2 fa-solid fa-heart"></i>
-
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product-img">
-                                <a href="#">
-                                    <img src="/Assets/img/8ls22s005-sb128-1-thumb.jpg" width="100%" alt="">
-                                </a>
-                                <div class="product-size-wrap">
-                                    <div class="d-flex justify-content-center flex-wrap pt-3">
-                                        <div class="product-size active">110</div>
-                                        <div class="product-size">120</div>
-                                        <div class="product-size">130</div>
-                                        <div class="product-size">140</div>
-                                        <div class="product-size">150</div>
-                                        <div class="product-size">160</div>
-                                    </div>
-                                    <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                                </div>
-                            </div>
-                            <div class="product-color-list d-flex pt-3 pb-2">
-                                <div class="product-color active">
-                                    <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sb128.png');"></span>
-                                </div>
-                            </div>
-                            <a href="" class="product-name">
-                                Bộ mặc nhà nam
-                            </a>
-                            <div class="d-flex mt-1">
-                                <div class="curent-price me-3">249.000 đ</div>
-                                <div class="curent-old">329.000 đ</div>
-                            </div>
-
-                            <div class="product-like">
-                                <span>Yêu thích</span>
-                                <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                <i class="product-like-img2 fa-solid fa-heart"></i>
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

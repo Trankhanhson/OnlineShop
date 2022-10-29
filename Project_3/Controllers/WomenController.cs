@@ -1,4 +1,6 @@
-﻿using Models.DAO;
+﻿using Models;
+using Models.DAO;
+using Models.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,11 @@ namespace Project_3.Controllers
         // GET: Women
         public ActionResult Index()
         {
-            return View();
+            ProductCategoryDAO productCategoryDAO = new ProductCategoryDAO();
+            ViewBag.ProductCategory = productCategoryDAO.getAll();
+            ProductDAO productDAO = new ProductDAO();
+            List<Product> list = productDAO.getAll();
+            return View(list);
         }
 
         [ChildActionOnly]

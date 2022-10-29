@@ -14,9 +14,10 @@
         CKEDITOR.replace('Content')
 
     </script>
+    <script src="~/Assets/Plugin/ckfinder/ckfinder.js"></script>
 }
 
-<main id="main" class="main" ng-app="NewApp" ng-controller="NewController" ng-init="New = {Title : '@Model.Title',UserID : '@Model.UserID'}" >
+<main id="main" class="main" ng-app="NewApp" ng-controller="NewController" ng-init="New = {NewID : '@Model.NewID',Title : '@Model.Title',UserID : '@Model.UserID'}" >
 
     <section class="section">
         <div class="row">
@@ -48,7 +49,7 @@
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">Ảnh</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="file" id="formFile" ngf-select="SelectImage($files)">
+                                        <input class="form-control" type="file" id="formFile" data-oldImg="@Model.Image" ngf-select="SelectImage($files)">
                                     </div>
                                 </div>
                                 <div class="row mb-3">

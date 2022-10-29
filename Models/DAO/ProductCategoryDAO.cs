@@ -18,6 +18,7 @@ namespace Models.DAO
 
         public List<ProductCat> getAll()
         {
+            _dbContext.Configuration.ProxyCreationEnabled = false;
             List<ProductCat> ProductCats = _dbContext.ProductCats.Include(x=>x.Category).ToList();
             return ProductCats;
         }

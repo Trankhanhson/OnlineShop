@@ -27,9 +27,10 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
     }
 
     /** Sửa danh mục*/
-
+    let nameOldImg = $("#formFile").attr("data-oldImg")
     $scope.SaveEdit = function () {
         if ($scope.editForm.$valid) {
+            $scope.New.Content = CKEDITOR.instances['Content'].getData();
             //nếu upload file mới thì gán tên file mới vào proCat
             if ($scope.fileImage != undefined) {
                 $scope.New.Image = $scope.fileImage[0].name
@@ -42,15 +43,8 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
             }).then(function (res) {
                 if (res.data.UpdateSuccess === true) //nếu update thành công
                 {
-                    if (res.data.checkExistImg == false) //ảnh chưa tồn tại
-                    {
-                        //upload ảnh khi update thành công
-                        $scope.UploadFiles($scope.fileImage, $scope.proCat.ProCatId)
-                    }
-
-                    //Tìm phần tử vừa được sửa trong danh sách và thay thế 
-                    var newProCat = $scope.proCat
-                    $scope.ProCatList.splice(indexEdit, 1, newProCat)
+                    //upload ảnh khi update thành công
+                    $scope.UploadFiles($scope.fileImage, $scope.New.NewID)
 
                     $("#successToast .text-toast").text("Sửa bài viết thành công")
                     $("#successToast").toast("show") //hiển thị thông báo thành công

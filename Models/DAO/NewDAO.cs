@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace Models.DAO
 {
@@ -17,7 +18,9 @@ namespace Models.DAO
 
         public List<New> getAll()
         {
-            List<New> News = _dbContext.News.ToList();
+            _dbContext.Configuration.ProxyCreationEnabled = false;
+
+            List<New> News = _dbContext.News.Include(x=>x.User).ToList();
             return News;
         }
 

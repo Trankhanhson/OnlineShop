@@ -28,7 +28,7 @@ namespace Models.Framework
         public string UserAdress { get; set; }
         public string UserPhone { get; set; }
         public string UserEmail { get; set; }
-        public Nullable<bool> Status { get; set; }
+        public bool Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportBill> ImportBills { get; set; }

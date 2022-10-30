@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Web;
 using System.Globalization;
-
 namespace Project_3.common
 {
     public static class MethodCommnon
@@ -35,5 +34,6 @@ namespace Project_3.common
 
             return value;
         }
+
     }
 }

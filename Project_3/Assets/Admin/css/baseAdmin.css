@@ -1,0 +1,456 @@
+﻿:root {
+    --background-main: #4154f1;
+}
+
+body {
+    color: #000;
+}
+
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    color: #fff;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.font-weight-bold {
+    font-weight: 700;
+}
+
+.font-weight-heading {
+    font-weight: 600;
+}
+
+
+
+ul {
+    list-style: none;
+}
+
+.text-dark, table {
+    color: #212529 !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.input-create {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 2px solid rgb(202, 202, 202);
+    transition: all 0.1s;
+}
+
+    .input-create:focus {
+        border-bottom: 2px solid var(--background-main);
+    }
+
+.btn-update, .btn-delete {
+    border: none;
+    color: #fff;
+    display: inline-block;
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.btn-delete {
+    background-color: #f72f2f;
+}
+
+.btn-update {
+    background-color: #c4c44e;
+}
+
+    .btn-update:hover i, .btn-delete:hover i {
+        color: white;
+    }
+
+.table-hover tbody tr:hover {
+    color: #000 !important;
+}
+
+p {
+    margin: 0;
+}
+
+.table td, .table th {
+    padding: 0.5rem;
+    vertical-align: middle;
+    border-top: 1px solid #e3e6f0;
+}
+
+label {
+    width: 170px;
+}
+
+    label i {
+        color: #666;
+    }
+
+.input-wrap {
+    flex: 1;
+}
+
+/*    .input-wrap.active {
+        border-bottom: 2px solid var(--background-main);
+    }*/
+
+.method-header {
+    border: 1px solid rgb(197, 197, 197);
+    background-color: rgb(235, 235, 235);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .method-header.active i {
+        transform: rotate(180deg);
+    }
+
+.options-header {
+    border: 1px solid rgb(197, 197, 197);
+    background-color: rgb(235, 235, 235);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 0px;
+}
+
+.method-header.active {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: 0px;
+}
+
+.method-content, .options-content {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: 1px solid rgb(197, 197, 197);
+    border-left: 1px solid rgb(197, 197, 197);
+    border-bottom: 1px solid rgb(197, 197, 197);
+}
+
+    .method-content label {
+        width: 100px;
+    }
+
+.method-values {
+    display: inline-flex;
+    height: 45%;
+    font-size: 16px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-main);
+    color: white;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+    .method-values i {
+        font-size: 14px;
+        position: relative;
+        bottom: -1.5px;
+    }
+
+.method-remove {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+    .method-remove i {
+        pointer-events: none;
+    }
+
+.delete-option {
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+    .delete-option:hover {
+        color: #da291c;
+    }
+
+    .delete-option i {
+        pointer-events: none;
+    }
+/*upload file*/
+.file-upload-content {
+    display: none;
+    text-align: center;
+}
+
+.input-file, .input-file__main {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.image-upload-wrap {
+    border: 2px dashed #999;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+}
+
+    .image-dropping,
+    .image-upload-wrap:hover {
+        border: 2px dashed #0a58ca;
+    }
+
+.drag-text {
+    margin: auto;
+}
+
+
+.file-upload-image {
+    max-width: 80px;
+    max-height: 100px;
+}
+
+.remove-image {
+    width: 80px;
+    line-height: 20px;
+    margin: 0;
+    color: #fff;
+    background: #cd4535;
+    border: none;
+    border-radius: 4px;
+    border-bottom: 4px solid #b02818;
+    transition: all .2s ease;
+    outline: none;
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+    .remove-image:hover {
+        background: #c13b2a;
+        color: #ffffff;
+        transition: all .2s ease;
+        cursor: pointer;
+    }
+
+    .remove-image:active {
+        border: 0;
+        transition: all .2s ease;
+    }
+
+.drag-text p {
+    text-align: center;
+}
+
+.wrap-file-box {
+    margin-top: 30px;
+}
+
+.btn.focus, .btn:focus {
+    box-shadow: 0 0 0 0;
+}
+
+.method-dropdown {
+    width: 100%;
+    text-align: left;
+}
+
+.method-dropdown__wrap {
+    width: 100%;
+}
+
+.method-dropdown__list {
+    width: 100%;
+    display: none;
+}
+
+    .method-dropdown__list.show {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+.method-dropdown__item {
+    display: inline-block;
+}
+
+.method-dropdown__item-link {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+}
+
+    .method-dropdown__item-link p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 110px;
+        font-size: 16px;
+        pointer-events: none;
+    }
+
+.method-image-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    pointer-events: none;
+}
+
+.pagination-container {
+    margin: 30px 0 0 0;
+    display: flex;
+    justify-content: end;
+    padding-right: 30px
+}
+
+.pagination li {
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+    .pagination li:hover {
+        background: rgb(235, 235, 235)
+    }
+
+    .pagination li.active {
+        background: #999;
+        color: #fff;
+    }
+
+.label-create {
+    width: 180px;
+}
+
+.error {
+    width: 100%;
+    color: #dc3545;
+    font-size: 13px;
+}
+
+.input-searchView {
+    font-size: 14px;
+    color: #012970;
+    border: 1px solid rgba(1, 41, 112, 0.2);
+    padding: 7px 38px 7px 8px;
+    border-radius: 3px;
+    transition: 0.3s;
+    width: 100%;
+    outline: none;
+}
+
+    .input-searchView:hover, .input-searchView:focus, .limitShow:hover, .limitShow:focus {
+        outline: none;
+        box-shadow: 0 0 10px 0 rgb(1 41 112 / 15%);
+        border: 1px solid rgba(1, 41, 112, 0.3);
+    }
+
+.limitShow {
+    font-size: 14px;
+    color: #012970;
+    border: 1px solid rgba(1, 41, 112, 0.2);
+    padding: 7px 5px 7px 5px;
+    border-radius: 3px;
+    transition: 0.3s;
+    width: 100%;
+    outline: none;
+    max-width: 50px;
+}
+
+.pagination li a {
+    display: block;
+    color: #212529;
+}
+
+.pagination li.active {
+    background-color: var(--background-main);
+}
+
+    .pagination li.active a {
+        color: #fff
+    }
+
+.search-form input {
+    border: 0;
+    font-size: 14px;
+    color: #012970;
+    border: 1px solid rgba(1, 41, 112, 0.2);
+    padding: 7px 38px 7px 8px;
+    border-radius: 3px;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.search-form button {
+    border: 0;
+    padding: 0;
+    margin-left: -30px;
+    background: none;
+}
+
+.btn-cancel {
+    background-color: #898c8d;
+    border-color: transparent;
+    color: #fff;
+}
+
+.select-procat:focus {
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+
+.select-procat {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
+
+.method-dropdown__item-link:hover .method-edit {
+    display: flex;
+}
+.method-edit:hover i {
+    color: var(--background-main) !important;
+}
+
+.method-edit {
+    display: flex;
+    width: 22px;
+    height: 22px;
+    display: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+    .method-edit i {
+        font-size: 13px !important;
+    }

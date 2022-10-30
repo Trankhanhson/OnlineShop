@@ -18,17 +18,16 @@ namespace Project_3.Areas.Admin.Controllers
         }
         // POST: Admin/Size/Create
         [HttpPost]
-        public ActionResult Create(ProductSize pz)
+        public ActionResult Create(ProductSize proSize)
         {
             try
-            {
-                
-                
-
+            {             
+                ProductSizeDAO dao = new ProductSizeDAO();
+                var newPz = dao.Insert(proSize);
                 return Json(new
                 {
                     message = true,
-                    
+                    newPz = newPz
                 });
             }
             catch
@@ -42,13 +41,13 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/Size/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ProductSize proSize)
         {
             bool check = true;
             try
             {
-                //CategoryDAO categoryDAO = new CategoryDAO();
-                //check = categoryDAO.Update(category);
+                ProductSizeDAO dao = new ProductSizeDAO();
+                check = dao.Update(proSize);
                 return Json(check);
             }
             catch
@@ -65,15 +64,15 @@ namespace Project_3.Areas.Admin.Controllers
             bool check = true;
             try
             {
-                CategoryDAO categoryDAO = new CategoryDAO();
-                check = categoryDAO.Delete(id);
+                ProductSizeDAO dao = new ProductSizeDAO();
+                check = dao.Delete(id);
                 if (check)
                 {
                     message = "Xóa thành công";
                 }
                 else
                 {
-                    message = "Danh mục này đang được dùng ở danh mục con";
+                    message = "Kích thước này đang được dùng ở sản phẩm";
                 }
             }
             catch

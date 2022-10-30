@@ -5,7 +5,7 @@
 
 /**handle method */
 /**add value */
-$('.method-dropdown__item-link').click(function (e) {
+function addValue(e) {
     e.preventDefault();  //Không cho submit from bạn có thể bỏ nều k cần
     //lấy giá trị vừa nhập
     let valueInput = $($(e.target).children("p")).text()
@@ -47,7 +47,7 @@ $('.method-dropdown__item-link').click(function (e) {
         addVariation(idSize, valueInput, "size")
     }
 
-});
+}
 
 //remove size or 
 //phải gọi từ cha mới có thể thực hiện click

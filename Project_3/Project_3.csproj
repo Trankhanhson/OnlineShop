@@ -169,7 +169,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Admin\css\base.css" />
+    <Content Include="Assets\Admin\css\baseAdmin.css" />
     <Content Include="Assets\Admin\css\ImportBill.css" />
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
@@ -181,6 +181,7 @@
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Color.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Size.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\C_ProcatInProduct.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Product\PoductAngularjs.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
     <Content Include="Assets\Admin\img\favicon.png" />

@@ -37,7 +37,7 @@ namespace Models
             }
         }
 
-        public bool Delete(int id)
+        public bool Delete(long id)
         {
             try
             {

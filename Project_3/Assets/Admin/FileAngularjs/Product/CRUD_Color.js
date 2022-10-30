@@ -1,6 +1,14 @@
-﻿var productApp = angular.module("ProductApp", ['ngFileUpload'])
+﻿angular.module("ProductApp", ['ngFileUpload'])
 
-productApp.controller("ColorController", function (Upload, $scope, $http) {
+productApp.controller("ColorController", ColorController)
+
+function ColorController(Upload, $scope, $http) {
+    $http.get("/Admin/Color/getAllData").then(function (res) {
+        $scope.ColorList = res.data
+    }, function (error) {
+        alert("Có lỗi khi lấy dữ liệu")
+    })
+
     //lưu file người dùng upload
     $scope.SelectImage = function (file) {
         $scope.fileImage = file
@@ -72,4 +80,4 @@ productApp.controller("ColorController", function (Upload, $scope, $http) {
             }
         }
     }
-})
+}

@@ -63,8 +63,6 @@ namespace Project_3.Areas.Admin.Controllers
             ViewBag.CatList = categoryDAO.getAll();
             //các danh sách dùng để select
             ViewBag.listproCat = new ProductCategoryDAO().getAll();
-            ViewBag.ListSize = new ProductSizeDAO().getAll();
-            ViewBag.ListColor = new ProductColorDAO().getAll();
             return View();
         }
 
@@ -116,7 +114,7 @@ namespace Project_3.Areas.Admin.Controllers
                 {
                     productVariationDAO.Edit(listVariation);
                     productImagesDAO.Delete(product.ProId); //xóa các đối tượng proImg
-                    DeleteAllImgByIdPro(product.ProId); //xóa các Img của ProId
+                    DeleteAllImg("~/Upload/Product/" + product.ProId); //xóa các Img của ProId
                 }
             }
             catch
@@ -143,7 +141,7 @@ namespace Project_3.Areas.Admin.Controllers
                 {
                     productImgDAO.Delete(id);
                     productDAO.Delete(id);
-                    DeleteAllImgByIdPro(id); //xóa các Img của ProId từ folder
+                    DeleteAllImg("~/Upload/Product/" + id); //xóa các Img của ProId từ folder
                     check = true;
                 }
             }
@@ -266,9 +264,9 @@ namespace Project_3.Areas.Admin.Controllers
             return "";
         }
 
-        public void DeleteAllImgByIdPro(long idPro)
+        public void DeleteAllImg(string pathId)
         {
-            string path = Server.MapPath("~/Upload/Product/" + idPro);
+            string path = Server.MapPath(pathId);
             if (Directory.Exists(path))
             {
                 DirectoryInfo directory = new DirectoryInfo(path);

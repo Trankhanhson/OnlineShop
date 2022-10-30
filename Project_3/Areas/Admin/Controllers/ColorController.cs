@@ -4,6 +4,7 @@ using Models.Framework;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -20,11 +21,11 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(ProductColor productColor)
+        public JsonResult Create(ProductColor proColor)
         {
             try
             {
-                ProductColor pco = new ProductColorDAO().Insert(productColor);
+                ProductColor pco = new ProductColorDAO().Insert(proColor);
                 return Json(new
                 {
                     check = true,
@@ -40,11 +41,11 @@ namespace Project_3.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult Upload(long ProCatId)
+        public ActionResult Upload(long proColorId)
         {
             try
             {
-                string path = Server.MapPath("~/Upload/CatPro/" + ProCatId + "/");
+                string path = Server.MapPath("~/Upload/ColorImage/" + proColorId + "/");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -62,26 +63,25 @@ namespace Project_3.Areas.Admin.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        // POST: Admin/ProductCat/Edit/5
+        // POST: Admin/ProductColor/Edit/5
         [HttpPost]
-        public JsonResult Edit(ProductCat proCat, string nameOldImg)
+        public JsonResult Edit(ProductColor proColor)
         {
             bool UpdateSuccess = true;
             bool checkExistImg = true;
             try
             {
-                //kiểm tra xem đã tồn tại đường dẫn với ảnh mưới chưa
-                string pathNew = Path.Combine("~/Upload/CatPro/" + proCat.ProCatId + "/" + proCat.Image);
-                if (!(System.IO.File.Exists(pathNew))) //nếu ảnh cũ chưa tồn tại
+                //kiểm tra xem đã tồn tại đường dẫn với ảnh mới chưa
+                string pathNew = Path.Combine("~/Upload/ColorImage/" + proColor.ProColorID + "/" + proColor.ImageColor);
+                if (!(System.IO.File.Exists(pathNew))) //nếu ảnh mới chưa tồn tại
                 {
                     //xóa ảnh cũ để thêm ảnh mới
-                    string path = Server.MapPath("~/Upload/CatPro/" + proCat.ProCatId + "/" + nameOldImg);
-                    System.IO.File.Delete(path);
+                    DeleteAllImg("~/Upload/ColorImage/" + proColor.ProColorID);
 
                     checkExistImg = false; //sẽ upload ảnh mới
                 }
-                ProductCategoryDAO dao = new ProductCategoryDAO();
-                UpdateSuccess = dao.Update(proCat); //update đối tượng
+                ProductColorDAO dao = new ProductColorDAO();
+                UpdateSuccess = dao.Update(proColor); //update đối tượng
                 //khi update thành công thành công thì upload ảnh
             }
             catch
@@ -95,41 +95,46 @@ namespace Project_3.Areas.Admin.Controllers
             });
         }
 
-        // POST: Admin/ProductCat/Delete/5
+        // POST: Admin/ProductColor/Delete/5
         [HttpPost]
-        public ActionResult Delete(ProductCat proCat)
+        public ActionResult Delete(ProductColor proColor)
         {
-            string message = "";
-            bool check = true;
-            try
+            ProductColorDAO dao = new ProductColorDAO();
+            bool check = dao.Delete(proColor.ProColorID);
+            if (check)
             {
-                ProductCategoryDAO dao = new ProductCategoryDAO();
-                check = dao.Delete(proCat.ProCatId);
-                if (check)
-                {
+                //xóa ảnh trong folder
+                DeleteAllImg("~/Upload/ColorImage/" + proColor.ProColorID);
+            }
 
-                    //xóa ảnh trong folder
-                    string path = Server.MapPath("~/Upload/CatPro/" + proCat.ProCatId + "/" + proCat.Image);
-                    if (System.IO.File.Exists(path))
-                    {
-                        System.IO.File.Delete(path);
-                    }
-                    message = "Xóa thành công";
-                }
-                else
-                {
-                    message = "Loại sản phẩm này đang được dùng ở sản phẩm";
-                }
-            }
-            catch
-            {
-                message = "Xóa thất bại";
-            }
             return Json(new
             {
-                message = message,
                 check = check
             });
+        }
+
+        public void DeleteAllImg(string pathId)
+        {
+            string path = Server.MapPath(pathId);
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo directory = new DirectoryInfo(path);
+                EmptyFolder(directory);
+            }
+        }
+
+        public void EmptyFolder(DirectoryInfo directory)
+        {
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            {
+                EmptyFolder(subdirectory);
+                subdirectory.Delete();
+            }
         }
     }
 }

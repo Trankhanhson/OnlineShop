@@ -37,14 +37,14 @@ namespace Project_3.Areas.Admin.Controllers
         {
             List<Product> products = new ProductDAO().getAll();
             ProductImagesDAO productImagesDAO = new ProductImagesDAO();
-            foreach(var p in products)
+            foreach (var p in products)
             {
-                foreach(var pv in p.ProductVariations)
+                foreach (var pv in p.ProductVariations)
                 {
                     pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
                 }
             }
-            
+
             //Ignore loopHanding
             JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var result = JsonConvert.SerializeObject(products, Formatting.Indented, jss);

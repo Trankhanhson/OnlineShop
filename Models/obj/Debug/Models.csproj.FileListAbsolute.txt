@@ -14,3 +14,5 @@ C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.csproj.CoreCompileInputs.cach
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.csproj.CopyComplete
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.dll
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.pdb
+C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.dll
+C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.xml

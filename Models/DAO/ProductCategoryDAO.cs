@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Models.DAO
 {
@@ -18,8 +21,8 @@ namespace Models.DAO
 
         public List<ProductCat> getAll()
         {
-            _dbContext.Configuration.ProxyCreationEnabled = false;
-            List<ProductCat> ProductCats = _dbContext.ProductCats.Include(x=>x.Category).ToList();
+            _dbContext.Configuration.LazyLoadingEnabled = false;
+            var ProductCats = _dbContext.ProductCats.Include(x => x.Category).AsNoTracking().ToList();
             return ProductCats;
         }
       

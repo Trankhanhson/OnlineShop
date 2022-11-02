@@ -1,5 +1,20 @@
 ﻿var productApp = angular.module("ProductApp", ['ngFileUpload']);
 
+productApp.controller("ProductController", ProductController)
+function ProductController($scope, $http) {
+    $scope.Oject = "Nam"
+    $scope.TopMenu = function (Oject) {
+        $http.get("/Admin/Category/getByType/" + Oject).then(function (res) {
+            $scope.listCategoryByType = res.data
+        }, function (error) {
+            alert("Lỗi khi tải dữ liệu")
+        })
+    }
+
+    $scope.TopMenu("Nam")
+}
+
+
 productApp.controller("SizeController", SizeController)
 function SizeController($scope, $http) {
 
@@ -20,19 +35,19 @@ function SizeController($scope, $http) {
         $scope.proSize = null
     }
 
-    //khi người dung nhấn lưu thêm mới danh mục
+    //khi người dung nhấn lưu thêm mới kích thước
     $scope.SaveAdd = function () {
         if ($scope.createSizeForm.$valid) {
             $http({
                 method: "POST",
                 url: "/Admin/Size/Create",
                 datatype: 'Json',
-                data: { proSize : $scope.proSize }
+                data: { proSize: $scope.proSize }
             }).then(function (res) {
                 if (res.data.message) {
                     $scope.ListSize.push(res.data.newPz) //hiển thị thêm đối tượng vừa thêm
 
-                    $(".btn-close").trigger('click') //đóng modal thêm
+                    $(".btn-closeModel").trigger('click') //đóng modal 
 
                     //hiển thị thông báo thành công
                     $("#successToast .text-toast").text("Thêm kích thước thành công")
@@ -53,7 +68,7 @@ function SizeController($scope, $http) {
     $scope.Edit = function (size, index, e) {
         e.stopPropagation()
         //nếu gán thẳng thì nó sẽ thay đổi luôn ở view trong khi chưa sửa
-        $scope.proSize = { ProSizeID: size.ProSizeID , NameSize: size.NameSize }
+        $scope.proSize = { ProSizeID: size.ProSizeID, NameSize: size.NameSize }
         indexEdit = index
     }
 
@@ -68,7 +83,7 @@ function SizeController($scope, $http) {
                 if (res.data) {
                     //Tìm phần tử vừa được sửa trong danh sách
                     var newProSize = $scope.proSize
-                    $scope.ListSize.splice(indexEdit, 1, newCat)
+                    $scope.ListSize.splice(indexEdit, 1, newProSize)
                     $("#successToast .text-toast").text("Sửa kích thước thành công")
                     $("#successToast").toast("show") //hiển thị thông báo thành công
                 }
@@ -76,7 +91,7 @@ function SizeController($scope, $http) {
                     $("#errorToast .text-toast").text("Sửa thất bại")
                     $("#errorToast").toast("show") //hiển thị thông báo thành công
                 }
-                $(".btn-close").trigger('click') //đóng modal sửa
+                $(".btn-closeModel").trigger('click') //đóng modal 
             })
         }
 
@@ -101,13 +116,14 @@ function SizeController($scope, $http) {
                     $("#errorToast .text-toast").text(res.data.message)
                     $("#errorToast").toast("show")
                 }
+                $(".btn-closeModel").trigger('click') //đóng modal 
             })
         }
     }
 }
 
-productApp.controller("ProCatController", ProCatController);
 
+productApp.controller("ProCatController", ProCatController);
 function ProCatController($scope, Upload, $http) {
 
     //lưu file người dùng upload
@@ -164,7 +180,7 @@ function ProCatController($scope, Upload, $http) {
                         $scope.errorImage = false
 
                         //nếu người dùng chỉ nhấn lưu
-                        $(".btn-close").trigger('click') //đóng modal thêm
+                        $(".btn-closeModel").trigger('click') //đóng modal 
 
                         //hiển thị thông báo thành công
                         $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
@@ -183,9 +199,8 @@ function ProCatController($scope, Upload, $http) {
     }
 }
 
+
 productApp.controller("ColorController", ColorController)
-
-
 function ColorController(Upload, $scope, $http) {
 
     //Thêm value size hoặc màu khi nhấn
@@ -241,7 +256,7 @@ function ColorController(Upload, $scope, $http) {
                 }).then(function (res) {
                     if (res.data.check) //tạo mới thành công
                     {
-                        var pco = JSON.parse(res.data.pco)
+                        var pco = res.data.pco
                         $scope.ColorList.push(pco)
 
                         //upload ảnh khi thêm đối tượng thành công
@@ -262,7 +277,7 @@ function ColorController(Upload, $scope, $http) {
                         $scope.errorImage = false
 
                         //nếu người dùng chỉ nhấn lưu
-                        $(".btn-close").trigger('click') //đóng modal thêm
+                        $(".btn-closeModel").trigger('click') //đóng modal 
 
                         //hiển thị thông báo thành công
                         $("#successToast .text-toast").text("Thêm màu thành công")
@@ -292,7 +307,7 @@ function ColorController(Upload, $scope, $http) {
         if ($scope.editColorForm.$valid) {
             //nếu upload file mới thì gán tên file mới vào proCat
             if ($scope.fileImage != undefined) {
-                $scope.proColor.Image = $scope.fileImage[0].name
+                $scope.proColor.ImageColor = $scope.fileImage[0].name
             }
             $http({
                 method: "POST",
@@ -305,11 +320,11 @@ function ColorController(Upload, $scope, $http) {
                     if (res.data.checkExistImg == false) //ảnh chưa tồn tại
                     {
                         //upload ảnh khi update thành công
-                        $scope.UploadFiles($scope.fileImage, $scope.proColor.ProColorID )
+                        $scope.UploadFiles($scope.fileImage, $scope.proColor.ProColorID)
                     }
 
                     //Tìm phần tử vừa được sửa trong danh sách và thay thế 
-                    $scope.ProCatList.splice(indexEdit, 1, $scope.proColor)
+                    $scope.ColorList.splice(indexEdit, 1, $scope.proColor)
 
                     $("#successToast .text-toast").text("Sửa màu thành công")
                     $("#successToast").toast("show") //hiển thị thông báo thành công
@@ -318,7 +333,7 @@ function ColorController(Upload, $scope, $http) {
                     $("#errorToast .text-toast").text("Sửa thất bại")
                     $("#errorToast").toast("show") //hiển thị thông báo thành công
                 }
-                $(".btn-close").trigger('click') //đóng modal sửa
+                $(".btn-closeModel").trigger('click') //đóng modal 
             })
         }
 
@@ -343,6 +358,8 @@ function ColorController(Upload, $scope, $http) {
                     $("#errorToast .text-toast").text("Màu này đang được dùng ở sản phẩm")
                     $("#errorToast").toast("show")
                 }
+                $(".btn-closeModel").trigger('click') //đóng modal 
+
             })
         }
     }

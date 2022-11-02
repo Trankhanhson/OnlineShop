@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace Models.DAO
 {
@@ -24,7 +25,8 @@ namespace Models.DAO
         }
         public List<Category> getByType(string type)
         {
-            List<Category> categories = _dbContext.Categories.Where(x => x.type == type).ToList();
+            
+            List<Category> categories = _dbContext.Categories.Include(x=>x.ProductCats).Where(x => x.type == type).ToList();
             return categories;
         }
 

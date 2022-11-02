@@ -33,6 +33,13 @@ namespace Project_3.Areas.Admin.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult getByType(string id)
+        {
+            List<Category> categories = new CategoryDAO().getByType(id);
+            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var result = JsonConvert.SerializeObject(categories, Formatting.Indented, jss);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         // POST: Admin/Category/Create
 

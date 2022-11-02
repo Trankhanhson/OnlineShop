@@ -20,9 +20,26 @@ namespace Models
 
         public List<Product> getAll()
         {
-            List<Product> list = _dbContext.Products.Include(pv=>pv.ProductVariations).Include(pi=>pi.ProductImages).ToList();
+            List<Product> list = _dbContext.Products.Include(pv=>pv.ProductVariations).ToList();
             return list;
         }
+
+        //public List<Product> getAllSelect()
+        //{
+        //    //_dbContext.Configuration.ProxyCreationEnabled = false;
+        //    //List<Product> list = _dbContext.Products.Select(p1=>new 
+        //    //{
+        //    //    p1.ProductCat.Name,
+
+        //    //}).ToList()
+        //    //    .Select(p => new Product()
+        //    //    {
+        //    //        ProName = p.ProName,
+        //    //        ProId = p.ProId,
+        //    //        ProductCat.ProCatId = p.ProductCat.ProCatId
+        //    //    }).ToList();
+        //    return list;
+        //}
 
         public IEnumerable<Product> getPage(string searchResult, int page, int pageSize)
         {

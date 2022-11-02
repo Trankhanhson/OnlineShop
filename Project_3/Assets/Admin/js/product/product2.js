@@ -72,7 +72,7 @@ function deleteValue(e) {
         let wrapSize = $(e.target).parents(".wrap-size")
         let textClicked = $(e.target).parent().text()
         let idColor = $($(item).parent()).attr("data-idColor")
-        if ($(wrapColor).children().length == 2 || $(wrapSize).children().length == 2) {
+        if ($(wrapColor).children("span").length == 2 || $(wrapSize).children("span").length == 2) {
             //khi xóa phần tử cuối cùng của method thì sẽ không thể tạo ra product
             $(".box-options").html('')
             deleteImgBox(idColor)

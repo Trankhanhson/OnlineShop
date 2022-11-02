@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var timeNow = System.DateTime.Now;
 }
 
 @section styles{
@@ -32,7 +33,7 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <input type="date" id="ImpDate" class="form-control">
+                                            <input type="date" id="ImpDate" value="@Html.FormatValue(timeNow.Year + "-" + timeNow.Month + "-" + timeNow.Day, "{0:dd/MM/yyyy}")" class="form-control">
                                         </div>
                                         <div>
                                             Tổng tiền: <span id="totalImportBill"></span>

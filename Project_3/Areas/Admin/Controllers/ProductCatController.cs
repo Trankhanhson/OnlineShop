@@ -26,6 +26,8 @@ namespace Project_3.Areas.Admin.Controllers
         public JsonResult getAllData()
         {
             List<ProductCat> list = new ProductCategoryDAO().getAll();
+
+            //loại bỏ các phần tử bị lặp và tuần tự hóa thành json
             JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var result = JsonConvert.SerializeObject(list, Formatting.Indented, jss);
             var firstCatId = new CategoryDAO().getAll().First().CatID;

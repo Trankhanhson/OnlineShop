@@ -150,7 +150,6 @@
     <Compile Include="Areas\Admin\Controllers\SizeController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\validateantiforgerytokenAttribute.cs" />
-    <Compile Include="Areas\Admin\Data\ProductCus.cs" />
     <Compile Include="Areas\Admin\Data\ProductImageFile.cs" />
     <Compile Include="common\CommonConstants.cs" />
     <Compile Include="common\Encryptor.cs" />

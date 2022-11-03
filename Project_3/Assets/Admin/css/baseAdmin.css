@@ -232,6 +232,7 @@ label {
 
 .drag-text {
     margin: auto;
+    font-size:12px;
 }
 
 
@@ -456,3 +457,7 @@ label {
     .method-edit i {
         font-size: 13px !important;
     }
+
+.text-dragenter{
+    display:none;
+}

@@ -22,7 +22,7 @@ namespace Models.Framework
         }
     
         public long ProId { get; set; }
-        public Nullable<int> ProCatId { get; set; }
+        public int ProCatId { get; set; }
         public string ProName { get; set; }
         public string Material { get; set; }
         public string Description { get; set; }

@@ -17,7 +17,9 @@ namespace Models
 
         public List<ProductColor> getAll()
         {
-            return _dbContext.ProductColors.ToList();
+            _dbContext.Configuration.ProxyCreationEnabled = false;
+            List<ProductColor> list = _dbContext.ProductColors.ToList();
+            return list;
         }
         public ProductColor getById(long id)
         {

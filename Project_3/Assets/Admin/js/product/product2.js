@@ -72,7 +72,7 @@ function deleteValue(e) {
         let wrapSize = $(e.target).parents(".wrap-size")
         let textClicked = $(e.target).parent().text()
         let idColor = $($(item).parent()).attr("data-idColor")
-        if ($(wrapColor).children("span").length == 2 || $(wrapSize).children("span").length == 2) {
+        if ($(wrapColor).children(".method-values").length == 1 || $(wrapSize).children(".method-values").length == 1) {
             //khi xóa phần tử cuối cùng của method thì sẽ không thể tạo ra product
             $(".box-options").html('')
             deleteImgBox(idColor)
@@ -103,10 +103,11 @@ function deleteValue(e) {
 function addImgBox(idColor, colorValue) {
     let result = `<div class="d-flex justify-content-between mb-4 imgItem" data-idColor="${idColor}">                                  
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                    <div class="image-upload-wrap">
-                        <input class="input-file__main input-file" type='file' " accept="image/*" onchange="uploadImg(this)"/>
+                    <div class="image-upload-wrap" >
+                        <input class="input-file__main input-file" type='file' " accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)"/>
                         <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
                         </div>
                     </div>
                     <div class="file-upload-content">
@@ -114,14 +115,15 @@ function addImgBox(idColor, colorValue) {
                         <div class="image-title-wrap">
                         <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
                         </div>
-                    </div>   
-                </div>  
-                    
+                    </div>
+                </div>
+
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
                     <div class="image-upload-wrap">
-                        <input class="input-file__detail1 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                        <input class="input-file__detail1 input-file" type='file' accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)" />
                         <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
                         </div>
                     </div>
                     <div class="file-upload-content">
@@ -129,13 +131,14 @@ function addImgBox(idColor, colorValue) {
                         <div class="image-title-wrap">
                         <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
                         </div>
-                    </div>   
+                    </div>
                 </div>
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
                     <div class="image-upload-wrap">
-                        <input class="input-file__detail2 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                        <input class="input-file__detail2 input-file" type='file' accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)" />
                         <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
                         </div>
                     </div>
                     <div class="file-upload-content">
@@ -143,13 +146,29 @@ function addImgBox(idColor, colorValue) {
                         <div class="image-title-wrap">
                         <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
                         </div>
-                    </div>   
+                    </div>
+                </div>
+                <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                    <div class="image-upload-wrap" >
+                        <input class="input-file input-file__detail3" type='file' accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)" />
+                        <div class="drag-text">
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
+                        </div>
+                    </div>
+                    <div class="file-upload-content">
+                        <img class="file-upload-image" src="#" alt="your image" />
+                        <div class="image-title-wrap">
+                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
                     <div class="image-upload-wrap">
-                        <input class="input-file input-file__detail3" type='file' accept="image/*" onchange="uploadImg(this)" />
+                        <input class="input-file input-file__detail4" type='file' accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)" />
                         <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
                         </div>
                     </div>
                     <div class="file-upload-content">
@@ -157,27 +176,14 @@ function addImgBox(idColor, colorValue) {
                         <div class="image-title-wrap">
                         <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
                         </div>
-                    </div>   
+                    </div>
                 </div>
                 <div class="wrap-file-box" onclick="fileBoxClick(this)">
                     <div class="image-upload-wrap">
-                        <input class="input-file input-file__detail4" type='file' accept="image/*" onchange="uploadImg(this)" />
+                        <input class="input-file input-file__detail5" type='file' accept="image/*" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)" />
                         <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
-                        </div>
-                    </div>
-                    <div class="file-upload-content">
-                        <img class="file-upload-image" src="#" alt="your image" />
-                        <div class="image-title-wrap">
-                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                        </div>
-                    </div>   
-                </div>    
-                <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                    <div class="image-upload-wrap">
-                        <input class="input-file input-file__detail5" type='file' accept="image/*" onchange="uploadImg(this)" />
-                        <div class="drag-text">
-                        <p>Ảnh ${colorValue}</p>
+                            <p class="text-nodragenter">Ảnh ${colorValue}</p>
+                            <p class="text-dragenter"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
                         </div>
                     </div>
                     <div class="file-upload-content">
@@ -363,6 +369,8 @@ var clickFile = document.createElement('div') //lưu thẻ bọc 1 ảnh khi cli
 function fileBoxClick(input) {
     clickFile = input
 }
+
+//Hiển thị hình ảnh vừa chọn lên view
 function uploadImg(input) {
     const reader = new FileReader()
 
@@ -380,6 +388,41 @@ function uploadImg(input) {
         $(clickFile).find('.file-upload-content').show();
         $(clickFile).find('.image-upload-wrap').hide();
     })
+}
+
+function dropImg(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.file = event.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+        this.url = reader.result;
+        const dropDiv = $(event.target).parents(".wrap-file-box")
+        $(dropDiv).find('.file-upload-image').attr('src', this.url);
+        $(dropDiv).find('.file-upload-content').show();
+        $(dropDiv).find('.image-upload-wrap').hide();
+    };
+    reader.readAsDataURL(this.file);
+}
+
+function DragEnter(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    const parent = $(event.target).parents(".image-upload-wrap")
+    $(parent).find(".text-dragenter").show()
+    $(parent).find(".text-nodragenter").hide()
+    $(parent).css("border", "2px dashed #0a58ca")
+}
+
+
+function dragLeaveBox(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    const parent = $(event.target).parents(".image-upload-wrap")
+    $(parent).find(".text-dragenter").hide()
+    $(parent).find(".text-nodragenter").show()
+    $(parent).css("border", "2px dashed #999")
+
 }
 
 

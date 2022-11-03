@@ -48,7 +48,8 @@
 
             /** Lấy danh sách category*/
             $http.get("/Admin/Size/getAllData").then(function (res) {
-                $scope.ListSize = res.data
+                $scope.ListSize = JSON.parse(res.data)
+                console.log($scope.ListSize)
             }, function (error) {
                 alert("Lỗi khi tải dữ liệu")
             })
@@ -71,7 +72,7 @@
                         if (res.data.message) {
                             $scope.ListSize.push(res.data.newPz) //hiển thị thêm đối tượng vừa thêm
 
-                            $(".btn-closeModel").trigger('click') //đóng modal 
+                            $(".btn-closeModel").trigger('click') //đóng modal
 
                             //hiển thị thông báo thành công
                             $("#successToast .text-toast").text("Thêm kích thước thành công")
@@ -115,7 +116,7 @@
                             $("#errorToast .text-toast").text("Sửa thất bại")
                             $("#errorToast").toast("show") //hiển thị thông báo thành công
                         }
-                        $(".btn-closeModel").trigger('click') //đóng modal 
+                        $(".btn-closeModel").trigger('click') //đóng modal
                     })
                 }
 
@@ -140,7 +141,7 @@
                             $("#errorToast .text-toast").text(res.data.message)
                             $("#errorToast").toast("show")
                         }
-                        $(".btn-closeModel").trigger('click') //đóng modal 
+                        $(".btn-closeModel").trigger('click') //đóng modal
                     })
                 }
             }
@@ -204,7 +205,7 @@
                                 $scope.errorImage = false
 
                                 //nếu người dùng chỉ nhấn lưu
-                                $(".btn-closeModel").trigger('click') //đóng modal 
+                                $(".btn-closeModel").trigger('click') //đóng modal
 
                                 //hiển thị thông báo thành công
                                 $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
@@ -233,7 +234,7 @@
             }
 
             $http.get("/Admin/Color/getAllData").then(function (res) {
-                $scope.ColorList = res.data
+                $scope.ColorList = JSON.parse(res.data)
             }, function (error) {
                 alert("Có lỗi khi lấy dữ liệu")
             })
@@ -301,7 +302,7 @@
                                 $scope.errorImage = false
 
                                 //nếu người dùng chỉ nhấn lưu
-                                $(".btn-closeModel").trigger('click') //đóng modal 
+                                $(".btn-closeModel").trigger('click') //đóng modal
 
                                 //hiển thị thông báo thành công
                                 $("#successToast .text-toast").text("Thêm màu thành công")
@@ -347,7 +348,7 @@
                                 $scope.UploadFiles($scope.fileImage, $scope.proColor.ProColorID)
                             }
 
-                            //Tìm phần tử vừa được sửa trong danh sách và thay thế 
+                            //Tìm phần tử vừa được sửa trong danh sách và thay thế
                             $scope.ColorList.splice(indexEdit, 1, $scope.proColor)
 
                             $("#successToast .text-toast").text("Sửa màu thành công")
@@ -357,7 +358,7 @@
                             $("#errorToast .text-toast").text("Sửa thất bại")
                             $("#errorToast").toast("show") //hiển thị thông báo thành công
                         }
-                        $(".btn-closeModel").trigger('click') //đóng modal 
+                        $(".btn-closeModel").trigger('click') //đóng modal
                     })
                 }
 
@@ -382,7 +383,7 @@
                             $("#errorToast .text-toast").text("Màu này đang được dùng ở sản phẩm")
                             $("#errorToast").toast("show")
                         }
-                        $(".btn-closeModel").trigger('click') //đóng modal 
+                        $(".btn-closeModel").trigger('click') //đóng modal
 
                     })
                 }
@@ -391,7 +392,7 @@
     </script>
 }
 
-<main id="main" class="main" ng-app="ProductApp" >
+<main id="main" class="main" ng-app="ProductApp">
 
     <section class="section">
         <div class="row">
@@ -498,7 +499,7 @@
                                             <input type="text" ng-model="searchColor" class="border-0" style="outline: none; width: 97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
                                         </div>
                                         <ul class="dropdown-menu method-dropdown__list shadow" aria-labelledby="dropdownColor">
-                                            <li class="" ng-repeat="item in ColorList | filter : searchColor"><a class="dropdown-item method-dropdown__item-link " ng-click="addValue($event)" data-idColor="{{item.ProColorID}}"><img class="method-image-color" src="/Upload/ColorImage/{{item.ProColorID}}/{{item.ImageColor}}"><p>{{item.NameColor}}</p><div data-bs-toggle="modal" data-bs-target="#EditColor" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen" ></i></div></a></li>
+                                            <li class="" ng-repeat="item in ColorList | filter : searchColor"><a class="dropdown-item method-dropdown__item-link " ng-click="addValue($event)" data-idColor="{{item.ProColorID}}"><img class="method-image-color" src="/Upload/ColorImage/{{item.ProColorID}}/{{item.ImageColor}}"><p>{{item.NameColor}}</p><div data-bs-toggle="modal" data-bs-target="#EditColor" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
                                         </ul>
                                     </div>
                                     <div class="my-auto px-1" style="cursor:pointer" ng-click="Add()" data-bs-toggle="modal" data-bs-target="#AddColor"><i class="fa-solid fa-plus"></i></div>
@@ -543,7 +544,7 @@
                                                 </form>
 
                                             </div>
-                                            
+
 
                                         </div>
                                     </div>
@@ -640,7 +641,7 @@
                                                 </form>
 
                                             </div>
-                                            
+
 
                                         </div>
                                     </div>

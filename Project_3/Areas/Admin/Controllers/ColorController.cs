@@ -17,7 +17,9 @@ namespace Project_3.Areas.Admin.Controllers
         ClothesShopEntities db = new ClothesShopEntities();
         public JsonResult getAllData()
         {
-            return Json(db.ProductColors.Select(x => new { x.ProColorID, x.ImageColor, x.NameColor }).ToList(),JsonRequestBehavior.AllowGet);
+            List<ProductColor> list = new ProductColorDAO().getAll();
+            var result = JsonConvert.SerializeObject(list);
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

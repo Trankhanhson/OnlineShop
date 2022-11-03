@@ -25,20 +25,10 @@ namespace Models.DAO
         }
         public List<Category> getByType(string type)
         {
-            
+            _dbContext.Configuration.ProxyCreationEnabled = false;
             List<Category> categories = _dbContext.Categories.Include(x=>x.ProductCats).Where(x => x.type == type).ToList();
             return categories;
         }
-
-        //public IEnumerable<Category> getPage(string searchResult, int page, int pageSize)
-        //{
-        //    IQueryable<Category> model = _dbContext.Categories;
-        //    if (!string.IsNullOrEmpty(searchResult))
-        //    {
-        //        model = model.Where(x => x.Name.Contains(searchResult));
-        //    }
-        //    return model.OrderByDescending(x => x.Name).ToPagedList(page, pageSize);
-        //}
 
         public Category getByCatID(int CatID)
         {

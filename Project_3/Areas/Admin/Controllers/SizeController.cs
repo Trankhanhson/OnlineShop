@@ -1,6 +1,7 @@
 ﻿using Models;
 using Models.DAO;
 using Models.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,11 @@ namespace Project_3.Areas.Admin.Controllers
 {
     public class SizeController : Controller
     {
-        ClothesShopEntities db = new ClothesShopEntities();
         public JsonResult getAllData()
         {
-            return Json(db.ProductSizes.Select(x => new { x.ProSizeID, x.NameSize}).ToList(), JsonRequestBehavior.AllowGet);
+            List<ProductSize> productSizeList = new ProductSizeDAO().getAll();
+            var result = JsonConvert.SerializeObject(productSizeList);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         // POST: Admin/Size/Create
         [HttpPost]

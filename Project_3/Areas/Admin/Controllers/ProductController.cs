@@ -45,9 +45,8 @@ namespace Project_3.Areas.Admin.Controllers
                 }
             }
 
-            //Ignore loopHanding
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(products, Formatting.Indented, jss);
+            //Convert to Json
+            var result = JsonConvert.SerializeObject(products);
 
             //set maxJsonLangth for ressult
             var jsonResult = Json(result, JsonRequestBehavior.AllowGet);

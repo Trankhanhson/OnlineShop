@@ -18,6 +18,8 @@ namespace Models
 
         public List<ProductSize> getAll()
         {
+            _dbContext.Configuration.ProxyCreationEnabled = false;
+            List<ProductSize> products = _dbContext.ProductSizes.ToList();
             return _dbContext.ProductSizes.ToList();
         }
 

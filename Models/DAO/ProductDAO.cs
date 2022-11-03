@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Net.NetworkInformation;
 
 namespace Models
 {
@@ -20,27 +21,39 @@ namespace Models
 
         public List<Product> getAll()
         {
-            List<Product> list = _dbContext.Products.Include(pv=>pv.ProductVariations).ToList();
+            _dbContext.Configuration.LazyLoadingEnabled = false;
+            List<Product> list = _dbContext.Products.Include(pv => pv.ProductVariations.Select(pc => pc.ProductColor))
+                .Include(pv => pv.ProductVariations.Select(ps => ps.ProductSize))
+                .Include(pi => pi.ProductImages).Include(pc => pc.ProductCat).ToList()
+                .Select(p => new Product()
+                {
+                    ProId = p.ProId,
+                    ProName = p.ProName,
+                    ProCatId = p.ProCatId,
+                    Price = p.Price,
+                    ImportPrice = p.ImportPrice,
+                    PromotionPrice = p.PromotionPrice,
+                    StartPromotion = p.StartPromotion,
+                    StopPromotion = p.StopPromotion,
+                    Status = p.Status,
+                    ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId},
+                    ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
+                    {
+                        ProVariationID = pv.ProVariationID,
+                        ProColorID = pv.ProColorID,
+                        ProSizeID = pv.ProSizeID,
+                        ProductColor = new ProductColor() {  NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
+                        ProductSize = new ProductSize() {NameSize = pv.ProductSize.NameSize },
+                        Quantity = pv.Quantity
+                    }).ToList(),
+                    ProductImages = p.ProductImages.Select(pi=>new ProductImage()
+                    {
+                        Image = pi.Image
+                    }).ToList()
+
+                }).ToList();
             return list;
         }
-
-        //public List<Product> getAllSelect()
-        //{
-        //    //_dbContext.Configuration.ProxyCreationEnabled = false;
-        //    //List<Product> list = _dbContext.Products.Select(p1=>new 
-        //    //{
-        //    //    p1.ProductCat.Name,
-
-        //    //}).ToList()
-        //    //    .Select(p => new Product()
-        //    //    {
-        //    //        ProName = p.ProName,
-        //    //        ProId = p.ProId,
-        //    //        ProductCat.ProCatId = p.ProductCat.ProCatId
-        //    //    }).ToList();
-        //    return list;
-        //}
-
         public IEnumerable<Product> getPage(string searchResult, int page, int pageSize)
         {
             IQueryable<Product> model = _dbContext.Products;

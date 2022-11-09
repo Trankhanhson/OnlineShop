@@ -7,19 +7,13 @@
     var ProCatId = $("#ProCatId").val()
     var ImportPrice = $("#importPrice").val()
     var Price = $("#Price").val()
-    var PricePromotion = $("#pricePromotion").val()
-    var StartPromotion = $("#startPromotion").val()
-    var StopPromotion = $("#stopPromotion").val()
     var product = {
         ProName: ProName,
         Material: Material,
         Description: Description,
         ProCatId: ProCatId,
         ImportPrice: ImportPrice,
-        Price: Price,
-        PromotionPrice: PricePromotion,
-        StartPromotion: StartPromotion,
-        StopPromotion: StopPromotion
+        Price: Price
     }
 
     var listVariation = [] //danh sách biến thể
@@ -50,7 +44,7 @@
         dataType: "json",
         type: "POST",
         success: function (response) {
-            
+
             for (var i = 0; i < listColorId.length; i++) {
                 UploadImgToServer(listColorId[i], response.Proid)
             }
@@ -101,24 +95,16 @@ function UploadImgToServer(idColor, idProduct) {
 }
 
 $(".btn-create").click((e) => {
-    //kiểm tra giá khuyến mại phải nhỏ hơn giá bán
-    var Price = $("#Price").val()
-    var PricePromotion = $("#pricePromotion").val()
-    if (PricePromotion <= Price) {
-        var variationWrap = $(".table-create tbody tr")
-        //kiểm tra xem đã thêm variation chưa
-        if (variationWrap.length > 0) {
-            if ($('#formProduct').valid()) {
-                SaveData()
-            }
-        }
-        else {
-            $("#errorToast .text-toast").text("Bạn chưa thêm biến thể nào")
-            $("#errorToast").toast("show")
+
+    var variationWrap = $(".table-create tbody tr")
+    //kiểm tra xem đã thêm variation chưa
+    if (variationWrap.length > 0) {
+        if ($('#formProduct').valid()) {
+            SaveData()
         }
     }
     else {
-        $("#errorToast .text-toast").text("Giá khuyến mại phải nhỏ hơn giá bán")
+        $("#errorToast .text-toast").text("Bạn chưa thêm biến thể nào")
         $("#errorToast").toast("show")
     }
 })

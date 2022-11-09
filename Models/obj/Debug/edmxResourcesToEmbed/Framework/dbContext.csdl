@@ -1,16 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ClothesShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="Customer">
-    <Key>
-      <PropertyRef Name="CusID" />
-    </Key>
-    <Property Name="CusID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CusName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
-  </EntityType>
   <EntityType Name="ImportBill">
     <Key>
       <PropertyRef Name="ImpId" />
@@ -34,21 +23,6 @@
     <NavigationProperty Name="ImportBill" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBillDetail" ToRole="ImportBill" />
     <NavigationProperty Name="ProductVariation" Relationship="Self.FK_ImportBillDetail_ProductVariation" FromRole="ImportBillDetail" ToRole="ProductVariation" />
   </EntityType>
-  <EntityType Name="Order">
-    <Key>
-      <PropertyRef Name="OrdID" />
-    </Key>
-    <Property Name="OrdID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CusID" Type="Int64" />
-    <Property Name="IDPromotionOrder" Type="Int64" />
-    <Property Name="ReceivingAddress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MoneyTotal" Type="Int32" />
-    <Property Name="OrderDate" Type="DateTime" Precision="3" />
-    <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
-    <NavigationProperty Name="PromotionOrder" Relationship="Self.FK_Order_PromotionOrder1" FromRole="Order" ToRole="PromotionOrder" />
-    <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
-  </EntityType>
   <EntityType Name="OrderDetail">
     <Key>
       <PropertyRef Name="ProVariationID" />
@@ -58,8 +32,8 @@
     <Property Name="OrdID" Type="Int64" Nullable="false" />
     <Property Name="Quantity" Type="Int32" />
     <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
-    <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
     <NavigationProperty Name="ProductVariation" Relationship="Self.FK_OrderDetail_ProductVariation" FromRole="OrderDetail" ToRole="ProductVariation" />
+    <NavigationProperty Name="Order" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
   </EntityType>
   <EntityType Name="ProductColor">
     <Key>
@@ -111,19 +85,6 @@
     <NavigationProperty Name="ProductSize" Relationship="Self.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
     <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
   </EntityType>
-  <EntityType Name="PromotionOrder">
-    <Key>
-      <PropertyRef Name="IDPromotionOrder" />
-    </Key>
-    <Property Name="IDPromotionOrder" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PromotionPrice" Type="Int32" />
-    <Property Name="AmountPromotion" Type="Int32" />
-    <Property Name="StartPromotion" Type="DateTime" Precision="3" />
-    <Property Name="StopPromotion" Type="DateTime" Precision="3" />
-    <Property Name="Status" Type="Boolean" />
-    <NavigationProperty Name="Orders" Relationship="Self.FK_Order_PromotionOrder1" FromRole="PromotionOrder" ToRole="Order" />
-  </EntityType>
   <EntityType Name="sysdiagram">
     <Key>
       <PropertyRef Name="diagram_id" />
@@ -159,18 +120,6 @@
     <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="Boolean" />
   </EntityType>
-  <Association Name="FK_Order_Customer">
-    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
-    <End Role="Order" Type="Self.Order" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customer">
-        <PropertyRef Name="CusID" />
-      </Principal>
-      <Dependent Role="Order">
-        <PropertyRef Name="CusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_ImportBill_User1">
     <End Role="User" Type="Self.User" Multiplicity="0..1" />
     <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="*" />
@@ -204,30 +153,6 @@
       </Principal>
       <Dependent Role="ImportBillDetail">
         <PropertyRef Name="ProVariationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Order_PromotionOrder1">
-    <End Role="PromotionOrder" Type="Self.PromotionOrder" Multiplicity="0..1" />
-    <End Role="Order" Type="Self.Order" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PromotionOrder">
-        <PropertyRef Name="IDPromotionOrder" />
-      </Principal>
-      <Dependent Role="Order">
-        <PropertyRef Name="IDPromotionOrder" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_OrderDetail_Order">
-    <End Role="Order" Type="Self.Order" Multiplicity="1" />
-    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Order">
-        <PropertyRef Name="OrdID" />
-      </Principal>
-      <Dependent Role="OrderDetail">
-        <PropertyRef Name="OrdID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -280,23 +205,16 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="ClothesShopEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Customers" EntityType="Self.Customer" />
     <EntitySet Name="ImportBills" EntityType="Self.ImportBill" />
     <EntitySet Name="ImportBillDetails" EntityType="Self.ImportBillDetail" />
-    <EntitySet Name="Orders" EntityType="Self.Order" />
     <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
     <EntitySet Name="ProductColors" EntityType="Self.ProductColor" />
     <EntitySet Name="ProductImages" EntityType="Self.ProductImage" />
     <EntitySet Name="ProductSizes" EntityType="Self.ProductSize" />
     <EntitySet Name="ProductVariations" EntityType="Self.ProductVariation" />
-    <EntitySet Name="PromotionOrders" EntityType="Self.PromotionOrder" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
     <EntitySet Name="Users" EntityType="Self.User" />
     <EntitySet Name="Slides" EntityType="Self.Slide" />
-    <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
-      <End Role="Customer" EntitySet="Customers" />
-      <End Role="Order" EntitySet="Orders" />
-    </AssociationSet>
     <AssociationSet Name="FK_ImportBill_User1" Association="Self.FK_ImportBill_User1">
       <End Role="User" EntitySet="Users" />
       <End Role="ImportBill" EntitySet="ImportBills" />
@@ -308,14 +226,6 @@
     <AssociationSet Name="FK_ImportBillDetail_ProductVariation" Association="Self.FK_ImportBillDetail_ProductVariation">
       <End Role="ProductVariation" EntitySet="ProductVariations" />
       <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Order_PromotionOrder1" Association="Self.FK_Order_PromotionOrder1">
-      <End Role="PromotionOrder" EntitySet="PromotionOrders" />
-      <End Role="Order" EntitySet="Orders" />
-    </AssociationSet>
-    <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
-      <End Role="Order" EntitySet="Orders" />
-      <End Role="OrderDetail" EntitySet="OrderDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_OrderDetail_ProductVariation" Association="Self.FK_OrderDetail_ProductVariation">
       <End Role="ProductVariation" EntitySet="ProductVariations" />
@@ -334,7 +244,27 @@
       <End Role="ProductVariation" EntitySet="ProductVariations" />
     </AssociationSet>
     <EntitySet Name="Categories" EntityType="ClothesShopModel.Category" />
+    <EntitySet Name="ProductCats" EntityType="ClothesShopModel.ProductCat" />
+    <AssociationSet Name="FK_ProductCat_Category" Association="ClothesShopModel.FK_ProductCat_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="ProductCat" EntitySet="ProductCats" />
+    </AssociationSet>
+    <EntitySet Name="News" EntityType="ClothesShopModel.New" />
+    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="New" EntitySet="News" />
+    </AssociationSet>
+    <EntitySet Name="DiscountProducts" EntityType="ClothesShopModel.DiscountProduct" />
+    <EntitySet Name="Vouchers" EntityType="ClothesShopModel.Voucher" />
     <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
+    <AssociationSet Name="FK_Product_DiscountProduct1" Association="ClothesShopModel.FK_Product_DiscountProduct1">
+      <End Role="DiscountProduct" EntitySet="DiscountProducts" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
+      <End Role="ProductCat" EntitySet="ProductCats" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
     <AssociationSet Name="FK_ProductImage_Product" Association="ClothesShopModel.FK_ProductImage_Product">
       <End Role="Product" EntitySet="Products" />
       <End Role="ProductImage" EntitySet="ProductImages" />
@@ -343,19 +273,19 @@
       <End Role="Product" EntitySet="Products" />
       <End Role="ProductVariation" EntitySet="ProductVariations" />
     </AssociationSet>
-    <EntitySet Name="ProductCats" EntityType="ClothesShopModel.ProductCat" />
-    <AssociationSet Name="FK_ProductCat_Category" Association="ClothesShopModel.FK_ProductCat_Category">
-      <End Role="Category" EntitySet="Categories" />
-      <End Role="ProductCat" EntitySet="ProductCats" />
+    <EntitySet Name="Customers" EntityType="ClothesShopModel.Customer" />
+    <EntitySet Name="Orders" EntityType="ClothesShopModel.Order" />
+    <AssociationSet Name="FK_Order_Customer" Association="ClothesShopModel.FK_Order_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
-    <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
-      <End Role="ProductCat" EntitySet="ProductCats" />
-      <End Role="Product" EntitySet="Products" />
+    <AssociationSet Name="FK_Order_Voucher" Association="ClothesShopModel.FK_Order_Voucher">
+      <End Role="Voucher" EntitySet="Vouchers" />
+      <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
-    <EntitySet Name="News" EntityType="ClothesShopModel.New" />
-    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
-      <End Role="User" EntitySet="Users" />
-      <End Role="New" EntitySet="News" />
+    <AssociationSet Name="FK_OrderDetail_Order" Association="ClothesShopModel.FK_OrderDetail_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
@@ -369,50 +299,6 @@
     <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="ProductCats" Relationship="ClothesShopModel.FK_ProductCat_Category" FromRole="Category" ToRole="ProductCat" />
   </EntityType>
-  <EntityType Name="Product">
-    <Key>
-      <PropertyRef Name="ProId" />
-    </Key>
-    <Property Name="ProId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProCatId" Type="Int32" />
-    <Property Name="ProName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="Material" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="ImportPrice" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="PromotionPrice" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="StartPromotion" Type="DateTime" Precision="3" />
-    <Property Name="StopPromotion" Type="DateTime" Precision="3" />
-    <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="Status" Type="Boolean" />
-    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
-    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="Product" ToRole="ProductVariation" />
-    <NavigationProperty Name="ProductCat" Relationship="ClothesShopModel.FK__Product__ProCatI__6AEFE058" FromRole="Product" ToRole="ProductCat" />
-  </EntityType>
-  <Association Name="FK_ProductImage_Product">
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="1" />
-    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProId" />
-      </Principal>
-      <Dependent Role="ProductImage">
-        <PropertyRef Name="ProID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ProductVariation_Product">
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProId" />
-      </Principal>
-      <Dependent Role="ProductVariation">
-        <PropertyRef Name="ProId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="ProductCat">
     <Key>
       <PropertyRef Name="ProCatId" />
@@ -438,18 +324,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Product__ProCatI__6AEFE058">
-    <End Type="ClothesShopModel.ProductCat" Role="ProductCat" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductCat">
-        <PropertyRef Name="ProCatId" />
-      </Principal>
-      <Dependent Role="Product">
-        <PropertyRef Name="ProCatId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="New">
     <Key>
       <PropertyRef Name="NewID" />
@@ -472,6 +346,173 @@
       </Principal>
       <Dependent Role="New">
         <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DiscountProduct">
+    <Key>
+      <PropertyRef Name="DiscountProductId" />
+    </Key>
+    <Property Name="DiscountProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="EndDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Double" Nullable="false" />
+    <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MiximumBuy" Type="Int32" />
+    <Property Name="UsedCurrent" Type="Int32" Nullable="false" />
+    <Property Name="MaxUses" Type="Int32" />
+    <Property Name="MaxUsesPerUser" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="ClothesShopModel.FK_Product_DiscountProduct1" FromRole="DiscountProduct" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Voucher">
+    <Key>
+      <PropertyRef Name="VoucherId" />
+    </Key>
+    <Property Name="VoucherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="EndDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Double" Nullable="false" />
+    <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MiximumMoney" Type="Int32" />
+    <Property Name="MaximumMoney" Type="Int32" />
+    <Property Name="UsedCurrent" Type="Int32" />
+    <Property Name="MaxUses" Type="Int32" />
+    <Property Name="MaxUsesPerUser" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Voucher" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProId" />
+    </Key>
+    <Property Name="ProId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProCatId" Type="Int32" Nullable="false" />
+    <Property Name="DiscountProductId" Type="Int32" />
+    <Property Name="ProName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Material" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Int32" Nullable="false" />
+    <Property Name="ImportPrice" Type="Int32" Nullable="false" />
+    <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="Boolean" />
+    <NavigationProperty Name="DiscountProduct" Relationship="ClothesShopModel.FK_Product_DiscountProduct1" FromRole="Product" ToRole="DiscountProduct" />
+    <NavigationProperty Name="ProductCat" Relationship="ClothesShopModel.FK__Product__ProCatI__6AEFE058" FromRole="Product" ToRole="ProductCat" />
+    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
+    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="Product" ToRole="ProductVariation" />
+  </EntityType>
+  <Association Name="FK_Product_DiscountProduct1">
+    <End Type="ClothesShopModel.DiscountProduct" Role="DiscountProduct" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscountProduct">
+        <PropertyRef Name="DiscountProductId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="DiscountProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__ProCatI__6AEFE058">
+    <End Type="ClothesShopModel.ProductCat" Role="ProductCat" Multiplicity="1" />
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductCat">
+        <PropertyRef Name="ProCatId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ProCatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductImage_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductImage">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductVariation_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductVariation">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CusID" />
+    </Key>
+    <Property Name="CusID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrdID" />
+    </Key>
+    <Property Name="OrdID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int64" />
+    <Property Name="VoucherId" Type="Int32" />
+    <Property Name="ReceivingAddress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MoneyTotal" Type="Int32" />
+    <Property Name="OrderDate" Type="DateTime" Precision="3" />
+    <Property Name="Note" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+    <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
+    <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+  </EntityType>
+  <Association Name="FK_Order_Customer">
+    <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Voucher">
+    <End Type="ClothesShopModel.Voucher" Role="Voucher" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Voucher">
+        <PropertyRef Name="VoucherId" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="VoucherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderDetail_Order">
+    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrdID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrdID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

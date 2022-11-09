@@ -7,12 +7,20 @@
 @section scripts{
     <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
     <script src="~/Scripts/ng-file-upload.min.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/New/CreateNewAngular.js"></script>
-    <script src="/Assets/Plugin/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng.ckeditor/2.1.0/ng-ckeditor.js"></script>
-    <script>
 
-        CKEDITOR.replace('Content')
+    <!--để ckfinder trên editor-->
+    <script src="~/Assets/Plugin/ckeditor/ckeditor.js"></script>
+    <script src="~/Assets/Plugin/ckfinder/ckfinder.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/New/CreateNewAngularjs.js"></script>
+
+    <script>
+        CKEDITOR.replace('Content',
+            {
+                filebrowserBrowseUrl: '/Assets/Plugin/ckfinder/ckfinder.html',
+                filebrowserImageBrowseUrl: '/Assets/Plugin/ckfinder/ckfinder.html?type=Images',
+                filebrowserUploadUrl: '/Assets/Plugin/ckfinder/connector?command=QuickUpload&type=Files',
+                filebrowserImageUploadUrl: '/Assets/Plugin/ckfinder/connector?command=QuickUpload&type=Images'
+            });
 
     </script>
 }

@@ -19,7 +19,7 @@ namespace Models.Framework
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> Price { get; set; }
     
-        public virtual Order Order { get; set; }
         public virtual ProductVariation ProductVariation { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

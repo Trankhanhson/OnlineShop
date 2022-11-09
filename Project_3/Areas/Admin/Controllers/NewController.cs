@@ -42,13 +42,12 @@ namespace Project_3.Areas.Admin.Controllers
         }
         // POST: Admin/New/Create
         [HttpPost]
-        public JsonResult Create(New n, string nameImg)
+        public JsonResult Create(New n)
         {
             try
             {
                 n.Status = true;
                 n.PublicDate = DateTime.Now;
-                n.Image = nameImg;
                 NewDAO dao = new NewDAO();
                 New newHasId = dao.Insert(n);
                 

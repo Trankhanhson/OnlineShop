@@ -135,18 +135,18 @@ $(".cart-close").click((e) => {
 
 /**modal */
 /**click login */
-$(".btn-login").click((e) => {
-    $(".btn-login").addClass("active")
-    $($(".btn-register")).removeClass("active")
-    $(".modal-title").text("Cảm ơn bạn đã trở lại.")
-})
+//$(".btn-login").click((e) => {
+//    $(".btn-login").addClass("active")
+//    $($(".btn-register")).removeClass("active")
+//    $(".modal-title").text("Cảm ơn bạn đã trở lại.")
+//})
 
-/**click dang ky */
-$(".btn-register").click((e) => {
-    $(".modal-title").text("Đăng ký để Canifa có cơ hội phục vụ bạn tốt hơn.")
-    $(".btn-register").addClass("active")
-    $(".btn-login").removeClass("active")
-})
+///**click dang ky */
+//$(".btn-register").click((e) => {
+//    $(".modal-title").text("Đăng ký để Canifa có cơ hội phục vụ bạn tốt hơn.")
+//    $(".btn-register").addClass("active")
+//    $(".btn-login").removeClass("active")
+//})
 
 
 /**product handle */
@@ -283,3 +283,4 @@ function addCart(input) {
 
     })
 }
+

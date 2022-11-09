@@ -11,7 +11,6 @@ namespace Project_3.Model
     {
         public ProductVariation ProVariation { get; set; }    
         public int Quantity { get; set; }
-
         public string Image { get; set; }
     }
 }

@@ -73,7 +73,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                         if (closeOrNew) {
                             $(".btn-close").trigger('click') //đóng modal thêm
                         }
-
+                        $('#createForm').trigger("reset");
                         //hiển thị thông báo thành công
                         $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
                         $("#successToast").toast("show")

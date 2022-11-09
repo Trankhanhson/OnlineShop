@@ -3,6 +3,27 @@
 })
 
 
+
+function ChangeStatus(event, id) {
+    event.stopPropagation()
+    if (confirm("Bạn có chắc chắn muốn đổi trạng thái")) {
+        $.ajax({
+            url: "/Admin/Product/ChangeStatus/" + id,
+            dataType: "Json",
+            type: "GET",
+            success: function (res) {
+                if (res) {
+                    $("#successToast .text-toast").text("Đã cập nhật trạng thái thành công")
+                    $("#successToast").toast("show")
+                }
+                else {
+                    $("#errorToast .text-toast").text("Cập nhật trạng thái thất bại")
+                    $("#errorToast").toast("show")
+                }
+            }
+        })
+    }
+}
 /**handle method */
 /**add value */
 function addValue(e) {
@@ -431,9 +452,12 @@ function removeImg(input) {
     let parentBox = $(input).parents(".wrap-file-box")
     let file = $(parentBox).find('.input-file')
     $(file).val('')
+    let Image = $(parentBox).find('.file-upload-image')
+    $(Image).attr("src","")
     $(parentBox).find('.file-upload-content').hide();
     $(parentBox).find('.image-upload-wrap').show();
 }
+
 $('.image-upload-wrap').bind('dragover', function () {
     $('.image-upload-wrap').addClass('image-dropping');
 });
@@ -459,17 +483,14 @@ $('#formProduct').validate({
             maxlength: 300
         },
         importPrice: {
-            required: true,
             min: 0
         },
         Price: {
-            required: true,
             min: 0
         },
-        pricePromotion: {
-            min: 0
+        ProCatId: {
+            required: true
         }
-
     },
     messages: {
         name: {
@@ -477,15 +498,13 @@ $('#formProduct').validate({
             maxlength: "Không được nhập quá 300 kí tự"
         },
         importPrice: {
-            required: "Bạn chưa nhập giá nhập",
             min: "Giá nhập phải lớn hơn 0"
         },
         Price: {
-            required: "Bạn chưa nhập giá bán",
             min: "Giá bán phải lớn hơn 0"
         },
-        pricePromotion: {
-            min: "Giá khuyến mại phải lớn hơn 0"
+        ProCatId: {
+            required: "Bạn chưa chọn loại sản phẩm"
         }
     }
 })

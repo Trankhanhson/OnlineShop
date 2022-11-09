@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ClothesShopModelStoreContainer" CdmEntityContainer="ClothesShopEntities">
-    <EntitySetMapping Name="Customers">
-      <EntityTypeMapping TypeName="ClothesShopModel.Customer">
-        <MappingFragment StoreEntitySet="Customer">
-          <ScalarProperty Name="CusID" ColumnName="CusID" />
-          <ScalarProperty Name="CusName" ColumnName="CusName" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ImportBills">
       <EntityTypeMapping TypeName="ClothesShopModel.ImportBill">
         <MappingFragment StoreEntitySet="ImportBill">
@@ -29,19 +18,6 @@
           <ScalarProperty Name="ImpId" ColumnName="ImpId" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Orders">
-      <EntityTypeMapping TypeName="ClothesShopModel.Order">
-        <MappingFragment StoreEntitySet="Order">
-          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
-          <ScalarProperty Name="CusID" ColumnName="CusID" />
-          <ScalarProperty Name="IDPromotionOrder" ColumnName="IDPromotionOrder" />
-          <ScalarProperty Name="ReceivingAddress" ColumnName="ReceivingAddress" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -98,19 +74,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PromotionOrders">
-      <EntityTypeMapping TypeName="ClothesShopModel.PromotionOrder">
-        <MappingFragment StoreEntitySet="PromotionOrder">
-          <ScalarProperty Name="IDPromotionOrder" ColumnName="IDPromotionOrder" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
-          <ScalarProperty Name="AmountPromotion" ColumnName="AmountPromotion" />
-          <ScalarProperty Name="StartPromotion" ColumnName="StartPromotion" />
-          <ScalarProperty Name="StopPromotion" ColumnName="StopPromotion" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
       <EntityTypeMapping TypeName="ClothesShopModel.sysdiagram">
         <MappingFragment StoreEntitySet="sysdiagrams">
@@ -158,24 +121,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Products">
-      <EntityTypeMapping TypeName="ClothesShopModel.Product">
-        <MappingFragment StoreEntitySet="Product">
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Slug" ColumnName="Slug" />
-          <ScalarProperty Name="StopPromotion" ColumnName="StopPromotion" />
-          <ScalarProperty Name="StartPromotion" ColumnName="StartPromotion" />
-          <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
-          <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Material" ColumnName="Material" />
-          <ScalarProperty Name="ProName" ColumnName="ProName" />
-          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
-          <ScalarProperty Name="ProId" ColumnName="ProId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ProductCats">
       <EntityTypeMapping TypeName="ClothesShopModel.ProductCat">
         <MappingFragment StoreEntitySet="ProductCat">
@@ -198,6 +143,84 @@
           <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="NewID" ColumnName="NewID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscountProducts">
+      <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
+        <MappingFragment StoreEntitySet="DiscountProduct">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="MaxUsesPerUser" ColumnName="MaxUsesPerUser" />
+          <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
+          <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
+          <ScalarProperty Name="MiximumBuy" ColumnName="MiximumBuy" />
+          <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vouchers">
+      <EntityTypeMapping TypeName="ClothesShopModel.Voucher">
+        <MappingFragment StoreEntitySet="Voucher">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="MaxUsesPerUser" ColumnName="MaxUsesPerUser" />
+          <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
+          <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
+          <ScalarProperty Name="MaximumMoney" ColumnName="MaximumMoney" />
+          <ScalarProperty Name="MiximumMoney" ColumnName="MiximumMoney" />
+          <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="ClothesShopModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Slug" ColumnName="Slug" />
+          <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Material" ColumnName="Material" />
+          <ScalarProperty Name="ProName" ColumnName="ProName" />
+          <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
+          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
+          <ScalarProperty Name="ProId" ColumnName="ProId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Customers">
+      <EntityTypeMapping TypeName="ClothesShopModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CusID" ColumnName="CusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="ClothesShopModel.Order">
+        <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ReceivingAddress" ColumnName="ReceivingAddress" />
+          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
+          <ScalarProperty Name="CusID" ColumnName="CusID" />
+          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

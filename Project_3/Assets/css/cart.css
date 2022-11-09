@@ -50,6 +50,7 @@ thead .col{
 
 .cart-content__left, .cart-content__right{
     padding:40px 40px 20px 40px;background-color: #f9f9f9;
+    height:100%;
 }
 
 .item-name{

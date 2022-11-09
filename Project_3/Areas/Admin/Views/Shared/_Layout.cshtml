@@ -8,7 +8,7 @@
     <meta content="" name="description" />
     <meta content="" name="keywords" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
     <link href="~/Assets/Admin/img/logo.svg" rel="icon" />
@@ -21,7 +21,6 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
     <!-- Vendor CSS Files -->
-    <link href="~/Assets/Admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Assets/Admin/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Assets/Admin/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
     <link href="~/Assets/Admin/vendor/quill/quill.snow.css" rel="stylesheet" />
@@ -309,12 +308,11 @@
 
     <!--jquery file-->
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <!--ajax file -->
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <!-- Vendor JS Files -->
     <script src="/Assets/Admin/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="/Assets/Admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/Assets/Admin/vendor/chart.js/chart.min.js"></script>
     <script src="/Assets/Admin/vendor/echarts/echarts.min.js"></script>
     <script src="/Assets/Admin/vendor/quill/quill.min.js"></script>
@@ -327,22 +325,28 @@
     <!--Convert price-->
     <script>
         /*hiển thị giá*/
-        $(".price").each((index, value) => {
+        function convertPrice(price) {
             let tg = "";
+            let length = price.length;
+            let count = 0;
+            for (var i = length - 1; i >= 0; --i) {
+                if (count % 3 == 0 && count != 0) {
+                    tg = price[i] + '.' + tg;
+                }
+                else {
+                    tg = price[i] + tg;
+                }
+                count++;
+            }
+            return tg + "đ";
+        }
+
+        $(".price").each((index, value) => {
+            
             let textPrice = $(value).text();
             if (textPrice.length != 0) {
-                let length = textPrice.length;
-                let count = 0;
-                for (var i = length - 1; i >= 0; --i) {
-                    if (count % 3 == 0 && count != 0) {
-                        tg = textPrice[i] + '.' + tg;
-                    }
-                    else {
-                        tg = textPrice[i] + tg;
-                    }
-                    count++;
-                }
-                $(value).text(tg + "đ")
+                let tg = convertPrice(textPrice)
+                $(value).text(tg)
             }
         })
     </script>

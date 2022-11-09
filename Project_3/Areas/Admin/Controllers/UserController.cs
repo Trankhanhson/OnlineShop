@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Models.DAO;
 using Models.Framework;
+using Newtonsoft.Json;
 using OnlineShop.Common;
 
 namespace Project_3.Areas.Admin.Controllers
@@ -15,116 +17,110 @@ namespace Project_3.Areas.Admin.Controllers
     public class UserController : BaseController
     {
 
-        // GET: Admin/User2
-        public ActionResult Index(string searchResult,int page = 1,int pageSize = 8)
-        {
-            UserDAO userDAO = new UserDAO();
-            var model = userDAO.getPage(searchResult, page, pageSize);
-            ViewBag.searchResult=searchResult;
-            return View(model);
-        }
-
-        // GET: Admin/User2/Create
-        public ActionResult Create()
+        // GET: Admin/User
+        public ActionResult Index()
         {
             return View();
         }
 
+        public JsonResult getAllData()
+        {
+            var listUser = new UserDAO().getAll();
+            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var result = JsonConvert.SerializeObject(listUser, Formatting.Indented, jss);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: Admin/User/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create( User user)
+        public JsonResult Create(User user)
         {
             try
             {
-                if (ModelState.IsValid)
+                UserDAO UserDAO = new UserDAO();
+                if (user.Status == null)
                 {
-                    var dao = new UserDAO();
+                    user.Status = true;
+                }
+                User u = UserDAO.Insert(user);
 
-                    //mã hóa mk
-                    var Md5Pas = Encryptor.MD5Hash(user.Password);
-                    user.Password = Md5Pas;
-                    dao.Insert(user);
-                    return RedirectToAction("Index");
-                }
-                else
+                return Json(new
                 {
-                    ModelState.AddModelError("", "Nhập không thỏa mãn");
-                }
+                    message = true,
+                    u = u
+                });
             }
             catch
             {
-
-
+                return Json(new
+                {
+                    message = false
+                });
             }
-            return View("Index");
         }
 
-        [HttpGet]
-        public ActionResult Edit(int id)
-        {
-            User user = new UserDAO().getById(id);
-            return View(user);
-        }
-
+        // POST: Admin/User/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(User user)
+        public JsonResult Edit(User user)
         {
+            bool check = true;
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var dao = new UserDAO();
-                    if (string.IsNullOrEmpty(user.Password))
-                    {
-                        var Md5Pas = Encryptor.MD5Hash(user.Password);
-                        user.Password= Md5Pas;
-                    }
-                    bool check = dao.Update(user);
-                    if (check)
-                    {
-                        return RedirectToAction("Index","User");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("","Sửa không thành công");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Nhập không thỏa mãn");
-                }
+                UserDAO UserDAO = new UserDAO();
+                check = UserDAO.Update(user);
+                return Json(check);
             }
             catch
             {
-
+                return Json(check);
             }
-            return View(user);
-        }
 
-        [HttpDelete]
+        }
+        // POST: Admin/User/Delete/5
+        [HttpPost]
         public ActionResult Delete(int id)
         {
-            bool check = new UserDAO().Delete(id);
-            if (check)
+            string message = "";
+            bool check = true;
+            try
             {
-                return RedirectToAction("Index");
+                UserDAO UserDAO = new UserDAO();
+                check = UserDAO.Delete(id);
+                if (check)
+                {
+                    message = "Xóa thành công";
+                }
+                else
+                {
+                    message = "Thông tin nhân viên này đã được sửa dụng";
+                }
             }
-            else
+            catch
             {
-                ModelState.AddModelError("", "Xóa thất bại");
+                message = "Xóa thất bại";
             }
-            return View();
+            return Json(new
+            {
+                message = message,
+                check = check
+            });
         }
+
 
         [HttpPost]
         public JsonResult ChangeStatus(int id)
         {
-            var rerult = new UserDAO().ChangeSattus(id);
-            return Json(new
+            try
             {
-                status = rerult
-            });
+                UserDAO UserDAO = new UserDAO();
+                UserDAO.ChangeSattus(id);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false,JsonRequestBehavior.AllowGet);
+            }
+            
         }
     }
 }

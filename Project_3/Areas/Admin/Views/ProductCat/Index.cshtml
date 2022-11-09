@@ -90,7 +90,7 @@
                                 <label for="inputText" class="col-sm-4 col-form-label">Tên loại sản phẩm</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="Name" ng-model="proCat.Name" required>
-                                    <span ng-show="createForm.$submitted">
+                                    <span ng-show="createForm.$submitted || editForm.Name.$dirty">
                                         <span class="error" ng-show="createForm.Name.$error.required">Tên loại sản phẩm không được để trống</span>
                                     </span>
                                 </div>
@@ -122,8 +122,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button class="btn btn-primary" ng-click="SaveAdd(true)">Lưu</button>
-                    @*<button class="btn btn-primary" ng-click="SaveAdd(false)">Lưu và thêm mới</button>*@
+                    <button class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
                 </div>
 
             </div>

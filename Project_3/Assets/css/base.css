@@ -677,11 +677,10 @@ body::before{
     padding: 0;
     opacity: 1;
 }
-#input-login{
+.input-loginAndRegis{
     height: 40px;
     width: 100%;
     border-bottom: 1px solid #333f48;
-    margin: 45px 0 15px 0;
 }
 .modal-footer{
     border: none;
@@ -690,6 +689,14 @@ body::before{
 .modal-title{
     font-weight: 600;
 }
+submit-modal:hover{
+    opacity: 0.8;
+    cursor:pointer;
+}
 
 
-
+label.error {
+    width: 100%;
+    color: #dc3545;
+    font-size: 13px;
+}

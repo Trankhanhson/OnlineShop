@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\CategoryDAO.cs" />
+    <Compile Include="DAO\CustomnerDAO.cs" />
     <Compile Include="DAO\ImportBillDAO.cs" />
     <Compile Include="DAO\ImportBillDetailDAO.cs" />
     <Compile Include="DAO\NewDAO.cs" />
@@ -93,6 +94,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dbContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\DiscountProduct.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\ImportBill.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
@@ -127,9 +131,6 @@
     <Compile Include="Framework\ProductVariation.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Framework\PromotionOrder.cs">
-      <DependentUpon>dbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Framework\Slide.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -137,6 +138,9 @@
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\User.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Voucher.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

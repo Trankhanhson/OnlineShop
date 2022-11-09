@@ -24,7 +24,7 @@ namespace Project_3.Controllers
             return View(list);
         }
 
-        public ActionResult deleteCartItem(long id)
+        public JsonResult deleteCartItem(long id)
         {
             var cart = Session[CartSession];
             List<CartItem> list = new List<CartItem>();
@@ -39,9 +39,34 @@ namespace Project_3.Controllers
                         break;
                     }    
                 }
+                Session[CartSession] = list;
+
             }
-            Session[CartSession] = list;
-            return RedirectToAction("Index");
+            return Json("",JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult updateCart(long proVariationId,int newQuantity)
+        {
+            var cart = Session[CartSession];
+            List<CartItem> list = new List<CartItem>();
+            var newPrice = 0;
+            if (cart != null)
+            {
+                list = (List<CartItem>)cart;
+                foreach (var item in list)
+                {
+                    if (item.ProVariation.ProVariationID == proVariationId)
+                    {
+                        item.Quantity= newQuantity;
+                         newPrice = item.ProVariation.Product.Price * newQuantity;
+                        break;
+                    }
+                }
+                Session[CartSession] = list;
+            }
+            
+            return Json(newPrice, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddItem(long ProId,int ProColorId, int ProSizeId)

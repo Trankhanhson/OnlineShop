@@ -21,6 +21,7 @@ namespace Models.DAO
 
         public List<User> getAll()
         {
+            _dbContext.Configuration.LazyLoadingEnabled = false;
             List<User> users = _dbContext.Users.ToList();
             return users;
         }
@@ -44,10 +45,12 @@ namespace Models.DAO
         {
             return _dbContext.Users.Find(id);
         }
-        public void Insert(User user)
+        public User Insert(User user)
         {
-            _dbContext.Users.Add(user);
+            _dbContext.Configuration.LazyLoadingEnabled = false;
+            var u = _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
+            return u;
         }
 
         public bool Update(User entity)

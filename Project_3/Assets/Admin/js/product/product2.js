@@ -2,6 +2,9 @@
     $(".method-header").toggleClass("active")
 })
 
+$(".form-switch").click((e) => {
+    e.stopPropagation()
+})
 
 /**handle method */
 /**add value */
@@ -376,7 +379,6 @@ function uploadImg(input) {
 
     // Lấy thông tin tập tin được đăng tải
     const file = input.files
-
     // Đọc thông tin tập tin đã được đăng tải
     reader.readAsDataURL(file[0])
     // Lắng nghe quá trình đọc tập tin hoàn thành
@@ -394,9 +396,11 @@ function dropImg(event) {
     event.preventDefault();
     event.stopPropagation();
     this.file = event.dataTransfer.files[0];
+    event.target.files = event.dataTransfer.files
     const reader = new FileReader();
     reader.onload = e => {
         this.url = reader.result;
+
         const dropDiv = $(event.target).parents(".wrap-file-box")
         $(dropDiv).find('.file-upload-image').attr('src', this.url);
         $(dropDiv).find('.file-upload-content').show();
@@ -430,9 +434,12 @@ function removeImg(input) {
     let parentBox = $(input).parents(".wrap-file-box")
     let file = $(parentBox).find('.input-file')
     $(file).val('')
+    let Image = $(parentBox).find('.file-upload-image')
+    $(Image).attr("src", "")
     $(parentBox).find('.file-upload-content').hide();
     $(parentBox).find('.image-upload-wrap').show();
 }
+
 $('.image-upload-wrap').bind('dragover', function () {
     $('.image-upload-wrap').addClass('image-dropping');
 });
@@ -458,15 +465,13 @@ $('#formProduct').validate({
             maxlength: 300
         },
         importPrice: {
-            required: true,
             min: 0
         },
         Price: {
-            required: true,
             min: 0
         },
-        pricePromotion: {
-            min: 0
+        ProCatId: {
+            required: true
         }
 
     },
@@ -476,15 +481,13 @@ $('#formProduct').validate({
             maxlength: "Không được nhập quá 300 kí tự"
         },
         importPrice: {
-            required: "Bạn chưa nhập giá nhập",
             min: "Giá nhập phải lớn hơn 0"
         },
         Price: {
-            required: "Bạn chưa nhập giá bán",
             min: "Giá bán phải lớn hơn 0"
         },
-        pricePromotion: {
-            min: "Giá khuyến mại phải lớn hơn 0"
+        ProCatId: {
+            required: "Bạn chưa chọn loại sản phẩm"
         }
     }
 })

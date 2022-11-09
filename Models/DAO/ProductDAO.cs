@@ -32,9 +32,6 @@ namespace Models
                     ProCatId = p.ProCatId,
                     Price = p.Price,
                     ImportPrice = p.ImportPrice,
-                    PromotionPrice = p.PromotionPrice,
-                    StartPromotion = p.StartPromotion,
-                    StopPromotion = p.StopPromotion,
                     Status = p.Status,
                     ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId},
                     ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
@@ -48,12 +45,19 @@ namespace Models
                     }).ToList(),
                     ProductImages = p.ProductImages.Select(pi=>new ProductImage()
                     {
+                        ProductColor = new ProductColor() { ProColorID=pi.ProColorID, NameColor=pi.ProductColor.NameColor, ImageColor = pi.ProductColor.ImageColor},
                         Image = pi.Image
                     }).ToList()
 
                 }).ToList();
             return list;
         }
+
+        public List<Product> getAllDefault()
+        {
+            return _dbContext.Products.Include(pi=>pi.ProductImages).Include(pv=>pv.ProductVariations).ToList();
+        }
+
         public IEnumerable<Product> getPage(string searchResult, int page, int pageSize)
         {
             IQueryable<Product> model = _dbContext.Products;
@@ -92,7 +96,7 @@ namespace Models
 
         public Product getById(long id)
         {
-            return _dbContext.Products.Include(pi => pi.ProductImages).Include(pv=>pv.ProductVariations).Where(p=>p.ProId==id).FirstOrDefault();
+            return _dbContext.Products.Include(pi => pi.ProductImages).Include(pc=>pc.ProductCat).Include(pv=>pv.ProductVariations).Where(p=>p.ProId==id).FirstOrDefault();
         }
 
         public void EditPrice(List<Product> products)
@@ -117,9 +121,6 @@ namespace Models
                 p.ProCatId = product.ProCatId;
                 p.ImportPrice = product.ImportPrice;
                 p.Price = product.Price;
-                p.PromotionPrice = product.PromotionPrice;
-                p.StartPromotion = product.StartPromotion;
-                p.StopPromotion = product.StopPromotion;
                 _dbContext.SaveChanges();
                 return true;
             }
@@ -128,6 +129,14 @@ namespace Models
                 return false;
             }
 
+        }
+
+        public bool? ChangeStatus(long ProId)
+        {
+            var product = _dbContext.Products.Find(ProId);
+            product.Status = !product.Status;
+            _dbContext.SaveChanges();
+            return product.Status;
         }
     }
 }

@@ -9,7 +9,6 @@
 
 namespace Models.Framework
 {
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -27,10 +26,9 @@ namespace Models.Framework
         public Nullable<int> CatID { get; set; }
         public Nullable<bool> Status { get; set; }
         public string Image { get; set; }
-
+    
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
         public virtual ICollection<Product> Products { get; set; }
     }
 }

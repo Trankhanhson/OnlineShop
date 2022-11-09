@@ -23,6 +23,7 @@ namespace Models.DAO
         {
             _dbContext.Configuration.LazyLoadingEnabled = false;
             var ProductCats = _dbContext.ProductCats.Include(x => x.Category).AsNoTracking().ToList();
+            _dbContext.Configuration.LazyLoadingEnabled = true;
             return ProductCats;
         }
       
@@ -34,7 +35,8 @@ namespace Models.DAO
 
         public ProductCat getById(int id)
         {
-            return _dbContext.ProductCats.Find(id);
+            _dbContext.Configuration.ProxyCreationEnabled = false;
+            return _dbContext.ProductCats.Include(c=>c.Category).Where(c=>c.ProCatId==id).FirstOrDefault();
         }
         public ProductCat Insert(ProductCat ProductCat)
         {

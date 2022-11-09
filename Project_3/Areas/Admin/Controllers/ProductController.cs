@@ -61,7 +61,7 @@ namespace Project_3.Areas.Admin.Controllers
             CategoryDAO categoryDAO = new CategoryDAO();
             ViewBag.CatList = categoryDAO.getAll();
             //các danh sách dùng để select
-            ViewBag.listproCat = new ProductCategoryDAO().getAll();
+            //ViewBag.listproCat = new ProductCategoryDAO().getAll();
             return View();
         }
 
@@ -73,6 +73,17 @@ namespace Project_3.Areas.Admin.Controllers
             //thêm sản phẩm
             ProductDAO pModel = new ProductDAO();
             product.Slug = common.MethodCommnon.ToUrlSlug(product.ProName); //chuyển tên sản phâm thành slug
+
+            product.Status = true;
+            if (product.Price==null)
+            {
+                product.Price = 0;
+            }
+            if (product.ImportPrice == null)
+            {
+                product.ImportPrice = 0;
+            }
+
             long proId = pModel.Create(product);
             foreach (ProductVariation variation in listVariation)
             {
@@ -90,10 +101,8 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult Edit(long id)
         {
             //các danh sách dùng để select
-            var listproCat = new ProductCategoryDAO().getAll();
-            ViewBag.listproCat = new SelectList(listproCat, "ProCatId", "Name");
-            ViewBag.ListSize = new ProductSizeDAO().getAll();
-            ViewBag.ListColor = new ProductColorDAO().getAll();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            ViewBag.CatList = categoryDAO.getAll();
 
             //Lấy đối tượng muốn sửa
             var product = new ProductDAO().getById(id);
@@ -112,8 +121,6 @@ namespace Project_3.Areas.Admin.Controllers
                 if (productDAO.Edit(product)) 
                 {
                     productVariationDAO.Edit(listVariation);
-                    productImagesDAO.Delete(product.ProId); //xóa các đối tượng proImg
-                    DeleteAllImg("~/Upload/Product/" + product.ProId); //xóa các Img của ProId
                 }
             }
             catch
@@ -183,10 +190,10 @@ namespace Project_3.Areas.Admin.Controllers
             //check ảnh chính
             if (file != null)
             {
-                var _fileName = Path.GetFileName(file.FileName);
+                
 
-                file.SaveAs(_path + ProColorId + "0" + _fileName);
-                productImage.Image = ProColorId + "0" + _fileName; //ảnh chính
+                file.SaveAs(_path + ProColorId + "0" + ".jpg");
+                productImage.Image = ProColorId + "0" + ".jpg"; //ảnh chính
             }
             else
             {
@@ -196,9 +203,8 @@ namespace Project_3.Areas.Admin.Controllers
             //ảnh detail1
             if (file1 != null)
             {
-                var _file1Name = Path.GetFileName(file1.FileName);
-                file1.SaveAs(_path + ProColorId + "1" + _file1Name);
-                productImage.DetailImage1 = ProColorId + "1" + _file1Name; //ảnh chi tiết
+                file1.SaveAs(_path + ProColorId + "1" + ".jpg");
+                productImage.DetailImage1 = ProColorId + "1" + ".jpg"; //ảnh chi tiết
             }
             else
             {
@@ -208,9 +214,8 @@ namespace Project_3.Areas.Admin.Controllers
             //ảnh detail2
             if (file2 != null)
             {
-                var _file2Name = Path.GetFileName(file2.FileName);
-                file2.SaveAs(_path + ProColorId + "2" + _file2Name);
-                productImage.DetailImage2 = ProColorId + "2" + _file2Name; //ảnh chi tiết
+                file2.SaveAs(_path + ProColorId + "2" + ".jpg");
+                productImage.DetailImage2 = ProColorId + "2" + ".jpg"; //ảnh chi tiết
             }
             else
             {
@@ -221,9 +226,8 @@ namespace Project_3.Areas.Admin.Controllers
             //ảnh detail3
             if (file3 != null)
             {
-                var _file3Name = Path.GetFileName(file3.FileName);
-                file3.SaveAs(_path + ProColorId + "3" + _file3Name);
-                productImage.DetailImage3 = ProColorId + "3" + _file3Name; //ảnh chi tiết
+                file3.SaveAs(_path + ProColorId + "3" + ".jpg");
+                productImage.DetailImage3 = ProColorId + "3" + ".jpg"; //ảnh chi tiết
             }
             else
             {
@@ -234,9 +238,8 @@ namespace Project_3.Areas.Admin.Controllers
             //ảnh detail4
             if (file4 != null)
             {
-                var _file4Name = Path.GetFileName(file4.FileName);
-                file4.SaveAs(_path + ProColorId + "4" + _file4Name);
-                productImage.DetailImage4 = ProColorId + "4" + _file4Name; //ảnh chi tiết
+                file4.SaveAs(_path + ProColorId + "4" + ".jpg");
+                productImage.DetailImage4 = ProColorId + "4" + ".jpg"; //ảnh chi tiết
             }
             else
             {
@@ -247,9 +250,8 @@ namespace Project_3.Areas.Admin.Controllers
             //ảnh detail5
             if (file5 != null)
             {
-                var _file5Name = Path.GetFileName(file5.FileName);
-                file5.SaveAs(_path + ProColorId + "5" + _file5Name);
-                productImage.DetailImage5 = ProColorId + "5" + _file5Name; //ảnh chi tiết
+                file5.SaveAs(_path + ProColorId + "5" + ".jpg");
+                productImage.DetailImage5 = ProColorId + "5" + ".jpg"; //ảnh chi tiết
             }
             else
             {
@@ -263,6 +265,203 @@ namespace Project_3.Areas.Admin.Controllers
             return "";
         }
 
+        [HttpPost]
+        public string UploadImgEdit(string ProId, string ProColorId, HttpPostedFileBase file, HttpPostedFileBase file1, HttpPostedFileBase file2, HttpPostedFileBase file3, HttpPostedFileBase file4, HttpPostedFileBase file5,string ListNoSelect)
+        {
+            ProductImagesDAO productsDAO = new ProductImagesDAO();
+
+            string[] listCheckNoSelct = ListNoSelect.Split(',');
+            //xử lý upload
+            ProductImage productImage = new ProductImage();
+            productImage.ProID = long.Parse(ProId);
+            productImage.ProColorID = long.Parse(ProColorId);
+
+            ProductImage oldProImg = productsDAO.getByKey(productImage.ProID, productImage.ProColorID);
+
+            //tạo đường dẫn có mục là idproduct
+            var _path = Server.MapPath("~/Upload/Product/" + ProId + "/");
+            if (!Directory.Exists(_path))
+            {
+                Directory.CreateDirectory(_path);
+            }
+
+            //lưu ảnh bằng cách ProColorId + số ảnh mấy
+            
+            if (file != null) //nếu người dùng  upload file mới
+            {
+                //Xóa ảnh cũ trong folder
+                DeleteFileFromFolder(ProColorId + "0" + ".jpg", ProId);
+
+                //lưu ảnh mới
+                file.SaveAs(_path + ProColorId + "0" + ".jpg");
+                productImage.Image = ProColorId + "0" + ".jpg"; //ảnh chính
+            }
+            else
+            {
+                if (listCheckNoSelct[0] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.Image = oldProImg.Image; //ảnh chính
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "0" + ".jpg", ProId);
+                    productImage.Image = "";
+                }   
+            }
+
+            //ảnh detail1
+            if (file1 != null)
+            {
+                //Xóa ảnh cũ trong folder nếu có
+                DeleteFileFromFolder(ProColorId + "1" + ".jpg", ProId);
+
+                //Lưu ảnh mới
+                file1.SaveAs(_path + ProColorId + "1" + ".jpg");
+                productImage.DetailImage1 = ProColorId + "1" + ".jpg"; //ảnh chi tiết
+            }
+            else
+            {
+                if (listCheckNoSelct[1] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.DetailImage1 = oldProImg.DetailImage1; 
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "1" + ".jpg", ProId);
+                    productImage.DetailImage1 = "";
+                }
+            }
+
+            //ảnh detail1
+            if (file2 != null)
+            {
+                //Xóa ảnh cũ trong folder
+                DeleteFileFromFolder(ProColorId + "2" + ".jpg", ProId);
+
+                //lưu ảnh mới
+                file2.SaveAs(_path + ProColorId + "2" + ".jpg");
+                productImage.DetailImage2 = ProColorId + "2" + ".jpg"; //ảnh chi tiết
+            }
+            else
+            {
+                if (listCheckNoSelct[2] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.DetailImage2 = oldProImg.DetailImage2;
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "2" + ".jpg", ProId);
+                    productImage.DetailImage2 = "";
+                }
+            }
+
+            //ảnh detail1
+            if (file3 != null)
+            {
+                //Xóa ảnh cũ trong folder
+                DeleteFileFromFolder(ProColorId + "3" + ".jpg", ProId);
+
+                //lưu ảnh mới
+                file3.SaveAs(_path + ProColorId + "3" + ".jpg");
+                productImage.DetailImage3 = ProColorId + "3" + ".jpg"; //ảnh chi tiết
+            }
+            else
+            {
+                if (listCheckNoSelct[3] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.DetailImage3 = oldProImg.DetailImage3;
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "3" + ".jpg", ProId);
+                    productImage.DetailImage3 = "";
+                }
+            }
+
+            //ảnh detail1
+            if (file4 != null)
+            {
+                //Xóa ảnh cũ trong folder
+                 DeleteFileFromFolder(ProColorId + "4" + ".jpg", ProId);
+
+
+                file4.SaveAs(_path + ProColorId + "4" + ".jpg");
+                productImage.DetailImage4 = ProColorId + "4" + ".jpg"; //ảnh chi tiết
+            }
+            else
+            {
+                if (listCheckNoSelct[4] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.DetailImage4 = oldProImg.DetailImage4;
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "4" + ".jpg", ProId);
+                    productImage.DetailImage4 = "";
+                }
+            }
+
+            //ảnh detail1
+            if (file5 != null)
+            {
+                //Xóa ảnh cũ trong folder
+                DeleteFileFromFolder(ProColorId + "5" + ".jpg", ProId);
+
+
+                file5.SaveAs(_path + ProColorId + "5" + ".jpg");
+                productImage.DetailImage5 = ProColorId + "5" + ".jpg"; //ảnh chi tiết
+            }
+            else
+            {
+                if (listCheckNoSelct[5] == "noSelect") //người dùng vẫn giữ nguyên ảnh
+                {
+                    productImage.DetailImage5 = oldProImg.DetailImage5;
+                }
+                else //người dùng đã xóa ảnh cũ
+                {
+                    //Xóa ảnh cũ trong folder và không upload ảnh mới
+                    DeleteFileFromFolder(ProColorId + "5" + ".jpg", ProId);
+                    productImage.DetailImage5 = "";
+                }
+            }
+
+
+            //thực hiện edit
+            productsDAO.Edit(productImage);
+            return "";
+        }
+
+        [HttpGet]
+        public JsonResult ChangeStatus(long id)
+        {
+            bool check = true;
+            try
+            {
+                var dao = new ProductDAO().ChangeStatus(id);
+            }
+            catch
+            {
+                check = false;
+            }
+            return Json(check, JsonRequestBehavior.AllowGet);
+        }
+        public void DeleteFileFromFolder(string StrFilename,string ProId)
+        {
+
+            string strPhysicalFolder = Server.MapPath("~/Upload/Product/" + ProId + "/");
+
+            string strFileFullPath = strPhysicalFolder + StrFilename;
+
+            if (System.IO.File.Exists(strFileFullPath))
+            {
+                System.IO.File.Delete(strFileFullPath);
+            }
+        }
         public void DeleteAllImg(string pathId)
         {
             string path = Server.MapPath(pathId);

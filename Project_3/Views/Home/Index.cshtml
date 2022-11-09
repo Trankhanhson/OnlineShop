@@ -155,7 +155,7 @@
                                     @foreach (var color in item.ProductImages)
                                     {
                                         <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                            <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
+                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');"></span>
                                         </div>
                                     }
                                 </div>
@@ -163,13 +163,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
-                                    @(
-                                if (item.PromotionPrice.HasValue)
-                                    {
-                                        < div class="curent-old price">@item.Price</div>
-                                    }
-                                )
+                                    <div class="curent-price price me-3">@item.Price</div>
+                                    <div class="curent-old price"></div>
                                     
                                 </div>
                                 <div class="product-like">
@@ -237,8 +232,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
-                                    <div class="curent-old price">@item.Price</div>
+                                    <div class="curent-price price me-3">@item.Price</div>
+                                    <div class="curent-old price"></div>
                                 </div>
                                 <div class="product-like">
                                     <span>Yêu thích</span>
@@ -302,8 +297,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.PromotionPrice</div>
-                                    <div class="curent-old price">@item.Price</div>
+                                    <div class="curent-price price me-3">@item.Price</div>
+                                    <div class="curent-old price"></div>
                                 </div>
                                 <div class="product-like">
                                     <span>Yêu thích</span>

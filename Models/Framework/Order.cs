@@ -22,14 +22,15 @@ namespace Models.Framework
     
         public long OrdID { get; set; }
         public Nullable<long> CusID { get; set; }
-        public Nullable<long> IDPromotionOrder { get; set; }
+        public Nullable<int> VoucherId { get; set; }
         public string ReceivingAddress { get; set; }
         public string Status { get; set; }
         public Nullable<int> MoneyTotal { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
+        public string Note { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual PromotionOrder PromotionOrder { get; set; }
+        public virtual Voucher Voucher { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

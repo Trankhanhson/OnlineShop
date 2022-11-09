@@ -38,6 +38,14 @@ namespace Project_3.Areas.Admin.Controllers
             },JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult getById(int id)
+        {
+            ProductCat productCat = new ProductCategoryDAO().getById(id);
+            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var result = JsonConvert.SerializeObject(productCat, Formatting.Indented, jss);
+            return Json(result, JsonRequestBehavior.AllowGet);  
+        }
+
         // POST: Admin/ProductCat/Create
         [HttpPost]
         public JsonResult Create(ProductCat proCat)

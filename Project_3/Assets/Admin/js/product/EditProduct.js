@@ -8,9 +8,6 @@
     var ProCatId = $("#ProCatId").val()
     var ImportPrice = $("#importPrice").val()
     var Price = $("#Price").val()
-    var PromotionPrice = $("#pricePromotion").val()
-    var StartPromotion = $("#startPromotion").val()
-    var StopPromotion = $("#stopPromotion").val()
     var product = {
         ProId: ProId,
         ProName: ProName,
@@ -18,10 +15,7 @@
         Description: Description,
         ProCatId: ProCatId,
         ImportPrice: ImportPrice,
-        Price: Price,
-        PromotionPrice: PromotionPrice,
-        StartPromotion: StartPromotion,
-        StopPromotion: StopPromotion
+        Price: Price
     }
 
     var listVariation = [] //danh sách biến thể
@@ -68,6 +62,19 @@ function UploadImgToServer(idColor, idProduct) {
         //Lấy dữ liệu trên file upload
         //lấy thẻ input theo idcolor
         var imgItem = $(`.imgItem[data-idColor=${idColor}]`)
+        var listImgElement = $(imgItem).find(".file-upload-image")
+        var ListNoSelect = []
+        listImgElement.each((index, value) => {
+            //nếu có ảnh thì là chưa select ngược lại không có ảnh là đã
+            let src = $(value).attr("src")
+            if (src != "") {
+                ListNoSelect.push("noSelect")
+            }
+            else {
+                ListNoSelect.push("Selected")
+
+            }
+        })
         var fileMain = $(imgItem).find('.input-file__main').get(0).files;
         var fileDetail1 = $(imgItem).find('.input-file__detail1').get(0).files;
         var fileDetail2 = $(imgItem).find('.input-file__detail2').get(0).files;
@@ -84,11 +91,12 @@ function UploadImgToServer(idColor, idProduct) {
         formData.append("file4", fileDetail4[0])
         formData.append("file5", fileDetail5[0])
         formData.append("ProId", idProduct)
+        formData.append("ListNoSelect", ListNoSelect)
         formData.append("ProColorId", idColor)
         $.ajax({
             async: true,
             type: 'POST',
-            url: '/Admin/Product/UploadImg',
+            url: '/Admin/Product/UploadImgEdit',
             contentType: false, //Không có header
             processData: false, //không xử lý dữ liệu
             data: formData,
@@ -106,10 +114,7 @@ function UploadImgToServer(idColor, idProduct) {
 }
 
 $(".btn-edit").click((e) => {
-    //kiểm tra giá khuyến mại phải nhỏ hơn giá bán
-    var Price = $("#Price").val()
-    var PricePromotion = $("#pricePromotion").val()
-    if (PricePromotion <= Price) {
+
         var variationWrap = $(".table-create tbody tr")
         //kiểm tra xem đã thêm variation chưa
         if (variationWrap.length > 0) {
@@ -121,11 +126,6 @@ $(".btn-edit").click((e) => {
             $("#errorToast .text-toast").text("Bạn chưa thêm biến thể nào")
             $("#errorToast").toast("show")
         }
-    }
-    else {
-        $("#errorToast .text-toast").text("Giá khuyến mại phải nhỏ hơn giá bán")
-        $("#errorToast").toast("show")
-    }
 })
 
 

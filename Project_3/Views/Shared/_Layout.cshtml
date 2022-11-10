@@ -55,7 +55,14 @@
 
             </div>
             <div>
-                <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="header-icon header-login"> </a>
+                @if (Session["Customer"] == null)
+                {
+                    <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="header-icon header-login"> </a>
+                }
+                else
+                {
+                    <a href="/InfoCustomer/InfoAccount" class="header-icon header-login"> </a>
+                }
 
             </div>
             <div class="header-cart-wrap">
@@ -161,12 +168,14 @@
                     <div class="modal-body">
                         <p class="modal-title fs-6">Cảm ơn bạn đã trở lại.</p>
                         <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Email/SĐT của bạn">
+                        <label id="userName-error" class="error" for="userName" style="display: none;"></label>
                         <input type="password" id="passwordLogin" name="passwordLogin" class="input-loginAndRegis PassWord mt-3" placeholder="Mật khẩu">
+                        <label id="passwordLogin-error" class="error" for="passwordLogin" style="display: none;"></label>
                     </div>
                     <div class="modal-footer">
-                        <button class="submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
+                        <div onclick="Login()" class="submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
                             Tiếp tục
-                        </button>
+                        </div>
                         <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>
                     </div>
                 </form>
@@ -181,7 +190,6 @@
                 <div class="position-relative d-flex ">
                     <div class="btn-login" data-bs-toggle="modal" href="#ModalLogin" role="button">Đăng nhập</div>
                     <div class="btn-register active">Khách hàng mới</div>
-
                     <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formRegister">
@@ -192,6 +200,7 @@
                         <input type="text" name="Email" id="Email" class="input-loginAndRegis mt-3" placeholder="Email">
                         <label id="Email-error" class="error" for="Email" style="display: none;"></label>
                         <input type="text" name="Phone" id="Phone" class="input-loginAndRegis mt-3" placeholder="SĐT của bạn">
+                        <label id="Phone-error" class="error" for="Phone" style="display: none;"></label>
                         <input type="password" autocomplete="new-password" name="Password" id="Password" class="input-loginAndRegis mt-3" placeholder="Mật khẩu">
                         <input type="password" autocomplete="new-password" name="ConfirmPassword" id="ConfirmPassword" class="input-loginAndRegis mt-3" placeholder="Nhập lại mật khẩu">
                     </div>

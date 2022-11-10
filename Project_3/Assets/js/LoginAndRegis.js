@@ -1,5 +1,5 @@
 ﻿//Register
-function addErorr(id, textError) {
+function addError(id, textError) {
     //thay đổi thuộc tính của thẻ input
     const element = $(`#${id}`) //element input
     $(element).removeClass("valid")
@@ -11,56 +11,6 @@ function addErorr(id, textError) {
     $(erorrLabel).css("display", "inline-block")
     $(erorrLabel).text(textError)
 }
-
-function RegisterSubmit() {
-    if ($("#formRegister").valid()) {
-        const Name = $("#Name").val()
-        const Address = $("#Address").val()
-        const Email = $("#Email").val()
-        const Phone = $("#Phone").val().trim()
-        const Password = $("#Password").val()
-        const cus = {
-            Name: Name,
-            Address: Address,
-            Email: Email,
-            Phone: Phone,
-            Password: Password
-        }
-
-        $.ajax({
-            url: "/Home/Register",
-            type: "POST",
-            dataType: "Json",
-            data: { cus: cus },
-            success: function (res) {
-                if (res.message == "ExistEmail") {
-                    addErorr("Email", "Email này đã tồn tại")
-                }
-                if (res.message == "ExistPhone") {
-                    addErorr("Phone", "SĐT này đã tồn tại")
-                }
-                else {
-                    if (res.message == "success") {
-                        //chuyển sang đăng nhập
-                        $('#ModalRigister .btn-login').trigger("click")
-                        $('#userName').val(Email) //gán email vừa đăng ký
-                        $('#passwordLogin').val(Password) //gán sđt vừa đăng ký
-
-                        $('#formRegister').trigger("reset");
-
-                        $("#successToast .text-toast").text("Đăng ký thành công")
-                        $("#successToast").toast("show")
-                    }
-                    else {
-                        $("#errorToast .text-toast").text("Đăng ký thất bại")
-                        $("#errorToast").toast("show")
-                    }
-                }
-            }
-        })
-    }
-}
-
 
 $.validator.addMethod('isEmail', function (value) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -122,5 +72,95 @@ $("#formRegister").validate({
         ConfirmPassword: {
             equalTo: "Xác nhận mật khẩu không trùng khớp"
         }
+    }
+})
+
+function RegisterSubmit() {
+    if ($("#formRegister").valid()) {
+        const Name = $("#Name").val()
+        const Address = $("#Address").val()
+        const Email = $("#Email").val()
+        const Phone = $("#Phone").val().trim()
+        const Password = $("#Password").val()
+        const cus = {
+            Name: Name,
+            Address: Address,
+            Email: Email,
+            Phone: Phone,
+            Password: Password
+        }
+
+        $.ajax({
+            url: "/Home/Register",
+            type: "POST",
+            dataType: "Json",
+            data: { cus: cus },
+            success: function (res) {
+                if (res.message == "ExistEmail") {
+                    addError("Email", "Email này đã tồn tại")
+                }
+                if (res.message == "ExistPhone") {
+                    addError("Phone", "SĐT này đã tồn tại")
+                }
+                else {
+                    if (res.message == "success") {
+                        //chuyển sang đăng nhập
+                        $('#ModalRigister .btn-login').trigger("click")
+                        $('#userName').val(Email) //gán email vừa đăng ký
+                        $('#passwordLogin').val(Password) //gán sđt vừa đăng ký
+
+                        $('#formRegister').trigger("reset");
+
+                        $("#successToast .text-toast").text("Đăng ký thành công")
+                        $("#successToast").toast("show")
+                    }
+                    else {
+                        $("#errorToast .text-toast").text("Đăng ký thất bại")
+                        $("#errorToast").toast("show")
+                    }
+                }
+            }
+        })
+    }
+}
+
+function Login() {
+    if ($("#formLogin").valid()) {
+        const username = $("#userName").val()
+        const password = $("#passwordLogin").val()
+        $.ajax({
+            url: "/Home/Login",
+            type: "Post",
+            dataType: "Json",
+            data: { username: username, password: password },
+            success: function (res) {
+                if (res.message == "usename") {
+                    addError("userName", "Tại khoản không tồn tại")
+                }
+                else if (res.message == "password") {
+                    addError("passwordLogin", "Mật khẩu không đúng")
+                }
+                else if (res.message == "fail") {
+                    $("#errorToast .text-toast").text("Đăng nhập thất bại")
+                    $("#errorToast").toast("show")
+                }
+                else {
+                    location.reload();
+                    $("#successToast .text-toast").text("Đã đăng nhập thành công")
+                    $("#successToast").toast("show")
+                }
+            }
+        })
+    }
+}
+
+$("#formLogin").validate({
+    rules: {
+        userName: "required",
+        passwordLogin: "required"
+    },
+    messages: {
+        userName: "Bạn chưa nhập tên tài khoản",
+        passwordLogin: "Bạn chưa nhập mật khẩu"
     }
 })

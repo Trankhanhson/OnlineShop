@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "OrderHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Assets/css/info-customer.css" rel="stylesheet" />
+    <link href="~/Assets/css/order-history.css" rel="stylesheet" />
+}
+
+@section Menu{
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebar">
+        <div class="offcanvas-header pt-4">
+            <a class="offcanvas-title header-brand" href="/Home/Index/">
+                <img src="/Assets/img/logo.svg" alt="" />
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="mb-3">
+                <li class="header-item">
+                    <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Man/Index/">NAM</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Women/Index/">NỮ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+                </li>
+            </ul>
+            <div class="sidebar-form-wrap ">
+                <form class="d-flex sidebar-form">
+                    <button class="search-btn">
+                        <span></span>
+                    </button>
+                    <input type="text"
+                           placeholder="Bạn tìm gì"
+                           id="input-sidebar-search"
+                           autocomplete="off" />
+                </form>
+                <div class="search-history">
+                    <div class="d-flex justify-content-between search-history__header">
+                        <p>Lịch sử tìm kiếm</p>
+                        <span style="cursor: pointer;">Xóa</span>
+                    </div>
+                    <div class="search-history-body pt-2">
+                        <span>áo polo</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Button to open the offcanvas sidebar -->
+    <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <ul class="header-list d-none d-xl-flex me-auto ms-5">
+        <li class="header-item">
+            <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Man/Index/">NAM</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Women/Index/">NỮ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Girl/Index/">BÉ GÁI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+        </li>
+    </ul>
+}
+
+<main>
+    <div class="topbar text-center text-white">
+        <div>Thêm vào giỏ 499.000 ₫ để miễn phí vận chuyển</div>
+        <div>ĐỔI HÀNG MIỄN PHÍ - Tại tất cả cửa hàng trong 30 ngày</div>
+    </div>
+    <div class="site-main">
+        <div class="account-container my-account">
+            <div class="page-title-wrapper">
+                Đơn hàng của tôi
+            </div>
+            <div class="account-sidebar">
+                <div class="profile">
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">Trần khánh sơn</div> <button class="btn btn-email">
+                            <span class="count"></span>
+                        </button>
+                    </div>
+                    <div class="profile-cpoint">
+                        <div class="profile-cpoint-item">
+                            <div class="title">C-point</div>
+                            <div class="value" style="color: rgb(218, 41, 28);">30</div>
+                        </div>
+                        <div class="profile-cpoint-line"></div>
+                        <div class="profile-cpoint-item">
+                            <div class="title">Điểm KHTT</div>
+                            <div class="value" style="color: rgb(99, 177, 188);">0</div>
+                        </div>
+                        <div class="profile-cpoint-line"></div>
+                        <div class="profile-cpoint-item">
+                            <div class="title">Hạng thẻ</div>
+                            <div class="label" style="background: rgb(116, 170, 80);">Green</div>
+                        </div>
+                    </div>
+                    <div class="profile-usermenu">
+                        <ul>
+                            <li active="Tài khoản"
+                                class=" active profile-usermenu-order"><a href="/InfoCustomer/OrderHistory">Đơn hàng của tôi</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-sale"><a href="#">Khuyến mại</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-cpoint"><a href="#">C-points</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-address"><a href="#">Sổ địa chỉ</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-khtt"><a href="#">Thẻ KHTT</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-wishlist"><a href="#">Yêu thích</a></li>
+                            <li active="Tài khoản"
+                                class=" profile-usermenu-account"><a href="/InfoCustomer/InfoAccount">Tài khoản</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-logout"><a href="#">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                    <div class="profile-support">
+                        <b>Bạn cần hỗ trợ?</b>
+                        <p>Vui lòng gọi <a href="#">1800 6061</a> (miễn phí cước gọi)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="account-column-main">
+                <div>
+                    <div>
+                        <div class="account-page-title">
+                            <h1 class="title">Đơn hàng của tôi</h1>
+                        </div>
+                        <div class="account-page-filter">
+                            <ul>
+                                <li class="active"><a href="#">Tất cả đơn hàng</a></li>
+                            </ul>
+                        </div>
+                        <div class="order-list">
+                            <table class="table-order-items">
+                                <thead>
+                                    <tr>
+                                        <th class="col id">Đơn hàng</th>
+                                        <th class="col date">Ngày mua</th>
+                                        <th class="col qty">Số lượng</th>
+                                        <th class="col total">Tổng tiền</th>
+                                        <th class="col status">Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="col id"><a href="#">CNF1000041606</a></td>
+                                        <td class="col date">14:58 26/10/2022</td>
+                                        <td class="col qty">3</td>
+                                        <td class="col total">811.200 ₫</td>
+                                        <td class="col status">Đang chờ xét</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="toolbar order-products-toolbar">
+                            <div class="pages">
+                                <ul class="items pages-items">
+                                    <li class="item pages-item-previous">
+                                        <a title="Previous" class="action previous">
+                                            <span class="label">Page</span>
+                                        </a>
+                                    </li>
+                                    <li class="item current">
+                                        <strong class="page">
+                                            <span class="label">
+                                                You're currently reading
+                                                page
+                                            </span> <span>1</span>
+                                        </strong>
+                                    </li>
+                                    <li class="item pages-item-next" style="cursor:pointer">
+                                        <a title="Next"
+                                           class="action next"><span class="label">Page</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

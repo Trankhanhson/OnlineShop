@@ -159,6 +159,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\GirlController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InfoCustomerController.cs" />
     <Compile Include="Controllers\ManController.cs" />
     <Compile Include="Controllers\OutletController.cs" />
     <Compile Include="Controllers\WomenController.cs" />
@@ -955,7 +956,10 @@
     <Content Include="Assets\Admin\datepicker\js\jquery.min.js" />
     <Content Include="Assets\css\base.css" />
     <Content Include="Assets\css\cart.css" />
+    <Content Include="Assets\css\customner-account.css" />
+    <Content Include="Assets\css\info-customer.css" />
     <Content Include="Assets\css\main.css" />
+    <Content Include="Assets\css\order-history.css" />
     <Content Include="Assets\css\outlet.css" />
     <Content Include="Assets\css\product-detail.css" />
     <Content Include="Assets\css\resposiveDetail.css" />
@@ -2782,9 +2786,9 @@
     <Content Include="Assets\js\BaseHome.js" />
     <Content Include="Assets\js\cart.js" />
     <Content Include="Assets\js\LoginAndRegis.js" />
-    <Content Include="Assets\js\LoginAndRegister.js" />
     <Content Include="Assets\js\product-detail.js" />
     <Content Include="Assets\js\subIndex.js" />
+    <Content Include="Assets\js\UpdateInfoAccount.js" />
     <Content Include="Assets\Plugin\ckeditor\adapters\jquery.js" />
     <Content Include="Assets\Plugin\ckeditor\build-config.js" />
     <Content Include="Assets\Plugin\ckeditor\ckeditor.js" />
@@ -3957,6 +3961,8 @@
     <Content Include="Views\Girl\Index.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Home\Detail.cshtml" />
+    <Content Include="Views\InfoCustomer\InfoAccount.cshtml" />
+    <Content Include="Views\InfoCustomer\OrderHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

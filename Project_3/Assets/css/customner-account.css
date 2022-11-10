@@ -1,0 +1,102 @@
+.account-page-setting {
+    max-width: 625px;
+}
+.account-page-title {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 22px;
+}
+.account-page-title .title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0;
+    display: block;
+}
+.account-setting-form {
+    max-width: 625px;
+    width: 100%;
+}
+.account-setting-form .form-group.active {
+    border: 1px solid #333f48;
+    background-color: #fff;
+    -webkit-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+}
+.account-setting-form .form-group {
+    border: 1px solid #c8c7cc;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background: #f6f6f6;
+    position: relative;
+    margin-bottom: 30px;
+    -webkit-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+}
+.account-setting-form .form-group.active label {
+    font-size: 12px;
+    line-height: 18px;
+    top: 10px;
+    -webkit-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+    z-index: 10;
+}
+.account-setting-form .form-group label {
+    display: block;
+    position: absolute;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    top: 19px;
+    left: 12px;
+    -webkit-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+}
+.account-setting-form .form-group.active .form-control {
+    padding-top: 28px;
+    padding-bottom: 11px;
+}
+
+.account-setting-form .form-group .form-control {
+    height: 60px;
+    width: 100%;
+    padding: 19px 12px 20px;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    background-color: transparent;
+    position: relative;
+    z-index: 2;
+    display: block;
+    color: #333f48;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    cursor: pointer;
+}
+.account-setting-form .actions {
+    padding-top: 40px;
+}
+.account-setting-form .btn {
+    display: block;
+    width: 100%;
+    padding: 13px 10px 11px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 19px;
+    background-color: #da291c;
+    border-color: #da291c;
+    color: #fff;
+}

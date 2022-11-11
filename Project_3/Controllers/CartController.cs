@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.DAO;
 using Models.Framework;
 using Project_3.Model;
 using System;
@@ -21,10 +22,14 @@ namespace Project_3.Controllers
             {
                 list=(List<CartItem>)cart;
             }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(list);
         }
 
-        public JsonResult deleteCartItem(long id)
+        public ActionResult deleteCartItem(long id)
         {
             var cart = Session[CartSession];
             List<CartItem> list = new List<CartItem>();
@@ -40,33 +45,74 @@ namespace Project_3.Controllers
                     }    
                 }
                 Session[CartSession] = list;
-
             }
-            return Json("",JsonRequestBehavior.AllowGet);
+            if (list.Count==0)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            else
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
-        public JsonResult updateCart(long proVariationId,int newQuantity)
+        public JsonResult increaseQty(long proVariationId,int newQuantity)  
         {
             var cart = Session[CartSession];
             List<CartItem> list = new List<CartItem>();
             var newPrice = 0;
-            if (cart != null)
+            bool checkQuantity = new ProductVariationDAO().CheckQuantity(newQuantity, proVariationId); //kiểm tra số lượng hàng tồn
+            if (checkQuantity)
             {
-                list = (List<CartItem>)cart;
-                foreach (var item in list)
+                if (cart != null)
                 {
-                    if (item.ProVariation.ProVariationID == proVariationId)
+                    list = (List<CartItem>)cart;
+                    foreach (var item in list)
                     {
-                        item.Quantity= newQuantity;
-                         newPrice = item.ProVariation.Product.Price * newQuantity;
-                        break;
+                        if (item.ProVariation.ProVariationID == proVariationId)
+                        {
+                            item.Quantity = newQuantity;
+                            newPrice = item.ProVariation.Product.Price * newQuantity;
+                            break;
+                        }
                     }
+                    Session[CartSession] = list;
                 }
-                Session[CartSession] = list;
             }
             
-            return Json(newPrice, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                newPrice= newPrice,
+                checkQuantity = checkQuantity
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult decreaseQty(long proVariationId, int newQuantity)
+        {
+            var cart = Session[CartSession];
+            List<CartItem> list = new List<CartItem>();
+            var newPrice = 0;
+                if (cart != null)
+                {
+                    list = (List<CartItem>)cart;
+                    foreach (var item in list)
+                    {
+                        if (item.ProVariation.ProVariationID == proVariationId)
+                        {
+                            item.Quantity = newQuantity;
+                            newPrice = item.ProVariation.Product.Price * newQuantity;
+                            break;
+                        }
+                    }
+                    Session[CartSession] = list;
+                }
+
+            return Json(new
+            {
+                newPrice = newPrice
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddItem(long ProId,int ProColorId, int ProSizeId)
@@ -114,6 +160,72 @@ namespace Project_3.Controllers
             {
 
             });
+        }
+
+        public ActionResult PaymentPage()
+        {
+            //Display info of customer
+            if (Session["Customer"] != null)
+            {
+                var id = (long)Session["Customer"];
+                var cus = new CustomnerDAO().getById(id);
+                ViewBag.Customer = cus;
+            }
+
+            var cart = Session[CartSession];
+            List<CartItem> list = new List<CartItem>();
+            if (cart != null)
+            {
+                list = (List<CartItem>)cart;
+            }
+            if(list.Count == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(list);
+        }
+
+        public ActionResult InfoBill()
+        {
+            var cart = Session[CartSession];
+            if (cart != null)
+            {
+
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        public ActionResult Order(Order order)
+        {
+            try {
+                order.OrderDate = DateTime.Now;
+                var o = new OrderDAO().Insert(order);
+                var cart = (List<CartItem>)Session[CartSession];
+                var listOrderDetail = new List<OrderDetail>();
+                foreach (var item in cart)
+                {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.ProVariationID = item.ProVariation.ProVariationID;
+                    orderDetail.OrdID = o.OrdID;
+                    orderDetail.Quantity = item.Quantity;
+                    orderDetail.Price = item.ProVariation.Product.Price;
+                    listOrderDetail.Add(orderDetail);
+                }
+                OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+                orderDetailDAO.Insert(listOrderDetail);
+
+                ProductVariationDAO productVariationDAO = new ProductVariationDAO();
+                productVariationDAO.editQuantity(listOrderDetail);
+            }
+            catch
+            {
+
+            }
+            return View();
         }
     }
 }

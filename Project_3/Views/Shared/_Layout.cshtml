@@ -55,13 +55,13 @@
 
             </div>
             <div>
-                @if (Session["Customer"] == null)
+                @if (Request.Cookies["CustomerId"] == null)
                 {
                     <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="header-icon header-login"> </a>
                 }
                 else
                 {
-                    <a href="/InfoCustomer/InfoAccount" class="header-icon header-login"> </a>
+                    <a href="/InfoCustomer/InfoAccount" class="header-icon header-login"></a>
                 }
 
             </div>

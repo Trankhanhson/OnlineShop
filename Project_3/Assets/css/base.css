@@ -697,6 +697,6 @@ submit-modal:hover{
 
 label.error {
     width: 100%;
-    color: #dc3545;
+    color: #dc3545 !important;
     font-size: 13px;
 }

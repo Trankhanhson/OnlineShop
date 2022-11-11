@@ -15,9 +15,9 @@ namespace Project_3.Controllers
         public ActionResult InfoAccount()
         {
             Customer customer = new Customer();
-            if (Session["Customer"] != null)
+            if (Request.Cookies["CustomerId"] != null)
             {
-                long id = (long)Session["Customer"];
+                long id = int.Parse(Request.Cookies["CustomerId"].Value);
                 customer = new CustomnerDAO().getById(id);
                 return View(customer);
             }
@@ -32,13 +32,14 @@ namespace Project_3.Controllers
         {
             var dao = new CustomnerDAO();
             var message = "";
+            var cusOld = dao.getById(cus.CusID);
             try
             {
-                if (dao.CheckEmail(cus.Email))
+                if (cus.Email != cusOld.Email && dao.CheckEmail(cus.Email))
                 {
                     message = "ExistEmail";
                 }
-                else if (dao.CheckPhone(cus.Phone))
+                else if (cus.Phone != cusOld.Phone && dao.CheckPhone(cus.Phone))
                 {
                     message = "ExistPhone";
                 }
@@ -60,7 +61,14 @@ namespace Project_3.Controllers
 
         public ActionResult OrderHistory()
         {
-            return View();
+            if (Request.Cookies["CustomerId"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

@@ -89,7 +89,10 @@ namespace Project_3.Controllers
                 {
                     message = "success";
                     long id = dao.getIdByUsername(username);
-                    Session["Customer"] = id;
+                    //trả về cookie có id và username
+                    HttpCookie Cookie = new HttpCookie("CustomerId",id.ToString());
+                    Cookie.Expires = DateTime.Now.AddYears(1);
+                    Response.Cookies.Add(Cookie);
                 }
             }
             catch
@@ -101,6 +104,13 @@ namespace Project_3.Controllers
             {
                 message = message
             });
+        }
+
+        public ActionResult Logout()
+        {
+            HttpCookie Cookie = new HttpCookie("CustomerId");
+            Cookie.Expires = DateTime.Now.AddDays(-1d);
+            return RedirectToAction("Index");
         }
     }
 }

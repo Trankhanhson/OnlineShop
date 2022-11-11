@@ -1,0 +1,273 @@
+﻿@model List<Project_3.Model.CartItem>
+@{
+    ViewBag.Title = "PaymentPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" href="/Assets/css/cart.css">
+    <link href="~/Assets/css/Payment.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="~/Assets/js/payment.js"></script>
+    <script src="~/Assets/js/Cart.js"></script>
+}
+
+
+@section Menu{
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebar">
+        <div class="offcanvas-header pt-4">
+            <a class="offcanvas-title header-brand" href="/Home/Index/">
+                <img src="/Assets/img/logo.svg" alt="" />
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="mb-3">
+                <li class="header-item">
+                    <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Man/Index/">NAM</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Women/Index/">NỮ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+                </li>
+            </ul>
+            <div class="sidebar-form-wrap ">
+                <form class="d-flex sidebar-form">
+                    <button class="search-btn">
+                        <span></span>
+                    </button>
+                    <input type="text"
+                           placeholder="Bạn tìm gì"
+                           id="input-sidebar-search"
+                           autocomplete="off" />
+                </form>
+                <div class="search-history">
+                    <div class="d-flex justify-content-between search-history__header">
+                        <p>Lịch sử tìm kiếm</p>
+                        <span style="cursor: pointer;">Xóa</span>
+                    </div>
+                    <div class="search-history-body pt-2">
+                        <span>áo polo</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Button to open the offcanvas sidebar -->
+    <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <ul class="header-list d-none d-xl-flex me-auto ms-5">
+        <li class="header-item">
+            <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Man/Index/">NAM</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Women/Index/">NỮ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Girl/Index/">BÉ GÁI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+        </li>
+    </ul>
+}
+<main class="border-top">
+    <div class="d-flex justify-content-between align-items-center w-50 mx-auto my-5">
+        <div class="process-item flex-grow-1 text-center">
+            <span class="rounded-circle border me-2 d-inline-block text-center"
+                  style="width:24px;line-height:22px;font-size: 14px;background-color: #63b1bc;">
+                <img class="my-auto"
+                     src="/Assets/img/checkpay.svg" style="position: relative;top: -2px;" alt="">
+            </span>
+            Giỏ hàng
+        </div>
+        <div class="flex-grow-1 border-top text-center"></div>
+        <div class="process-item active flex-grow-1 text-center">
+            <span class="rounded-circle border me-2 d-inline-block text-center"
+                  style="width:24px;line-height:22px;font-size: 14px;">2</span>
+            Đặt hàng
+        </div>
+        <div class="flex-grow-1 border-top text-center"></div>
+        <div class="process-item flex-grow-1 text-center">
+            <span class="rounded-circle border me-2 d-inline-block text-center"
+                  style="width:24px;line-height:22px;font-size: 14px;">3</span>
+            Hoàn tất
+        </div>
+    </div>
+    <div class="cart-content pt-3">
+        <div class="row g-1 align-items-stretch">
+            <div class="col-lg-8 col-12 h-100">
+                <div class="cart-content__left">
+                    <div class="info-client pb-5 border-bottom">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h4>Thông tin giao hàng</h4>
+                            <a class="text-black fw-bold text-decoration-underline fs-4" href="/Cart/Index">
+                                <img src="/Assets/img/back.svg" alt=""><span>Quay lại giỏ hàng</span>
+                            </a>
+                        </div>
+                        <form action="" class="form-Payment account-setting-form mt-4" style="max-width:550px" data-cusid="@ViewBag.Customer.CusID">
+                            <div class="form-group active">
+                                <label>Họ tên</label>
+                                <input type="text" value="@ViewBag.Customer.Name" name="name" id="name" class="form-control">
+                                <label class="error" for="name" style="display: none;"></label>
+                            </div>
+                            <div class="form-group active">
+                                <label>Số điện thoại</label>
+                                <input type="text" name="phone" id="phone" value="@ViewBag.Customer.Phone" class="form-control ">
+                                <label id="phone-error" class="error" for="phone" style="display: none;"></label>
+                            </div>
+                            <select class="form-select form-select-sm mb-3" id="city" name="city" aria-label=".form-select-sm">
+                                <option value="" selected>Tỉnh / Thành phố</option>
+                            </select>
+                            <select class="form-select form-select-sm mb-3" id="district" name="district" aria-label=".form-select-sm">
+                                <option value="" selected>Quận / Huyện</option>
+                            </select>
+                            <select class="form-select form-select-sm mb-3" id="ward" name="ward" aria-label=".form-select-sm">
+                                <option value="" selected>Phường / Xã</option>
+                            </select>
+                            <div class="form-group active">
+                                <label>Địa chỉ</label>
+                                <input type="text" name="address" id="address" value="@ViewBag.Customer.Address" class="form-control ">
+                            </div>
+                            <div class="form-group active">
+                                <label>Ghi chú</label>
+                                <input type="text" name="note" id="note" class="form-control">
+                            </div>
+                            <button></button>
+                        </form>
+                    </div>
+                    <div class="py-5 border-bottom">
+                        <h4 class="mt-4 mb-3">Phương thức thanh toán</h4>
+                        <div class="mb-3 d-flex justify-content-between align-items-center border payment-method active"
+                             style="padding: 12px 16px;cursor: pointer;">
+                            <div class="d-flex align-items-center" style="pointer-events: none;">
+                                <input type="radio" name="payByCOD" class="radioPay">
+                                <p style="font-size:16px;margin-left: 15px;">Thanh toán khi nhận hàng (COD)</p>
+                            </div>
+                            <img src="/Assets/img/cod.svg" alt="">
+                        </div>
+                        <div class="mb-3 d-flex justify-content-between align-items-center border payment-method"
+                             style="padding: 12px 16px;cursor: pointer;">
+                            <div class="d-flex align-items-center" style="pointer-events: none;">
+                                <input type="radio" name="payByCOD" class="radioPay">
+                                <p style="font-size:16px;margin-left: 15px;">Thanh toán bằng VNPAY</p>
+                            </div>
+                            <img src="/Assets/img/vnpay.svg" alt="">
+                        </div>
+                        <div class="mb-3 d-flex justify-content-between align-items-center border payment-method"
+                             style="padding: 12px 16px;cursor: pointer;">
+                            <div class="d-flex align-items-center" style="pointer-events: none;">
+                                <input type="radio" name="payByCOD" class="radioPay">
+                                <p style="font-size:16px;margin-left: 15px;">Thanh toán bằng ShopeePay</p>
+                            </div>
+                            <img src="/Assets/img/shopeepay.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="fw-bold" style="font-size: 25px;">Giỏ hàng</h4>
+                        <table class="mt-3 cart-list w-100">
+                            <thead style="background-color: #333f48; color:white;">
+                                <tr>
+                                    <th class="col item">Sản phẩm</th>
+                                    <th class="col">Giá tiền</th>
+                                    <th class="col qty">Số lượng</th>
+                                    <th class="col subtotal">Tổng tiền</th>
+                                    <th class="col action"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="proVariation_@item.ProVariation.ProVariationID">
+                                        <td class="col item">
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <img class="img-item" src="~/Upload/Product/@item.ProVariation.Product.ProId/@item.Image" alt="">
+                                                </a>
+                                                <div style="width:100%" class="flex-grow-1">
+                                                    <a href="" class="item-name">@item.ProVariation.Product.ProName</a>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="item-size">@item.ProVariation.ProductSize.NameSize</span>
+                                                        <span>&nbsp;/&nbsp;</span>
+                                                        <span class="item-color rounded-circle d-inline-block" style="width:14px; height:14px;background-image:url('/Upload/ColorImage/@item.ProVariation.ProColorID/@item.ProVariation.ProductColor.ImageColor') ;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="col priceCartItem">
+                                            <span class="price" data="@item.ProVariation.Product.Price">@item.ProVariation.Product.Price</span>
+                                        </td>
+                                        <td class="col qty">
+                                            <div class="d-flex justify-content-start align-items-center quantity-wrap">
+                                                <span class="btn-minus" onclick="decreaseQunatity(event,@item.ProVariation.ProVariationID)"></span>
+                                                <input type="text" readonly="readonly" class="input-cart-qty" value="@item.Quantity">
+                                                <span class="btn-plus" onclick="increaseQuantity(event,@item.ProVariation.ProVariationID)"></span>
+                                            </div>
+                                        </td>
+                                        <td class="col subtotal">
+                                            <span class="price" data="@(item.ProVariation.Product.Price * item.Quantity)">@(item.ProVariation.Product.Price * item.Quantity)</span>
+                                        </td>
+                                        <td class="actions">
+                                            <a class="cart-item__remove" onclick="deleteCartItem(event,@item.ProVariation.ProVariationID)"></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="cart-content__right h-100">
+                    <h4>Đơn hàng</h4>
+                    <div class="d-flex justify-content-between mt-4 mb-2" style="color:#77757f;">
+                        <span>Giá gốc</span>
+                        <span class="original-price">329.000 ₫</span>
+                    </div>
+                    <div class="d-flex justify-content-between fw-bold pb-5 border-bottom">
+                        <span>Tổng tiền thanh toán</span>
+                        <span class="total-price">329.000 ₫</span>
+                    </div>
+                    <div class="checkout-step checkout-coupon">
+                        <div class="checkout-step-title mb-3">Mã giảm giá/ Thẻ quà tặng</div>
+                        <div class="checkout-step-content" style="padding-bottom: 25px;">
+                            <div class="checkout-coupon-form">
+                                <input type="text" name="promoCode"
+                                       placeholder="Nhập mã" class="form-control">
+                                <button class="btn-add-coupon btn-add">Áp dụng</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="payment()" CLASS="btn-order">THANH TOÁN</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

@@ -36,6 +36,7 @@ namespace Models
                     ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId},
                     ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                     {
+                        ProId = pv.ProId,
                         ProVariationID = pv.ProVariationID,
                         ProColorID = pv.ProColorID,
                         ProSizeID = pv.ProSizeID,

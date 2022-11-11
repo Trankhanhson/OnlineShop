@@ -961,6 +961,7 @@
     <Content Include="Assets\css\main.css" />
     <Content Include="Assets\css\order-history.css" />
     <Content Include="Assets\css\outlet.css" />
+    <Content Include="Assets\css\Payment.css" />
     <Content Include="Assets\css\product-detail.css" />
     <Content Include="Assets\css\resposiveDetail.css" />
     <Content Include="Assets\css\resposiveIndex.css" />
@@ -2756,12 +2757,15 @@
     <Content Include="Assets\fonts\fonts\fontawesome-free-6.0.0-web\svgs\solid\yin-yang.svg" />
     <Content Include="Assets\fonts\fonts\fontawesome-free-6.0.0-web\svgs\solid\z.svg" />
     <Content Include="Assets\img\8ls22s005-sb128-1-thumb.jpg" />
+    <Content Include="Assets\img\back.svg" />
     <Content Include="Assets\img\banner.jpg" />
     <Content Include="Assets\img\cart-empty.svg" />
     <Content Include="Assets\img\cart-icon.svg" />
     <Content Include="Assets\img\cart-like.svg" />
     <Content Include="Assets\img\check.svg" />
+    <Content Include="Assets\img\checkpay.svg" />
     <Content Include="Assets\img\close.svg" />
+    <Content Include="Assets\img\cod.svg" />
     <Content Include="Assets\img\cong-icon.svg" />
     <Content Include="Assets\img\detail-heart.svg" />
     <Content Include="Assets\img\endow1.jpg" />
@@ -2780,12 +2784,15 @@
     <Content Include="Assets\img\search-btn.svg" />
     <Content Include="Assets\img\send-icon.svg" />
     <Content Include="Assets\img\share.svg" />
+    <Content Include="Assets\img\shopeepay.svg" />
     <Content Include="Assets\img\store-icon.svg" />
     <Content Include="Assets\img\tru-icon.svg" />
+    <Content Include="Assets\img\vnpay.svg" />
     <Content Include="Assets\img\youtube-icon.svg" />
     <Content Include="Assets\js\BaseHome.js" />
-    <Content Include="Assets\js\cart.js" />
+    <Content Include="Assets\js\Cart.js" />
     <Content Include="Assets\js\LoginAndRegis.js" />
+    <Content Include="Assets\js\payment.js" />
     <Content Include="Assets\js\product-detail.js" />
     <Content Include="Assets\js\subIndex.js" />
     <Content Include="Assets\js\UpdateInfoAccount.js" />
@@ -3963,6 +3970,8 @@
     <Content Include="Views\Home\Detail.cshtml" />
     <Content Include="Views\InfoCustomer\InfoAccount.cshtml" />
     <Content Include="Views\InfoCustomer\OrderHistory.cshtml" />
+    <Content Include="Views\Cart\PaymentPage.cshtml" />
+    <Content Include="Views\Cart\InfoBill.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3972,6 +3981,7 @@
     <Folder Include="Upload\NewCkFinder\" />
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
+    <Folder Include="Views\CartCheck\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

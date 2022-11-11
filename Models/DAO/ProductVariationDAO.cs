@@ -30,6 +30,7 @@ namespace Models
             }
             _dbContext.SaveChanges();
         }
+
         public List<ProductVariation> getById(long id)
         {
             _dbContext.Configuration.ProxyCreationEnabled = false;
@@ -94,6 +95,23 @@ namespace Models
         public ProductVariation getByForeignKey(long ProId,int ProColorId,int ProSizeId)
         {
             return _dbContext.ProductVariations.Where(x=>x.ProId==ProId && x.ProColorID==ProColorId && x.ProSizeID==ProSizeId).FirstOrDefault();
+        }
+
+        public bool CheckQuantity(int newQuantity,long variationId)
+        {
+            int? quantity = _dbContext.ProductVariations.Find(variationId).Quantity;
+            return quantity >= newQuantity;
+        }
+
+        public void editQuantity(List<OrderDetail> listOrderDetail)
+        {
+            var listVariation = _dbContext.ProductVariations.ToList();
+            foreach (var item in listOrderDetail)
+            {
+                ProductVariation v = _dbContext.ProductVariations.Find(item.ProVariationID);
+                v.Quantity -= item.Quantity;
+            }
+            _dbContext.SaveChanges();
         }
     }
 }

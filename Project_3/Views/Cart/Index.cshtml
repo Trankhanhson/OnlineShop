@@ -2,103 +2,16 @@
 @{
     ViewBag.Title = "cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-
 }
 @section scripts{
-    <script>
-        /*hiển thị giá*/
-        function convertPrice(price) {
-            let tg = "";
-            let length = price.length;
-            let count = 0;
-            for (var i = length - 1; i >= 0; --i) {
-                if (count % 3 == 0 && count != 0) {
-                    tg = price[i] + '.' + tg;
-                }
-                else {
-                    tg = price[i] + tg;
-                }
-                count++;
-            }
-            return tg + "đ";
-        }
-
-        /**change quantity of product first load*/
-        var quantityOfProduct = $("tbody").children().length
-        $(".quantity-product").text(quantityOfProduct)
-
-        /**remove item trong cart */
-        function deleteCartItem(event, proVariationId){
-            event.preventDefault()
-            $.ajax({
-                url: "/Cart/deleteCartItem/" + proVariationId,
-                type: "GET",
-                dataType: "Json"
-            })
-            let parent = $(event.target).parents("tr")
-            $(parent).remove();
-            //update quantity
-            var quantityOfProduct = $("tbody").children().length
-            $(".quantity-product").text(quantityOfProduct)
-            updateTotalPrice()
-        }
-
-        function updateQuantity(id, newQuantity) {
-            $.ajax({
-                url: "/Cart/updateCart",
-                type: "POST",
-                data: { proVariationId: id, newQuantity: newQuantity },
-                dataType: "Json",
-                success: function (response) {
-                    let newPrice = JSON.stringify(response)
-                    const span = $($(`#proVariation_${id}`).find(".subtotal span"))
-                    $(span).text(convertPrice(newPrice)) //thực hiện gán vào subtotal
-                    $(span).attr("data", newPrice)
-                    updateTotalPrice()
-                }
-            })
-
-        }
-
-        function updateTotalPrice() {
-            let listSubTotal = $(".subtotal span")
-            let oriTotal = 0
-            listSubTotal.each((index, value) => {
-                oriTotal += JSON.parse($(value).attr("data"))
-            })
-
-            let textOriTotal = convertPrice(JSON.stringify(oriTotal))
-            //update gia tri cho gia goc
-            $(".original-price").text(textOriTotal)
-
-            //update tong tien bill
-            $(".total-price").text(textOriTotal)
-            $(".total-price").attr("data", oriTotal)
-        }
-        updateTotalPrice()
-
-        function decreaseQunatity(event,id) {
-            const input = $($(event.target).parent()).children("input")
-            let quantityCurrent = JSON.parse($(input).val())
-            if (quantityCurrent != 1) {
-                $(input).val(quantityCurrent - 1)
-                updateQuantity(id, quantityCurrent - 1) //update so luong moi
-            }
-        }
-
-        function increaseQuantity(event,id) {
-            const input = $($(event.target).parent()).children("input")
-            let quantityCurrent = JSON.parse($(input).val())
-            $(input).val(quantityCurrent + 1)
-            updateQuantity(id, quantityCurrent + 1) //update so luong moi
-        }
-    </script>
+    <script src="~/Assets/js/Cart.js"></script>
 }
 
 @section styles{
     <link rel="stylesheet" href="/Assets/css/cart.css">
+    <link href="~/Assets/css/payment.css" rel="stylesheet" />
 }
+
 @section Menu{
     <!-- Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-start" id="sidebar">
@@ -198,7 +111,7 @@
     </div>
     <div class="cart-content pt-5">
         <div class="row g-1 align-items-stretch">
-            <div class="col-lg-8 col-12 h-100">
+            <div class="col-lg-8 col-12" style="background-color:#f9f9f9">
                 <div class="cart-content__left">
                     <div class="freeship-notify mb-5 d-inline-flex rounded-3 bg-white shadow-sm align-items-center p-3">
                         <img src="/Assets/img/free-delivery.svg" alt="">
@@ -248,10 +161,13 @@
                                         <span class="price" data="@(item.ProVariation.Product.Price * item.Quantity)">@(item.ProVariation.Product.Price * item.Quantity)</span>
                                     </td>
                                     <td class="actions">
-                                        <a class="cart-item__remove" onclick="deleteCartItem(event,@item.ProVariation.ProVariationID)" ></a>
+                                        <a class="cart-item__remove" onclick="deleteCartItem(event,@item.ProVariation.ProVariationID)"></a>
                                     </td>
                                 </tr>
                             }
+
+
+
                         </tbody>
                     </table>
                 </div>
@@ -267,8 +183,14 @@
                         <span>Tổng tiền thanh toán</span>
                         <span class="total-price" data=""></span>
                     </div>
-                    <button CLASS="btn-order">ĐẶT HÀNG</button>
-
+                    @if (Session["Customer"] != null)
+                    {
+                        <a href="/Cart/PaymentPage" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
+                    }
+                    else
+                    {
+                        <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
+                    }
                     <p class="my-4" style="font-size: 13px; color:#77757f">Áp dụng mã giảm giá, C-point tại bước tiếp theo</p>
                     <hr class="border">
                     <div>
@@ -280,200 +202,6 @@
 
         </div>
     </div>
-    <section class="related-products" style="background-color: #f9f9f9;padding-bottom: 70px;">
-        <div class="container-main">
-            <h3 class="pt-5 mb-4">Có thể bạn sẽ thích</h3>
-            <div class="product-related">
-                <div class="product">
-                    <div class="product-img">
-                        <a href="./product-detail.html">
-                            <img src="https://canifa.com/img/486/733/resize/2/l/2ls22s018-sy038-2-thumb.jpg" width="100%" alt="">
-                        </a>
-                        <div class="product-size-wrap">
-                            <div class="d-flex justify-content-center flex-wrap pt-3">
-                                <div class="product-size active">110</div>
-                                <div class="product-size">120</div>
-                                <div class="product-size">130</div>
-                                <div class="product-size">140</div>
-                                <div class="product-size">150</div>
-                                <div class="product-size">160</div>
-                            </div>
-                            <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                        </div>
-                    </div>
-                    <div class="product-color-list d-flex pt-3 pb-2">
-                        <div class="product-color active">
-                            <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sy038.png');"></span>
-                        </div>
-                    </div>
-                    <a href="./product-detail.html" class="product-name">
-                        Bộ mặc nhà nam
-                    </a>
-                    <div class="d-flex mt-1">
-                        <div class="curent-price me-3">249.000 đ</div>
-                        <div class="curent-old">329.000 đ</div>
-                    </div>
-                    <div class="product-like">
-                        <span>Yêu thích</span>
-                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                    </div>
-                </div>
-
-                <div class="product">
-                    <div class="product-img">
-                        <a href="#">
-                            <img src="https://canifa.com/img/486/733/resize/6/l/6ls22s010-sa026-1-thumb.jpg" width="100%" alt="">
-                        </a>
-                        <div class="product-size-wrap">
-                            <div class="d-flex justify-content-center flex-wrap pt-3">
-                                <div class="product-size active">110</div>
-                                <div class="product-size">120</div>
-                                <div class="product-size">130</div>
-                                <div class="product-size">140</div>
-                                <div class="product-size">150</div>
-                                <div class="product-size">160</div>
-                            </div>
-                            <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                        </div>
-                    </div>
-                    <div class="product-color-list d-flex pt-3 pb-2">
-                        <div class="product-color active" data="https://canifa.com/img/1000/1500/resize/6/l/6ls22s010-sa026-1-thumb.jpg">
-                            <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sa026.png');"></span>
-                        </div>
-                        <div class="product-color" data="https://canifa.com/img/1000/1500/resize/6/l/6ls22s010-sw001-1.jpg">
-                            <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sw001.png');"></span>
-                        </div>
-
-                    </div>
-                    <a href="" class="product-name">
-                        Bộ mặc nhà nam
-                    </a>
-                    <div class="d-flex mt-1">
-                        <div class="curent-price me-3">249.000 đ</div>
-                        <div class="curent-old">329.000 đ</div>
-                    </div>
-
-                    <div class="product-like">
-                        <span>Yêu thích</span>
-                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-img">
-                        <a href="#">
-                            <img src="https://canifa.com/img/486/733/resize/2/l/2ls22s017-sw001-2-thumb.jpg" width="100%" alt="">
-                        </a>
-                        <div class="product-size-wrap">
-                            <div class="d-flex justify-content-center flex-wrap pt-3">
-                                <div class="product-size active">110</div>
-                                <div class="product-size">120</div>
-                                <div class="product-size">130</div>
-                                <div class="product-size">140</div>
-                                <div class="product-size">150</div>
-                                <div class="product-size">160</div>
-                            </div>
-                            <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                        </div>
-                    </div>
-                    <div class="product-color-list d-flex pt-3 pb-2">
-                        <div class="product-color active">
-                            <span style="background-image: url('	https://media.canifa.com/attribute/swatch/images/sw001.png');"></span>
-                        </div>
-
-                    </div>
-                    <a href="" class="product-name">
-                        Bộ mặc nhà nam
-                    </a>
-                    <div class="d-flex mt-1">
-                        <div class="curent-price me-3">249.000 đ</div>
-                        <div class="curent-old">329.000 đ</div>
-                    </div>
-
-                    <div class="product-like">
-                        <span>Yêu thích</span>
-                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-img">
-                        <a href="#">
-                            <img src="/Assets/img/8ls22s005-sb128-1-thumb.jpg" width="100%" alt="">
-                        </a>
-                        <div class="product-size-wrap">
-                            <div class="d-flex justify-content-center flex-wrap pt-3">
-                                <div class="product-size active">110</div>
-                                <div class="product-size">120</div>
-                                <div class="product-size">130</div>
-                                <div class="product-size">140</div>
-                                <div class="product-size">150</div>
-                                <div class="product-size">160</div>
-                            </div>
-                            <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                        </div>
-                    </div>
-                    <div class="product-color-list d-flex pt-3 pb-2">
-                        <div class="product-color active">
-                            <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sb128.png');"></span>
-                        </div>
-                    </div>
-                    <a href="" class="product-name">
-                        Bộ mặc nhà nam
-                    </a>
-                    <div class="d-flex mt-1">
-                        <div class="curent-price me-3">249.000 đ</div>
-                        <div class="curent-old">329.000 đ</div>
-                    </div>
-
-                    <div class="product-like">
-                        <span>Yêu thích</span>
-                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-img">
-                        <a href="#">
-                            <img src="https://canifa.com/img/486/733/resize/2/t/2ts22w013-sy193-110-1.jpg" width="100%" alt="">
-                        </a>
-                        <div class="product-size-wrap">
-                            <div class="d-flex justify-content-center flex-wrap pt-3">
-                                <div class="product-size active">110</div>
-                                <div class="product-size">120</div>
-                                <div class="product-size">130</div>
-                                <div class="product-size">140</div>
-                                <div class="product-size">150</div>
-                                <div class="product-size">160</div>
-                            </div>
-                            <button class="product-btn-addCart bg-dark text-white d-inline-block p-2" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</button>
-                        </div>
-                    </div>
-                    <div class="product-color-list d-flex pt-3 pb-2">
-                        <div class="product-color active">
-                            <span style="background-image: url('https://media.canifa.com/attribute/swatch/images/sy193.png');"></span>
-                        </div>
-
-
-                    </div>
-                    <a href="" class="product-name">
-                        Product name
-                    </a>
-                    <div class="d-flex mt-1">
-                        <div class="curent-price me-3">249.000 đ</div>
-                        <div class="curent-old">329.000 đ</div>
-                    </div>
-
-                    <div class="product-like">
-                        <span>Yêu thích</span>
-                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 </main>
 
 

@@ -66,14 +66,61 @@
 
             </div>
             <div class="header-cart-wrap">
-                <div class="header-icon header-cart">
+                <div class="header-icon header-cart" type="button" id="miniCart" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="header-cart__quantity">3</span>
                 </div>
 
-                <div class="header-cart__inner cart-empty">
-                    <img src="/Assets/img/cart-empty.svg" alt="">
-                    <p class="px-5 pt-3 text-center">Chưa có sản phẩm trong giỏ hàng của bạn.</p>
-                    <button class="btn-close cart-close"></button>
+                <div class="header-cart__inner block-minicart dropdown-menu rounded-0 border-0" aria-labelledby="dropdownMenuButton1">
+                    <div class="empty-minicart__inner">
+                        <img src="/assets/img/cart-empty.svg" alt="">
+                        <p class="px-5 pt-3 text-center">chưa có sản phẩm trong giỏ hàng của bạn.</p>
+                        <button class="btn-close cart-close"></button>
+                    </div>
+                    <div class="haveItem-Minicart">
+                        <div class="block-minicart-heading w-100 fs-6">
+                            (<span></span>) sản phẩm trong giỏ hàng
+                        </div>
+                        <ol class="minicart-items w-100">
+                            <li class="minicart-item">
+                                <div class="minicart-item-info">
+                                    <div class="minicart-item-photo">
+                                        <div class="minicart-item-photo">
+                                            <a href="/vay-lien-be-gai-1ds22w012" class="router-link-exact-active router-link-active">
+                                                <img src="https://canifa.com/img/210/300/resize/1/d/1ds22w012-sp247-2-thumb.webp" alt="">
+                                            </a>
+                                            <div class="minicart-item-label">
+                                                -10%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="minicart-item-details">
+                                        <h3 class="minicart-item-name">
+                                            <a href="/vay-lien-be-gai-1ds22w012" class="router-link-exact-active router-link-active">Váy liền bé gái có hình in</a>
+                                        </h3>
+                                        <div class="minicart-item-options">
+                                            <div class="minicart-item-option"><span class="value">140</span></div>
+                                            <div class="minicart-item-option">
+                                                <span class="swatch-option" style="background-image: url(&quot;https://media.canifa.com/attribute/swatch/images/sp247.png&quot;);"></span>
+                                            </div>
+                                        </div>
+                                        <div class="minicart-item-action"><a class="minicart-item-remove" onclick="deleteMiniCart()"></a></div>
+                                        <div class="minicart-item-bottom">
+                                            <div class="minicart-item-price"><span class="price">224000</span></div>
+                                            <div>x1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                        <!---->
+                        <!---->
+                        <!---->
+                        <div class="minicart-actions w-100">
+                            <a href="/Cart/Index" class="action checkout text-center">
+                                Xem giỏ hàng
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,17 +262,6 @@
         </div>
     </div>
 
-    <!--toast add cart-->
-    <div class="toast toast-addCart position-fixed rounded-0" id="addedCart" style="top:30px; right:20px;z-index: 101;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="true" data-bs-delay="5000">
-        <div class="toast-header">
-            <a href="/Cart/Index" class="me-auto text-decoration-underline">Xem giỏ hàng</a>
-            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-        </div>
-        <div class="toast-body bg-white">
-            <p><i style="color:#63b1bc;" class="fa-solid fa-check"></i> Đã thêm sản phẩm vào giỏ hàng</p>
-        </div>
-    </div>
-
     <!--toast when like-->
     <div class="toast toast-like position-fixed rounded-0" style="top:30px; right:20px;z-index: 101;" data-bs-animation="true" data-bs-autohide="true" data-bs-delay="5000">
         <div class="toast-header py-3 border-none">
@@ -261,6 +297,7 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Assets/js/BaseHome.js"></script>
+    <script src="~/Assets/js/Cart/AddCartItem.js"></script>
     <script src="~/Assets/js/LoginAndRegis.js"></script>
     @RenderSection("scripts", required: false)
 </body>

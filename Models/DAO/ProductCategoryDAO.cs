@@ -22,8 +22,7 @@ namespace Models.DAO
         public List<ProductCat> getAll()
         {
             _dbContext.Configuration.LazyLoadingEnabled = false;
-            var ProductCats = _dbContext.ProductCats.Include(x => x.Category).AsNoTracking().ToList();
-            _dbContext.Configuration.LazyLoadingEnabled = true;
+            var ProductCats = _dbContext.ProductCats.Include(x => x.Category).ToList();
             return ProductCats;
         }
       

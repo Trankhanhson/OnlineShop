@@ -97,9 +97,9 @@ namespace Models
             return _dbContext.ProductVariations.Where(x=>x.ProId==ProId && x.ProColorID==ProColorId && x.ProSizeID==ProSizeId).FirstOrDefault();
         }
 
-        public bool CheckQuantity(int newQuantity,long variationId)
+        public bool CheckQuantity(long ProId, int ProColorId, int ProSizeId, int newQuantity)
         {
-            int? quantity = _dbContext.ProductVariations.Find(variationId).Quantity;
+            int? quantity = _dbContext.ProductVariations.Where(pv=>pv.ProId==ProId && pv.ProColorID == ProColorId && pv.ProSizeID == ProSizeId).SingleOrDefault().Quantity;
             return quantity >= newQuantity;
         }
 

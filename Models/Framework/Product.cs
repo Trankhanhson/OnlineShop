@@ -19,25 +19,28 @@ namespace Models.Framework
         {
             this.ProductImages = new HashSet<ProductImage>();
             this.ProductVariations = new HashSet<ProductVariation>();
+            this.DiscountDetails = new HashSet<DiscountDetail>();
         }
     
         public long ProId { get; set; }
         public int ProCatId { get; set; }
-        public Nullable<int> DiscountProductId { get; set; }
         public string ProName { get; set; }
         public string Material { get; set; }
         public string Description { get; set; }
-        public int Price { get; set; }
-        public int ImportPrice { get; set; }
+        public Nullable<int> Price { get; set; }
+        public Nullable<int> ImportPrice { get; set; }
         public string Slug { get; set; }
         public Nullable<bool> Status { get; set; }
-
         public string firstImage { get; set; }
-        public virtual DiscountProduct DiscountProduct { get; set; }
+        public int TotalQty { get; set; }
+        public decimal DiscountPrice { get; set; }
+        public int Percent { get; set; }
         public virtual ProductCat ProductCat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductVariation> ProductVariations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-﻿@model List<Project_3.Model.CartItem>
+﻿
 @{
     ViewBag.Title = "cart";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutCart.cshtml";
 }
 @section scripts{
-    <script src="~/Assets/js/Cart.js"></script>
+    <script src="~/Assets/js/Cart/UpdateCart.js"></script>
 }
 
 @section styles{
@@ -12,86 +12,6 @@
     <link href="~/Assets/css/payment.css" rel="stylesheet" />
 }
 
-@section Menu{
-    <!-- Offcanvas Sidebar -->
-    <div class="offcanvas offcanvas-start" id="sidebar">
-        <div class="offcanvas-header pt-4">
-            <a class="offcanvas-title header-brand" href="/Home/Index/">
-                <img src="/Assets/img/logo.svg" alt="" />
-            </a>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="mb-3">
-                <li class="header-item">
-                    <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Man/Index/">NAM</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Women/Index/">NỮ</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
-                </li>
-                <li class="header-item">
-                    <a class="header-link" href="/Outlet/Index/">OUTLET</a>
-                </li>
-            </ul>
-            <div class="sidebar-form-wrap ">
-                <form class="d-flex sidebar-form">
-                    <button class="search-btn">
-                        <span></span>
-                    </button>
-                    <input type="text"
-                           placeholder="Bạn tìm gì"
-                           id="input-sidebar-search"
-                           autocomplete="off" />
-                </form>
-                <div class="search-history">
-                    <div class="d-flex justify-content-between search-history__header">
-                        <p>Lịch sử tìm kiếm</p>
-                        <span style="cursor: pointer;">Xóa</span>
-                    </div>
-                    <div class="search-history-body pt-2">
-                        <span>áo polo</span>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Button to open the offcanvas sidebar -->
-    <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-    <ul class="header-list d-none d-xl-flex me-auto ms-5">
-        <li class="header-item">
-            <a class="header-link " href="/Home/Index/">TRANG CHỦ</a>
-        </li>
-        <li class="header-item">
-            <a class="header-link " href="/Man/Index/">NAM</a>
-        </li>
-        <li class="header-item">
-            <a class="header-link " href="/Women/Index/">NỮ</a>
-        </li>
-        <li class="header-item">
-            <a class="header-link " href="/Girl/Index/">BÉ GÁI</a>
-        </li>
-        <li class="header-item">
-            <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
-        </li>
-        <li class="header-item">
-            <a class="header-link" href="/Outlet/Index/">OUTLET</a>
-        </li>
-    </ul>
-}
 <main class="border-top">
     <div class="d-flex justify-content-between align-items-center w-50 mx-auto my-5">
         <div class="process-item active flex-grow-1 text-center">
@@ -118,7 +38,7 @@
                         <p class="mb-0 ms-2" style="font-size:14px">Bạn đủ điều kiện để nhận miễn phí vận chuyển</p>
                     </div>
                     <div class="fw-bold" style="font-size: 25px;">(<span style="font-size: 25px;" class="quantity-product"></span>) sản phẩm</div>
-                    <table class="mt-3 cart-list w-100">
+                    <table class="mt-3 cart-list w-100 table-cart">
                         <thead style="background-color: #333f48; color:white;">
                             <tr>
                                 <th class="col item">Sản phẩm</th>
@@ -129,45 +49,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr id="proVariation_@item.ProVariation.ProVariationID">
-                                    <td class="col item">
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <img class="img-item" src="~/Upload/Product/@item.ProVariation.Product.ProId/@item.Image" alt="">
-                                            </a>
-                                            <div style="width:100%" class="flex-grow-1">
-                                                <a href="" class="item-name">@item.ProVariation.Product.ProName</a>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="item-size">@item.ProVariation.ProductSize.NameSize</span>
-                                                    <span>&nbsp;/&nbsp;</span>
-                                                    <span class="item-color rounded-circle d-inline-block" style="width:14px; height:14px;background-image:url('/Upload/ColorImage/@item.ProVariation.ProColorID/@item.ProVariation.ProductColor.ImageColor') ;"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="col priceCartItem">
-                                        <span class="price" data="@item.ProVariation.Product.Price">@item.ProVariation.Product.Price</span>
-                                    </td>
-                                    <td class="col qty">
-                                        <div class="d-flex justify-content-start align-items-center quantity-wrap">
-                                            <span class="btn-minus" onclick="decreaseQunatity(event,@item.ProVariation.ProVariationID)"></span>
-                                            <input type="text" readonly="readonly" class="input-cart-qty" value="@item.Quantity">
-                                            <span class="btn-plus" onclick="increaseQuantity(event,@item.ProVariation.ProVariationID)"></span>
-                                        </div>
-                                    </td>
-                                    <td class="col subtotal">
-                                        <span class="price" data="@(item.ProVariation.Product.Price * item.Quantity)">@(item.ProVariation.Product.Price * item.Quantity)</span>
-                                    </td>
-                                    <td class="actions">
-                                        <a class="cart-item__remove" onclick="deleteCartItem(event,@item.ProVariation.ProVariationID)"></a>
-                                    </td>
-                                </tr>
-                            }
-
-
-
                         </tbody>
                     </table>
                 </div>
@@ -183,7 +64,7 @@
                         <span>Tổng tiền thanh toán</span>
                         <span class="total-price" data=""></span>
                     </div>
-                    @if (Session["Customer"] != null)
+                    @if (Request.Cookies["CustomerId"] != null)
                     {
                         <a href="/Cart/PaymentPage" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
                     }

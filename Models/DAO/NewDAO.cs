@@ -19,7 +19,6 @@ namespace Models.DAO
         public List<New> getAll()
         {
             _dbContext.Configuration.ProxyCreationEnabled = false;
-
             List<New> News = _dbContext.News.Include(x=>x.User).ToList();
             return News;
         }

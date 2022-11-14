@@ -38,6 +38,19 @@ namespace Project_3.Areas.Admin.Controllers
             },JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult getNameImg()
+        {
+            List<ProductCat> list = new ProductCategoryDAO().getAll();
+            var resultList = list.Select(pc => new ProductCat()
+            {
+                ProCatId = pc.ProCatId,
+                Name = pc.Name,
+                Image = pc.Image
+            });
+            var result = JsonConvert.SerializeObject(resultList);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getById(int id)
         {
             ProductCat productCat = new ProductCategoryDAO().getById(id);

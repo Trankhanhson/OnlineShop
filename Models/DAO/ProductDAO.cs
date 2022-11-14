@@ -54,6 +54,7 @@ namespace Models
             return list;
         }
 
+
         public List<Product> getAllDefault()
         {
             return _dbContext.Products.Include(pi=>pi.ProductImages).Include(pv=>pv.ProductVariations).ToList();

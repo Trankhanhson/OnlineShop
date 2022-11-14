@@ -17,18 +17,20 @@ namespace Project_3.Areas.Admin.Controllers
     public class ProductController : BaseController
     {
         // GET: Admin/Product
-        public ActionResult Index(string searchResult, int page = 1, int pageSize = 4)
+        public ActionResult Index(string searchResult, int page = 1, int pageSize = 5)
         {
             ProductDAO model = new ProductDAO();
             var list = model.getPage(searchResult, page, pageSize);
             ProductImagesDAO productImagesDAO = new ProductImagesDAO();
             foreach (var p in list)
             {
+                //Lấy ảnh để hiển thị
                 foreach (var pv in p.ProductVariations)
                 {
                     pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
                 }
             }
+
             ViewBag.searchResult = searchResult;
             return View(list);
         }
@@ -52,6 +54,31 @@ namespace Project_3.Areas.Admin.Controllers
             var jsonResult = Json(result, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
+        }
+
+        public JsonResult getProductOnly()
+        {
+            List<Product> products = new ProductDAO().getAll();
+            var listResult = products.Select(p => new Product()
+            {
+                ProId = p.ProId,
+                Price = p.Price,
+                ProName = p.ProName,
+                firstImage = p.ProductImages.First().Image,
+                TotalQty = CountTotalQuantity(p.ProductVariations.ToList())
+            }); ;
+            var result = JsonConvert.SerializeObject(listResult);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public int CountTotalQuantity(List<ProductVariation> list)
+        {
+            int total = 0;
+            foreach(var item in list)
+            {
+                total += item.Quantity.Value;
+            }
+            return total;
         }
 
         // GET: Admin/Product/Create

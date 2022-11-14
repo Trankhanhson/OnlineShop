@@ -13,7 +13,6 @@ namespace Project_3.Areas.Admin.Controllers
     public class ImportBillController : Controller
     {
         // GET: Admin/ImportBill
-        // GET: Admin/ImportBill
         public ActionResult Index()
         {
             return View();

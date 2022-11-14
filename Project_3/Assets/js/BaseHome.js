@@ -121,17 +121,6 @@ $(".search-history-body").each(function (index, value) {
 
 /**cart handle */
 
-$(".header-cart").click((e) => {
-    $(".header-cart__inner").css("display", "flex")
-    e.stopPropagation()
-})
-
-$("body").click((e) => {
-    $(".header-cart__inner").css("display", "none")
-})
-$(".cart-close").click((e) => {
-    $(".header-cart__inner").css("display", "none")
-})
 
 /**modal */
 /**click login */
@@ -266,21 +255,4 @@ parentAddActives.each((index, wrapItem) => {
 })
 
 
-/*ADD CART*/
-function addCart(input) {
-    let parent = $(input).parents(".product")
-    let proId = $(parent).data("proid")
-    let proSizeId = $($(parent).find(".product-size.active")).data("idsize")
-    let proColorId = $($(parent).find(".product-color.active")).data("idcolor")
-
-    $.ajax({
-        url: '/Cart/AddItem',
-        type: 'POST',
-        data: { ProId: proId, ProColorId: proColorId, ProSizeId: proSizeId },
-        dataType: 'json',
-        success: function (response) {
-        }
-
-    })
-}
 

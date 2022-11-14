@@ -141,16 +141,17 @@
     <Compile Include="Areas\Admin\Controllers\BaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ColorController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DiscountController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportBillController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductCatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SizeController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\validateantiforgerytokenAttribute.cs" />
-    <Compile Include="Areas\Admin\Data\ProductImageFile.cs" />
     <Compile Include="common\CommonConstants.cs" />
     <Compile Include="common\Encryptor.cs" />
     <Compile Include="common\MethodCommnon.cs" />
@@ -167,14 +168,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\CartItem.cs" />
+    <Compile Include="Model\OrderDetailDTO.cs" />
+    <Compile Include="Model\OrderDTO.cs" />
     <Compile Include="Model\RegisterCustomer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Admin\css\baseAdmin.css" />
+    <Content Include="Assets\Admin\css\Discount.css" />
+    <Content Include="Assets\Admin\css\DiscountProduct.css" />
     <Content Include="Assets\Admin\css\ImportBill.css" />
+    <Content Include="Assets\Admin\css\Order.css" />
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\DiscountAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\ImportBillAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngularjs.js" />
@@ -186,6 +193,7 @@
     <Content Include="Assets\Admin\FileAngularjs\Product\C_ProcatInProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatCreate.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatEdit.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Order.js" />
     <Content Include="Assets\Admin\FileAngularjs\UserAngular.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
@@ -211,6 +219,7 @@
     <Content Include="Assets\Admin\img\slides-2.jpg" />
     <Content Include="Assets\Admin\img\slides-3.jpg" />
     <Content Include="Assets\Admin\js\ColorColntroller.js" />
+    <Content Include="Assets\Admin\js\Discount.js" />
     <Content Include="Assets\Admin\js\ImportBill.js" />
     <Content Include="Assets\Admin\js\main.js" />
     <Content Include="Assets\Admin\js\product\Createproduct.js" />
@@ -2790,9 +2799,10 @@
     <Content Include="Assets\img\vnpay.svg" />
     <Content Include="Assets\img\youtube-icon.svg" />
     <Content Include="Assets\js\BaseHome.js" />
-    <Content Include="Assets\js\Cart.js" />
+    <Content Include="Assets\js\Cart\AddCartItem.js" />
+    <Content Include="Assets\js\Cart\UpdateCart.js" />
     <Content Include="Assets\js\LoginAndRegis.js" />
-    <Content Include="Assets\js\payment.js" />
+    <Content Include="Assets\js\Cart\payment.js" />
     <Content Include="Assets\js\product-detail.js" />
     <Content Include="Assets\js\subIndex.js" />
     <Content Include="Assets\js\UpdateInfoAccount.js" />
@@ -3925,6 +3935,12 @@
     <Content Include="Assets\Plugin\ckfinder\skins\bootstrap\assets\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Assets\Plugin\ckfinder\skins\bootstrap\assets\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Assets\Plugin\ckfinder\userfiles\.htaccess" />
+    <Content Include="Areas\Admin\Views\Order\WaitConfirm.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\WaitProcess.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Tranfering.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Success.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Canceled.cshtml" />
+    <Content Include="Areas\Admin\Views\Discount\Create.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
     <Content Include="Scripts\FileAPI.flash.swf" />
@@ -3972,9 +3988,11 @@
     <Content Include="Views\InfoCustomer\OrderHistory.cshtml" />
     <Content Include="Views\Cart\PaymentPage.cshtml" />
     <Content Include="Views\Cart\InfoBill.cshtml" />
+    <Content Include="Views\Shared\_LayoutCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\Base\" />
     <Folder Include="Upload\CatPro\" />
     <Folder Include="Upload\ColorImage\" />

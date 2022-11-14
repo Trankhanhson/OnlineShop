@@ -17,22 +17,16 @@ namespace Models.Framework
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DiscountProduct()
         {
-            this.Products = new HashSet<Product>();
+            this.DiscountDetails = new HashSet<DiscountDetail>();
         }
     
         public int DiscountProductId { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
-        public double Amount { get; set; }
-        public string TypeAmount { get; set; }
-        public Nullable<int> MiximumBuy { get; set; }
-        public int UsedCurrent { get; set; }
-        public Nullable<int> MaxUses { get; set; }
-        public Nullable<int> MaxUsesPerUser { get; set; }
         public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
     }
 }

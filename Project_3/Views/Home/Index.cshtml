@@ -136,7 +136,7 @@
                     <div class="product-slider">
                         @foreach (var item in Model)
                         {
-                            <div class="product" data-ProId="@item.ProId">
+                            <div class="product" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price"}'>
                                 <div class="product-img">
                                     <a href="/Home/Detail/@item.ProId">
                                         <img src="/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">
@@ -150,12 +150,15 @@
                                         </div>
                                         <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</a>
                                     </div>
+                                    @if (item.Percent != 0) { 
+                                        <span class="price-percent">-@item.Percent%</span>
+                                    }
                                 </div>
                                 <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
                                     @foreach (var color in item.ProductImages)
                                     {
                                         <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');"></span>
+                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
                                         </div>
                                     }
                                 </div>
@@ -163,8 +166,8 @@
                                     @item.ProName
                                 </a>
                                 <div class="d-flex mt-1">
-                                    <div class="curent-price price me-3">@item.Price</div>
-                                    <div class="curent-old price"></div>
+                                    <div class="curent-price price me-3">@item.DiscountPrice</div>
+                                    <div class="curent-old price" data="">@item.Price</div>
                                     
                                 </div>
                                 <div class="product-like">

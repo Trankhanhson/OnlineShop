@@ -9,8 +9,10 @@ namespace Project_3.Model
     [Serializable]
     public class CartItem
     {
-        public ProductVariation ProVariation { get; set; }    
+        public long ProId { get; set; }
+        public int ProSizeID { get; set; }
+        public int ProColorID { get; set; }
         public int Quantity { get; set; }
-        public string Image { get; set; }
+        public int Price { get; set; }
     }
 }

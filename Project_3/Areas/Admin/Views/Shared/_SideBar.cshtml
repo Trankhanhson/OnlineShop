@@ -42,22 +42,42 @@
                data-bs-target="#sell-nav"
                data-bs-toggle="collapse"
                href="#">
-                <i class="bi bi-journal-text"></i><span>Giao dịch</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-journal-text"></i><span>Đơn hàng</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="sell-nav"
                 class="nav-content collapse"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="forms-elements.html">
-                        <i class="bi bi-circle"></i><span>Đơn hàng</span>
+                    <a href="/Admin/Order/WaitConfirm">
+                        <i class="bi bi-circle"></i><span>Chờ xác nhận</span>
                     </a>
                 </li>
                 <li>
-                    <a href="forms-layouts.html">
-                        <i class="bi bi-circle"></i><span>Hóa đơn nhập</span>
+                    <a href="/Admin/Order/WaitProcess">
+                        <i class="bi bi-circle"></i><span>Chờ xử lý</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Order/Tranfering">
+                        <i class="bi bi-circle"></i><span>Đang vận chuyển</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Order/Success">
+                        <i class="bi bi-circle"></i><span>Thành công</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Order/Canceled">
+                        <i class="bi bi-circle"></i><span>Đã hủy</span>
                     </a>
                 </li>
             </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/Admin/ImportBill">
+                <i class="bi bi-person"></i><span>Nhập hàng</span>
+            </a>
         </li>
         <!-- End Forms Nav -->
 

@@ -19,6 +19,30 @@ namespace Project_3.Controllers
         {
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAllDefault();
+            DiscountDAO discountDAO = new DiscountDAO();
+            DiscountProduct d = discountDAO.lastDiscount();
+            if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
+            {
+                foreach (var p in list)
+                {
+                    //kiểm tra giảm có giảm giá không
+                    foreach (var dt in d.DiscountDetails)
+                    {
+                        if (dt.ProId == p.ProId)
+                        {
+                            if (dt.TypeAmount == "0") //giảm giá theo tiền
+                            {
+                                p.DiscountPrice = p.Price.Value - dt.Amount.Value;
+                            }
+                            else  //giảm giá theo %
+                            {
+                                p.Percent = dt.Amount.Value;
+                                p.DiscountPrice = Math.Round(p.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * p.Price.Value),0);
+                            }
+                        }
+                    }
+                }
+            }
             return View(list);
         }
 
@@ -110,6 +134,7 @@ namespace Project_3.Controllers
         {
             HttpCookie Cookie = new HttpCookie("CustomerId");
             Cookie.Expires = DateTime.Now.AddDays(-1d);
+            Response.Cookies.Add(Cookie);
             return RedirectToAction("Index");
         }
     }

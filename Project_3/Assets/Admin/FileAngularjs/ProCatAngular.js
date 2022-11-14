@@ -38,9 +38,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
         $scope.proCat = null
         $scope.proCat = { CatID: JSON.stringify($scope.firstCatId) }
     }
-
-    $scope.errorImage = false
-    //khi người dung nhấn lưu thêm mới danh mục
+    //khi người dung nhấn lưu thêm mới loại sản phẩm
     $scope.SaveAdd = function (closeOrNew) {
         if ($scope.createForm.$valid) {
             if ($scope.fileImage !== undefined) {
@@ -49,7 +47,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                     method: "POST",
                     url: "/Admin/ProductCat/Create",
                     datatype: 'Json',
-                    data: { proCat: $scope.proCat}
+                    data: { proCat: $scope.proCat }
                 }).then(function (res) {
                     if (res.data.check) //tạo mới thành công
                     {
@@ -69,11 +67,13 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
 
                         }
 
+                        $scope.errorImage = false
+
                         //nếu người dùng chỉ nhấn lưu
                         if (closeOrNew) {
                             $(".btn-close").trigger('click') //đóng modal thêm
                         }
-                        $('#createForm').trigger("reset");
+
                         //hiển thị thông báo thành công
                         $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
                         $("#successToast").toast("show")
@@ -88,7 +88,6 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                 $scope.errorImage = true
             }
         }
-
     }
 
     /** Sửa danh mục*/

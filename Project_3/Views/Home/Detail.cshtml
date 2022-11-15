@@ -8,25 +8,6 @@
 @section scripts{
     <script src="~/Assets/js/product-detail.js"></script>
     <script>
-        //add cart từ detail
-        function addCartFromDetail() {
-            let proId = $("main").attr("data-proId")
-            let proSizeId = $(".product-size.active").attr("data-idSize")
-            let proColorId = $(".product-color.active").attr("data-idColor")
-
-            $.ajax({
-                url: '/Cart/AddItem',
-                type: 'POST',
-                data: { ProId: proId, ProColorId: proColorId, ProSizeId: proSizeId },
-                dataType: 'json',
-                success: function (response) {
-                    $("#addedCart").toast("show")
-                }
-
-            })
-
-        }
-
         //color click
         let listColorOption = $(".detail-color")
         listColorOption.click((e) => {
@@ -151,7 +132,7 @@
     </ul>
 }
 
-<main data-proId="@Model.ProId">
+<main data='{"ProId":"@Model.ProId","ProName":"@Model.ProName","Price":"@Model.Price","DiscountPrice":"@Model.DiscountPrice","Percent":@Model.Percent}'>
     <div class="topbar text-center text-white">
         <div>Thêm vào giỏ  499.000 ₫ để  miễn phí vận chuyển</div>
         <div>ĐỔI HÀNG MIỄN PHÍ - Tại tất cả cửa hàng trong 30 ngày</div>
@@ -185,8 +166,16 @@
                 <div class="col-md-4" style="padding-left: 60px;">
                     <h4>@Model.ProName</h4>
                     <DIV class="d-flex fs-5 align-items-center mt-3">
-                        <div class="detail-current-price me-3 price">@Model.Price</div>
-                        <div class="detail-old-price text text-decoration-line-through price" style="font-size:18px;color:#fdaa63"></div>
+                        @if (Model.DiscountPrice != 0)
+                        {
+                            <div class="detail-current-price me-3 price">@Model.DiscountPrice</div>
+                            <div class="detail-old-price text text-decoration-line-through price" style="font-size:18px;color:#fdaa63">@Model.Price</div>
+                        }
+                        else
+                        {
+                            <div class="detail-current-price me-3 price">@Model.Price</div>
+
+                        }
                     </DIV>
                     <hr style="height: 1px;background-color:#adaaaa;margin: 30px 0;">
                     <div class="detail-list-color">
@@ -194,8 +183,8 @@
                         <div class="product-color-list d-flex mt-2 mb-3 wrapActiveToFirstChild">
                             @foreach (var item in Model.ProductImages)
                             {
-                                <div class="product-color detail-color addActiveItem" data-nameColor="@item.ProductColor.NameColor" data-idColor="@item.ProColorID" data-Images='{"MainImage":"/Upload/Product/@Model.ProId/@item.Image","Detail1":"/Upload/Product/@Model.ProId/@item.DetailImage1","Detail2":"/Upload/Product/@Model.ProId/@item.DetailImage2","Detail3":"/Upload/Product/@Model.ProId/@item.DetailImage3","Detail4":"/Upload/Product/@Model.ProId/@item.DetailImage4","Detail5":"/Upload/Product/@Model.ProId/@item.DetailImage5"}'>
-                                    <span data="" style="background-image: url('@item.ProductColor.ImageColor');pointer-events:none;"></span>
+                                <div class="product-color detail-color addActiveItem" data-srcColor="/Upload/ColorImage/@item.ProductColor.ProColorID/@item.ProductColor.ImageColor" data-nameColor="@item.ProductColor.NameColor" data-idColor="@item.ProColorID" data-Images='{"MainImage":"/Upload/Product/@Model.ProId/@item.Image","Detail1":"/Upload/Product/@Model.ProId/@item.DetailImage1","Detail2":"/Upload/Product/@Model.ProId/@item.DetailImage2","Detail3":"/Upload/Product/@Model.ProId/@item.DetailImage3","Detail4":"/Upload/Product/@Model.ProId/@item.DetailImage4","Detail5":"/Upload/Product/@Model.ProId/@item.DetailImage5"}'>
+                                    <span data="" style="background-image: url('/Upload/ColorImage/@item.ProductColor.ProColorID/@item.ProductColor.ImageColor');pointer-events:none;"></span>
                                 </div>
                             }
 
@@ -203,10 +192,18 @@
                     </div>
                     <div class="detail-list-size">
                         <p>Kích cỡ: <span class="size-choose">@Model.ProductVariations.First().ProductSize.NameSize</span></p>
-                        <div class="list-size mt-2 filter-sameValue wrapActiveToFirstChild">
+                        <div class="list-size mt-2 filter-sameValue">
                             @foreach (var item in Model.ProductVariations)
                             {
-                                <div class="product-size filter-value addActiveItem" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+                                if (item.Quantity > 0)
+                                {
+                                    <div class="product-size addActiveItem" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+                                }
+                                else
+                                {
+                                    <div class="product-size addActiveItem disabled-size" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+
+                                }
                             }
                         </div>
                     </div>
@@ -300,37 +297,59 @@
             <div class="product-related">
                 @foreach (var item in ViewBag.RelatedProduct)
                 {
-                    <div class="product" data-ProId="@item.ProId">
+                    <div class="product" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price","DiscountPrice":"@item.DiscountPrice","Percent":@item.Percent}'>
                         <div class="product-img">
-
                             <a href="/Home/Detail/@item.ProId">
-                                <img src = "/Upload/Product/@item.ProId/@item.firstImage" width="100%" alt="">
+                                <img src="/Upload/Product/@item.ProId/@item.firstImage" width="100%" alt="">
                             </a>
                             <div class="product-size-wrap">
-                                <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
+                                <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue">
                                     @foreach (var size in item.ProductVariations)
                                     {
-                                        <div class="product-size filter-value addActiveItem" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+                                        if (size.Quantity > 0)
+                                        {
+                                            <div class="product-size addActiveItem" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="product-size addActiveItem disabled-size" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+
+                                        }
                                     }
                                 </div>
-                                <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;">THÊM VÀO GIỎ HÀNG</a>
+                                <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
                             </div>
+                            @if (item.Percent != 0)
+                            {
+                                <span class="price-percent text-white">-@item.Percent%</span>
+                            }
                         </div>
                         <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
                             @foreach (var color in item.ProductImages)
                             {
                                 <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                    <span style="background-image: url('@color.ProductColor.ImageColor');"></span>
+                                    <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
                                 </div>
                             }
                         </div>
                         <a href="/Home/Detail/@item.ProId" class="product-name">
                             @item.ProName
                         </a>
-                        <div class="d-flex mt-1">
-                            <div class="curent-price price me-3">@item.Price</div>
-                            <div class="curent-old price">@item.PromotionPrice</div>
-                        </div>
+                        @if (item.DiscountPrice != 0)
+                        {
+                            <div class="d-flex mt-1">
+                                <div class="curent-price price me-3">@item.DiscountPrice</div>
+                                <div class="curent-old price" data="">@item.Price</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex mt-1">
+                                <div class="curent-price price me-3">@item.Price</div>
+
+                            </div>
+                        }
                         <div class="product-like">
                             <span>Yêu thích</span>
                             <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
@@ -338,6 +357,7 @@
                         </div>
                     </div>
                 }
+                
 
             </div>
         </div>

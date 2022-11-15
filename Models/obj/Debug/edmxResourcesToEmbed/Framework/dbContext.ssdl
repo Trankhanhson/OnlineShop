@@ -100,6 +100,7 @@
     <Property Name="ProVariationID" Type="bigint" Nullable="false" />
     <Property Name="OrdID" Type="bigint" Nullable="false" />
     <Property Name="Quantity" Type="int" />
+    <Property Name="DiscountPrice" Type="int" />
     <Property Name="Price" Type="int" />
   </EntityType>
   <EntityType Name="Product">

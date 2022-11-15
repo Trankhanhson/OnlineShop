@@ -141,3 +141,10 @@ tbody .col{
     padding: 0 3px !important;
 }
 
+.old-price {
+    display: block;
+    color: #fdaa63;
+    text-decoration: line-through;
+    margin-top: 12px;
+    font-weight: 400;
+}

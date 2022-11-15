@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Models;
 using Models.DAO;
 using Models.Framework;
+using Newtonsoft.Json;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -16,6 +18,18 @@ namespace Project_3.Areas.Admin.Controllers
             return View();
         }
 
+        public ActionResult getAllData()
+        {
+            List<DiscountProduct> list = new DiscountDAO().getAll().Select(d => new DiscountProduct()
+            {
+                DiscountProductId = d.DiscountProductId,
+                Name = d.Name,
+                StartDate = d.StartDate,
+                EndDate = d.EndDate
+            }).ToList();
+            var result = JsonConvert.SerializeObject(list);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         // GET: Admin/Discount/Create
         public ActionResult Create()
         {

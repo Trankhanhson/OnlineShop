@@ -70,8 +70,8 @@
     <NavigationProperty Name="ImportBillDetails" Relationship="Self.FK_ImportBillDetail_ProductVariation" FromRole="ProductVariation" ToRole="ImportBillDetail" />
     <NavigationProperty Name="ProductColor" Relationship="Self.FK_ProductVariation_ProductColor" FromRole="ProductVariation" ToRole="ProductColor" />
     <NavigationProperty Name="ProductSize" Relationship="Self.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
-    <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="ProductVariation" ToRole="OrderDetail" />
     <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
+    <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="ProductVariation" ToRole="OrderDetail" />
   </EntityType>
   <EntityType Name="sysdiagram">
     <Key>
@@ -241,15 +241,6 @@
       <End Role="Voucher" EntitySet="Vouchers" />
       <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
-    <EntitySet Name="OrderDetails" EntityType="ClothesShopModel.OrderDetail" />
-    <AssociationSet Name="FK_OrderDetail_Order" Association="ClothesShopModel.FK_OrderDetail_Order">
-      <End Role="Order" EntitySet="Orders" />
-      <End Role="OrderDetail" EntitySet="OrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_OrderDetail_ProductVariation" Association="ClothesShopModel.FK_OrderDetail_ProductVariation">
-      <End Role="ProductVariation" EntitySet="ProductVariations" />
-      <End Role="OrderDetail" EntitySet="OrderDetails" />
-    </AssociationSet>
     <EntitySet Name="DiscountProducts" EntityType="ClothesShopModel.DiscountProduct" />
     <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
     <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
@@ -272,6 +263,15 @@
     <AssociationSet Name="FK_DiscountDetail_Product" Association="ClothesShopModel.FK_DiscountDetail_Product">
       <End Role="Product" EntitySet="Products" />
       <End Role="DiscountDetail" EntitySet="DiscountDetails" />
+    </AssociationSet>
+    <EntitySet Name="OrderDetails" EntityType="ClothesShopModel.OrderDetail" />
+    <AssociationSet Name="FK_OrderDetail_Order" Association="ClothesShopModel.FK_OrderDetail_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderDetail_ProductVariation" Association="ClothesShopModel.FK_OrderDetail_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
@@ -433,42 +433,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="OrderDetail">
-    <Key>
-      <PropertyRef Name="ProVariationID" />
-      <PropertyRef Name="OrdID" />
-    </Key>
-    <Property Name="ProVariationID" Type="Int64" Nullable="false" />
-    <Property Name="OrdID" Type="Int64" Nullable="false" />
-    <Property Name="Quantity" Type="Int32" />
-    <Property Name="Price" Type="Int32" />
-    <NavigationProperty Name="Order" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
-    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="OrderDetail" ToRole="ProductVariation" />
-  </EntityType>
-  <Association Name="FK_OrderDetail_Order">
-    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="1" />
-    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Order">
-        <PropertyRef Name="OrdID" />
-      </Principal>
-      <Dependent Role="OrderDetail">
-        <PropertyRef Name="OrdID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_OrderDetail_ProductVariation">
-    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
-    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductVariation">
-        <PropertyRef Name="ProVariationID" />
-      </Principal>
-      <Dependent Role="OrderDetail">
-        <PropertyRef Name="ProVariationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="DiscountProduct">
     <Key>
       <PropertyRef Name="DiscountProductId" />
@@ -568,6 +532,43 @@
       </Principal>
       <Dependent Role="DiscountDetail">
         <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="ProVariationID" />
+      <PropertyRef Name="OrdID" />
+    </Key>
+    <Property Name="ProVariationID" Type="Int64" Nullable="false" />
+    <Property Name="OrdID" Type="Int64" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="DiscountPrice" Type="Int32" />
+    <Property Name="Price" Type="Int32" />
+    <NavigationProperty Name="Order" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
+    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="OrderDetail" ToRole="ProductVariation" />
+  </EntityType>
+  <Association Name="FK_OrderDetail_Order">
+    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrdID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrdID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderDetail_ProductVariation">
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
+    <End Type="ClothesShopModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="ProVariationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

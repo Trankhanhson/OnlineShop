@@ -226,7 +226,6 @@
     <Content Include="Assets\Admin\js\product\DeleteProduct.js" />
     <Content Include="Assets\Admin\js\product\EditProduct.js" />
     <Content Include="Assets\Admin\js\product\product.js" />
-    <Content Include="Assets\Admin\js\product\product2.js" />
     <Content Include="Assets\Admin\js\SizeController.js" />
     <Content Include="Assets\Admin\scss\Readme.txt" />
     <Content Include="Assets\Admin\vendor\apexcharts\apexcharts.min.js" />
@@ -2799,7 +2798,7 @@
     <Content Include="Assets\img\vnpay.svg" />
     <Content Include="Assets\img\youtube-icon.svg" />
     <Content Include="Assets\js\BaseHome.js" />
-    <Content Include="Assets\js\Cart\AddCartItem.js" />
+    <Content Include="Assets\js\Cart\AddCart.js" />
     <Content Include="Assets\js\Cart\UpdateCart.js" />
     <Content Include="Assets\js\LoginAndRegis.js" />
     <Content Include="Assets\js\Cart\payment.js" />
@@ -3941,6 +3940,7 @@
     <Content Include="Areas\Admin\Views\Order\Success.cshtml" />
     <Content Include="Areas\Admin\Views\Order\Canceled.cshtml" />
     <Content Include="Areas\Admin\Views\Discount\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Discount\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
     <Content Include="Scripts\FileAPI.flash.swf" />

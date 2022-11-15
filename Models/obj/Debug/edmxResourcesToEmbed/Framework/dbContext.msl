@@ -195,16 +195,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="OrderDetails">
-      <EntityTypeMapping TypeName="ClothesShopModel.OrderDetail">
-        <MappingFragment StoreEntitySet="OrderDetail">
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
-          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DiscountProducts">
       <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
         <MappingFragment StoreEntitySet="DiscountProduct">
@@ -240,6 +230,17 @@
           <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
           <ScalarProperty Name="ProId" ColumnName="ProId" />
           <ScalarProperty Name="DiscountDetailId" ColumnName="DiscountDetailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetails">
+      <EntityTypeMapping TypeName="ClothesShopModel.OrderDetail">
+        <MappingFragment StoreEntitySet="OrderDetail">
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
+          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

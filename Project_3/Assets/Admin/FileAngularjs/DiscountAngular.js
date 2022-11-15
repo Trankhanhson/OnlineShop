@@ -2,6 +2,14 @@
 
 var discountApp = angular.module("discountApp", ['angularUtils.directives.dirPagination']);
 
+discountApp.controller("discountController", function ($scope, $http) {
+    $http.get("/Admin/Discount/getAllData").then(function (res) {
+        $scope.discountList = JSON.parse(res.data)
+    }, function (error) {
+        alert("failed")
+    })
+})
+
 discountApp.controller("productController", function ($scope, $http) {
     /** Lấy danh sách loại sản phẩm*/
     $http.get("/Admin/Product/getProductOnly").then(function (res) {

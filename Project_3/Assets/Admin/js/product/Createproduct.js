@@ -48,6 +48,8 @@
             for (var i = 0; i < listColorId.length; i++) {
                 UploadImgToServer(listColorId[i], response.Proid)
             }
+
+            location.reload()
             $("#successToast .text-toast").text("Đã thêm sản phẩm thành công")
             $("#successToast").toast("show") //hiển thị thông báo thành công
         }

@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script>
+        /*hiển thị giá*/
+        function convertPrice(price) {
+            let tg = "";
+            let length = price.length;
+            let count = 0;
+            for (var i = length - 1; i >= 0; --i) {
+                if (count % 3 == 0 && count != 0) {
+                    tg = price[i] + '.' + tg;
+                }
+                else {
+                    tg = price[i] + tg;
+                }
+                count++;
+            }
+            return tg + "đ";
+        }
+    </script>
+    <script src="~/Scripts/dirPagination.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/DiscountAngular.js"></script>
+}
+<main id="main" class="main" ng-app="discountApp" ng-controller="discountController">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <div class="text-end">
+                            <a href="/Admin/Discount/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm chương trình khuyến mại</a>
+                        </div>
+                        <table class="table bg-white table-listProduct mt-3">
+                            <thead class="text-dark">
+                                <tr>
+                                    <th >Tên chương trình</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in discountList" class="row-product">
+                                    <td>{{item.Name}}</td>
+                                    <td class="col">
+                                        {{item.StartDate}} - {{item.EndDate}}
+                                    </td>
+                                    <td class="col">
+                                        <div class="form-check form-switch" onclick="ChangeStatus(event,item.DiscountProductId)">
+                                            <input class="form-check-input" type="checkbox" checked="{{item.Status}}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a class="btn-update" href="/Admin/Discount/Edit/{{item.DiscountProductId}}"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                        <a class="btn-delete" ng-click="deleteDiscount(item.DiscountProductId)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>

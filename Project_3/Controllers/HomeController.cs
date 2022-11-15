@@ -49,6 +49,26 @@ namespace Project_3.Controllers
         public ActionResult Detail(long id)
         {
             Product product = new ProductDAO().getById(id);
+            DiscountDAO discountDAO = new DiscountDAO();
+            DiscountProduct d = discountDAO.lastDiscount();
+            if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
+            {
+                foreach (var dt in d.DiscountDetails)
+                {
+                    if (dt.ProId == product.ProId)
+                    {
+                        if (dt.TypeAmount == "0") //giảm giá theo tiền
+                        {
+                            product.DiscountPrice = product.Price.Value - dt.Amount.Value;
+                        }
+                        else  //giảm giá theo %
+                        {
+                            product.Percent = dt.Amount.Value;
+                            product.DiscountPrice = Math.Round(product.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * product.Price.Value), 0);
+                        }
+                    }
+                }
+            }
 
             //lấy 10 sản phẩm cung loại
             ProductDAO dao = new ProductDAO();

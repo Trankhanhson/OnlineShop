@@ -50,6 +50,7 @@ function importBillController($scope, $http) {
                 data: { ImportBill: ImportBill, listProduct: listProduct, billDetails: billDetails }
             }).then(function (res) {
                 if (res.data) {
+                    location.reload()
                     //hiển thị thông báo thành công
                     $("#successToast .text-toast").text("Thêm hóa đơn nhập thành công")
                     $("#successToast").toast("show")

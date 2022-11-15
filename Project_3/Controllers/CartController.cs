@@ -43,6 +43,13 @@ namespace Project_3.Controllers
         public ActionResult InfoBill(long id)
         {
             Order order = new OrderDAO().getById(id);
+            int totalOriginPrice = 0;
+            foreach(var item in order.OrderDetails)
+            {
+                totalOriginPrice += (item.Price.Value * item.Quantity.Value);
+            }
+            ViewBag.TotalOriginPrice = totalOriginPrice;
+            ViewBag.TotalDiscount = totalOriginPrice - order.MoneyTotal;
             return View("InfoBill",order);
         }
 
@@ -63,6 +70,7 @@ namespace Project_3.Controllers
                     orderDetail.ProVariationID = productVariationDAO.getByForeignKey(item.ProId, item.ProColorID, item.ProSizeID).ProVariationID;
                     orderDetail.Price = item.Price;
                     orderDetail.Quantity = item.Quantity;
+                    orderDetail.DiscountPrice =item.DiscountPrice;
                     listOrderDetail.Add(orderDetail);
                 }
                 OrderDetailDAO orderDetailDAO = new OrderDetailDAO();

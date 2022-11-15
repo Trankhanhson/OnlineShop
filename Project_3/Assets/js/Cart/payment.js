@@ -119,7 +119,8 @@ function listCartItem() {
                 ProSizeID: list[i].proSizeId,
                 ProColorID: list[i].proColorId,
                 Quantity: list[i].Quantity,
-                Price: list[i].Price
+                Price: list[i].Price,
+                DiscountPrice: list[i].DiscountPrice
             }
             listResult.push(cartItem)
         }
@@ -137,16 +138,7 @@ function payment() {
     const address = $("#address").val()
     const PaymentType = "COD"
     const MoneyTotal = $(".total-price").attr("data")
-    if (city == NaN) {
-        alert("Bạn chưa chọn Tỉnh / Thành phố")
-    }
-    else if (district == NaN) {
-        alert("Bạn chưa chọn Quận / Huyện")
-    }
-    else if (ward == NaN) {
-        alert("Bạn chưa chọn Phường / Xã")
-    }
-    else if ($(".form-Payment").valid()) {
+    if ($(".form-Payment").valid()) {
         let order = {
             CusID: CusID,
             ReceivingPhone: Phone,

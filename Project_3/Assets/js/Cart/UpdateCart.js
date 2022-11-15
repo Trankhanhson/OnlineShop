@@ -21,7 +21,17 @@ function loadCart() {
         let list = JSON.parse(localStorage.getItem("Cart"))
         let string = ""
         for (let i = 0; i < list.length; i++) {
-            let subtotal = list[i].Price * list[i].Quantity
+            let subtotal = 0;
+            let disPlay = ""
+            if (list[i].DiscountPrice != 0) {
+                subtotal = list[i].DiscountPrice * list[i].Quantity
+                disPlay = `<span class="price" data="${list[i].DiscountPrice}">${convertPrice(list[i].DiscountPrice)}</span><span class="old-price">${convertPrice(list[i].Price)}</span>`
+            }
+            else {
+                subtotal = list[i].Price * list[i].Quantity
+                disPlay = `<span class="price" data="${list[i].Price}">${convertPrice(list[i].Price)}</span>`
+            }
+
             string += `<tr id="proVariation_${i}">
                                     <td class="col item">
                                         <div class="d-flex">
@@ -39,7 +49,8 @@ function loadCart() {
                                         </div>
                                     </td>
                                     <td class="col priceCartItem">
-                                        <span class="price" data="${list[i].Price}">${convertPrice(list[i].Price)}</span>
+                                       
+                                        ${disPlay}
                                     </td>
                                     <td class="col qty">
                                         <div class="d-flex justify-content-start align-items-center quantity-wrap">
@@ -59,7 +70,6 @@ function loadCart() {
 
         $(".table-cart tbody").html(string) //thêm các phần tử vào table
         $(".quantity-product").text(list.length) //hiển thị số lượng phần tử
-        loadMiniCart()
     }
     else {
         let btnOrder = $(".btn-order")
@@ -82,25 +92,40 @@ function deleteCartItem(event, index) {
         list.splice(index, 1)
         localStorage.setItem("Cart", JSON.stringify(list))    
     }
-    $(".quantity-product").text(list.length) //hiển thị số lượng phần tử
-    $(`#proVariation_${index}`).remove()
+    loadCart()
     updateTotalPrice()
 }
 
 function updateTotalPrice() {
-    let listSubTotal = $(".subtotal span")
-    let oriTotal = 0
-    listSubTotal.each((index, value) => {
-        oriTotal += JSON.parse($(value).attr("data"))
-    })
+    let originPrice = 0;
+    let totalPrice = 0
+    if (localStorage.getItem("Cart") != null) {
+        let list = JSON.parse(localStorage.getItem("Cart"))
+        for (let i = 0; i < list.length; i++) {
+            let Price = JSON.parse(list[i].Price)
+            let DiscountPrice = JSON.parse(list[i].DiscountPrice)
+            let Quantity = JSON.parse(list[i].Quantity)
+            originPrice += (Price * Quantity)
+            
+            if (DiscountPrice != 0) {
+                totalPrice += (DiscountPrice * Quantity)
+            }
+            else {
+                totalPrice += (Price * Quantity)
+            }
+        }
+    }
 
-    let textOriTotal = convertPrice(JSON.stringify(oriTotal))
+    let totaldisCountPrice = originPrice - totalPrice;
+    let textOriTotal = convertPrice(JSON.stringify(originPrice))
+    let textDiscountTotal = convertPrice(JSON.stringify(totaldisCountPrice))
+    let textTotalPrice = convertPrice(JSON.stringify(totalPrice))
     //update gia tri cho gia goc
     $(".original-price").text(textOriTotal)
+    $(".discount-total").text("-"+textDiscountTotal)
+    $(".total-price").text(textTotalPrice)
 
-    //update tong tien bill
-    $(".total-price").text(textOriTotal)
-    $(".total-price").attr("data", oriTotal)
+    $(".total-price").attr("data", totalPrice)
 }
 updateTotalPrice()
 
@@ -115,7 +140,14 @@ function decreaseQuantity(event, index) {
 
         //load lại subtotal
         const span = $($(`#proVariation_${index}`).find(".subtotal span"))
-        let newSubtotal = list[index].Quantity * list[index].Price
+        let newSubtotal = 0;
+        if (list[index].DiscountPrice != 0) {
+            newSubtotal = list[index].DiscountPrice * list[index].Quantity
+        }
+        else {
+            newSubtotal = list[index].Quantity * list[index].Price
+        }
+
         $(span).text(convertPrice(JSON.stringify(newSubtotal)))
         $(span).attr("data", newSubtotal)
         $(input).val(quantityCurrent - 1) //thay dổi ở thẻ input
@@ -147,7 +179,13 @@ function increaseQuantity(event, index) {
 
                 //load lại subtotal
                 const span = $($(`#proVariation_${index}`).find(".subtotal span"))
-                let newSubtotal = list[index].Quantity * list[index].Price
+                let newSubtotal = 0;
+                if (list[index].DiscountPrice != 0) {
+                    newSubtotal = list[index].DiscountPrice * list[index].Quantity
+                }
+                else {
+                    newSubtotal = list[index].Quantity * list[index].Price
+                }
 
                 $(span).text(convertPrice(JSON.stringify(newSubtotal)))
                 $(span).attr("data", newSubtotal)

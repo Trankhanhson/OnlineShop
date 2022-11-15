@@ -17,6 +17,7 @@ namespace Models.Framework
         public long ProVariationID { get; set; }
         public long OrdID { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> DiscountPrice { get; set; }
         public Nullable<int> Price { get; set; }
     
         public virtual Order Order { get; set; }

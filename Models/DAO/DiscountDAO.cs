@@ -30,9 +30,10 @@ namespace Models.DAO
             return a.DiscountProductId;
         }
 
-        public DiscountProduct lastDiscount()
+        public List<DiscountProduct> CheckDiscount()
         {
-            return db.DiscountProducts.OrderByDescending(d=>d.DiscountProductId).FirstOrDefault();
+            var now = DateTime.Now;
+            return db.DiscountProducts.OrderByDescending(d=>d.DiscountProductId).Where(d=>d.StartDate<=now && d.EndDate>=now).ToList();
         }
     }
 }

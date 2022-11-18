@@ -27,17 +27,28 @@ namespace Project_3.Areas.Admin.Controllers
 
         public JsonResult getAllData()
         {
-            List<Category> categories = new CategoryDAO().getAll();
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(categories, Formatting.Indented, jss);
+            List<Category> categories = new CategoryDAO().getAll().Select(c=>new Category()
+            {
+                CatID = c.CatID,
+                Name = c.Name,
+                type = c.type,
+                Status = c.Status
+            }).ToList();
+            var result = JsonConvert.SerializeObject(categories);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult getByType(string id)
         {
-            List<Category> categories = new CategoryDAO().getByType(id);
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(categories, Formatting.Indented, jss);
+            List<Category> categories = new CategoryDAO().getByType(id).Select(c => new Category()
+            {
+                CatID = c.CatID,
+                Name = c.Name,
+                type = c.type,
+                Status = c.Status,
+                ProductCats = c.ProductCats.Select(pc=>new ProductCat() { ProCatId=pc.ProCatId, Name = pc.Name}).ToList()
+            }).ToList();
+            var result = JsonConvert.SerializeObject(categories);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

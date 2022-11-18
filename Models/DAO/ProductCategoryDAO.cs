@@ -37,6 +37,7 @@ namespace Models.DAO
             _dbContext.Configuration.ProxyCreationEnabled = false;
             return _dbContext.ProductCats.Include(c=>c.Category).Where(c=>c.ProCatId==id).FirstOrDefault();
         }
+
         public ProductCat Insert(ProductCat ProductCat)
         {
             _dbContext.Configuration.ProxyCreationEnabled = false;

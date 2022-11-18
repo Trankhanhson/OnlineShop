@@ -2,6 +2,7 @@
 using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,13 +22,11 @@ namespace Project_3.Areas.Admin.Controllers
         {
             ProductDAO model = new ProductDAO();
             var list = model.getPage(searchResult, page, pageSize);
-            ProductImagesDAO productImagesDAO = new ProductImagesDAO();
             foreach (var p in list)
             {
-                //Lấy ảnh để hiển thị
-                foreach (var pv in p.ProductVariations)
+                foreach(var pv in p.ProductVariations)
                 {
-                    pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
+                    pv.DisplayImage = p.ProductImages.Where(pi => pi.ProID == pv.ProId && pi.ProColorID == pv.ProColorID).First().Image;
                 }
             }
 
@@ -37,15 +36,28 @@ namespace Project_3.Areas.Admin.Controllers
 
         public JsonResult getAllData()
         {
-            List<Product> products = new ProductDAO().getAll();
-            ProductImagesDAO productImagesDAO = new ProductImagesDAO();
-            foreach (var p in products)
+            List<Product> products = new ProductDAO().getAll().Select(p => new Product()
             {
-                foreach (var pv in p.ProductVariations)
+                ProId = p.ProId,
+                ProName = p.ProName,
+                ProCatId = p.ProCatId,
+                Price = p.Price,
+                ImportPrice = p.ImportPrice,
+                Status = p.Status,
+                ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId },
+                ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                 {
-                    pv.DisplayImage = productImagesDAO.getByKey(pv.ProId, pv.ProColorID).Image;
-                }
-            }
+                    ProId = pv.ProId,
+                    ProVariationID = pv.ProVariationID,
+                    ProColorID = pv.ProColorID,
+                    ProSizeID = pv.ProSizeID,
+                    ProductColor = new ProductColor() { NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
+                    ProductSize = new ProductSize() { NameSize = pv.ProductSize.NameSize },
+                    Quantity = pv.Quantity,
+                    DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
+                }).ToList()
+
+            }).ToList();
 
             //Convert to Json
             var result = JsonConvert.SerializeObject(products);

@@ -3975,7 +3975,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\SubMenu.cshtml" />
     <Content Include="Views\Man\Index.cshtml" />
     <Content Include="Views\Women\Index.cshtml" />
@@ -3989,6 +3988,7 @@
     <Content Include="Views\Cart\PaymentPage.cshtml" />
     <Content Include="Views\Cart\InfoBill.cshtml" />
     <Content Include="Views\Shared\_LayoutCart.cshtml" />
+    <Content Include="Views\Home\HomePage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

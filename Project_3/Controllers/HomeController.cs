@@ -14,35 +14,15 @@ using OnlineShop.Common;
 namespace Project_3.Controllers
 {
     public class HomeController : Controller
-    {
-        public ActionResult Index()
+    { 
+
+
+        public ActionResult HomePage()
         {
             ProductDAO productDAO = new ProductDAO();
-            List<Product> list = productDAO.getAllDefault();
+            List<Product> list = productDAO.getAll();
             DiscountDAO discountDAO = new DiscountDAO();
-            DiscountProduct d = discountDAO.lastDiscount();
-            if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
-            {
-                foreach (var p in list)
-                {
-                    //kiểm tra giảm có giảm giá không
-                    foreach (var dt in d.DiscountDetails)
-                    {
-                        if (dt.ProId == p.ProId)
-                        {
-                            if (dt.TypeAmount == "0") //giảm giá theo tiền
-                            {
-                                p.DiscountPrice = p.Price.Value - dt.Amount.Value;
-                            }
-                            else  //giảm giá theo %
-                            {
-                                p.Percent = dt.Amount.Value;
-                                p.DiscountPrice = Math.Round(p.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * p.Price.Value),0);
-                            }
-                        }
-                    }
-                }
-            }
+            List<DiscountProduct> discountProducts = discountDAO.CheckDiscount();
             return View(list);
         }
 
@@ -50,25 +30,25 @@ namespace Project_3.Controllers
         {
             Product product = new ProductDAO().getById(id);
             DiscountDAO discountDAO = new DiscountDAO();
-            DiscountProduct d = discountDAO.lastDiscount();
-            if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
-            {
-                foreach (var dt in d.DiscountDetails)
-                {
-                    if (dt.ProId == product.ProId)
-                    {
-                        if (dt.TypeAmount == "0") //giảm giá theo tiền
-                        {
-                            product.DiscountPrice = product.Price.Value - dt.Amount.Value;
-                        }
-                        else  //giảm giá theo %
-                        {
-                            product.Percent = dt.Amount.Value;
-                            product.DiscountPrice = Math.Round(product.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * product.Price.Value), 0);
-                        }
-                    }
-                }
-            }
+            List<DiscountProduct> list = discountDAO.CheckDiscount();
+            //if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
+            //{
+            //    foreach (var dt in d.DiscountDetails)
+            //    {
+            //        if (dt.ProId == product.ProId)
+            //        {
+            //            if (dt.TypeAmount == "0") //giảm giá theo tiền
+            //            {
+            //                product.DiscountPrice = product.Price.Value - dt.Amount.Value;
+            //            }
+            //            else  //giảm giá theo %
+            //            {
+            //                product.Percent = dt.Amount.Value;
+            //                product.DiscountPrice = Math.Round(product.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * product.Price.Value), 0);
+            //            }
+            //        }
+            //    }
+            //}
 
             //lấy 10 sản phẩm cung loại
             ProductDAO dao = new ProductDAO();

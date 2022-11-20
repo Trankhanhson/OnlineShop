@@ -153,8 +153,10 @@
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\validateantiforgerytokenAttribute.cs" />
     <Compile Include="common\CommonConstants.cs" />
+    <Compile Include="common\ConvertSearchText.cs" />
     <Compile Include="common\Encryptor.cs" />
     <Compile Include="common\MethodCommnon.cs" />
+    <Compile Include="common\Paggination.cs" />
     <Compile Include="common\UserLogin.cs" />
     <Compile Include="Controllers\BoyController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Model\CartItem.cs" />
     <Compile Include="Model\OrderDetailDTO.cs" />
     <Compile Include="Model\OrderDTO.cs" />
+    <Compile Include="Model\PagedData.cs" />
     <Compile Include="Model\RegisterCustomer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -182,18 +185,19 @@
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\DiscountAngular.js" />
-    <Content Include="Assets\Admin\FileAngularjs\ImportBillAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\ImportBill\CreateImportBill.js" />
+    <Content Include="Assets\Admin\FileAngularjs\ImportBill\ImportBillHome.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngularjs.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\EditNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\IndexNewAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\OrderAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\ProCatAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Color.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Size.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\C_ProcatInProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatCreate.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatEdit.js" />
-    <Content Include="Assets\Admin\FileAngularjs\Order.js" />
     <Content Include="Assets\Admin\FileAngularjs\UserAngular.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
@@ -3757,6 +3761,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -3941,8 +3947,11 @@
     <Content Include="Areas\Admin\Views\Order\Canceled.cshtml" />
     <Content Include="Areas\Admin\Views\Discount\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Discount\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ImportBill\Index.cshtml" />
+    <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
+    <Content Include="Scripts\dirPagination.tpl.html" />
     <Content Include="Scripts\FileAPI.flash.swf" />
     <Content Include="Scripts\FileAPI.js" />
     <Content Include="Scripts\FileAPI.min.js" />
@@ -3999,7 +4008,6 @@
     <Folder Include="Upload\NewCkFinder\" />
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
-    <Folder Include="Views\CartCheck\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

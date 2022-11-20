@@ -21,9 +21,7 @@ namespace Models
 
         public List<Product> getAll()
         {
-            List<Product> list = _dbContext.Products.Include(pv => pv.ProductVariations.Select(pc => pc.ProductColor))
-                .Include(pv => pv.ProductVariations.Select(ps => ps.ProductSize))
-                .Include(pi => pi.ProductImages).Include(pc => pc.ProductCat).ToList();
+            List<Product> list = _dbContext.Products.ToList();
             return list;
         }
 
@@ -77,6 +75,7 @@ namespace Models
                 p.Price = product.Price;
                 p.ImportPrice = product.ImportPrice;
             }
+  
             _dbContext.SaveChanges();
         }
 

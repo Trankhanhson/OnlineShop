@@ -27,6 +27,7 @@ namespace Models
             {
                 ProductVariation v = _dbContext.ProductVariations.Find(detail.ProVariationID);
                 v.Quantity += detail.Quantity;
+                
             }
             _dbContext.SaveChanges();
         }
@@ -97,19 +98,12 @@ namespace Models
             return _dbContext.ProductVariations.Where(x=>x.ProId==ProId && x.ProColorID==ProColorId && x.ProSizeID==ProSizeId).FirstOrDefault();
         }
 
-        public bool CheckQuantity(long ProId, int ProColorId, int ProSizeId, int newQuantity)
+        public void editOrdered(List<OrderDetail> listOrderDetail)
         {
-            int? quantity = _dbContext.ProductVariations.Where(pv=>pv.ProId==ProId && pv.ProColorID == ProColorId && pv.ProSizeID == ProSizeId).SingleOrDefault().Quantity;
-            return quantity >= newQuantity;
-        }
-
-        public void editQuantity(List<OrderDetail> listOrderDetail)
-        {
-            var listVariation = _dbContext.ProductVariations.ToList();
             foreach (var item in listOrderDetail)
             {
                 ProductVariation v = _dbContext.ProductVariations.Find(item.ProVariationID);
-                v.Quantity -= item.Quantity;
+                v.Ordered += item.Quantity;
             }
             _dbContext.SaveChanges();
         }

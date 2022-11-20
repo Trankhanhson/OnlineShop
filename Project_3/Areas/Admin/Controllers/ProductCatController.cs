@@ -1,6 +1,7 @@
 ﻿using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Xml.Linq;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -23,17 +25,31 @@ namespace Project_3.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult getAllData()
+        public JsonResult getPagedData(string searchText,int pageNumber = 1, int pageSize = 5)
         {
-            List<ProductCat> list = new ProductCategoryDAO().getAll();
+            List<ProductCat> list = new ProductCategoryDAO().getAll().Select(pc=>new ProductCat()
+            {
+                CatID = pc.CatID,
+                ProCatId = pc.ProCatId,
+                Image = pc.Image,
+                Name = pc.Name,
+                Category = new Category() { Name= pc.Category.Name,type = pc.Category.type},
+                Status = pc.Status,
+                Slug = pc.Slug
+            }).ToList();
 
-            //loại bỏ các phần tử bị lặp và tuần tự hóa thành json
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(list, Formatting.Indented, jss);
+            if (searchText.Trim() != "")
+            {
+                list = list.Where(pc => pc.Slug.Contains(MethodCommnon.ToUrlSlug(searchText.ToLower()))).ToList();
+            }
+
+            var pagedData = Paggination.PagedResult(list,pageNumber,pageSize);
+            
+            var result = JsonConvert.SerializeObject(pagedData);
             var firstCatId = new CategoryDAO().getAll().First().CatID;
             return Json(new
             {
-                result = result,
+                pageData = result,
                 firstCatId = firstCatId
             },JsonRequestBehavior.AllowGet);
         }

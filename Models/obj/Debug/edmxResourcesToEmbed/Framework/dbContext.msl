@@ -52,18 +52,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ProductVariations">
-      <EntityTypeMapping TypeName="ClothesShopModel.ProductVariation">
-        <MappingFragment StoreEntitySet="ProductVariation">
-          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
-          <ScalarProperty Name="ProId" ColumnName="ProId" />
-          <ScalarProperty Name="ProSizeID" ColumnName="ProSizeID" />
-          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
       <EntityTypeMapping TypeName="ClothesShopModel.sysdiagram">
         <MappingFragment StoreEntitySet="sysdiagrams">
@@ -195,20 +183,10 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DiscountProducts">
-      <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
-        <MappingFragment StoreEntitySet="DiscountProduct">
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Products">
       <EntityTypeMapping TypeName="ClothesShopModel.Product">
         <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="Slug" ColumnName="Slug" />
           <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
@@ -241,6 +219,30 @@
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="OrdID" ColumnName="OrdID" />
           <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductVariations">
+      <EntityTypeMapping TypeName="ClothesShopModel.ProductVariation">
+        <MappingFragment StoreEntitySet="ProductVariation">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Ordered" ColumnName="Ordered" />
+          <ScalarProperty Name="ProColorID" ColumnName="ProColorID" />
+          <ScalarProperty Name="ProSizeID" ColumnName="ProSizeID" />
+          <ScalarProperty Name="ProId" ColumnName="ProId" />
+          <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscountProducts">
+      <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
+        <MappingFragment StoreEntitySet="DiscountProduct">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

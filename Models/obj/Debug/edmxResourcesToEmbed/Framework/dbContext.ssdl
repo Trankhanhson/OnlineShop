@@ -41,7 +41,7 @@
     <Property Name="Name" Type="nvarchar" MaxLength="100" />
     <Property Name="StartDate" Type="datetime" />
     <Property Name="EndDate" Type="datetime" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="bit" />
   </EntityType>
   <EntityType Name="ImportBill">
     <Key>
@@ -116,6 +116,7 @@
     <Property Name="ImportPrice" Type="int" />
     <Property Name="Slug" Type="varchar" MaxLength="300" />
     <Property Name="Status" Type="bit" />
+    <Property Name="ImportDate" Type="datetime" />
   </EntityType>
   <EntityType Name="ProductCat">
     <Key>
@@ -165,6 +166,7 @@
     <Property Name="ProId" Type="bigint" />
     <Property Name="ProSizeID" Type="bigint" />
     <Property Name="ProColorID" Type="bigint" />
+    <Property Name="Ordered" Type="int" />
     <Property Name="Quantity" Type="int" />
     <Property Name="Status" Type="bit" />
   </EntityType>

@@ -10,16 +10,12 @@
         <EntityTypeShape EntityType="ClothesShopModel.ProductColor" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductImage" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductSize" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClothesShopModel.ProductVariation" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.User" Width="1.5" PointX="3.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.Slide" Width="1.5" PointX="10.75" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBill_User1" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ImportBill" ManuallyRouted="false" />
-        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductImage_ProductColor" ManuallyRouted="false" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" ManuallyRouted="false" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" ManuallyRouted="false" />
         <EntityTypeShape EntityType="ClothesShopModel.Category" Width="1.5" PointX="8.75" PointY="8" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductCat" Width="1.5" PointX="11" PointY="7.75" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductCat_Category" />
@@ -32,17 +28,21 @@
         <AssociationConnector Association="ClothesShopModel.FK_Order_Customer" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_StatusOrder" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_Voucher" />
-        <EntityTypeShape EntityType="ClothesShopModel.DiscountProduct" Width="1.5" PointX="13.25" PointY="17" />
         <EntityTypeShape EntityType="ClothesShopModel.Product" Width="1.5" PointX="13.25" PointY="7.625" />
         <AssociationConnector Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductImage_Product" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_Product" />
         <EntityTypeShape EntityType="ClothesShopModel.DiscountDetail" Width="1.5" PointX="18.5" PointY="11.875" />
-        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct" />
         <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_Product" />
         <EntityTypeShape EntityType="ClothesShopModel.OrderDetail" Width="1.5" PointX="17.875" PointY="7.875" />
         <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_Order" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductVariation" Width="1.5" PointX="15.5" PointY="5.375" />
+        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" />
         <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_ProductVariation" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" />
+        <EntityTypeShape EntityType="ClothesShopModel.DiscountProduct" Width="1.5" PointX="6.375" PointY="0.875" />
+        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct" />
         </Diagram>
       <Diagram DiagramId="b3a46f2332c64c989370a0f902c91d0a" Name="Diagram2" >
       </Diagram>

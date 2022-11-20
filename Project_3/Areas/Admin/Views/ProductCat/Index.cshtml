@@ -14,7 +14,7 @@
                     <div class="card-body pt-4">
                         <div class="text-end mb-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <input type="text" class="input-searchView me-3" ng-model="search.Name" placeholder="Tìm kiếm theo tên" />
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="SearchProcat($event)" placeholder="Tìm kiếm theo tên" />
                                 <select ng-model="pageSize" class="limitShow">
                                     <option ng-click="getPageSize('5')" value="5">5</option>
                                     <option ng-click="getPageSize('10')" value="10">10</option>
@@ -29,16 +29,14 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Hình ảnh</th>
-                                    <th ng-click="SortData('Name')">
+                                    <th>
                                         Tên loại sản phẩm
-                                        <i ng-class="getSortClass('Name')"></i>
                                     </th>
                                     <th >
                                         Danh mục cha
                                     </th>
-                                    <th ng-click="SortData('Status')">
+                                    <th>
                                         Trạng thái
-                                        <i ng-class="getSortClass('Status')"></i>
                                     </th>
                                     <th>
                                         Tùy chỉnh
@@ -46,7 +44,7 @@
                                 </tr>
                             </thead>
                             <tbody class="category-wrap">
-                                <tr dir-paginate="pc in ProCatList | itemsPerPage: pageSize | orderBy: sortColumn : reverse | filter: search">
+                                <tr dir-paginate="pc in ProCatList | itemsPerPage: pageSize | orderBy: sortColumn : reverse" total-items="totalCount">
                                     <td>{{$index}}</td>
                                     <td class="text-center"><img src="~/Upload/CatPro/{{pc.ProCatId}}/{{pc.Image}}" alt="" style="width: 50px;height:50px;" /></td>
                                     <td>
@@ -67,7 +65,13 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <dir-pagination-controls></dir-pagination-controls>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="GetPageProCat(newPageNumber)"></dir-pagination-controls>
+                        </div>
+
                     </div>
                 </div>
             </div>

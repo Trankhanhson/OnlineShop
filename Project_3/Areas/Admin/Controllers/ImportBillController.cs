@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static System.Data.Entity.Infrastructure.Design.Executor;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -20,10 +21,14 @@ namespace Project_3.Areas.Admin.Controllers
 
         public JsonResult getAllData()
         {
-            List<ImportBill> importBills = new ImportBillDAO().getAll();
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(importBills, Formatting.Indented, jss);
-
+            List<ImportBill> importBills = new ImportBillDAO().getAll().Select(i=>new ImportBill()
+            {
+                ImpId = i.ImpId,
+                User = new User() { UserID=i.User.UserID, Name = i.User.Name},
+                ImpDate = i.ImpDate,
+                MoneyTotal = i.MoneyTotal
+            }).ToList();
+            var result = JsonConvert.SerializeObject(importBills);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

@@ -18,7 +18,8 @@ namespace Models.DAO
         }
         public List<ImportBill> getAll()
         {
-            return _dbContext.ImportBills.Include(x=>x.ImportBillDetails).ToList();
+            _dbContext.Configuration.LazyLoadingEnabled = false;
+            return _dbContext.ImportBills.Include(i => i.User).ToList();
         }
         public ImportBill Insert(ImportBill im)
         {

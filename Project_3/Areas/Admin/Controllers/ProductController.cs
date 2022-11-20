@@ -78,7 +78,7 @@ namespace Project_3.Areas.Admin.Controllers
                 ProName = p.ProName,
                 firstImage = p.ProductImages.First().Image,
                 TotalQty = CountTotalQuantity(p.ProductVariations.ToList())
-            }); ;
+            });
             var result = JsonConvert.SerializeObject(listResult);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -127,6 +127,7 @@ namespace Project_3.Areas.Admin.Controllers
             foreach (ProductVariation variation in listVariation)
             {
                 variation.ProId = proId;
+                variation.Ordered = 0;
             }
             ProductVariationDAO productVariationDAO = new ProductVariationDAO();
             productVariationDAO.Insert(listVariation);

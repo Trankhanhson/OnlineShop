@@ -25,15 +25,16 @@ namespace Models.Framework
         public Nullable<long> ProId { get; set; }
         public Nullable<long> ProSizeID { get; set; }
         public Nullable<long> ProColorID { get; set; }
+        public Nullable<int> Ordered { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<bool> Status { get; set; }
         public string DisplayImage { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportBillDetail> ImportBillDetails { get; set; }
-        public virtual ProductColor ProductColor { get; set; }
-        public virtual ProductSize ProductSize { get; set; }
-        public virtual Product Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual ProductColor ProductColor { get; set; }
+        public virtual ProductSize ProductSize { get; set; }
     }
 }

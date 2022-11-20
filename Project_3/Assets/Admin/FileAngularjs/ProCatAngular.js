@@ -1,14 +1,31 @@
 ﻿var proCatApp = angular.module("ProCatApp", ['ngFileUpload', 'angularUtils.directives.dirPagination']);
 
 proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
+    $scope.maxSize = 3;
+    $scope.totalCount = 0;
+    $scope.searchText = ""
+    $scope.pageSize = "5"
 
-    /** Lấy danh sách loại sản phẩm*/
-    $http.get("/Admin/ProductCat/getAllData").then(function (res) {
-        $scope.ProCatList = JSON.parse(res.data.result)
-        $scope.firstCatId = res.data.firstCatId
-    }, function (error) {
-        alert("failed")
-    })
+    $scope.GetPageProCat = function (newPage) {
+        $scope.pageNumber = newPage
+        /** Lấy danh sách loại sản phẩm*/
+        $http.get("/Admin/ProductCat/getPagedData",
+            { params: { searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize } }).then(function (res) {
+                let pageData = JSON.parse(res.data.pageData)
+                $scope.ProCatList = pageData.Data
+                $scope.totalCount = pageData.TotalCount
+                $scope.firstCatId = res.data.firstCatId
+            }, function (error) {
+                alert("failed")
+            })
+    }
+
+    $scope.GetPageProCat()
+
+    $scope.SearchProcat = function (event) {
+        $scope.GetPageProCat(1)
+    }
+
 
     //lưu file người dùng upload
     $scope.SelectImage = function (file) {
@@ -178,31 +195,8 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
         })
     }
 
-
-    //sắp xếp
-    $scope.sortColumn = 'Name'
-    $scope.reverse = 'false'
-    $scope.SortData = function (column) {
-        if ($scope.sortColumn == column) {
-            $scope.reverse = !$scope.reverse
-        }
-        else {
-            $scope.reverse = false //sort increase
-        }
-        $scope.sortColumn = column
-    }
-    $scope.getSortClass = function (column) {
-        //khi reverse thay doi thi nd-class dc kich hoat
-        if ($scope.sortColumn == column) {
-            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
-        }
-        return ''
-    }
-
     //paging
-    $scope.pageSize = "5"
     $scope.getPageSize = function (pageSize) {
         $scope.pageSize = pageSize
     }
-
 });

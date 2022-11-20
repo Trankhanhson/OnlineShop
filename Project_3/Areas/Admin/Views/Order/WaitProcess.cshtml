@@ -6,7 +6,7 @@
 
 @section scripts{
 <script src="~/Scripts/dirPagination.js"></script>
-<script src="~/Assets/Admin/FileAngularjs/Order.js"></script>
+<script src="~/Assets/Admin/FileAngularjs/OrderAngular.js"></script>
 }
 
 @section styles{
@@ -30,7 +30,7 @@
                                 </select>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover table-bordered pt-4" id="dataTable">
+                        <table class="table table-hover table-bordered pt-4" id="dataTable">
                             <thead class="table-primary">
                                 <tr>
                                     <th>Mã</th>
@@ -55,8 +55,10 @@
                                         {{o.OrderDate}}
                                     </td>
                                     <td>
-                                        <a href="ChangeStatus/{{o.OrdID}}" class="btn-tool" style=" background: #4bac4d;"><i class="fa-solid fa-check"></i></a>
+                                        <a ng-click="ChangeStatus($index,o)" class="btn-tool" style=" background: #4bac4d;"><i class="fa-solid fa-check"></i></a>
                                         <a class=" btn-tool bg-primary" ng-click="showDetail(o.OrdID)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
+                                        <a class="btn-delete btn-tool" ng-click="cancel($index,o)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+
                                     </td>
                                 </tr>
                             </tbody>

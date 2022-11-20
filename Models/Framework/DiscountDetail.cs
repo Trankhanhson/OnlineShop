@@ -21,7 +21,7 @@ namespace Models.Framework
         public string TypeAmount { get; set; }
         public Nullable<int> MaxQuantityPerUser { get; set; }
     
-        public virtual DiscountProduct DiscountProduct { get; set; }
         public virtual Product Product { get; set; }
+        public virtual DiscountProduct DiscountProduct { get; set; }
     }
 }

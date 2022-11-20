@@ -22,7 +22,6 @@ namespace Project_3.Controllers
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAll();
             DiscountDAO discountDAO = new DiscountDAO();
-            List<DiscountProduct> discountProducts = discountDAO.CheckDiscount();
             return View(list);
         }
 

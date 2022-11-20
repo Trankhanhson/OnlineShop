@@ -22,8 +22,16 @@ namespace Project_3.Controllers
         [HttpPost]
         public JsonResult CheckQuantity(long ProId, int ProColorId, int ProSizeId, int newQuantity)
         {
-            bool checkQuantity = new ProductVariationDAO().CheckQuantity(ProId, ProColorId, ProSizeId, newQuantity);
-            return Json(checkQuantity);
+            ProductVariation pv = new ProductVariationDAO().getByForeignKey(ProId, ProColorId, ProSizeId);
+            if ((pv.Quantity - pv.Ordered) >= newQuantity)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
+            
         }
 
         public ActionResult PaymentPage()
@@ -77,7 +85,7 @@ namespace Project_3.Controllers
                 orderDetailDAO.Insert(listOrderDetail);
 
 
-                productVariationDAO.editQuantity(listOrderDetail);
+                productVariationDAO.editOrdered(listOrderDetail);
                 return Json(o.OrdID);
             }
             catch

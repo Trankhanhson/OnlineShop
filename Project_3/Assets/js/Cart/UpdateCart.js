@@ -153,7 +153,6 @@ function decreaseQuantity(event, index) {
         $(input).val(quantityCurrent - 1) //thay dổi ở thẻ input
 
         updateTotalPrice()
-        loadMiniCart()
     }
 
 
@@ -192,7 +191,6 @@ function increaseQuantity(event, index) {
                 $(input).val(newQuantity) //thay dổi ở thẻ input
 
                 updateTotalPrice()
-                loadMiniCart()
             }
             else {
                 $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")

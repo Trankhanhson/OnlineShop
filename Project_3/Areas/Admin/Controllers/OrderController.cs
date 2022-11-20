@@ -100,26 +100,38 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult ChangeStatus(long id)
         {
             OrderDAO dao = new OrderDAO();
-            int statusId = dao.ChangeStatus(id);
-            if(statusId == 1)
+            Order o = dao.ChangeStatus(id);
+            string message = "";
+            if(o.StatusOrderId == 2)
             {
-                return RedirectToAction("WaitConfirm", "Order");
+                message = "Chờ xử lý";
             } 
-            else if(statusId == 2)
+            else if(o.StatusOrderId == 3)
             {
-                return RedirectToAction("WaitProcess", "Order");
-
-            }
-            else if(statusId==3)
-            {
-                return RedirectToAction("Tranfering", "Order");
-
+                message = "Đang vận chuyển";
             }
             else
             {
-                return RedirectToAction("Success", "Order");
+                message = "Thành công";
+                dao.onSuccess(o.OrderDetails.ToList());
             }
 
+            return Json(message,JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CancelOrder(long id)
+        {
+            try
+            {
+                OrderDAO dao = new OrderDAO();
+                dao.CancelOrder(id);
+                return Json(true,JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false,JsonRequestBehavior.AllowGet);    
+            }
+            
         }
     } 
 }

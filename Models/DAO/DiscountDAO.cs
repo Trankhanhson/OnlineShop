@@ -30,6 +30,11 @@ namespace Models.DAO
             return a.DiscountProductId;
         }
 
+        public List<DiscountDetail> getDiscountDetail(int id)
+        {
+            return db.DiscountDetails.Where(d=>d.DiscountProductId==id).ToList();
+        }
+
         public List<DiscountProduct> CheckDiscount()
         {
             var now = DateTime.Now;

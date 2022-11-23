@@ -3,14 +3,26 @@
 categoryApp.controller("CategoryController", CategoryController);
 
 function CategoryController($scope, $http) {
+    $scope.maxSize = 3;
+    $scope.totalCount = 0;
+    $scope.searchText = ""
+    $scope.pageSize = "5"
 
+    $scope.getPage = function (newPage) {
+        $scope.pageNumber = newPage
+        /** Lấy danh sách category*/
+        $http.get("/Admin/Category/getPageData", {
+            params: { searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize }
+        }).then(function (res) {
+            let pageData = JSON.parse(res.data)
+            $scope.categories = pageData.Data
+            $scope.totalCount = pageData.TotalCount
+        }, function (error) {
+            alert("failed")
+        })
+    }
 
-    /** Lấy danh sách category*/
-    $http.get("/Admin/Category/getAllData").then(function (res) {
-        $scope.categories = JSON.parse(res.data)
-    }, function (error) {
-        alert("failed")
-    })
+    $scope.getPage(1)
 
     /**Thêm danh mục */
 
@@ -151,11 +163,5 @@ function CategoryController($scope, $http) {
             return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
         }
         return ''
-    }
-
-    //paging
-    $scope.pageSize = "5"
-    $scope.getPageSize = function (pageSize) {
-        $scope.pageSize = pageSize
     }
 }

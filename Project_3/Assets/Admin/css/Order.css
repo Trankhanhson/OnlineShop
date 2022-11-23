@@ -344,3 +344,9 @@ img {
     color:#fff;
     cursor:pointer;
 }
+
+.swatch-option {
+    width:15px;
+    height: 15px;
+    margin-left:3px;
+}

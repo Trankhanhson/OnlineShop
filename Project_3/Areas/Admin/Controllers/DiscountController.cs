@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +8,8 @@ using Models;
 using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using Project_3.common;
+using Project_3.Model;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -18,7 +21,7 @@ namespace Project_3.Areas.Admin.Controllers
             return View();
         }
 
-        public ActionResult getAllData()
+        public ActionResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
         {
             List<DiscountProduct> list = new DiscountDAO().getAll().Select(d => new DiscountProduct()
             {
@@ -27,9 +30,73 @@ namespace Project_3.Areas.Admin.Controllers
                 StartDate = d.StartDate,
                 EndDate = d.EndDate
             }).ToList();
-            var result = JsonConvert.SerializeObject(list);
+            if (searchText.Trim() != "")
+            {
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                list = list.Where(p => p.Name.Contains(a)).ToList();
+            }
+            var pageData = Paggination.PagedResult(list, pageNumber, pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
+            return Json(new
+            {
+                result = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult getProductOnly(string searchText, int pageNumber = 1, int pageSize = 5)
+        {
+            List<Product> products = new ProductDAO().getAll();
+            List<ProductDiscount> listResult = products.Select(p => new ProductDiscount()
+            {
+                ProId = p.ProId,
+                Price = p.Price,
+                ProName = p.ProName,
+                Slug = p.Slug,
+                firstImage = p.ProductImages.First().Image,
+                TotalQty = CountTotalQuantity(p.ProductVariations.ToList()),
+                Check = false
+            }).ToList();
+            if (searchText.Trim() != "")
+            {
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                listResult = listResult.Where(p => p.Slug.Contains(a)).ToList();
+            }
+            var pageData = Paggination.PagedResult(listResult, pageNumber, pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
+            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        public int CountTotalQuantity(List<ProductVariation> list)
+        {
+            int total = 0;
+            foreach (var item in list)
+            {
+                total += item.Quantity.Value;
+            }
+            return total;
+        }
+
+        public ActionResult getDiscountDetail(int id)
+        {
+            var listDetail = new DiscountDAO().getDiscountDetail(id).Select(d=>new DiscountDetail()
+            {
+                DiscountDetailId = d.DiscountDetailId,
+                Product = new Product() 
+                { 
+                    ProId = d.Product.ProId,
+                    firstImage= d.Product.ProductImages.First().Image,
+                    ProName= d.Product.ProName,
+                    Price = d.Product.Price,
+                },
+                priceAfter =  MethodCommnon.CountDiscountPrice(d.Product.Price.Value,d.Amount.Value,d.TypeAmount),
+                Amount = d.Amount,
+                TypeAmount = d.TypeAmount,
+                MaxQuantityPerUser = d.MaxQuantityPerUser
+            });
+            var result = JsonConvert.SerializeObject(listDetail);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         // GET: Admin/Discount/Create
         public ActionResult Create()
         {

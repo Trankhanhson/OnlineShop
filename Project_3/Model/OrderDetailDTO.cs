@@ -13,7 +13,7 @@ namespace Project_3.Model
         public long ProId { get; set; }
         public string NameProduct { get; set; }
         public long ProColorId { get; set; }
-        public string ImageColor { get; set; }
+        public string NameColor { get; set; }
         public string NameSize { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> Price { get; set; }

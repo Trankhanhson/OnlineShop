@@ -279,9 +279,7 @@
                                                         {{item.NameProduct}}
                                                     </div>
                                                     <div class="order-product-option">
-                                                        <span>Màu:</span> <span>
-                                                            <span class="swatch-option color" style="background-image: url('/Upload/ColorImage/{{item.ProColorId}}/{{item.ImageColor}}'); "></span>
-                                                        </span>
+                                                        <span>Màu: {{item.NameColor}}</span> 
                                                     </div>
                                                     <div class="order-product-option">
                                                         <span>Kích cỡ :</span> <span>
@@ -308,7 +306,7 @@
                                 <tbody>
                                     <tr class="quantity">
                                         <th>Tổng sản phẩm</th>
-                                        <td>{{Order.OrderDetailDTOs.Count}}</td>
+                                        <td>{{Order.OrderDetailDTOs.length}}</td>
                                     </tr>
                                     <tr class="sub-totals">
                                         <th>Tổng giá bán</th>
@@ -337,8 +335,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>

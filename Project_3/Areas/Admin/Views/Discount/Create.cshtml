@@ -27,9 +27,9 @@
         }
     </script>
     <script src="~/Scripts/dirPagination.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/DiscountAngular.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/Discount/CreateDiscountAngular.js"></script>
 }
-<main id="main" class="main" ng-app="discountApp" ng-controller="productController" ng-init="checkProduct = false">
+<main id="main" class="main" ng-app="discountApp" ng-controller="discountController" ng-init="checkProduct = false">
     <form name="discountForm" novalidate>
         <section class="section">
             <div class="row">
@@ -41,7 +41,7 @@
                                     <label for="inputText" class="label-create col-form-label">Tên chương trình</label>
                                     <div class="flex-grow-1 position-relative">
                                         <input type="text" id="Name" name="Name" class="form-control text-dark" ng-model="discountPro.Name" required>
-                                        <span ng-show="discountForm.$submitted || discountForm.Name.$dirty">
+                                        <span ng-show="discountForm.$submitted">
                                             <span class="error" ng-show="discountForm.Name.$error.required">Bạn chưa nhập trường này</span>
                                         </span>
                                     </div>
@@ -51,7 +51,7 @@
                                     <label for="inputText" class="label-create col-form-label">Thời gian bắt đầu</label>
                                     <div class="flex-grow-1 position-relative">
                                         <input type="datetime-local" id="StartDate" name="StartDate" ng-model="discountPro.StartDate" class="form-control text-dark" required>
-                                        <span ng-show="discountForm.$submitted || discountForm.StartDate.$dirty">
+                                        <span ng-show="discountForm.$submitted">
                                             <span class="error" ng-show="discountForm.StartDate.$error.required">Bạn chưa nhập trường này</span>
                                         </span>
                                     </div>
@@ -60,7 +60,7 @@
                                     <label for="inputText" class="label-create col-form-label">Thời gian kết thúc</label>
                                     <div class="flex-grow-1 position-relative">
                                         <input type="datetime-local" id="EndDate" name="EndDate" ng-model="discountPro.EndDate" class="form-control text-dark" required>
-                                        <span ng-show="discountForm.$submitted || discountForm.EndDate.$dirty">
+                                        <span ng-show="discountForm.$submitted">
                                             <span class="error" ng-show="discountForm.EndDate.$error.required">Bạn chưa nhập trường này</span>
                                         </span>
                                     </div>
@@ -88,18 +88,21 @@
                                         <div class="d-flex col-4 me-5" style="height:38px;">
                                             <label for="inputText" class="col-form-label">Giá khuyến mãi</label>
                                             <div class="flex-grow-1 d-flex  position-relative">
-                                                <input type="number" class="form-control text-dark" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                                                <select class="form-select" style="cursor:pointer;outline:none; width:100px;border-top-left-radius:0;border-bottom-left-radius:0;" id="TypeAmount" name="TypeAmount">
-                                                    <option value="Tiền">Tiền</option>
-                                                    <option value="%">%</option>
+                                                <input type="number" ng-change="ChangeDiscountPrice()" ng-model="generalSetting.Amount" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" class="form-control text-dark" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                <select class="form-select" ng-change="ChangeDiscountPrice()" ng-model="generalSetting.TypeAmount" style="cursor:pointer;outline:none; width:100px;border-top-left-radius:0;border-bottom-left-radius:0;" id="TypeAmount">
+                                                    <option value="0">đ</option>
+                                                    <option value="1">%</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="d-flex col-4">
                                             <label for="inputText" class="label-create col-form-label">Số sản phẩm mỗi khách hàng mua</label>
                                             <div class="flex-grow-1 position-relative d-flex align-items-center">
-                                                <input type="text" class="form-control text-dark">
+                                                <input type="number" ng-model="generalSetting.MaxQuantityPerUser" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" class="form-control text-dark">
                                             </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="btn btn-primary" ng-click="setAll()">Thiết lập</div>
                                         </div>
                                     </div>
                                 </div>
@@ -117,8 +120,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- ngRepeat: item in Order.OrderDetailDTOs -->
-                                            <tr dir-paginate="item in listProConfirmed | itemsPerPage: 8" class="product-{{$index}}" data-proid="{{item.ProId}}">
+                                            
+                                            <tr ng-repeat="item in listProConfirmed" class="product-{{$index}}" data-proid="{{item.ProId}}">
                                                 <td class="col name">
                                                     <div class="order-product">
                                                         <div class="order-product-photo">
@@ -133,18 +136,18 @@
                                                 </td>
                                                 <td class="col originPrice">{{item.Price | number: 0}}đ</td>
                                                 <td class="col priceAfter">
-                                                    {{item.Price | number: 0}}đ
+                                                    {{item.priceAfter | number: 0}}đ
                                                 </td>
                                                 <td class="col price-sale">
                                                     <div class="flex-grow-1 d-flex">
-                                                        <input type="number" class="amount-sale text-dark input-discount" ng-model="amountSale" ng-change="changePriceAfter($index,item.Price)" name="amount-sale" required>
-                                                        <select class="TypeAmount" style="outline: none; border: 1px solid #c6c6c6; border-radius: 2px; " name="TypeAmount">
+                                                        <input type="number" class="amount-sale text-dark input-discount"  ng-change="changePriceAfter(item)" ng-model="item.Amount"  oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1">
+                                                        <select class="TypeAmount" ng-model="item.TypeAmount"  ng-change="changePriceAfter(item)" style="outline: none; border: 1px solid #c6c6c6; border-radius: 2px; " name="TypeAmount">
                                                             <option value="0">đ</option>
                                                             <option value="1">%</option>
                                                         </select>
                                                     </div>
                                                 </td>
-                                                <td class="col maxOrder"><input type="number" class="input-discount" name="name" value="" required/></td>
+                                                <td class="col maxOrder"><input type="number" class="input-discount" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" ng-model="item.MaxQuantityPerUser"/></td>
                                                 <td class="col"><a class="btn-delete" ng-click="deleteProductSelect($index)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a></td>
                                             </tr>
                                         </tbody>
@@ -165,17 +168,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="search-form d-flex align-items-center" id="productSearch">
-                        <input type="text" name="query" placeholder="Nhập để tìm kiếm" title="Enter search keyword" ng-model="searchText">
+                    <form class="search-form d-flex align-items-center position-relative ng-pristine ng-valid">
+                        <input type="search" name="query" class="search-product w-100 ng-pristine ng-valid ng-empty ng-touched" ng-model="searchText" ng-change="getPage(1)" placeholder="Nhập tên để tìm kiếm" title="Enter search keyword">
                         <button type="submit" title="Search">
                             <i class="bi bi-search"></i>
                         </button>
-                    </div>
+                    </form>
                     <div class="order-details-items mt-4">
                         <table class="table-order-items rounded-2">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" class="check-all" name="" value="" /></th>
+                                    <th width="5%"></th>
                                     <th class="col" style="width: 60%;">Sản phẩm</th>
                                     <th class="col" style="width:15%">Giá</th>
                                     <th class="col" style="width:15%;">Kho</th>
@@ -183,9 +186,9 @@
                             </thead>
                             <tbody ng-app>
                                 <!-- ngRepeat: item in Order.OrderDetailDTOs -->
-                                <tr dir-paginate="item in productList | itemsPerPage: 8 | filter : searchText">
+                                <tr dir-paginate="item in productList | itemsPerPage: pageSize" total-items="totalCount">
                                     <td>
-                                        <input type="checkbox" ng-click="selectProduct(item)" name="name" value="" />
+                                        <input type="checkbox" ng-model="item.Check" ng-click="selectProduct(item)" name="name" style="width:17px;height:17px;cursor:pointer" />
                                     </td>
                                     <td class="col">
                                         <div class="order-product">
@@ -205,11 +208,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="pagination sortPagiBar ms-auto">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" ng-click="confirmPro()" class="btn btn-primary">Xác nhận</button>
                 </div>
             </div>
         </div>

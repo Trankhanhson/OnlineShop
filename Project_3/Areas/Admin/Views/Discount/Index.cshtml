@@ -5,26 +5,8 @@
 }
 
 @section scripts{
-    <script>
-        /*hiển thị giá*/
-        function convertPrice(price) {
-            let tg = "";
-            let length = price.length;
-            let count = 0;
-            for (var i = length - 1; i >= 0; --i) {
-                if (count % 3 == 0 && count != 0) {
-                    tg = price[i] + '.' + tg;
-                }
-                else {
-                    tg = price[i] + tg;
-                }
-                count++;
-            }
-            return tg + "đ";
-        }
-    </script>
     <script src="~/Scripts/dirPagination.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/DiscountAngular.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/Discount/DiscountHome.js"></script>
 }
 <main id="main" class="main" ng-app="discountApp" ng-controller="discountController">
 
@@ -33,23 +15,32 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body pt-4">
-                        <div class="text-end">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="getPage(1)" placeholder="Nhập tên để tìm kiếm" />
+                                <select ng-model="pageSize" class="limitShow">
+                                    <option ng-click="getPageSize('5')" value="5">5</option>
+                                    <option ng-click="getPageSize('10')" value="10">10</option>
+                                    <option ng-click="getPageSize('15')" value="15">15</option>
+                                    <option ng-click="getPageSize('20')" value="20">20</option>
+                                </select>
+                            </div>
                             <a href="/Admin/Discount/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm chương trình khuyến mại</a>
                         </div>
-                        <table class="table bg-white table-listProduct mt-3">
+                        <table class="table table-hover table-bordered table-listProduct mt-3">
                             <thead class="text-dark">
                                 <tr>
-                                    <th >Tên chương trình</th>
+                                    <th>Tên chương trình</th>
                                     <th>Thời gian</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in discountList" class="row-product">
+                                <tr dir-paginate="item in discountList | itemsPerPage: pageSize" total-items="totalCount" class="row-product">
                                     <td>{{item.Name}}</td>
                                     <td class="col">
-                                        {{item.StartDate}} - {{item.EndDate}}
+                                        {{item.StartDate | date:"dd/MM/yyyy 'at' h:mma"}} - {{item.EndDate | date:"dd/MM/yyyy 'at' h:mma"}}
                                     </td>
                                     <td class="col">
                                         <div class="form-check form-switch" onclick="ChangeStatus(event,item.DiscountProductId)">
@@ -57,16 +48,104 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <a class="btn-update bg-primary" ng-click="showDetail(item)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
                                         <a class="btn-update" href="/Admin/Discount/Edit/{{item.DiscountProductId}}"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
                                         <a class="btn-delete" ng-click="deleteDiscount(item.DiscountProductId)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    <div class="modal fade" id="SeeDtail" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div>
+                        <div class="order-detail-top">
+                            <div class="account-page-title">
+                                <h1 class="title">
+                                    Chi tiết đơn hàng <span>#CNF{{ImportBill.ImpId}}</span>
+                                </h1>
+                            </div>
+                            <div class="order-date">
+                                <div>Ngày tạo: <b>{{ImportBill.ImpDate | date:"dd/MM/yyyy '-' h:mma"}}</b></div>
+                                <div>Người tạo: <b>{{ImportBill.User.UserID}} {{ImportBill.User.Name}}</b></div>
+                            </div>
+                        </div>
+                        <div class="order-details-items mt-3">
+                            <table class="table-order-items">
+                                <thead>
+                                    <tr>
+                                        <th class="col name">Sản phẩm</th>
+                                        <th class="col">Số lượng</th>
+                                        <th class="col ">Giá nhập</th>
+                                        <th class="col total">Tổng tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in ListDetail">
+                                        <td class="col name">
+                                            <div class="order-product">
+                                                <div class="order-product-photo">
+                                                    <img src="/Upload/Product/{{item.ProId}}/{{item.Image}}" alt="Không ảnh">
+                                                </div>
+                                                <div class="order-product-details">
+                                                    <div class="order-product-name">
+                                                        {{item.NameProduct}}
+                                                    </div>
+                                                    <div class="order-product-option d-flex align-items-center">
+                                                        <span>Màu: {{item.NameColor}}</span>
+                                                    </div>
+                                                    <div class="order-product-option">
+                                                        <span>Kích cỡ :</span> <span>
+                                                            {{item.NameSize}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="col qty">{{item.Quantity}}</td>
+                                        <td class="col">
+                                            {{item.ImportPrice | number}}đ
+                                        </td>
+                                        <td class="col total">{{item.ImportPrice * item.Quantity | number}}đ</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="order-details-totals">
+                            <table>
+                                <tbody>
+                                    <tr class="quantity">
+                                        <th>Tổng sản phẩm</th>
+                                        <td>{{ListDetail.length}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="grand-totals">
+                                        <th style="color: rgb(51, 63, 72); font-weight: 600;">Tổng tiền thanh toán</th>
+                                        <td style="font-weight: 600;">{{ImportBill.MoneyTotal | number}}đ</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>

@@ -14,7 +14,7 @@
                     <div class="card-body pt-4">
                         <div class="text-end mb-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="SearchProcat($event)" placeholder="Tìm kiếm theo tên" />
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="GetPageProCat(1)" placeholder="Tìm kiếm theo tên" />
                                 <select ng-model="pageSize" class="limitShow">
                                     <option ng-click="getPageSize('5')" value="5">5</option>
                                     <option ng-click="getPageSize('10')" value="10">10</option>
@@ -32,7 +32,7 @@
                                     <th>
                                         Tên loại sản phẩm
                                     </th>
-                                    <th >
+                                    <th>
                                         Danh mục cha
                                     </th>
                                     <th>
@@ -44,7 +44,7 @@
                                 </tr>
                             </thead>
                             <tbody class="category-wrap">
-                                <tr dir-paginate="pc in ProCatList | itemsPerPage: pageSize | orderBy: sortColumn : reverse" total-items="totalCount">
+                                <tr dir-paginate="pc in ProCatList | itemsPerPage: pageSize" total-items="totalCount">
                                     <td>{{$index}}</td>
                                     <td class="text-center"><img src="~/Upload/CatPro/{{pc.ProCatId}}/{{pc.Image}}" alt="" style="width: 50px;height:50px;" /></td>
                                     <td>
@@ -190,5 +190,5 @@
     <script src="~/Scripts/dirPagination.js"></script>
     <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
     <script src="~/Scripts/ng-file-upload.min.js"></script>
-    <script src="~/Assets/Admin/FileAngularjs/ProCatAngular.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/ProductCatAngular.js"></script>
 }

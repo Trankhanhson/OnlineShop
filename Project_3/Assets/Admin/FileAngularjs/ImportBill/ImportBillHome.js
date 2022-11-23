@@ -2,36 +2,52 @@
 importBillApp.controller("importBillController", importBillController)
 
 function importBillController($scope, $http) {
-    $http.get("/Admin/ImportBill/getAllData").then(function (res) {
-        $scope.ImportBills = JSON.parse(res.data)
-    }, function (error) {
-        alert("failed")
-    })
 
-    $scope.showDetail = function (id) {
+    $scope.maxSize = 3;
+    $scope.totalCount = 0;
+    $scope.searchText = ""
+    $scope.pageSize = '5'
+
+    $scope.getPage = function (newPage) {
+        $scope.pageNumber = newPage
+        /** Lấy danh sách loại sản phẩm*/
+        $http.get("/Admin/ImportBill/getPageData",
+            { params: { searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize } }).then(function (res) {
+                let pageData = JSON.parse(res.data)
+                $scope.ImportBills = pageData.Data
+                $scope.totalCount = pageData.TotalCount
+            }, function (error) {
+                alert("failed")
+            })
+    }
+
+    $scope.getPage()
+
+    $scope.showDetail = function (im) {
         $http({
             method: "GET",
-            url: "/Admin/Order/getOrderById/" + id,
+            url: "/Admin/ImportBill/getById/" + im.ImpId,
             datatype: 'Json'
         }).then(function (res) {
-            $scope.Order = JSON.parse(res.data)
+            $scope.ListDetail = JSON.parse(res.data)
+            $scope.ImportBill = im
         })
     }
 
-    $scope.cancel = function (index, o) {
-        if (confirm(`Bạn có muốn hủy đơn hàng mã ${o.OrdID}`)) {
+    $scope.cancel = function (index, im) {
+        if (confirm(`Bạn có muốn hủy đơn hàng mã ${im.ImpIdD}`)) {
             $http({
                 method: "GET",
-                url: "/Admin/Order/CancelOrder/" + o.OrdID,
+                url: "/Admin/ImportBill/CancelBill/" + im.ImpIdD,
                 dataType: 'Json'
             }).then(function (res) {
                 if (res.data) {
-                    $scope.OrderList.splice(index, 1)
-                    $("#successToast .text-toast").text(`Đơn hàng ${o.OrdID} đã được hủy`)
+                    $scope.ImportBills.splice(index, 1)
+                    $("#successToast .text-toast").text(`Hóa đơn nhập ${im.ImpIdD} đã được hủy`)
                     $("#successToast").toast("show")
                 }
                 else {
-                    $("#erorrToast .text-toast").text(`Không thể hủy đơn hàng ${o.OrdID}`)
+                    $("#erorrToast .text-toast").text(`Không thể hủy hóa đơn nhập ${im.ImpIdD}`)
                     $("#erorrToast").toast("show")
                 }
             })
@@ -45,11 +61,4 @@ function importBillController($scope, $http) {
         }
         return ''
     }
-
-    //paging
-    $scope.pageSize = "5"
-    $scope.getPageSize = function (pageSize) {
-        $scope.pageSize = pageSize
-    }
-
 }

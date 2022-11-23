@@ -86,7 +86,7 @@ namespace Project_3.Areas.Admin.Controllers
                 dto.ProId = item.ProductVariation.ProId.Value;
                 dto.ProColorId = item.ProductVariation.ProColorID.Value;
                 dto.NameProduct = item.ProductVariation.Product.ProName;
-                dto.ImageColor = item.ProductVariation.ProductColor.ImageColor;
+                dto.NameColor = item.ProductVariation.ProductColor.NameColor;
                 dto.NameSize = item.ProductVariation.ProductSize.NameSize;
                 dto.Quantity = item.Quantity;
                 dto.Price = item.Price;

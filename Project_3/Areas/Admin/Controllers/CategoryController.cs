@@ -1,6 +1,7 @@
 ﻿using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.EnterpriseServices.CompensatingResourceManager;
@@ -25,7 +26,7 @@ namespace Project_3.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult getAllData()
+        public JsonResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
         {
             List<Category> categories = new CategoryDAO().getAll().Select(c=>new Category()
             {
@@ -34,7 +35,13 @@ namespace Project_3.Areas.Admin.Controllers
                 type = c.type,
                 Status = c.Status
             }).ToList();
-            var result = JsonConvert.SerializeObject(categories);
+            if (searchText.Trim() != "")
+            {
+                categories = categories.Where(pc => pc.Slug.Contains(MethodCommnon.ToUrlSlug(searchText.ToLower()))).ToList();
+            }
+
+            var pageData = Paggination.PagedResult(categories,pageNumber,pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

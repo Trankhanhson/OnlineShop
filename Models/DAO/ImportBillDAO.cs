@@ -21,6 +21,11 @@ namespace Models.DAO
             _dbContext.Configuration.LazyLoadingEnabled = false;
             return _dbContext.ImportBills.Include(i => i.User).ToList();
         }
+
+        public ImportBill getById(long id)
+        {
+            return _dbContext.ImportBills.Find(id);
+        }
         public ImportBill Insert(ImportBill im)
         {
             try

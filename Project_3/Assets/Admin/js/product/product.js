@@ -2,8 +2,6 @@
     $(".method-header").toggleClass("active")
 })
 
-
-
 function ChangeStatus(event, id) {
     event.stopPropagation()
     if (confirm("Bạn có chắc chắn muốn đổi trạng thái")) {
@@ -465,13 +463,6 @@ $('.image-upload-wrap').bind('dragleave', function () {
     $('.image-upload-wrap').removeClass('image-dropping');
 });
 
-//handle list product
-$(".row-product").click((e) => {
-    let rowProduct = $(e.target).parents(".row-product");
-    let id = $(rowProduct).attr("id")
-    $(`.row-variation-${id}`).toggle()
-    rowProduct.toggleClass("active")
-})
 
 
 //validate form create and edit

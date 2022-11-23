@@ -32,5 +32,10 @@ namespace Models.DAO
                 return false;
             }
         }
+
+        public List<ImportBillDetail> getByIdImportBill(long id)
+        {
+            return _dbContext.ImportBillDetails.Where(imd=>imd.ImpId==id).ToList();
+        }
     }
 }

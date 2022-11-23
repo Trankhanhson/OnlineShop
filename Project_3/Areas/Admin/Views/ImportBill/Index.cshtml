@@ -10,23 +10,8 @@
 }
 
 @section styles {
-    <style>
-        .btn-tool {
-            color: #fff;
-            width: 35px;
-            height: 35px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-        }
-
-            .btn-tool:hover {
-                color: #fff;
-                cursor: pointer;
-            }
-    </style>
-    }
+    <link href="~/Assets/Admin/css/Order.css" rel="stylesheet" />
+}
 
 <main id="main" class="main" ng-app="importBillApp" ng-controller="importBillController">
 
@@ -37,12 +22,12 @@
                     <div class="card-body pt-4">
                         <div class="text-end mb-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <input type="text" class="input-searchView me-3" ng-model="searchText" placeholder="Tìm kiếm theo tên" />
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo tên" />
                                 <select ng-model="pageSize" class="limitShow">
-                                    <option ng-click="getPageSize('5')" value="5">5</option>
-                                    <option ng-click="getPageSize('10')" value="10">10</option>
-                                    <option ng-click="getPageSize('15')" value="15">15</option>
-                                    <option ng-click="getPageSize('20')" value="20">20</option>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
                                 </select>
                             </div>
                             <div class="text-end">
@@ -68,23 +53,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr dir-paginate="i in ImportBills | itemsPerPage: pageSize | filter: searchText">
+                                <tr dir-paginate="i in ImportBills | itemsPerPage: pageSize" total-items="totalCount">
                                     <td>{{i.ImpId}}</td>
                                     <td>
                                         {{i.User.Name}}
                                     </td>
                                     <td>
-                                        {{i.ImpDate}}
+                                        {{i.ImpDate | date:"dd/MM/yyyy '-' h:mma"}}
                                     </td>
-                                    <td>{{i.MoneyTotal}}</td>
+                                    <td>{{i.MoneyTotal | number}}đ</td>
                                     <td>
-                                        <a class="btn-tool bg-primary" ng-click="showDetail(i.ImpId)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
+                                        <a class="btn-tool bg-primary" ng-click="showDetail(i)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
                                         <a class="btn-tool btn-delete" ng-click="cancel($index,i)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <dir-pagination-controls></dir-pagination-controls>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -98,37 +88,37 @@
                         <div class="order-detail-top">
                             <div class="account-page-title">
                                 <h1 class="title">
-                                    Chi tiết đơn hàng <span>#CNF{{i.ImpId}}</span>
+                                    Chi tiết đơn hàng <span>#CNF{{ImportBill.ImpId}}</span>
                                 </h1>
                             </div>
-                            <div class="order-date"><span class="label">Ngày tạo:</span> <span>{{i.ImpDate}}</span></div> <span class="order-status" style="color: rgb(99, 177, 188);">{{Order.Status}}</span>
+                            <div class="order-date">
+                                <div>Ngày tạo: <b>{{ImportBill.ImpDate | date:"dd/MM/yyyy '-' h:mma"}}</b></div>
+                                <div>Người tạo: <b>{{ImportBill.User.UserID}} {{ImportBill.User.Name}}</b></div>
+                            </div>
                         </div>
                         <div class="order-details-items mt-3">
                             <table class="table-order-items">
                                 <thead>
                                     <tr>
                                         <th class="col name">Sản phẩm</th>
-                                        <th class="col qty">Số lượng</th>
-                                        <th class="col ">Giá tiền</th>
-                                        <th class="col price-sale">Giảm giá</th>
+                                        <th class="col">Số lượng</th>
+                                        <th class="col ">Giá nhập</th>
                                         <th class="col total">Tổng tiền</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="item in Order.OrderDetailDTOs">
+                                    <tr ng-repeat="item in ListDetail">
                                         <td class="col name">
                                             <div class="order-product">
                                                 <div class="order-product-photo">
-                                                    <img src="/Upload/Product/{{item.ProId}}/{{item.Image}}" alt="{{item.NameProduct}}">
+                                                    <img src="/Upload/Product/{{item.ProId}}/{{item.Image}}" alt="Không ảnh">
                                                 </div>
                                                 <div class="order-product-details">
                                                     <div class="order-product-name">
                                                         {{item.NameProduct}}
                                                     </div>
-                                                    <div class="order-product-option">
-                                                        <span>Màu:</span> <span>
-                                                            <span class="swatch-option color" style="background-image: url('/Upload/ColorImage/{{item.ProColorId}}/{{item.ImageColor}}'); "></span>
-                                                        </span>
+                                                    <div class="order-product-option d-flex align-items-center">
+                                                        <span>Màu: {{item.NameColor}}</span> 
                                                     </div>
                                                     <div class="order-product-option">
                                                         <span>Kích cỡ :</span> <span>
@@ -140,12 +130,9 @@
                                         </td>
                                         <td class="col qty">{{item.Quantity}}</td>
                                         <td class="col">
-                                            {{item.Price}}
+                                            {{item.ImportPrice | number}}đ
                                         </td>
-                                        <td class="col price-sale">
-                                            0 ₫
-                                        </td>
-                                        <td class="col total">{{item.Price * item.Quantity}}</td>
+                                        <td class="col total">{{item.ImportPrice * item.Quantity | number}}đ</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -155,28 +142,13 @@
                                 <tbody>
                                     <tr class="quantity">
                                         <th>Tổng sản phẩm</th>
-                                        <td>{{Order.OrderDetailDTOs.Count}}</td>
-                                    </tr>
-                                    <tr class="sub-totals">
-                                        <th>Tổng giá bán</th>
-                                        <td>{{Order.MoneyTotal}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Chiết khấu</th>
-                                        <td>0 ₫</td>
-                                    </tr>
-                                    <!---->
-                                    <!---->
-                                    <!---->
-                                    <tr>
-                                        <th>Vận chuyển</th>
-                                        <td>30.000 ₫</td>
+                                        <td>{{ListDetail.length}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="grand-totals">
                                         <th style="color: rgb(51, 63, 72); font-weight: 600;">Tổng tiền thanh toán</th>
-                                        <td style="font-weight: 600;">{{Order.MoneyTotal}}</td>
+                                        <td style="font-weight: 600;">{{ImportBill.MoneyTotal | number}}đ</td>
                                     </tr>
                                 </tfoot>
                             </table>

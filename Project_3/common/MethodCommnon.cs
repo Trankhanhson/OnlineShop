@@ -9,31 +9,51 @@ namespace Project_3.common
 {
     public static class MethodCommnon
     {
-        public static string ToUrlSlug(string value)
+        public static string ToUrlSlug(string text)
+
         {
+            for (int i = 32; i < 48; i++)
 
-            //First to lower case 
-            value = value.ToLowerInvariant();
+            {
 
-            //Remove all accents
-            var bytes = Encoding.GetEncoding("Cyrillic").GetBytes(value);
+                text = text.Replace(((char)i).ToString(), " ");
 
-            value = Encoding.ASCII.GetString(bytes);
+            }
 
-            //Replace spaces 
-            value = Regex.Replace(value, @"\s", "-", RegexOptions.Compiled);
+            text = text.Replace(".", "-");
 
-            //Remove invalid chars 
-            value = Regex.Replace(value, @"[^\w\s\p{Pd}]", "", RegexOptions.Compiled);
+            text = text.Replace(" ", "-");
 
-            //Trim dashes from end 
-            value = value.Trim('-', '_');
+            text = text.Replace(",", "-");
 
-            //Replace double occurences of - or \_ 
-            value = Regex.Replace(value, @"([-_]){2,}", "$1", RegexOptions.Compiled);
+            text = text.Replace(";", "-");
 
-            return value;
+            text = text.Replace(":", "-");
+
+
+
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+
+
+
+            string strFormD = text.Normalize(System.Text.NormalizationForm.FormD);
+
+            return regex.Replace(strFormD, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
+
         }
 
+        public static decimal CountDiscountPrice(int Price,int Amount, string TypeAmount)
+        {
+            decimal DiscountPrice = 0;
+            if (TypeAmount == "0") //giảm giá theo tiền
+            {
+                DiscountPrice = Price - Amount;
+            }
+            else  //giảm giá theo %
+            {
+                DiscountPrice = Math.Round(Price - ((Convert.ToDecimal(Amount) / 100) * Price), 0);
+            }
+            return DiscountPrice;
+        }
     }
 }

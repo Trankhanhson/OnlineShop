@@ -153,7 +153,6 @@
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\validateantiforgerytokenAttribute.cs" />
     <Compile Include="common\CommonConstants.cs" />
-    <Compile Include="common\ConvertSearchText.cs" />
     <Compile Include="common\Encryptor.cs" />
     <Compile Include="common\MethodCommnon.cs" />
     <Compile Include="common\Paggination.cs" />
@@ -170,9 +169,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\CartItem.cs" />
+    <Compile Include="Model\ImportDetailDTO.cs" />
     <Compile Include="Model\OrderDetailDTO.cs" />
     <Compile Include="Model\OrderDTO.cs" />
     <Compile Include="Model\PagedData.cs" />
+    <Compile Include="Model\ProductDiscount.cs" />
     <Compile Include="Model\RegisterCustomer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -180,11 +181,12 @@
     <Content Include="Assets\Admin\css\baseAdmin.css" />
     <Content Include="Assets\Admin\css\Discount.css" />
     <Content Include="Assets\Admin\css\DiscountProduct.css" />
-    <Content Include="Assets\Admin\css\ImportBill.css" />
+    <Content Include="Assets\Admin\css\importBill.css" />
     <Content Include="Assets\Admin\css\Order.css" />
     <Content Include="Assets\Admin\css\style.css" />
     <Content Include="Assets\Admin\FileAngularjs\CategoryAngular.js" />
-    <Content Include="Assets\Admin\FileAngularjs\DiscountAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Discount\CreateDiscountAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Discount\DiscountHome.js" />
     <Content Include="Assets\Admin\FileAngularjs\ImportBill\CreateImportBill.js" />
     <Content Include="Assets\Admin\FileAngularjs\ImportBill\ImportBillHome.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\CreateNewAngular.js" />
@@ -192,12 +194,13 @@
     <Content Include="Assets\Admin\FileAngularjs\New\EditNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\New\IndexNewAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\OrderAngular.js" />
-    <Content Include="Assets\Admin\FileAngularjs\ProCatAngular.js" />
+    <Content Include="Assets\Admin\FileAngularjs\ProductCatAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Color.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\CRUD_Size.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\C_ProcatInProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatCreate.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatEdit.js" />
+    <Content Include="Assets\Admin\FileAngularjs\Product\ProductHomeAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\UserAngular.js" />
     <Content Include="Assets\Admin\img\apple-touch-icon.png" />
     <Content Include="Assets\Admin\img\card.jpg" />
@@ -223,8 +226,6 @@
     <Content Include="Assets\Admin\img\slides-2.jpg" />
     <Content Include="Assets\Admin\img\slides-3.jpg" />
     <Content Include="Assets\Admin\js\ColorColntroller.js" />
-    <Content Include="Assets\Admin\js\Discount.js" />
-    <Content Include="Assets\Admin\js\ImportBill.js" />
     <Content Include="Assets\Admin\js\main.js" />
     <Content Include="Assets\Admin\js\product\Createproduct.js" />
     <Content Include="Assets\Admin\js\product\DeleteProduct.js" />

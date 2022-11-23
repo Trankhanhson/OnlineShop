@@ -3,6 +3,7 @@ using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
 using PagedList;
+using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,24 +19,60 @@ namespace Project_3.Areas.Admin.Controllers
     public class ProductController : BaseController
     {
         // GET: Admin/Product
-        public ActionResult Index(string searchResult, int page = 1, int pageSize = 5)
+        public ActionResult Index()
         {
-            ProductDAO model = new ProductDAO();
-            var list = model.getPage(searchResult, page, pageSize);
-            foreach (var p in list)
-            {
-                foreach(var pv in p.ProductVariations)
-                {
-                    pv.DisplayImage = p.ProductImages.Where(pi => pi.ProID == pv.ProId && pi.ProColorID == pv.ProColorID).First().Image;
-                }
-            }
-
-            ViewBag.searchResult = searchResult;
-            return View(list);
+            return View();
         }
 
-        public JsonResult getAllData()
+        public JsonResult getSearchData(string searchText)
         {
+            var result = "";
+            var check = false;
+            if (searchText.Trim() != "")
+            {
+                List<Product> products = new ProductDAO().getAll().Select(p => new Product()
+                {
+                    ProId = p.ProId,
+                    ProName = p.ProName,
+                    ProCatId = p.ProCatId,
+                    Price = p.Price,
+                    ImportPrice = p.ImportPrice,
+                    Status = p.Status,
+                    ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId },
+                    Slug = p.Slug,
+                    ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
+                    {
+                        ProId = pv.ProId,
+                        ProVariationID = pv.ProVariationID,
+                        ProColorID = pv.ProColorID,
+                        ProSizeID = pv.ProSizeID,
+                        ProductColor = new ProductColor() { NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
+                        ProductSize = new ProductSize() { NameSize = pv.ProductSize.NameSize },
+                        Quantity = pv.Quantity,
+                        DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
+                    }).ToList()
+
+                }).ToList();
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                products = products.Where(p => p.Slug.Contains(a)).ToList();
+                //Convert to Json
+                result = JsonConvert.SerializeObject(products);
+                check = true;
+            }
+
+            //set maxJsonLangth for ressult
+            var jsonResult = Json(new
+            {
+                check = check,
+                result = result
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
+        public JsonResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
+        {
+
             List<Product> products = new ProductDAO().getAll().Select(p => new Product()
             {
                 ProId = p.ProId,
@@ -45,6 +82,7 @@ namespace Project_3.Areas.Admin.Controllers
                 ImportPrice = p.ImportPrice,
                 Status = p.Status,
                 ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId },
+                Slug = p.Slug,
                 ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                 {
                     ProId = pv.ProId,
@@ -58,40 +96,24 @@ namespace Project_3.Areas.Admin.Controllers
                 }).ToList()
 
             }).ToList();
-
+            if (searchText.Trim() != "")
+            {
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                products = products.Where(p => p.Slug.Contains(a)).ToList();
+            }
+            var pageData = Paggination.PagedResult(products, pageNumber, pageSize);
             //Convert to Json
-            var result = JsonConvert.SerializeObject(products);
+            var result = JsonConvert.SerializeObject(pageData);
 
             //set maxJsonLangth for ressult
-            var jsonResult = Json(result, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new
+            {
+                result = result
+            }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
 
-        public JsonResult getProductOnly()
-        {
-            List<Product> products = new ProductDAO().getAll();
-            var listResult = products.Select(p => new Product()
-            {
-                ProId = p.ProId,
-                Price = p.Price,
-                ProName = p.ProName,
-                firstImage = p.ProductImages.First().Image,
-                TotalQty = CountTotalQuantity(p.ProductVariations.ToList())
-            });
-            var result = JsonConvert.SerializeObject(listResult);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public int CountTotalQuantity(List<ProductVariation> list)
-        {
-            int total = 0;
-            foreach(var item in list)
-            {
-                total += item.Quantity.Value;
-            }
-            return total;
-        }
 
         // GET: Admin/Product/Create
         public ActionResult Create()

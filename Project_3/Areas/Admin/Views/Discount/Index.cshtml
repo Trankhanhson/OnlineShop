@@ -4,6 +4,10 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+@section styles{
+    <link href="~/Assets/Admin/css/DiscountProduct.css" rel="stylesheet" />
+}
+
 @section scripts{
     <script src="~/Scripts/dirPagination.js"></script>
     <script src="~/Assets/Admin/FileAngularjs/Discount/DiscountHome.js"></script>
@@ -28,11 +32,11 @@
                             <a href="/Admin/Discount/Create" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i> Thêm chương trình khuyến mại</a>
                         </div>
                         <table class="table table-hover table-bordered table-listProduct mt-3">
-                            <thead class="text-dark">
+                            <thead class="text-dark table-primary">
                                 <tr>
                                     <th>Tên chương trình</th>
-                                    <th>Thời gian</th>
-                                    <th>Trạng thái</th>
+                                    <th>Bắt đầu</th>
+                                    <th>Kết thúc</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -40,17 +44,13 @@
                                 <tr dir-paginate="item in discountList | itemsPerPage: pageSize" total-items="totalCount" class="row-product">
                                     <td>{{item.Name}}</td>
                                     <td class="col">
-                                        {{item.StartDate | date:"dd/MM/yyyy 'at' h:mma"}} - {{item.EndDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                                        {{item.StartDate | date:"dd/MM/yyyy 'at' h:mma"}}
                                     </td>
-                                    <td class="col">
-                                        <div class="form-check form-switch" onclick="ChangeStatus(event,item.DiscountProductId)">
-                                            <input class="form-check-input" type="checkbox" checked="{{item.Status}}">
-                                        </div>
-                                    </td>
+                                    <td class="col">{{item.EndDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
                                     <td>
-                                        <a class="btn-update bg-primary" ng-click="showDetail(item)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
+                                        <a class="btn-update bg-primary" ng-click="showDetail(item.DiscountProductId)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
                                         <a class="btn-update" href="/Admin/Discount/Edit/{{item.DiscountProductId}}"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
-                                        <a class="btn-delete" ng-click="deleteDiscount(item.DiscountProductId)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                        <a class="btn-delete" ng-click="Delete($index,item)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -74,76 +74,66 @@
                         <div class="order-detail-top">
                             <div class="account-page-title">
                                 <h1 class="title">
-                                    Chi tiết đơn hàng <span>#CNF{{ImportBill.ImpId}}</span>
+                                    Chương trình <span>{{Discount.Name}}</span>
                                 </h1>
                             </div>
                             <div class="order-date">
-                                <div>Ngày tạo: <b>{{ImportBill.ImpDate | date:"dd/MM/yyyy '-' h:mma"}}</b></div>
-                                <div>Người tạo: <b>{{ImportBill.User.UserID}} {{ImportBill.User.Name}}</b></div>
+                                <div>Bắt đầu: <b>{{Discount.StartDate | date:"dd/MM/yyyy '-' h:mma"}}</b></div>
+                                <div>Kết thúc: <b>{{Discount.EndDate | date:"dd/MM/yyyy '-' h:mma"}}</b></div>
                             </div>
                         </div>
                         <div class="order-details-items mt-3">
-                            <table class="table-order-items">
+                            <form class="search-form d-flex align-items-center position-relative mb-3">
+                                <input type="search" name="query" class="search-product w-100" ng-model="searchDetail" placeholder="Nhập để tìm kiếm" title="Enter search keyword">
+                                <button type="submit" title="Search">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </form>
+                            <table class="table-order-items table-product-selected rounded-2">
                                 <thead>
                                     <tr>
                                         <th class="col name">Sản phẩm</th>
-                                        <th class="col">Số lượng</th>
-                                        <th class="col ">Giá nhập</th>
-                                        <th class="col total">Tổng tiền</th>
+                                        <th class="col originPrice">Giá gốc</th>
+                                        <th class="col priceAfter">Giá sau giảm</th>
+                                        <th class="col price-sale">Giảm giá</th>
+                                        <th class="col maxOrder">Giới hạn đặt hàng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="item in ListDetail">
+                                    <tr ng-repeat="item in Discount.DiscountDetails | filter : searchDetail">
                                         <td class="col name">
                                             <div class="order-product">
                                                 <div class="order-product-photo">
-                                                    <img src="/Upload/Product/{{item.ProId}}/{{item.Image}}" alt="Không ảnh">
+                                                    <img src="/Upload/Product/{{item.Product.ProId}}/{{item.Product.firstImage}}" alt="">
                                                 </div>
                                                 <div class="order-product-details">
                                                     <div class="order-product-name">
-                                                        {{item.NameProduct}}
-                                                    </div>
-                                                    <div class="order-product-option d-flex align-items-center">
-                                                        <span>Màu: {{item.NameColor}}</span>
+                                                        {{item.Product.ProName}}
                                                     </div>
                                                     <div class="order-product-option">
-                                                        <span>Kích cỡ :</span> <span>
-                                                            {{item.NameSize}}
-                                                        </span>
+                                                        <span>Mã: {{item.Product.ProId}}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="col qty">{{item.Quantity}}</td>
-                                        <td class="col">
-                                            {{item.ImportPrice | number}}đ
+                                        <td class="col originPrice">{{item.Product.Price | number: 0}}đ</td>
+                                        <td class="col priceAfter">
+                                            {{item.priceAfter | number: 0}}đ
                                         </td>
-                                        <td class="col total">{{item.ImportPrice * item.Quantity | number}}đ</td>
+                                        <td class="col price-sale">
+                                            <div class="flex-grow-1 d-flex">
+                                                {{item.Amount}}{{item.TypeAmount}}
+                                            </div>
+                                        </td>
+                                        <td class="col maxOrder">{{item.MaxQuantityPerUser}}</td>
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
-                        <div class="order-details-totals">
-                            <table>
-                                <tbody>
-                                    <tr class="quantity">
-                                        <th>Tổng sản phẩm</th>
-                                        <td>{{ListDetail.length}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr class="grand-totals">
-                                        <th style="color: rgb(51, 63, 72); font-weight: 600;">Tổng tiền thanh toán</th>
-                                        <td style="font-weight: 600;">{{ImportBill.MoneyTotal | number}}đ</td>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>

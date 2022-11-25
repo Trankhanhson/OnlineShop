@@ -20,5 +20,14 @@ namespace Models.DAO
             db.DiscountDetails.AddRange(list);
             db.SaveChanges();
         }
+
+        public void Edit(List<DiscountDetail> listNew)
+        {
+            var id = listNew[0].DiscountProductId;
+            var listOld = db.DiscountDetails.Where(d=>d.DiscountProductId==id).ToList();
+            db.DiscountDetails.RemoveRange(listOld);
+            db.DiscountDetails.AddRange(listNew);
+            db.SaveChanges();
+        }
     }
 }

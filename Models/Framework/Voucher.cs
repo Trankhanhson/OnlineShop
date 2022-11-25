@@ -21,7 +21,7 @@ namespace Models.Framework
         }
     
         public int VoucherId { get; set; }
-        public string Code { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
@@ -31,8 +31,6 @@ namespace Models.Framework
         public Nullable<int> MaximumMoney { get; set; }
         public Nullable<int> UsedCurrent { get; set; }
         public Nullable<int> MaxUses { get; set; }
-        public Nullable<int> MaxUsesPerUser { get; set; }
-        public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }

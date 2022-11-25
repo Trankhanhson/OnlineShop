@@ -21,13 +21,11 @@
         <AssociationConnector Association="ClothesShopModel.FK_ProductCat_Category" />
         <EntityTypeShape EntityType="ClothesShopModel.New" Width="1.5" PointX="6" PointY="19.5" />
         <AssociationConnector Association="ClothesShopModel.FK_News_User" />
-        <EntityTypeShape EntityType="ClothesShopModel.Voucher" Width="1.5" PointX="2.75" PointY="22.125" />
         <EntityTypeShape EntityType="ClothesShopModel.Customer" Width="1.5" PointX="13.375" PointY="1.75" />
         <EntityTypeShape EntityType="ClothesShopModel.Order" Width="1.5" PointX="15.625" PointY="11.625" />
         <EntityTypeShape EntityType="ClothesShopModel.StatusOrder" Width="1.5" PointX="13.375" PointY="14" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_Customer" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_StatusOrder" />
-        <AssociationConnector Association="ClothesShopModel.FK_Order_Voucher" />
         <EntityTypeShape EntityType="ClothesShopModel.Product" Width="1.5" PointX="13.25" PointY="7.625" />
         <AssociationConnector Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductImage_Product" />
@@ -42,7 +40,9 @@
         <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" />
         <EntityTypeShape EntityType="ClothesShopModel.DiscountProduct" Width="1.5" PointX="6.375" PointY="0.875" />
+        <EntityTypeShape EntityType="ClothesShopModel.Voucher" Width="1.5" PointX="5.375" PointY="8" />
         <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct" />
+        <AssociationConnector Association="ClothesShopModel.FK_Order_Voucher" />
         </Diagram>
       <Diagram DiagramId="b3a46f2332c64c989370a0f902c91d0a" Name="Diagram2" >
       </Diagram>

@@ -76,24 +76,33 @@ namespace Project_3.Areas.Admin.Controllers
             return total;
         }
 
-        public ActionResult getDiscountDetail(int id)
+        public ActionResult getById(int id)
         {
-            var listDetail = new DiscountDAO().getDiscountDetail(id).Select(d=>new DiscountDetail()
+            var dao = new DiscountDAO().getById(id);
+
+            DiscountProduct dp = new DiscountProduct()
             {
-                DiscountDetailId = d.DiscountDetailId,
-                Product = new Product() 
-                { 
-                    ProId = d.Product.ProId,
-                    firstImage= d.Product.ProductImages.First().Image,
-                    ProName= d.Product.ProName,
-                    Price = d.Product.Price,
-                },
-                priceAfter =  MethodCommnon.CountDiscountPrice(d.Product.Price.Value,d.Amount.Value,d.TypeAmount),
-                Amount = d.Amount,
-                TypeAmount = d.TypeAmount,
-                MaxQuantityPerUser = d.MaxQuantityPerUser
-            });
-            var result = JsonConvert.SerializeObject(listDetail);
+                DiscountProductId = dao.DiscountProductId,
+                Name = dao.Name,
+                StartDate = dao.StartDate,
+                EndDate = dao.EndDate,
+                DiscountDetails = dao.DiscountDetails.Select(d => new DiscountDetail()
+                {
+                    DiscountDetailId = d.DiscountDetailId,
+                    Product = new Product()
+                    {
+                        ProId = d.Product.ProId,
+                        firstImage = d.Product.ProductImages.First().Image,
+                        ProName = d.Product.ProName,
+                        Price = d.Product.Price
+                    },
+                    priceAfter = MethodCommnon.CountDiscountPrice(d.Product.Price.Value, d.Amount.Value, d.TypeAmount),
+                    Amount = d.Amount,
+                    TypeAmount = d.TypeAmount,
+                    MaxQuantityPerUser = d.MaxQuantityPerUser
+                }).ToList()
+            };
+            var result = JsonConvert.SerializeObject(dp);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -124,51 +133,48 @@ namespace Project_3.Areas.Admin.Controllers
             }
             catch
             {
-                return Json(true);
+                return Json(false);
             }
         }
 
         // GET: Admin/Discount/Edit/5
         public ActionResult Edit(int id)
         {
+            ViewBag.Id = id;
             return View();
         }
 
         // POST: Admin/Discount/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(DiscountProduct discountPro, List<DiscountDetail> listDiscountDetail)
         {
             try
             {
-                // TODO: Add update logic here
+                DiscountDAO discountDAO = new DiscountDAO();
+                discountDAO.Edit(discountPro);
+                DiscountDetailDAO discountDetailDAO = new DiscountDetailDAO();
+                discountDetailDAO.Edit(listDiscountDetail);
 
-                return RedirectToAction("Index");
+                return Json(true);
             }
             catch
             {
-                return View();
+                return Json(false);
             }
         }
 
-        // GET: Admin/Discount/Delete/5
+        [HttpGet]
         public ActionResult Delete(int id)
         {
-            return View();
-        }
-
-        // POST: Admin/Discount/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                DiscountDAO discountDAO = new DiscountDAO();
+                discountDAO.Delete(id);
+                return Json(true,JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                return View();
+                return Json(false,JsonRequestBehavior.AllowGet);
             }
         }
     }

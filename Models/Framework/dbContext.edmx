@@ -46,7 +46,6 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
-          <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="ImportBill">
           <Key>
@@ -222,7 +221,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             <PropertyRef Name="VoucherId" />
           </Key>
           <Property Name="VoucherId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Description" Type="nvarchar" MaxLength="200" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
@@ -232,8 +231,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="MaximumMoney" Type="int" />
           <Property Name="UsedCurrent" Type="int" />
           <Property Name="MaxUses" Type="int" />
-          <Property Name="MaxUsesPerUser" Type="int" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK__Product__ProCatI__6AEFE058">
           <End Role="ProductCat" Type="Self.ProductCat" Multiplicity="1" />
@@ -717,7 +714,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             <End Role="User" EntitySet="Users" />
             <End Role="New" EntitySet="News" />
           </AssociationSet>
-          <EntitySet Name="Vouchers" EntityType="ClothesShopModel.Voucher" />
           <EntitySet Name="Customers" EntityType="ClothesShopModel.Customer" />
           <EntitySet Name="Orders" EntityType="ClothesShopModel.Order" />
           <EntitySet Name="StatusOrders" EntityType="ClothesShopModel.StatusOrder" />
@@ -727,10 +723,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           </AssociationSet>
           <AssociationSet Name="FK_Order_StatusOrder" Association="ClothesShopModel.FK_Order_StatusOrder">
             <End Role="StatusOrder" EntitySet="StatusOrders" />
-            <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Order_Voucher" Association="ClothesShopModel.FK_Order_Voucher">
-            <End Role="Voucher" EntitySet="Vouchers" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
           <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
@@ -774,9 +766,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             <End Role="ProductVariation" EntitySet="ProductVariations" />
           </AssociationSet>
           <EntitySet Name="DiscountProducts" EntityType="ClothesShopModel.DiscountProduct" />
+          <EntitySet Name="Vouchers" EntityType="ClothesShopModel.Voucher" />
           <AssociationSet Name="FK_DiscountDetail_DiscountProduct" Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct">
             <End Role="DiscountProduct" EntitySet="DiscountProducts" />
             <End Role="DiscountDetail" EntitySet="DiscountDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Voucher" Association="ClothesShopModel.FK_Order_Voucher">
+            <End Role="Voucher" EntitySet="Vouchers" />
+            <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Category">
@@ -840,25 +837,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Voucher">
-          <Key>
-            <PropertyRef Name="VoucherId" />
-          </Key>
-          <Property Name="VoucherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MiximumMoney" Type="Int32" />
-          <Property Name="MaximumMoney" Type="Int32" />
-          <Property Name="UsedCurrent" Type="Int32" />
-          <Property Name="MaxUses" Type="Int32" />
-          <Property Name="MaxUsesPerUser" Type="Int32" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Voucher" ToRole="Order" />
-        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="CusID" />
@@ -891,8 +869,8 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="Note" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
           <NavigationProperty Name="StatusOrder" Relationship="ClothesShopModel.FK_Order_StatusOrder" FromRole="Order" ToRole="StatusOrder" />
-          <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
           <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+          <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
         </EntityType>
         <EntityType Name="StatusOrder">
           <Key>
@@ -923,18 +901,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Principal>
             <Dependent Role="Order">
               <PropertyRef Name="StatusOrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Order_Voucher">
-          <End Type="ClothesShopModel.Voucher" Role="Voucher" Multiplicity="0..1" />
-          <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Voucher">
-              <PropertyRef Name="VoucherId" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="VoucherId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1116,8 +1082,24 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="DiscountDetails" Relationship="ClothesShopModel.FK_DiscountDetail_DiscountProduct" FromRole="DiscountProduct" ToRole="DiscountDetail" />
+        </EntityType>
+        <EntityType Name="Voucher">
+          <Key>
+            <PropertyRef Name="VoucherId" />
+          </Key>
+          <Property Name="VoucherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MiximumMoney" Type="Int32" />
+          <Property Name="MaximumMoney" Type="Int32" />
+          <Property Name="UsedCurrent" Type="Int32" />
+          <Property Name="MaxUses" Type="Int32" />
+          <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Voucher" ToRole="Order" />
         </EntityType>
         <Association Name="FK_DiscountDetail_DiscountProduct">
           <End Type="ClothesShopModel.DiscountProduct" Role="DiscountProduct" Multiplicity="0..1" />
@@ -1128,6 +1110,18 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Principal>
             <Dependent Role="DiscountDetail">
               <PropertyRef Name="DiscountProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Voucher">
+          <End Type="ClothesShopModel.Voucher" Role="Voucher" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voucher">
+              <PropertyRef Name="VoucherId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="VoucherId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1260,25 +1254,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vouchers">
-            <EntityTypeMapping TypeName="ClothesShopModel.Voucher">
-              <MappingFragment StoreEntitySet="Voucher">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="MaxUsesPerUser" ColumnName="MaxUsesPerUser" />
-                <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
-                <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
-                <ScalarProperty Name="MaximumMoney" ColumnName="MaximumMoney" />
-                <ScalarProperty Name="MiximumMoney" ColumnName="MiximumMoney" />
-                <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="ClothesShopModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
@@ -1374,11 +1349,27 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <EntitySetMapping Name="DiscountProducts">
             <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
               <MappingFragment StoreEntitySet="DiscountProduct">
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vouchers">
+            <EntityTypeMapping TypeName="ClothesShopModel.Voucher">
+              <MappingFragment StoreEntitySet="Voucher">
+                <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
+                <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
+                <ScalarProperty Name="MaximumMoney" ColumnName="MaximumMoney" />
+                <ScalarProperty Name="MiximumMoney" ColumnName="MiximumMoney" />
+                <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

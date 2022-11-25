@@ -115,38 +115,66 @@ discountApp.controller("discountController", function ($scope, $http) {
         }
     }
 
+    //check startDate và endDate
+    let checkDate = true
+    $scope.checkDate = function (startDate, endDate) {
+        checkDate = true
+        $scope.errMessage = '';
+        var curDate = new Date();
+
+        if (new Date(startDate) > new Date(endDate)) {
+            $("#errorToast .text-toast").text("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc")
+            $("#errorToast").toast("show")
+            checkDate = false
+            return false;
+        }
+        if (new Date(startDate) < curDate) {
+            $("#errorToast .text-toast").text("Thời gian bắt đầu phải lớn hơn thời gian hiện tại")
+            $("#errorToast").toast("show")
+            checkDate = false
+            return false;
+        }
+    }
+
     $scope.submit = function () {
-        if ($scope.discountForm.$valid) {
-            let listDiscountDetail = []
-            $.each($scope.listProConfirmed, (index, value) => {
-                let discountDetail = {
-                    ProId: value.ProId,
-                    Amount: value.Amount,
-                    TypeAmount: value.TypeAmount,
-                    MaxQuantityPerUser: value.MaxQuantityPerUser
-                }
-                listDiscountDetail.push(discountDetail)
-            })
+        if ($scope.listProConfirmed.length > 0) {
+            if ($scope.discountForm.$valid) {
+                $scope.checkDate($scope.discountPro.StartDate, $scope.discountPro.EndDate)
+                if (checkDate) {
+                    let listDiscountDetail = []
+                    $.each($scope.listProConfirmed, (index, value) => {
+                        let discountDetail = {
+                            ProId: value.ProId,
+                            Amount: value.Amount,
+                            TypeAmount: value.TypeAmount,
+                            MaxQuantityPerUser: value.MaxQuantityPerUser
+                        }
+                        listDiscountDetail.push(discountDetail)
+                    })
 
-            $http({
-                method: "POST",
-                url: "/Admin/Discount/Create",
-                datatype: 'Json',
-                data: { discountPro: $scope.discountPro, listDiscountDetail: listDiscountDetail }
-            }).then(function (res) {
-                if (res.data) {
-                    $scope.discountPro = null;
-                    $scope.listProConfirmed = null;
-                    $scope.checkProduct = false;
+                    $http({
+                        method: "POST",
+                        url: "/Admin/Discount/Create",
+                        datatype: 'Json',
+                        data: { discountPro: $scope.discountPro, listDiscountDetail: listDiscountDetail }
+                    }).then(function (res) {
+                        if (res.data) {
+                            location.reload()
 
-                    $("#successToast .text-toast").text("Đã thêm chương tình khuyến mãi thành công")
-                    $("#successToast").toast("show")
-                }
-                else {
-                    $("#errorToast .text-toast").text("Thêm thất bại")
-                    $("#errorToast").toast("show")
-                }
-            })
+                            $("#successToast .text-toast").text("Đã thêm chương tình khuyến mãi thành công")
+                            $("#successToast").toast("show")
+                        }
+                        else {
+                            $("#errorToast .text-toast").text("Thêm thất bại")
+                            $("#errorToast").toast("show")
+                        }
+                    })
+                } 
+            }
+        }
+        else {
+            $("#errorToast .text-toast").text("Bạn chưa thêm sản phẩm nào")
+            $("#errorToast").toast("show")
         }
     }
 

@@ -79,6 +79,7 @@
                             <div class="text-end">
                                 <a class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ExtralargeModal"><i class="fa-solid fa-plus"></i> Thêm sản phẩm</a>
                                 <button class="btn btn-primary me-2" type="submit" ng-click="submit()"><i class="fa-solid fa-check"></i> Hoàn tất</button>
+                                <a href="Index" class="btn-cancel btn bg-secondary text-white"><i class="fa-solid fa-backward"></i> Về danh sách</a>
 
                             </div>
                             <div ng-if="checkProduct">
@@ -168,8 +169,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="search-form d-flex align-items-center position-relative ng-pristine ng-valid">
-                        <input type="search" name="query" class="search-product w-100 ng-pristine ng-valid ng-empty ng-touched" ng-model="searchText" ng-change="getPage(1)" placeholder="Nhập tên để tìm kiếm" title="Enter search keyword">
+                    <form class="search-form d-flex align-items-center position-relative">
+                        <input type="search" name="query" class="search-product w-100" ng-model="searchText" ng-change="getPage(1)" placeholder="Nhập tên để tìm kiếm" title="Enter search keyword">
                         <button type="submit" title="Search">
                             <i class="bi bi-search"></i>
                         </button>

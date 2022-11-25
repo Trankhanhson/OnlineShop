@@ -1,0 +1,263 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main" ng-app="VoucherApp" ng-controller="VoucherController">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <div class="text-end mb-3 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo tên" />
+                                <select ng-model="pageSize" class="limitShow">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+                            <a ng-click="Add()" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#AddVoucher"><i class="fa-solid fa-plus"></i> Thêm mã giảm giá</a>
+                        </div>
+                        <table class="table table-hover table-bordered  pt-4">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th style="width:20%;">Tên</th>
+                                    <th style="width:20%;">
+                                        Bắt đầu
+                                    </th>
+                                    <th style="width:20%;">
+                                        Kết thúc
+                                    </th>
+                                    <th style="width:10%;">
+                                        Giảm
+                                    </th>
+                                    <th style="width:10%;">Giá trị đơn</th>
+                                    <th style="width:10%;">Số lượng</th>
+                                    <th>
+                                        Tùy chỉnh
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="category-wrap">
+                                <tr dir-paginate="v in listVoucher | itemsPerPage: pageSize" total-items="totalCount">
+                                    <td>{{v.Name}}</td>
+                                    <td>{{v.StartDate | date:"dd/MM/yyyy '-' h:mma"}}</td>
+                                    <td>
+                                        {{v.EndDate | date:"dd/MM/yyyy '-' h:mma"}}
+                                    </td>
+                                    <td>
+                                        {{v.Amount}}{{v.TypeAmount=="0" ? "đ" : "%"}}
+                                    </td>
+                                    <td>
+                                        {{v.MiximumMoney | number : 0}}đ
+                                    </td>
+                                    <td>{{v.MaxUses}}</td>
+                                    <td>
+                                        <a class="btn-update" ng-click="Edit(v,$index)" data-bs-toggle="modal" data-bs-target="#Editcategory" href=""><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                        <a class="btn-delete btn-deleteHome" ng-click="Delete(v)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Thêm loại sản phẩm-->
+    <div class="modal fade" id="AddVoucher" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm Mã giảm giá</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="createForm" novalidate>
+                        <div class="form-horizontal">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Tên mã giảm giá</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="Name" ng-model="Voucher.Name" required>
+                                    <span ng-show="createForm.$submitted">
+                                        <span class="error" ng-show="createForm.Name.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Bắt đầu</label>
+                                <div class="col-sm-8">
+                                    <input type="datetime-local" class="form-control" name="StartDate" ng-model="Voucher.StartDate" required>
+                                    <span ng-show="createForm.$submitted">
+                                        <span class="error" ng-show="createForm.StartDate.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Kết thúc</label>
+                                <div class="col-sm-8">
+                                    <input type="datetime-local" class="form-control" name="EndDate" ng-model="Voucher.EndDate" required>
+                                    <span ng-show="createForm.$submitted">
+                                        <span class="error" ng-show="createForm.EndDate.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Giá khuyến mãi</label>
+                                <div class=" d-flex col-sm-8">
+                                    <div class="flex-grow-1">
+                                        <input type="number" name="Amount" ng-model="Voucher.Amount" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" class="form-control text-dark" style="border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
+                                        <span ng-show="createForm.$submitted">
+                                            <span class="error" ng-show="createForm.Amount.$error.required">Bạn chưa nhập trường này</span>
+                                        </span>
+                                    </div>
+                                    <select class="form-select" ng-model="Voucher.TypeAmount" style="height: 38px; cursor: pointer; outline: none; width: 100px; border-top-left-radius: 0; border-bottom-left-radius: 0;" id="TypeAmount">
+                                        <option value="0">đ</option>
+                                        <option value="1">%</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Giá trị đơn tối thiểu</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="MiximumMoney" ng-model="Voucher.MiximumMoney" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" required>
+                                    <span ng-show="createForm.$submitted">
+                                        <span class="error" ng-show="createForm.MiximumMoney.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Số lượng mã</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="MaxUses" ng-model="Voucher.MaxUses" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" required>
+                                    <span ng-show="createForm.$submitted || createForm.MaxUses.$dirty">
+                                        <span class="error" ng-show="createForm.MaxUses.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
+                        </div>
+                    </form>
+
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+
+    <!--sửa loại sản phẩm-->
+    <div class="modal fade" id="Editcategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sửa loại sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="editForm" novalidate>
+                        <div class="form-horizontal">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Tên mã giảm giá</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="Name" ng-model="Voucher.Name" required>
+                                    <span ng-show="editForm.$submitted || editForm.Name.$dirty">
+                                        <span class="error" ng-show="editForm.Name.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Bắt đầu</label>
+                                <div class="col-sm-8">
+                                    <input type="datetime-local" class="form-control" name="StartDate" ng-model="Voucher.StartDate" required>
+                                    <span ng-show="editForm.$submitted || editForm.StartDate.$dirty">
+                                        <span class="error" ng-show="editForm.StartDate.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Kết thúc</label>
+                                <div class="col-sm-8">
+                                    <input type="datetime-local" class="form-control" name="EndDate" ng-model="Voucher.EndDate" required>
+                                    <span ng-show="editForm.$submitted || editForm.EndDate.$dirty">
+                                        <span class="error" ng-show="editForm.EndDate.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Giá khuyến mãi</label>
+                                <div class=" d-flex col-sm-8">
+                                    <div class="flex-grow-1">
+                                        <input type="number" name="Amount" ng-model="Voucher.Amount" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" class="form-control text-dark" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                        <span ng-show="editForm.$submitted || editForm.Amount.$dirty">
+                                            <span class="error" ng-show="editForm.Amount.$error.required">Bạn chưa nhập trường này</span>
+                                        </span>
+                                    </div>
+                                    <select class="form-select" ng-model="Voucher.TypeAmount" style="height: 38px; cursor: pointer; outline: none; width: 100px; border-top-left-radius: 0; border-bottom-left-radius: 0;" id="TypeAmount">
+                                        <option value="0">đ</option>
+                                        <option value="1">%</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Giá trị đơn tối thiểu</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="MiximumMoney" ng-model="Voucher.MiximumMoney" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" required>
+                                    <span ng-show="createForm.$submitted">
+                                        <span class="error" ng-show="createForm.MiximumMoney.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Số lượng mã</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="MaxUses" ng-model="Voucher.MaxUses" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1" required>
+                                    <span ng-show="createForm.$submitted || createForm.MaxUses.$dirty">
+                                        <span class="error" ng-show="createForm.MaxUses.$error.required">Bạn chưa nhập trường này</span>
+                                    </span>
+                                </div>
+                            </div>  
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary" ng-click="SaveEdit()">Lưu</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+@section scripts{
+    <script src="~/Scripts/dirPagination.js"></script>
+    <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
+    <script src="~/Scripts/ng-file-upload.min.js"></script>
+    <script src="~/Assets/Admin/FileAngularjs/VoucherAngular.js"></script>
+}
+
+

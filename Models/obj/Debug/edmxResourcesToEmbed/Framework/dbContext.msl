@@ -124,25 +124,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Vouchers">
-      <EntityTypeMapping TypeName="ClothesShopModel.Voucher">
-        <MappingFragment StoreEntitySet="Voucher">
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="MaxUsesPerUser" ColumnName="MaxUsesPerUser" />
-          <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
-          <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
-          <ScalarProperty Name="MaximumMoney" ColumnName="MaximumMoney" />
-          <ScalarProperty Name="MiximumMoney" ColumnName="MiximumMoney" />
-          <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Code" ColumnName="Code" />
-          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Customers">
       <EntityTypeMapping TypeName="ClothesShopModel.Customer">
         <MappingFragment StoreEntitySet="Customer">
@@ -238,11 +219,27 @@
     <EntitySetMapping Name="DiscountProducts">
       <EntityTypeMapping TypeName="ClothesShopModel.DiscountProduct">
         <MappingFragment StoreEntitySet="DiscountProduct">
-          <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="EndDate" ColumnName="EndDate" />
           <ScalarProperty Name="StartDate" ColumnName="StartDate" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="DiscountProductId" ColumnName="DiscountProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vouchers">
+      <EntityTypeMapping TypeName="ClothesShopModel.Voucher">
+        <MappingFragment StoreEntitySet="Voucher">
+          <ScalarProperty Name="MaxUses" ColumnName="MaxUses" />
+          <ScalarProperty Name="UsedCurrent" ColumnName="UsedCurrent" />
+          <ScalarProperty Name="MaximumMoney" ColumnName="MaximumMoney" />
+          <ScalarProperty Name="MiximumMoney" ColumnName="MiximumMoney" />
+          <ScalarProperty Name="TypeAmount" ColumnName="TypeAmount" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

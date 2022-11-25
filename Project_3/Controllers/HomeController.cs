@@ -21,7 +21,29 @@ namespace Project_3.Controllers
         {
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAll();
-            DiscountDAO discountDAO = new DiscountDAO();
+            var discountNow = new DiscountDAO().getDiscountNow();
+            foreach (var p in list)
+            {
+                //kiểm tra giảm có giảm giá không
+                foreach (var d in discountNow)
+                {
+                    foreach(var dt in d.DiscountDetails)
+                    {
+                        if (dt.ProId == p.ProId)
+                        {
+                            if (dt.TypeAmount == "0") //giảm giá theo tiền
+                            {
+                                p.DiscountPrice = p.Price.Value - dt.Amount.Value;
+                            }
+                            else  //giảm giá theo %
+                            {
+                                p.Percent = dt.Amount.Value;
+                                p.DiscountPrice = Math.Round(p.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * p.Price.Value), 0);
+                            }
+                        }
+                    }
+                }
+            }
             return View(list);
         }
 
@@ -116,6 +138,7 @@ namespace Project_3.Controllers
                     HttpCookie Cookie = new HttpCookie("CustomerId",id.ToString());
                     Cookie.Expires = DateTime.Now.AddYears(1);
                     Response.Cookies.Add(Cookie);
+                    var fb = new FaceBookClient();
                 }
             }
             catch
@@ -134,7 +157,7 @@ namespace Project_3.Controllers
             HttpCookie Cookie = new HttpCookie("CustomerId");
             Cookie.Expires = DateTime.Now.AddDays(-1d);
             Response.Cookies.Add(Cookie);
-            return RedirectToAction("Index");
+            return RedirectToAction("HomePage");
         }
     }
 }

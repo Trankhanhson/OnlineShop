@@ -160,7 +160,6 @@
       <End Role="User" EntitySet="Users" />
       <End Role="New" EntitySet="News" />
     </AssociationSet>
-    <EntitySet Name="Vouchers" EntityType="ClothesShopModel.Voucher" />
     <EntitySet Name="Customers" EntityType="ClothesShopModel.Customer" />
     <EntitySet Name="Orders" EntityType="ClothesShopModel.Order" />
     <EntitySet Name="StatusOrders" EntityType="ClothesShopModel.StatusOrder" />
@@ -170,10 +169,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Order_StatusOrder" Association="ClothesShopModel.FK_Order_StatusOrder">
       <End Role="StatusOrder" EntitySet="StatusOrders" />
-      <End Role="Order" EntitySet="Orders" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Order_Voucher" Association="ClothesShopModel.FK_Order_Voucher">
-      <End Role="Voucher" EntitySet="Vouchers" />
       <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
     <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
@@ -217,9 +212,14 @@
       <End Role="ProductVariation" EntitySet="ProductVariations" />
     </AssociationSet>
     <EntitySet Name="DiscountProducts" EntityType="ClothesShopModel.DiscountProduct" />
+    <EntitySet Name="Vouchers" EntityType="ClothesShopModel.Voucher" />
     <AssociationSet Name="FK_DiscountDetail_DiscountProduct" Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct">
       <End Role="DiscountProduct" EntitySet="DiscountProducts" />
       <End Role="DiscountDetail" EntitySet="DiscountDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Voucher" Association="ClothesShopModel.FK_Order_Voucher">
+      <End Role="Voucher" EntitySet="Vouchers" />
+      <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
@@ -283,25 +283,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Voucher">
-    <Key>
-      <PropertyRef Name="VoucherId" />
-    </Key>
-    <Property Name="VoucherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="StartDate" Type="DateTime" Precision="3" />
-    <Property Name="EndDate" Type="DateTime" Precision="3" />
-    <Property Name="Amount" Type="Double" Nullable="false" />
-    <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="MiximumMoney" Type="Int32" />
-    <Property Name="MaximumMoney" Type="Int32" />
-    <Property Name="UsedCurrent" Type="Int32" />
-    <Property Name="MaxUses" Type="Int32" />
-    <Property Name="MaxUsesPerUser" Type="Int32" />
-    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Voucher" ToRole="Order" />
-  </EntityType>
   <EntityType Name="Customer">
     <Key>
       <PropertyRef Name="CusID" />
@@ -334,8 +315,8 @@
     <Property Name="Note" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
     <NavigationProperty Name="StatusOrder" Relationship="ClothesShopModel.FK_Order_StatusOrder" FromRole="Order" ToRole="StatusOrder" />
-    <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
     <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+    <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
   </EntityType>
   <EntityType Name="StatusOrder">
     <Key>
@@ -366,18 +347,6 @@
       </Principal>
       <Dependent Role="Order">
         <PropertyRef Name="StatusOrderId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Order_Voucher">
-    <End Type="ClothesShopModel.Voucher" Role="Voucher" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Voucher">
-        <PropertyRef Name="VoucherId" />
-      </Principal>
-      <Dependent Role="Order">
-        <PropertyRef Name="VoucherId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -559,8 +528,24 @@
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="StartDate" Type="DateTime" Precision="3" />
     <Property Name="EndDate" Type="DateTime" Precision="3" />
-    <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="DiscountDetails" Relationship="ClothesShopModel.FK_DiscountDetail_DiscountProduct" FromRole="DiscountProduct" ToRole="DiscountDetail" />
+  </EntityType>
+  <EntityType Name="Voucher">
+    <Key>
+      <PropertyRef Name="VoucherId" />
+    </Key>
+    <Property Name="VoucherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="EndDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Double" Nullable="false" />
+    <Property Name="TypeAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MiximumMoney" Type="Int32" />
+    <Property Name="MaximumMoney" Type="Int32" />
+    <Property Name="UsedCurrent" Type="Int32" />
+    <Property Name="MaxUses" Type="Int32" />
+    <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Voucher" ToRole="Order" />
   </EntityType>
   <Association Name="FK_DiscountDetail_DiscountProduct">
     <End Type="ClothesShopModel.DiscountProduct" Role="DiscountProduct" Multiplicity="0..1" />
@@ -571,6 +556,18 @@
       </Principal>
       <Dependent Role="DiscountDetail">
         <PropertyRef Name="DiscountProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Voucher">
+    <End Type="ClothesShopModel.Voucher" Role="Voucher" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Voucher">
+        <PropertyRef Name="VoucherId" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="VoucherId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

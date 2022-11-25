@@ -1077,3 +1077,8 @@ label.error {
         background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDQiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0NCA0NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAuNSA0My41TDQzLjUgMC41IiBzdHJva2U9IiNFOEU4RUEiLz4KPC9zdmc+Cg==);
         background-clip: border-box;
     }
+
+.submit-regisLogin:hover{
+    opacity: 0.7;
+    cursor:pointer;
+}

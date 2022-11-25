@@ -145,3 +145,49 @@ img {
     margin-left: -30px;
     background: none;
 }
+.order-detail-top {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+    .order-detail-top .account-page-title {
+        margin-bottom: 14px;
+        margin-top: 20px;
+    }
+
+.account-page-title {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 22px;
+}
+
+    .account-page-title .title {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 24px;
+        margin: 0;
+        display: block;
+    }
+
+.order-detail-top .account-page-title span {
+    font-weight: 500;
+}
+
+.order-detail-top .order-date {
+    margin-left: auto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}

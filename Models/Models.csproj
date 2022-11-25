@@ -78,6 +78,7 @@
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\ProductSizeDAO.cs" />
     <Compile Include="DAO\ProductVariationDAO.cs" />
+    <Compile Include="DAO\VoucherDAO.cs" />
     <Compile Include="Framework\Category.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>

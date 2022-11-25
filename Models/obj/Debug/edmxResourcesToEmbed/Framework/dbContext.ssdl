@@ -41,7 +41,6 @@
     <Property Name="Name" Type="nvarchar" MaxLength="100" />
     <Property Name="StartDate" Type="datetime" />
     <Property Name="EndDate" Type="datetime" />
-    <Property Name="Status" Type="bit" />
   </EntityType>
   <EntityType Name="ImportBill">
     <Key>
@@ -217,7 +216,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       <PropertyRef Name="VoucherId" />
     </Key>
     <Property Name="VoucherId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="nvarchar" MaxLength="200" />
     <Property Name="Description" Type="nvarchar" MaxLength="200" />
     <Property Name="StartDate" Type="datetime" />
     <Property Name="EndDate" Type="datetime" />
@@ -227,8 +226,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <Property Name="MaximumMoney" Type="int" />
     <Property Name="UsedCurrent" Type="int" />
     <Property Name="MaxUses" Type="int" />
-    <Property Name="MaxUsesPerUser" Type="int" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK__Product__ProCatI__6AEFE058">
     <End Role="ProductCat" Type="Self.ProductCat" Multiplicity="1" />

@@ -53,18 +53,4 @@ OrderApp.controller("OrderController", function ($scope, $http) {
         }
     }
 
-    $scope.getSortClass = function (column) {
-        //khi reverse thay doi thi nd-class dc kich hoat
-        if ($scope.sortColumn == column) {
-            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
-        }
-        return ''
-    }
-
-    //paging
-    $scope.pageSize = "5"
-    $scope.getPageSize = function (pageSize) {
-        $scope.pageSize = pageSize
-    }
-
 });

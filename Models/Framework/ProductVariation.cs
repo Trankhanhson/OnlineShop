@@ -20,7 +20,6 @@ namespace Models.Framework
             this.ImportBillDetails = new HashSet<ImportBillDetail>();
             this.OrderDetails = new HashSet<OrderDetail>();
         }
-    
         public long ProVariationID { get; set; }
         public Nullable<long> ProId { get; set; }
         public Nullable<long> ProSizeID { get; set; }

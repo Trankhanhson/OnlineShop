@@ -44,8 +44,7 @@ namespace Project_3.Controllers
                 ViewBag.Customer = cus;
             }
 
-            List<CartItem> list = new List<CartItem>();
-            return View(list);
+            return View();
         }
 
         public ActionResult InfoBill(long id)

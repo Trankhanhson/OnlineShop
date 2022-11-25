@@ -57,7 +57,7 @@
             <div>
                 @if (Request.Cookies["CustomerId"] == null)
                 {
-                    <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="header-icon header-login"> </a>
+                    <button data-bs-toggle="modal" href="#ModalLogin" style="background-color:transparent" class="header-icon header-login"> </button>
                 }
                 else
                 {
@@ -214,17 +214,18 @@
                 <form id="formLogin">
                     <div class="modal-body">
                         <p class="modal-title fs-6">Cảm ơn bạn đã trở lại.</p>
-                        <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Email/SĐT của bạn">
+                        <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Email của bạn">
                         <label id="userName-error" class="error" for="userName" style="display: none;"></label>
                         <input type="password" id="passwordLogin" name="passwordLogin" class="input-loginAndRegis PassWord mt-3" placeholder="Mật khẩu">
                         <label id="passwordLogin-error" class="error" for="passwordLogin" style="display: none;"></label>
                     </div>
                     <div class="modal-footer">
-                        <div onclick="Login()" class="submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
+                        <div onclick="Login()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
                             Tiếp tục
                         </div>
                         <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>
                     </div>
+                    <a>Đăng nhập với Google</a>
                 </form>
             </div>
         </div>
@@ -252,7 +253,7 @@
                         <input type="password" autocomplete="new-password" name="ConfirmPassword" id="ConfirmPassword" class="input-loginAndRegis mt-3" placeholder="Nhập lại mật khẩu">
                     </div>
                     <div class="modal-footer">
-                        <div class="submit-modal fw-bold text-white py-3 text-center w-100" onclick="RegisterSubmit()" style="background-color: #333f48;">
+                        <div class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" onclick="RegisterSubmit()" style="background-color: #333f48;">
                             Tiếp tục
                         </div>
                         <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>

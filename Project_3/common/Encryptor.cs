@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace OnlineShop.Common
+namespace Project_3.common
 {
     public static class Encryptor
     {

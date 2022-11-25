@@ -91,7 +91,7 @@ function RegisterSubmit() {
         }
 
         $.ajax({
-            url: "/Home/Register",
+            url: "/LoginClient/Register",
             type: "POST",
             dataType: "Json",
             data: { cus: cus },
@@ -129,7 +129,7 @@ function Login() {
         const username = $("#userName").val()
         const password = $("#passwordLogin").val()
         $.ajax({
-            url: "/Home/Login",
+            url: "/LoginClient/Login",
             type: "Post",
             dataType: "Json",
             data: { username: username, password: password },
@@ -164,3 +164,27 @@ $("#formLogin").validate({
         passwordLogin: "Bạn chưa nhập mật khẩu"
     }
 })
+
+function ConfirmEmail() {
+    
+    if ($("#formConfirmEmail").valid()) {
+        const EmailConfirm = $("#EmailConfirm").val()
+        $.ajax({
+            url: "/LoginClient/ForgotPassword",
+            type: "Post",
+            dataType: "Json",
+            data: { Email: EmailConfirm},
+            success: function (res) {
+                
+                if (res) //nếu Email tồn tại
+                {
+                    $("#ConfirmedEmail").modal("show")
+                }
+                else //nếu không thì sẻ thông báo
+                {
+                    addError("EmailConfirm", "Email không đúng")
+                }
+            }
+        })
+    }
+}

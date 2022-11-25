@@ -1,11 +1,18 @@
 ﻿using Models;
 using Models.DAO;
 using Models.Framework;
+using Project_3.common;
 using Project_3.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using WebGrease.Activities;
 
@@ -43,6 +50,11 @@ namespace Project_3.Controllers
                 var cus = new CustomnerDAO().getById(id);
                 ViewBag.Customer = cus;
             }
+            else
+            {
+                var cus = new CustomnerDAO().getAll().First();
+                ViewBag.Customer = cus;
+            }
 
             return View();
         }
@@ -65,6 +77,7 @@ namespace Project_3.Controllers
         {
             try
             {
+
                 ProductVariationDAO productVariationDAO = new ProductVariationDAO();
                 order.OrderDate = DateTime.Now;
                 order.StatusOrderId = 1;
@@ -82,14 +95,23 @@ namespace Project_3.Controllers
                 }
                 OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
                 orderDetailDAO.Insert(listOrderDetail);
-
-
                 productVariationDAO.editOrdered(listOrderDetail);
+
+                ////Send mail
+                string content = System.IO.File.ReadAllText(Server.MapPath("~/Assets/Template/NewOrder.html"));
+
+                content = content.Replace("{{CustomerName}}", "Trần dương");
+                content = content.Replace("{{Phone}}", o.ReceivingPhone);
+                content = content.Replace("{{Email}}", "tduong842007@gmail.com");
+                content = content.Replace("{{Address}}", o.ReceivingAddress);
+                content = content.Replace("{{Total}}", o.MoneyTotal.Value.ToString("N0"));
+                string subject = "Thông báo đơn hàng #ĐH" + o.OrdID + " của quý khách đã được tiếp nhận";
+                MailHelper.SendMail("tduong842007@gmail.com", subject, content);
                 return Json(o.OrdID);
             }
             catch
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("HomePage", "Home");
             }
         }
     }

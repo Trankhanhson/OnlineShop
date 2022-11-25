@@ -33,6 +33,8 @@ namespace Models.Framework
         public Nullable<int> MoneyTotal { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
         public string Note { get; set; }
+        public string ReceivingName { get; set; }
+        public string ReceivingMail { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual StatusOrder StatusOrder { get; set; }

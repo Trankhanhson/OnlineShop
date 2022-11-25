@@ -17,6 +17,7 @@
     <Property Name="CusID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="100" />
     <Property Name="Phone" Type="varchar" MaxLength="10" />
+    <Property Name="ResetPasswordCode" Type="varchar" MaxLength="100" />
     <Property Name="Password" Type="varchar" MaxLength="50" />
     <Property Name="Email" Type="varchar" MaxLength="100" />
     <Property Name="Address" Type="nvarchar" MaxLength="300" />
@@ -80,6 +81,8 @@
     <Property Name="OrdID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CusID" Type="bigint" />
     <Property Name="VoucherId" Type="int" />
+    <Property Name="ReceivingName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ReceivingMail" Type="nvarchar(max)" />
     <Property Name="ReceivingPhone" Type="varchar" MaxLength="10" />
     <Property Name="ReceivingCity" Type="nvarchar" MaxLength="100" />
     <Property Name="ReceivingDistrict" Type="nvarchar" MaxLength="100" />
@@ -89,7 +92,7 @@
     <Property Name="StatusOrderId" Type="int" />
     <Property Name="MoneyTotal" Type="int" />
     <Property Name="OrderDate" Type="datetime" />
-    <Property Name="Note" Type="nvarchar" MaxLength="400" />
+    <Property Name="Note" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="OrderDetail">
     <Key>

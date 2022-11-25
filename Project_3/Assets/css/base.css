@@ -1078,7 +1078,7 @@ label.error {
         background-clip: border-box;
     }
 
-.submit-regisLogin:hover{
+.submit-regisLogin:hover {
     opacity: 0.7;
-    cursor:pointer;
+    cursor: pointer;
 }

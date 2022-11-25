@@ -22,6 +22,7 @@
           <Property Name="CusID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="ResetPasswordCode" Type="varchar" MaxLength="100" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
           <Property Name="Address" Type="nvarchar" MaxLength="300" />
@@ -85,6 +86,8 @@
           <Property Name="OrdID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CusID" Type="bigint" />
           <Property Name="VoucherId" Type="int" />
+          <Property Name="ReceivingName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReceivingMail" Type="nvarchar(max)" />
           <Property Name="ReceivingPhone" Type="varchar" MaxLength="10" />
           <Property Name="ReceivingCity" Type="nvarchar" MaxLength="100" />
           <Property Name="ReceivingDistrict" Type="nvarchar" MaxLength="100" />
@@ -94,7 +97,7 @@
           <Property Name="StatusOrderId" Type="int" />
           <Property Name="MoneyTotal" Type="int" />
           <Property Name="OrderDate" Type="datetime" />
-          <Property Name="Note" Type="nvarchar" MaxLength="400" />
+          <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -849,6 +852,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+          <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -866,11 +870,13 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="StatusOrderId" Type="Int32" />
           <Property Name="MoneyTotal" Type="Int32" />
           <Property Name="OrderDate" Type="DateTime" Precision="3" />
-          <Property Name="Note" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
           <NavigationProperty Name="StatusOrder" Relationship="ClothesShopModel.FK_Order_StatusOrder" FromRole="Order" ToRole="StatusOrder" />
           <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
           <NavigationProperty Name="Voucher" Relationship="ClothesShopModel.FK_Order_Voucher" FromRole="Order" ToRole="Voucher" />
+          <Property Name="ReceivingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivingMail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="StatusOrder">
           <Key>
@@ -1257,6 +1263,7 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="ClothesShopModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1270,6 +1277,8 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="ClothesShopModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="ReceivingMail" ColumnName="ReceivingMail" />
+                <ScalarProperty Name="ReceivingName" ColumnName="ReceivingName" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />

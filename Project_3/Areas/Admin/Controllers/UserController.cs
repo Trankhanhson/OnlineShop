@@ -10,7 +10,7 @@ using System.Web.Mvc;
 using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
-using OnlineShop.Common;
+using Project_3.common;
 
 namespace Project_3.Areas.Admin.Controllers
 {

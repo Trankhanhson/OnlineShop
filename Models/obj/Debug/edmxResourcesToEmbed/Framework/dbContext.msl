@@ -127,6 +127,7 @@
     <EntitySetMapping Name="Customers">
       <EntityTypeMapping TypeName="ClothesShopModel.Customer">
         <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="Address" ColumnName="Address" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -140,6 +141,8 @@
     <EntitySetMapping Name="Orders">
       <EntityTypeMapping TypeName="ClothesShopModel.Order">
         <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="ReceivingMail" ColumnName="ReceivingMail" />
+          <ScalarProperty Name="ReceivingName" ColumnName="ReceivingName" />
           <ScalarProperty Name="Note" ColumnName="Note" />
           <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
           <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />

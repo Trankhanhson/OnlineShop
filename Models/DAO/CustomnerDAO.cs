@@ -69,6 +69,11 @@ namespace Models.DAO
             }
         }
 
+        public List<Customer> getAll()
+        {
+            return db.Customers.ToList();
+        }
+
         public Customer getById(long id)
         {
             return db.Customers.Find(id);
@@ -76,7 +81,12 @@ namespace Models.DAO
 
         public long getIdByUsername(string username)
         {
-            return db.Customers.Where(c=>c.Email==username || c.Phone==username).SingleOrDefault().CusID;
+            return db.Customers.Where(c=>c.Email==username).SingleOrDefault().CusID;
+        }
+
+        public Customer getByEmail(string email)
+        {
+            return db.Customers.Where(c=>c.Email==email).SingleOrDefault();
         }
     }
 }

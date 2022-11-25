@@ -57,10 +57,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GoogleAuthentication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleAuthentication.1.0.0\lib\net46\GoogleAuthentication.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -159,6 +155,7 @@
     <Compile Include="Areas\Admin\Controllers\VoucherController.cs" />
     <Compile Include="common\CommonConstants.cs" />
     <Compile Include="common\Encryptor.cs" />
+    <Compile Include="common\MailHelper.cs" />
     <Compile Include="common\MethodCommnon.cs" />
     <Compile Include="common\Paggination.cs" />
     <Compile Include="common\UserLogin.cs" />
@@ -167,6 +164,7 @@
     <Compile Include="Controllers\GirlController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfoCustomerController.cs" />
+    <Compile Include="Controllers\LoginClientController.cs" />
     <Compile Include="Controllers\ManController.cs" />
     <Compile Include="Controllers\OutletController.cs" />
     <Compile Include="Controllers\WomenController.cs" />
@@ -180,6 +178,7 @@
     <Compile Include="Model\PagedData.cs" />
     <Compile Include="Model\ProductDiscount.cs" />
     <Compile Include="Model\RegisterCustomer.cs" />
+    <Compile Include="Model\ResetPasswordModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -3759,7 +3758,7 @@
     <Content Include="Assets\Plugin\ckfinder\skins\v1\skin.js" />
     <Content Include="Assets\Plugin\ckfinder\skins\v1\uipanel.css" />
     <Content Include="Assets\Plugin\ckfinder\translations.txt" />
-    <Content Include="Code2Night.jpeg" />
+    <Content Include="Assets\Template\NewOrder.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -4009,6 +4008,7 @@
     <Content Include="Views\Cart\InfoBill.cshtml" />
     <Content Include="Views\Shared\_LayoutCart.cshtml" />
     <Content Include="Views\Home\HomePage.cshtml" />
+    <Content Include="Views\LoginClient\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

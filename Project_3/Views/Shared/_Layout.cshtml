@@ -223,10 +223,50 @@
                         <div onclick="Login()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
                             Tiếp tục
                         </div>
-                        <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>
+                        <a data-bs-toggle="modal" href="#ModalGetPassword" role="button">Quên mật khẩu</a>
                     </div>
-                    <a>Đăng nhập với Google</a>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!--modal forget pass-->
+    <div class="modal fade" id="ModalGetPassword" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="position-relative d-flex ">
+                    <div class="pt-3 text-center w-100">
+                        <h3>Lấy lại mật khẩu</h3>
+                        <p>Vui lòng nhập email của bạn để xác nhận</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formConfirmEmail">
+                    <div class="modal-body">
+                        <input type="text" id="EmailConfirm" name="EmailConfirm" class="input-loginAndRegis NameAccount mt-4" placeholder="Email của bạn">
+                        <label id="EmailConfirm-error" class="error" for="EmailConfirm" style="display: none;"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <div onclick="ConfirmEmail()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
+                            Tiếp tục
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--modal forget pass-->
+    <div class="modal fade" id="ConfirmedEmail" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="position-relative d-flex ">
+                    <div class="pt-3 text-center w-100">
+                        <h3>Yêu Cầu Thành Công</h3>
+                        <p>Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu.</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
             </div>
         </div>
     </div>

@@ -68,14 +68,7 @@
                         <span>Tổng tiền thanh toán</span>
                         <span class="total-price" data=""></span>
                     </div>
-                    @if (Request.Cookies["CustomerId"] != null)
-                    {
-                        <a href="/Cart/PaymentPage" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
-                    }
-                    else
-                    {
-                        <a data-bs-toggle="modal" href="#ModalLogin" role="button" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
-                    }
+                    <a href="/Cart/PaymentPage" class="btn-order text-center" style="color:white;">ĐẶT HÀNG</a>
                     <p class="my-4" style="font-size: 13px; color:#77757f">Áp dụng mã giảm giá, C-point tại bước tiếp theo</p>
                     <hr class="border">
                     <div>

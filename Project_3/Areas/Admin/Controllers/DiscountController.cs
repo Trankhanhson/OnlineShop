@@ -13,7 +13,7 @@ using Project_3.Model;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class DiscountController : Controller
+    public class DiscountController : BaseController
     {
         // GET: Admin/Discount
         public ActionResult Index()

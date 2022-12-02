@@ -136,7 +136,7 @@ function payment() {
     const district = $("#district option:selected").text()
     const ward = $("#ward option:selected").text()
     const address = $("#address").val()
-    const PaymentType = "COD"
+    const PaymentType = $('input[name= "PaymentMethod"]:checked').val()
     const MoneyTotal = $(".total-price").attr("data")
     if ($(".form-Payment").valid()) {
         let order = {

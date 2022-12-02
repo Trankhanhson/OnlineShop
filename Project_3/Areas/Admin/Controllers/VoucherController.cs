@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class VoucherController : Controller
+    public class VoucherController : BaseController
     {
         // GET: Admin/Voucher
         public ActionResult Index()
@@ -38,7 +38,7 @@ namespace Project_3.Areas.Admin.Controllers
         {
             try
             {
-                
+                Voucher.UsedCurrent = 0;
                 VoucherDAO VoucherDAO = new VoucherDAO();
                 Voucher v = VoucherDAO.Insert(Voucher);
                 var result = JsonConvert.SerializeObject(v);
@@ -97,5 +97,6 @@ namespace Project_3.Areas.Admin.Controllers
                 check = check
             });
         }
+
     }
 }

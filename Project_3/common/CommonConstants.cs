@@ -8,5 +8,6 @@ namespace Project_3.common
     public class CommonConstants
     {
         public static string USER_SESSION = "USER_SESSION";
+        public static string SESSION_CREDENTIALS = "SESSION_CREDENTIALS";
     }
 }

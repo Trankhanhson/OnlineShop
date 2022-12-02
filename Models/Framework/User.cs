@@ -27,6 +27,7 @@ namespace Models.Framework
         public string Password { get; set; }
         public string UserAdress { get; set; }
         public string UserPhone { get; set; }
+        public Nullable<int> GroupId { get; set; }
         public string UserEmail { get; set; }
         public Nullable<bool> Status { get; set; }
     
@@ -34,5 +35,6 @@ namespace Models.Framework
         public virtual ICollection<ImportBill> ImportBills { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<New> News { get; set; }
+        public virtual UserGroup UserGroup { get; set; }
     }
 }

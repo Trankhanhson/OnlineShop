@@ -4,12 +4,271 @@
 <head>
     <title> Thông tin đơn hàng mới từ khách hàng: {{CustomerName}}</title>
     <meta charset="utf-8" />
+    <style>
+        html {
+            font-family: 'Pangea',sans-serif;
+        }
+        .m_-5644367405254415818table {
+            border-collapse: collapse;
+        }
+            .m_-5644367405254415818table th {
+                padding: 10px 20px;
+                background-color: #2f5acf;
+                color: white;
+                border: 1px solid white;
+            }
+    </style>
 </head>
 <body>
-    Thông tin đơn hàng mới từ khách hàng: {{CustomerName}}
-    Điện thoại: {{Phone}} <br />
-    Email: {{Email}}<br />
-    Địa chỉ: {{Address}}<br />
-    Trị giá: {{Total}}<br />
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="720" bgcolor="#ffffff">
+        <tbody>
+            <tr>
+                <td style="padding:0 16px;line-height:30px">
+                    <p style="margin:10px 0">
+                        <span class="il">Canifa</span> rất vui thông báo đơn hàng <b>#{{OrderId}}</b> của quý khách đã được tiếp nhận và
+                        đang trong quá trình xử lý.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="border:2px solid #2f5acf;padding:8px 16px;border-radius:16px;margin-top:16px">
+                        <p style="margin:10px 0 20px;font-weight:bold;font-size:20px">
+                            THÔNG TIN ĐƠN HÀNG <b>#{{OrderId}}</b>
+
+                            <span style="font-weight:normal">{{OrderDate}}</span>
+                        </p>
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td valign="top">
+                                        <p style="margin:10px 0;font-weight:bold">
+                                            <b>Địa chỉ giao hàng</b>
+                                        </p>
+                                        <p style="margin:10px 0">
+                                            Tên khách hàng: {{CusName}}
+                                        </p>
+                                        <p style="margin:10px 0">
+                                            Email: {{Email}}
+                                        </p>
+                                        <p style="margin:10px 0">
+                                            Số điện thoại: {{Phone}}
+                                        </p>
+                                        <p style="margin:10px 0">
+                                            Địa chỉ: {{Adress}}, {{ReceivingCity}} - {{ReceivingDistrict}} - {{ReceivingWard}}
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p style="margin:10px 0">
+                                            <b>Phương thức thanh toán:</b> {{PaymentType}}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div style="border:2px solid #2f5acf;padding:8px 16px;border-radius:16px;margin-top:16px">
+                        <p style="margin:10px 0 20px;font-weight:bold;font-size:20px">
+                            CHI TIẾT ĐƠN HÀNG
+                        </p>
+                        <table class="m_-4552931129180647865table" cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:14px">
+                            <thead>
+                                <tr>
+                                    <th width="150px" style="text-align:left">Tên sản phẩm</th>
+                                    <th>SL</th>
+                                    <th width="150px">Giá bán</th>
+                                    <th style="text-align:right">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <p style="margin:5px 0 0">
+                                            Áo nỉ dài tay Lifewear - thoải mái khi mặc
+                                        </p>
+                                        <p style="margin-top:3px">
+                                            <span style="font-size:12px;display:block">
+                                                Màu sắc: Xám đậm
+                                            </span>
+                                            <span style="font-size:12px;display:block">
+                                                Kích thước: L
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td style="text-align:center">
+                                        1
+                                    </td>
+                                    <td style="text-align:center">
+                                        <b>
+                                            339.000đ
+                                        </b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        339.000đ
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        Mã giảm giá
+                                    </td>
+                                    <td style="text-align:right">
+                                        {{Voucher}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        Tổng giá trị sản phẩm
+                                    </td>
+                                    <td style="text-align:right">
+                                        {{TotalValue}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        Số tiền giảm giá
+                                    </td>
+                                    <td style="text-align:right">
+                                        {{Total}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Phí vận chuyển</td>
+                                    <td style="text-align:right">
+                                        25.000đ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <b>Tổng thanh toán</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>
+                                            {{TotalBill}}
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <b>Hình thức thanh toán</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>
+                                            {{PaymentType}}
+                                        </b>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <table class="m_-5644367405254415818table" cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:14px">
+                            <thead>
+                                <tr>
+                                    <th width="150px" style="text-align:left">Tên sản phẩm</th>
+                                    <th>SL</th>
+                                    <th width="150px">Giá bán</th>
+                                    <th style="text-align:right">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left">
+                                        <p style="margin:5px 0 0">
+                                            Áo Hoodie nam Daily Wear (mũ trùm có dây rút)
+                                        </p>
+                                        <p style="margin-top:3px">
+                                            <span style="font-size:12px;display:block">
+                                                Màu sắc: Đen
+                                            </span>
+                                            <span style="font-size:12px;display:block">
+                                                Kích thước Áo: L
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td style="text-align:center">
+                                        1
+                                    </td>
+                                    <td style="text-align:center">
+                                        <b>
+                                            399.000đ
+                                        </b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        399.000đ
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        Mã giảm giá
+                                    </td>
+                                    <td style="text-align:right">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        Tổng giá trị sản phẩm
+                                    </td>
+                                    <td style="text-align:right">
+                                        738.000đ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        Số tiền giảm giá
+                                    </td>
+                                    <td style="text-align:right">
+                                        0đ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        Voucher
+                                    </td>
+                                    <td style="text-align:right">
+                                        -339.000đ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Phí vận chuyển</td>
+                                    <td style="text-align:right">
+                                        0đ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <b>Tổng thanh toán</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>
+                                            399.000đ
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <b>Hình thức thanh toán</b>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <b>
+                                            Thanh toán khi nhận hàng (COD)
+                                        </b>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

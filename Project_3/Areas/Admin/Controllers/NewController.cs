@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class NewController : Controller
+    public class NewController : BaseController
     {
         // GET: Admin/News
         public ActionResult Index()

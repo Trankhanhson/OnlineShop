@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "LoginView";
+    Layout = "~/Views/Shared/_LayoutCart.cshtml";
+}
+
+@section styles{
+    <style>
+        input:focus {
+            border: 1px solid #63b1bc !important;
+        }
+
+        .form-control:focus {
+            color: #212529;
+            background-color: #fff;
+            outline: 0;
+            box-shadow: 0 0 0 0 rgb(13 110 253 / 25%);
+        }
+
+        .continueShoping {
+            display: none;
+        }
+
+        .payBill {
+            display: none;
+        }
+    </style>
+}
+
+<div class="w-50 mx-auto ">
+    <h3 class="text-center mb-5">Đăng nhập</h3>
+    <form id="LoginView">
+        <div class="form-group mb-3">
+            <input type="text" name="Email" id="Email" value="@ViewBag.Email" class="form-control Email" placeholder="Email của bạn">
+            <label id="Email-error" class="error" for="Email" style="display: none;"></label>
+        </div>
+        <div class="form-group mb-3">
+            <input type="password" value="@ViewBag.Password" id="Password" name="Password" class="form-control Password" placeholder="Mật khẩu">
+            <label id="Password-error" class="error" for="Password" style="display: none;"></label>
+        </div>
+        <div onclick="LoginView()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
+            Tiếp tục
+        </div>
+    </form>
+</div>
+

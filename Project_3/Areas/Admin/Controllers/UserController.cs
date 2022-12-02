@@ -18,6 +18,7 @@ namespace Project_3.Areas.Admin.Controllers
     {
 
         // GET: Admin/User
+        [HasCredential(RoleID = "VIEW_USER")]
         public ActionResult Index()
         {
             return View();
@@ -33,6 +34,7 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/User/Create
         [HttpPost]
+        [HasCredential(RoleID = "ADD_USER")]
         public JsonResult Create(User user)
         {
             try
@@ -61,6 +63,7 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/User/Edit/5
         [HttpPost]
+        [HasCredential(RoleID = "EDIT_USER")]
         public JsonResult Edit(User user)
         {
             bool check = true;
@@ -78,6 +81,7 @@ namespace Project_3.Areas.Admin.Controllers
         }
         // POST: Admin/User/Delete/5
         [HttpPost]
+        [HasCredential(RoleID = "DELETE_USER")]
         public ActionResult Delete(int id)
         {
             string message = "";

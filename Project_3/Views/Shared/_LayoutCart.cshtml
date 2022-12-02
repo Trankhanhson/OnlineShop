@@ -22,10 +22,10 @@
             <a class="header-brand me-auto me-xl-0 ms-xl-0 ms-sm-5" href="/Home/HomePage/">
                 <img src="/Assets/img/logo.svg" alt="" />
             </a>
-            <div style="font-size:15px;font-weight:700;margin-left:20px">THANH TOÁN ĐƠN HÀNG</div>
+            <div class="payBill" style="font-size:15px;font-weight:700;margin-left:20px">THANH TOÁN ĐƠN HÀNG</div>
         </div>
         <div>
-            <a style="font-size:15px;font-weight:700;text-decoration:underline; color:#000;" href="/Home/HomePage">TIẾP TỤC MUA SẮM</a>
+            <a class="continueShoping" style="font-size:15px;font-weight:700;text-decoration:underline; color:#000;" href="/Home/HomePage">TIẾP TỤC MUA SẮM</a>
         </div>
     </header>
 
@@ -104,67 +104,6 @@
         <div class="text-center py-4">Design by Trần Khánh Sơn</div>
     </footer>
 
-    <!--modal login-->
-    <div class="modal fade" id="ModalLogin" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="position-relative d-flex ">
-                    <div class="btn-login active">Đăng nhập</div>
-                    <div class="btn-register" data-bs-toggle="modal" href="#ModalRigister" role="button">Khách hàng mới</div>
-
-                    <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="formLogin">
-                    <div class="modal-body">
-                        <p class="modal-title fs-6">Cảm ơn bạn đã trở lại.</p>
-                        <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Email/SĐT của bạn">
-                        <label id="userName-error" class="error" for="userName" style="display: none;"></label>
-                        <input type="password" id="passwordLogin" name="passwordLogin" class="input-loginAndRegis PassWord mt-3" placeholder="Mật khẩu">
-                        <label id="passwordLogin-error" class="error" for="passwordLogin" style="display: none;"></label>
-                    </div>
-                    <div class="modal-footer">
-                        <div onclick="Login()" class="submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
-                            Tiếp tục
-                        </div>
-                        <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!--resigter-->
-    <div class="modal fade" id="ModalRigister" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="position-relative d-flex ">
-                    <div class="btn-login" data-bs-toggle="modal" href="#ModalLogin" role="button">Đăng nhập</div>
-                    <div class="btn-register active">Khách hàng mới</div>
-                    <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="formRegister">
-                    <div class="modal-body">
-                        <p class="modal-title fs-6">Đăng ký để Canifa có cơ hội phục vụ bạn tốt hơn.</p>
-                        <input type="text" name="Name" id="Name" class="input-loginAndRegis mt-3" placeholder="Tên của bạn">
-                        <input type="text" name="Address" id="Address" class="input-loginAndRegis mt-3" placeholder="Địa chỉ">
-                        <input type="text" name="Email" id="Email" class="input-loginAndRegis mt-3" placeholder="Email">
-                        <label id="Email-error" class="error" for="Email" style="display: none;"></label>
-                        <input type="text" name="Phone" id="Phone" class="input-loginAndRegis mt-3" placeholder="SĐT của bạn">
-                        <label id="Phone-error" class="error" for="Phone" style="display: none;"></label>
-                        <input type="password" autocomplete="new-password" name="Password" id="Password" class="input-loginAndRegis mt-3" placeholder="Mật khẩu">
-                        <input type="password" autocomplete="new-password" name="ConfirmPassword" id="ConfirmPassword" class="input-loginAndRegis mt-3" placeholder="Nhập lại mật khẩu">
-                    </div>
-                    <div class="modal-footer">
-                        <div class="submit-modal fw-bold text-white py-3 text-center w-100" onclick="RegisterSubmit()" style="background-color: #333f48;">
-                            Tiếp tục
-                        </div>
-                        <p class="fw-normal my-4">Bằng việc chọn tiếp tục, bạn đã đồng ý với <a class="fw-normal" href="#" style="color: #63b1bc;"> Điều khoản & Điều kiện</a> cùng <a href="#" class="fw-normal" style="color: #63b1bc;"> Chính sách bảo mật và chia sẻ thông tin</a> của CANIFA</p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!--toast when like-->
     <div class="toast toast-like position-fixed rounded-0" style="top:30px; right:20px;z-index: 101;" data-bs-animation="true" data-bs-autohide="true" data-bs-delay="5000">
         <div class="toast-header py-3 border-none">
@@ -200,7 +139,7 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Assets/js/BaseHome.js"></script>
-    <script src="~/Assets/js/LoginAndRegis.js"></script>
+    <script src="~/Assets/js/LoginAndRegister2.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

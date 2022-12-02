@@ -125,6 +125,7 @@ function updateTotalPrice() {
     $(".discount-total").text("-"+textDiscountTotal)
     $(".total-price").text(textTotalPrice)
 
+    $(".discount-total").attr("data", totaldisCountPrice)
     $(".total-price").attr("data", totalPrice)
 }
 updateTotalPrice()

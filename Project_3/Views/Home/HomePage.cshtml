@@ -171,17 +171,17 @@
                                         <img src="/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">
                                     </a>
                                     <div class="product-size-wrap">
-                                        <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue">
+                                        <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
                                             @foreach (var size in item.ProductVariations)
                                             {
                                                 if (size.Quantity > 0)
                                                 {
-                                                    <div class="product-size addActiveItem" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+                                                    <div class="product-size addActiveItem filter-value" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
 
                                                 }
                                                 else
                                                 {
-                                                    <div class="product-size addActiveItem disabled-size" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
+                                                    <div class="product-size addActiveItem disabled-size filter-value" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
 
                                                 }
                                             }
@@ -196,7 +196,7 @@
                                 <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
                                     @foreach (var color in item.ProductImages)
                                     {
-                                        <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
+                                        <div class="product-color addActiveItem" onclick="changeImgProduct(event)" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
                                             <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
                                         </div>
                                     }

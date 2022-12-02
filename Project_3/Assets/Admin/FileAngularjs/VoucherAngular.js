@@ -91,6 +91,7 @@ function VoucherController($scope, $http) {
             Amount: v.Amount,
             TypeAmount: v.TypeAmount,
             MiximumMoney: v.MiximumMoney,
+            Description: v.Description,
             MaxUses: v.MaxUses
         }
         indexEdit = index

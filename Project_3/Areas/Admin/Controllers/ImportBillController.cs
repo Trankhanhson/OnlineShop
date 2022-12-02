@@ -13,7 +13,7 @@ using static System.Data.Entity.Infrastructure.Design.Executor;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class ImportBillController : Controller
+    public class ImportBillController : BaseController
     {
         // GET: Admin/ImportBill
         public ActionResult Index()

@@ -18,19 +18,19 @@ namespace Project_3.Controllers
             if (Request.Cookies["CustomerId"] != null)
             {
                 long id = int.Parse(Request.Cookies["CustomerId"].Value);
-                customer = new CustomnerDAO().getById(id);
+                customer = new CustomerDAO().getById(id);
                 return View(customer);
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("HomePage", "Home");
             }
         }
 
         [HttpPost]
         public ActionResult UpdateInfoCustomer(Customer cus)
         {
-            var dao = new CustomnerDAO();
+            var dao = new CustomerDAO();
             var message = "";
             var cusOld = dao.getById(cus.CusID);
             try
@@ -67,7 +67,7 @@ namespace Project_3.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Homepage", "Home");
             }
         }
     }

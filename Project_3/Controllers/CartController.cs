@@ -47,14 +47,12 @@ namespace Project_3.Controllers
             if (Request.Cookies["CustomerId"] != null)
             {
                 var id = long.Parse(Request.Cookies["CustomerId"].Value);
-                var cus = new CustomnerDAO().getById(id);
+                var cus = new CustomerDAO().getById(id);
                 ViewBag.Customer = cus;
             }
-            else
-            {
-                var cus = new CustomnerDAO().getAll().First();
-                ViewBag.Customer = cus;
-            }
+            else { ViewBag.Customer = null; }
+
+            ViewBag.Vouchers = new VoucherDAO().getVoucherNow();
 
             return View();
         }
@@ -97,16 +95,16 @@ namespace Project_3.Controllers
                 orderDetailDAO.Insert(listOrderDetail);
                 productVariationDAO.editOrdered(listOrderDetail);
 
-                ////Send mail
-                string content = System.IO.File.ReadAllText(Server.MapPath("~/Assets/Template/NewOrder.html"));
+                //////Send mail
+                //string content = System.IO.File.ReadAllText(Server.MapPath("~/Assets/Template/NewOrder.html"));
 
-                content = content.Replace("{{CustomerName}}", "Trần dương");
-                content = content.Replace("{{Phone}}", o.ReceivingPhone);
-                content = content.Replace("{{Email}}", "tduong842007@gmail.com");
-                content = content.Replace("{{Address}}", o.ReceivingAddress);
-                content = content.Replace("{{Total}}", o.MoneyTotal.Value.ToString("N0"));
-                string subject = "Thông báo đơn hàng #ĐH" + o.OrdID + " của quý khách đã được tiếp nhận";
-                MailHelper.SendMail("tduong842007@gmail.com", subject, content);
+                //content = content.Replace("{{CustomerName}}", "Trần dương");
+                //content = content.Replace("{{Phone}}", o.ReceivingPhone);
+                //content = content.Replace("{{Email}}", "tduong842007@gmail.com");
+                //content = content.Replace("{{Address}}", o.ReceivingAddress);
+                //content = content.Replace("{{Total}}", o.MoneyTotal.Value.ToString("N0"));
+                //string subject = "Thông báo đơn hàng #ĐH" + o.OrdID + " của quý khách đã được tiếp nhận";
+                //MailHelper.SendMail("tduong842007@gmail.com", subject, content);
                 return Json(o.OrdID);
             }
             catch

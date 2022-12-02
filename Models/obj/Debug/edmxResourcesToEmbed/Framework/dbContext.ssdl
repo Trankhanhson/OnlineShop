@@ -10,6 +10,14 @@
     <Property Name="type" Type="nvarchar" MaxLength="50" />
     <Property Name="Status" Type="bit" />
   </EntityType>
+  <EntityType Name="Credential">
+    <Key>
+      <PropertyRef Name="CredentialId" />
+    </Key>
+    <Property Name="CredentialId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GroupId" Type="int" />
+    <Property Name="RoleId" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Customer">
     <Key>
       <PropertyRef Name="CusID" />
@@ -172,6 +180,13 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="Status" Type="bit" />
   </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Slide">
@@ -211,8 +226,16 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <Property Name="Password" Type="varchar(max)" />
     <Property Name="UserAdress" Type="nvarchar" MaxLength="300" />
     <Property Name="UserPhone" Type="varchar" MaxLength="10" />
+    <Property Name="GroupId" Type="int" />
     <Property Name="UserEmail" Type="varchar" MaxLength="100" />
     <Property Name="Status" Type="bit" />
+  </EntityType>
+  <EntityType Name="UserGroup">
+    <Key>
+      <PropertyRef Name="GroupId" />
+    </Key>
+    <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Voucher">
     <Key>
@@ -239,6 +262,30 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Principal>
       <Dependent Role="Product">
         <PropertyRef Name="ProCatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Credential_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="Credential">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Credential_UserGroup">
+    <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
+    <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="GroupId" />
+      </Principal>
+      <Dependent Role="Credential">
+        <PropertyRef Name="GroupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -446,8 +493,21 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_User_UserGroup">
+    <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="GroupId" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="ClothesShopModelStoreContainer">
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Credential" EntityType="Self.Credential" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscountDetail" EntityType="Self.DiscountDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscountProduct" EntityType="Self.DiscountProduct" Schema="dbo" store:Type="Tables" />
@@ -462,9 +522,11 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSize" EntityType="Self.ProductSize" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductVariation" EntityType="Self.ProductVariation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StatusOrder" EntityType="Self.StatusOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserGroup" EntityType="Self.UserGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Voucher" EntityType="Self.Voucher" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Slide" EntityType="Self.Slide" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
@@ -478,6 +540,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="Self.FK__Product__ProCatI__6AEFE058">
       <End Role="ProductCat" EntitySet="ProductCat" />
       <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Credential_Role" Association="Self.FK_Credential_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Credential" EntitySet="Credential" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Credential_UserGroup" Association="Self.FK_Credential_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroup" />
+      <End Role="Credential" EntitySet="Credential" />
     </AssociationSet>
     <AssociationSet Name="FK_DiscountDetail_DiscountProduct" Association="Self.FK_DiscountDetail_DiscountProduct">
       <End Role="DiscountProduct" EntitySet="DiscountProduct" />
@@ -546,6 +616,10 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <AssociationSet Name="FK_ProductVariation_ProductSize" Association="Self.FK_ProductVariation_ProductSize">
       <End Role="ProductSize" EntitySet="ProductSize" />
       <End Role="ProductVariation" EntitySet="ProductVariation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_UserGroup" Association="Self.FK_User_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroup" />
+      <End Role="User" EntitySet="User" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

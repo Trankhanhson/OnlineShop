@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\CategoryDAO.cs" />
-    <Compile Include="DAO\CustomnerDAO.cs" />
+    <Compile Include="DAO\CustomerDAO.cs" />
     <Compile Include="DAO\DiscountDAO.cs" />
     <Compile Include="DAO\DiscountDetailDAO.cs" />
     <Compile Include="DAO\ImportBillDAO.cs" />
@@ -71,6 +71,7 @@
     <Compile Include="DAO\NewDAO.cs" />
     <Compile Include="DAO\OrderDAO.cs" />
     <Compile Include="DAO\OrderDetailDAO.cs" />
+    <Compile Include="DAO\PositionDAO.cs" />
     <Compile Include="DAO\ProductCategoryDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="DAO\ProductColorDAO.cs" />
@@ -80,6 +81,9 @@
     <Compile Include="DAO\ProductVariationDAO.cs" />
     <Compile Include="DAO\VoucherDAO.cs" />
     <Compile Include="Framework\Category.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Credential.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Customer.cs">
@@ -139,6 +143,9 @@
     <Compile Include="Framework\ProductVariation.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Framework\Role.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Framework\Slide.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -149,6 +156,9 @@
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\User.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserGroup.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Voucher.cs">

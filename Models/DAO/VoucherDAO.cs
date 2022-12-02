@@ -15,6 +15,12 @@ namespace Models.DAO
             db = new ClothesShopEntities();
         }
 
+        public List<Voucher> getVoucherNow()
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            return db.Vouchers.Where(v=>v.StartDate<=DateTime.Now && v.EndDate>=DateTime.Now).ToList();
+        }
+
         public List<Voucher> getAll()
         {
             db.Configuration.LazyLoadingEnabled = false;

@@ -80,8 +80,5 @@ namespace Project_3.Controllers
             ViewBag.RelatedProduct = relatedList;
             return View(product);
         }
-
-        
-
     }
 }

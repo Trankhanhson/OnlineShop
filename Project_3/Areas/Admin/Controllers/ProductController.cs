@@ -70,6 +70,38 @@ namespace Project_3.Areas.Admin.Controllers
             return jsonResult;
         }
 
+        public JsonResult getSearchDataClient(string searchText)
+        {
+            var result = "";
+            var check = false;
+            if (searchText.Trim() != "")
+            {
+                List<Product> products = new ProductDAO().getAll().Select(p => new Product()
+                {
+                    ProId = p.ProId,
+                    ProName = p.ProName,
+                    Price = p.Price,
+                    Status = p.Status,
+                    Slug = p.Slug,
+                    firstImage = p.ProductImages.First().Image
+                }).ToList();
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                products = products.Where(p => p.Slug.Contains(a)).ToList();
+                //Convert to Json
+                result = JsonConvert.SerializeObject(products);
+                check = true;
+            }
+
+            //set maxJsonLangth for ressult
+            var jsonResult = Json(new
+            {
+                check = check,
+                result = result
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
         public JsonResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
         {
 

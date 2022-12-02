@@ -36,7 +36,6 @@ namespace Models.Framework
         public int TotalQty { get; set; }
         public decimal DiscountPrice { get; set; }
         public int Percent { get; set; }
-
         public virtual ProductCat ProductCat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }

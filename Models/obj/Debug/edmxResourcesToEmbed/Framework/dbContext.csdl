@@ -8,8 +8,8 @@
     <Property Name="ImpDate" Type="DateTime" Precision="3" />
     <Property Name="StaffId" Type="Int32" />
     <Property Name="MoneyTotal" Type="Int32" />
-    <NavigationProperty Name="User" Relationship="Self.FK_ImportBill_User1" FromRole="ImportBill" ToRole="User" />
     <NavigationProperty Name="ImportBillDetails" Relationship="Self.FK_ImportBillDetail_ImportBill" FromRole="ImportBill" ToRole="ImportBillDetail" />
+    <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_ImportBill_User1" FromRole="ImportBill" ToRole="User" />
   </EntityType>
   <EntityType Name="ImportBillDetail">
     <Key>
@@ -67,21 +67,6 @@
     <Property Name="version" Type="Int32" />
     <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
-  <EntityType Name="User">
-    <Key>
-      <PropertyRef Name="UserID" />
-    </Key>
-    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="UserAdress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="UserPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="UserEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Status" Type="Boolean" />
-    <NavigationProperty Name="ImportBills" Relationship="Self.FK_ImportBill_User1" FromRole="User" ToRole="ImportBill" />
-    <NavigationProperty Name="News" Relationship="ClothesShopModel.FK_News_User" FromRole="User" ToRole="New" />
-  </EntityType>
   <EntityType Name="Slide">
     <Key>
       <PropertyRef Name="ID" />
@@ -92,18 +77,6 @@
     <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="Boolean" />
   </EntityType>
-  <Association Name="FK_ImportBill_User1">
-    <End Role="User" Type="Self.User" Multiplicity="0..1" />
-    <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="ImportBill">
-        <PropertyRef Name="StaffId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_ImportBillDetail_ImportBill">
     <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="1" />
     <End Role="ImportBillDetail" Type="Self.ImportBillDetail" Multiplicity="*" />
@@ -135,12 +108,7 @@
     <EntitySet Name="ProductImages" EntityType="Self.ProductImage" />
     <EntitySet Name="ProductSizes" EntityType="Self.ProductSize" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-    <EntitySet Name="Users" EntityType="Self.User" />
     <EntitySet Name="Slides" EntityType="Self.Slide" />
-    <AssociationSet Name="FK_ImportBill_User1" Association="Self.FK_ImportBill_User1">
-      <End Role="User" EntitySet="Users" />
-      <End Role="ImportBill" EntitySet="ImportBills" />
-    </AssociationSet>
     <AssociationSet Name="FK_ImportBillDetail_ImportBill" Association="Self.FK_ImportBillDetail_ImportBill">
       <End Role="ImportBill" EntitySet="ImportBills" />
       <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
@@ -156,10 +124,6 @@
       <End Role="ProductCat" EntitySet="ProductCats" />
     </AssociationSet>
     <EntitySet Name="News" EntityType="ClothesShopModel.New" />
-    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
-      <End Role="User" EntitySet="Users" />
-      <End Role="New" EntitySet="News" />
-    </AssociationSet>
     <EntitySet Name="Customers" EntityType="ClothesShopModel.Customer" />
     <EntitySet Name="Orders" EntityType="ClothesShopModel.Order" />
     <EntitySet Name="StatusOrders" EntityType="ClothesShopModel.StatusOrder" />
@@ -221,6 +185,30 @@
       <End Role="Voucher" EntitySet="Vouchers" />
       <End Role="Order" EntitySet="Orders" />
     </AssociationSet>
+    <EntitySet Name="Credentials" EntityType="ClothesShopModel.Credential" />
+    <EntitySet Name="Roles" EntityType="ClothesShopModel.Role" />
+    <EntitySet Name="Users" EntityType="ClothesShopModel.User" />
+    <EntitySet Name="UserGroups" EntityType="ClothesShopModel.UserGroup" />
+    <AssociationSet Name="FK_Credential_Role" Association="ClothesShopModel.FK_Credential_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="Credential" EntitySet="Credentials" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Credential_UserGroup" Association="ClothesShopModel.FK_Credential_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroups" />
+      <End Role="Credential" EntitySet="Credentials" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImportBill_User1" Association="ClothesShopModel.FK_ImportBill_User1">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ImportBill" EntitySet="ImportBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_News_User" Association="ClothesShopModel.FK_News_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="New" EntitySet="News" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_UserGroup" Association="ClothesShopModel.FK_User_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroups" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>
@@ -271,18 +259,6 @@
     <Property Name="Status" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="User" Relationship="ClothesShopModel.FK_News_User" FromRole="New" ToRole="User" />
   </EntityType>
-  <Association Name="FK_News_User">
-    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.New" Role="New" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="New">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="Customer">
     <Key>
       <PropertyRef Name="CusID" />
@@ -571,6 +547,110 @@
       </Principal>
       <Dependent Role="Order">
         <PropertyRef Name="VoucherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Credential">
+    <Key>
+      <PropertyRef Name="CredentialId" />
+    </Key>
+    <Property Name="CredentialId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GroupId" Type="Int32" />
+    <Property Name="RoleId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Role" Relationship="ClothesShopModel.FK_Credential_Role" FromRole="Credential" ToRole="Role" />
+    <NavigationProperty Name="UserGroup" Relationship="ClothesShopModel.FK_Credential_UserGroup" FromRole="Credential" ToRole="UserGroup" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Credentials" Relationship="ClothesShopModel.FK_Credential_Role" FromRole="Role" ToRole="Credential" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserAdress" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="UserPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="GroupId" Type="Int32" />
+    <Property Name="UserEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="Boolean" />
+    <NavigationProperty Name="ImportBills" Relationship="ClothesShopModel.FK_ImportBill_User1" FromRole="User" ToRole="ImportBill" />
+    <NavigationProperty Name="News" Relationship="ClothesShopModel.FK_News_User" FromRole="User" ToRole="New" />
+    <NavigationProperty Name="UserGroup" Relationship="ClothesShopModel.FK_User_UserGroup" FromRole="User" ToRole="UserGroup" />
+  </EntityType>
+  <EntityType Name="UserGroup">
+    <Key>
+      <PropertyRef Name="GroupId" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Credentials" Relationship="ClothesShopModel.FK_Credential_UserGroup" FromRole="UserGroup" ToRole="Credential" />
+    <NavigationProperty Name="Users" Relationship="ClothesShopModel.FK_User_UserGroup" FromRole="UserGroup" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_Credential_Role">
+    <End Type="ClothesShopModel.Role" Role="Role" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Credential" Role="Credential" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="Credential">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Credential_UserGroup">
+    <End Type="ClothesShopModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Credential" Role="Credential" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="GroupId" />
+      </Principal>
+      <Dependent Role="Credential">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImportBill_User1">
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ImportBill" Role="ImportBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ImportBill">
+        <PropertyRef Name="StaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_News_User">
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.New" Role="New" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="New">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_UserGroup">
+    <End Type="ClothesShopModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="GroupId" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="GroupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

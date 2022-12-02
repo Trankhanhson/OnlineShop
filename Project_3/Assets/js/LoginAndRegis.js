@@ -124,6 +124,17 @@ function RegisterSubmit() {
     }
 }
 
+$("#formLogin").validate({
+    rules: {
+        userName: "required",
+        passwordLogin: "required"
+    },
+    messages: {
+        userName: "Bạn chưa nhập tên tài khoản",
+        passwordLogin: "Bạn chưa nhập mật khẩu"
+    }
+})
+
 function Login() {
     if ($("#formLogin").valid()) {
         const username = $("#userName").val()
@@ -154,35 +165,135 @@ function Login() {
     }
 }
 
-$("#formLogin").validate({
+$("#formConfirmEmail").validate({
     rules: {
-        userName: "required",
-        passwordLogin: "required"
+        EmailConfirm: {
+            required: true,
+            isEmail: true
+        }
     },
     messages: {
-        userName: "Bạn chưa nhập tên tài khoản",
-        passwordLogin: "Bạn chưa nhập mật khẩu"
+        EmailConfirm: {
+            required: "Bạn cần nhập Email"
+        }
     }
 })
 
 function ConfirmEmail() {
-    
+
     if ($("#formConfirmEmail").valid()) {
         const EmailConfirm = $("#EmailConfirm").val()
         $.ajax({
             url: "/LoginClient/ForgotPassword",
             type: "Post",
             dataType: "Json",
-            data: { Email: EmailConfirm},
+            data: { Email: EmailConfirm },
             success: function (res) {
-                
+
                 if (res) //nếu Email tồn tại
                 {
                     $("#ConfirmedEmail").modal("show")
+                    $("#ModalGetPassword").modal("hide")
                 }
                 else //nếu không thì sẻ thông báo
                 {
                     addError("EmailConfirm", "Email không đúng")
+                }
+            }
+        })
+    }
+}
+
+$("#resetPassword").validate({
+    rules: {
+        NewPassword: {
+            required: true,
+            minlength: 8,
+            letterOnly: true
+        },
+        ConfirmPass: {
+            equalTo: "#NewPassword"
+        }
+    },
+    messages: {
+        NewPassword: {
+            required: "Bạn cần nhập mật khẩu mới",
+            minlength: "Mật khẩu tối thiểu 8 ký tự"
+        },
+        ConfirmPass: {
+            equalTo: "Xác nhận mật khẩu không trùng khớp"
+        }
+    }
+})
+
+function ResetPassword() {
+    if ($("#resetPassword").valid()) {
+        const NewPassword = $("#NewPassword").val()
+        const ResetCode = $("#ResetCode").val()
+        const model = {
+            NewPassword: NewPassword,
+            ResetCode: ResetCode
+        }
+        $.ajax({
+            url: "/LoginClient/ResetPassword",
+            type: "Post",
+            dataType: "Json",
+            data: { model: model },
+            success: function (res) {
+
+                if (res.check) //nếu Email tồn tại
+                {
+                    $("#successToast .text-toast").text("Thay đổi mật khẩu thành công, bạn có thể dùng mật khẩu này để đăng nhập bây giờ")
+                    $("#successToast").toast("show")
+
+                    let url = "/LoginClient/LoginView/" + res.id
+                    window.location.href = url;
+                }
+                else //nếu không thì sẻ thông báo
+                {
+                    $("#errorToast .text-toast").text("Thay đổi mật khẩu thất bại")
+                    $("#errorToast").toast("show")
+                }
+            }
+        })
+    }
+}
+
+$("#LoginView").validate({
+    rules: {
+        Email: "required",
+        Password: "required"
+    },
+    messages: {
+        Email: "Bạn chưa nhập tên tài khoản",
+        Password: "Bạn chưa nhập mật khẩu"
+    }
+})
+
+function LoginView() {
+    console.log($("#LoginView"))
+    if ($("#LoginView").valid()) {
+        const username = $("#Email").val()
+        const password = $("#Password").val()
+        $.ajax({
+            url: "/LoginClient/Login",
+            type: "Post",
+            dataType: "Json",
+            data: { username: username, password: password },
+            success: function (res) {
+                if (res.message == "usename") {
+                    addError("userName", "Tại khoản không tồn tại")
+                }
+                else if (res.message == "password") {
+                    addError("passwordLogin", "Mật khẩu không đúng")
+                }
+                else if (res.message == "fail") {
+                    $("#errorToast .text-toast").text("Đăng nhập thất bại")
+                    $("#errorToast").toast("show")
+                }
+                else {
+                    let url = "/Home/HomePage"
+                    window.location.href = url;
                 }
             }
         })

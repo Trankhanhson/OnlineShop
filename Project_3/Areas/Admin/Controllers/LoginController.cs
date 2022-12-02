@@ -25,13 +25,16 @@ namespace Project_3.Areas.Admin.Controllers
             {
 
                 var dao = new UserDAO();
-                var result = dao.Login(account.UserName, Encryptor.MD5Hash(account.Password));
+                var result = dao.Login(account.UserName, Encryptor.MD5Hash(account.Password),true);
                 if (result == 1)
                 {
                     var user = dao.getByUserName(account.UserName);
                     var userSession = new UserLogin();
                     userSession.UserName = user.UserName;
                     userSession.UserID = user.UserID;
+                    userSession.GroupId = user.GroupId.Value;
+                    var listCredential = dao.GetListCredential(user);
+                    Session.Add(CommonConstants.SESSION_CREDENTIALS,listCredential);
                     Session.Add(CommonConstants.USER_SESSION, userSession);
                     return RedirectToAction("Index", "HomeAdmin");
                 }
@@ -43,9 +46,18 @@ namespace Project_3.Areas.Admin.Controllers
                 {
                     ModelState.AddModelError("", "Tài khoản đang bị khóa");
                 }
-                else
+                else if (result == -2)
                 {
                     ModelState.AddModelError("", "Mật khẩu không đúng");
+                }
+                else if(result == -3)
+                {
+                    ModelState.AddModelError("", "Tài khoản của bạn không có quyền đăng nhập");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Đăng nhập thất bại");
+
                 }
             }
             return View("Index");

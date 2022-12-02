@@ -18,7 +18,8 @@ discountApp.controller("discountController", function ($scope, $http) {
             EndDate: EndDate
         }
         //chuyển list detail nhận được thành listConfirm
-        $.each(result.DiscountDetails, (index, value) => {
+        $.each(result.DiscountDetails, (index, value) =>
+        {
             let ProConfirm = {
                 ProId: value.Product.ProId,
                 firstImage: value.Product.firstImage,

@@ -45,7 +45,7 @@ function loadMiniCart() {
                                     </div>
                                     <div class="minicart-item-details">
                                         <h3 class="minicart-item-name">
-                                            <a href="/vay-lien-be-gai-1ds22w012" class="router-link-exact-active router-link-active">${list[i].ProName}</a>
+                                            <a href="/Home/Detail/${list[i].ProId}" class="router-link-exact-active router-link-active">${list[i].ProName}</a>
                                         </h3>
                                         <div class="minicart-item-options">
                                             <div class="minicart-item-option"><span class="value">${list[i].proSizeName}</span></div>
@@ -206,8 +206,8 @@ function addCartFromDetail() {
                         if (res) {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                            $("#successToast .text-toast").text("Đã thêm sản phẩm vào giỏ hàng")
-                            $("#successToast").toast("show")
+                            var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
+                            bsAlert.show();//show it
                         }
                         else {
                             $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")
@@ -219,8 +219,8 @@ function addCartFromDetail() {
             else {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                $("#successToast .text-toast").text("Đã thêm sản phẩm vào giỏ hàng")
-                $("#successToast").toast("show")
+                var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
+                bsAlert.show();//show it
             }
         }
         else {
@@ -228,6 +228,7 @@ function addCartFromDetail() {
             localStorage.setItem("Cart", JSON.stringify(listCartItem))
         }
         loadMiniCart()
+
     }
     else {
         $("#errorToast .text-toast").text("Bạn chưa chọn kích thước")

@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Models.DAO
 {
     public class UserDAO
@@ -94,31 +95,61 @@ namespace Models.DAO
             }
         }
 
-        public int Login(string username, string password)
+        public List<string> GetListCredential(User user)
+        {
+            
+            var listResult = user.UserGroup.Credentials.ToList().Select(c=>c.RoleId).ToList();
+            return listResult;
+        }
+
+        public int Login(string username, string password,bool isLoginAdmin = false)
         {
             User user = _dbContext.Users.SingleOrDefault(u => u.UserName == username);
-            if (user == null)
+            if (user == null) 
             {
                 return 0; //sai username
             }
             else
             {
-                if (user.Status == false)
+                if(isLoginAdmin==true)
                 {
-                    return -1; //account is locked
-                }
-                else
-                {
-                    if (user.Password == password)
+                    if (user.Status == false)
                     {
-                        return 1;
+                        return -1; //account is locked
                     }
                     else
                     {
-                        //pass sai
-                        return -2;
+                        if (user.Password == password)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            //pass sai
+                            return -2;
+                        }
                     }
                 }
+                else
+                {
+                    if (user.Status == false)
+                    {
+                        return -1; //account is locked
+                    }
+                    else
+                    {
+                        if (user.Password == password)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            //pass sai
+                            return -2;
+                        }
+                    }
+                }
+                
             }
         }
     }

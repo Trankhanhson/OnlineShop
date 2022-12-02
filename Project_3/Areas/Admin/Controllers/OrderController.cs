@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace Project_3.Areas.Admin.Controllers
 {
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         // GET: Admin/Order
         public ActionResult WaitConfirm()

@@ -51,7 +51,7 @@
                                         {{v.EndDate | date:"dd/MM/yyyy '-' h:mma"}}
                                     </td>
                                     <td>
-                                        {{v.Amount}}{{v.TypeAmount=="0" ? "đ" : "%"}}
+                                        {{v.Amount | number}}{{v.TypeAmount=="0" ? "đ" : "%"}}
                                     </td>
                                     <td>
                                         {{v.MiximumMoney | number : 0}}đ
@@ -95,6 +95,12 @@
                                     <span ng-show="createForm.$submitted">
                                         <span class="error" ng-show="createForm.Name.$error.required">Bạn chưa nhập trường này</span>
                                     </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Mô tả</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="Description" ng-model="Voucher.Description">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -185,6 +191,12 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Mô tả</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="Description" ng-model="Voucher.Description">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="inputText" class="col-sm-4 col-form-label">Bắt đầu</label>
                                 <div class="col-sm-8">
                                     <input type="datetime-local" class="form-control" name="StartDate" ng-model="Voucher.StartDate" required>
@@ -236,7 +248,7 @@
                                         <span class="error" ng-show="createForm.MaxUses.$error.required">Bạn chưa nhập trường này</span>
                                     </span>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </form>
 

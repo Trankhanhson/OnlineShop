@@ -21,7 +21,7 @@ namespace Project_3.Controllers
         [HttpPost]
         public JsonResult Register(Customer cus)
         {
-            var dao = new CustomnerDAO();
+            var dao = new CustomerDAO();
             var message = "";
             if (dao.CheckEmail(cus.Email))
             {
@@ -33,7 +33,8 @@ namespace Project_3.Controllers
             }
             else
             {
-                cus.Password = Encryptor.MD5Hash(cus.Password);
+                cus.Password = EncryptorClient.Encrypt(cus.Password);
+                cus.Status = true;
                 bool check = dao.Insert(cus);
                 if (check)
                 {
@@ -50,14 +51,27 @@ namespace Project_3.Controllers
             });
         }
 
+        /// <summary>
+        /// View login sau khi lấy lại mk
+        /// </summary>
+        /// <returns></returns>  
+        public ActionResult LoginView(long id)
+        {
+            var c  = new CustomerDAO().getById(id);
+            ViewBag.Email = c.Email;
+            ViewBag.Password = EncryptorClient.Decrypt(c.Password);    
+            return View();
+        }
+
+
         [HttpPost]
         public JsonResult Login(string username, string password)
         {
-            var dao = new CustomnerDAO();
+            var dao = new CustomerDAO();
             var message = "";
             try
             {
-                int result = dao.Login(username, Encryptor.MD5Hash(password));
+                int result = dao.Login(username, EncryptorClient.Encrypt(password));
                 if (result == 0)
                 {
                     message = "usename";
@@ -93,7 +107,7 @@ namespace Project_3.Controllers
             HttpCookie Cookie = new HttpCookie("CustomerId");
             Cookie.Expires = DateTime.Now.AddDays(-1d);
             Response.Cookies.Add(Cookie);
-            return RedirectToAction("HomePage");
+            return RedirectToAction("HomePage","Home");
         }
 
         [HttpPost]
@@ -101,7 +115,7 @@ namespace Project_3.Controllers
         {
             ClothesShopEntities db = new ClothesShopEntities();
             string resetCode = Guid.NewGuid().ToString();
-            var verifyUrl = "/Account/ResetPassword/" + resetCode;
+            var verifyUrl = "/LoginClient/ResetPassword/" + resetCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
             var getUser = db.Customers.Where(c=>c.Email==Email).FirstOrDefault();
             if (getUser != null)
@@ -110,11 +124,10 @@ namespace Project_3.Controllers
                 db.Configuration.ValidateOnSaveEnabled = false;
                 db.SaveChanges();
 
+                string content = System.IO.File.ReadAllText(Server.MapPath("~/Assets/Template/ResetPasssword.html"));
                 var subject = "Lấy lại mật khẩu đăng nhập";
-                var body = "Hi " + getUser.Name + ", <br/> You recently requested to reset your password for your account. Click the link below to reset it. " +
-
-                     " <br/><br/><a href='" + link + "'>" + link + "</a> <br/><br/>" +
-                     "If you did not request a password reset, please ignore this email or reply to let us know.<br/><br/> Thank you";
+                content = content.Replace("{{Url}}", link);
+                var body = content;
 
                 MailHelper.SendMail(getUser.Email, subject, body);
 
@@ -153,20 +166,34 @@ namespace Project_3.Controllers
         [HttpPost]
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
-            var message = "";
-            ClothesShopEntities db = new ClothesShopEntities();
-            var user = db.Customers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
-            if (user != null)
+            try
             {
-                user.Password = model.NewPassword;
-                //gán lại ResetPasswordCode bằng rỗng
-                user.ResetPasswordCode = "";
-                //to avoid validation issues, disable it
+                ClothesShopEntities db = new ClothesShopEntities();
+                var user = db.Customers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                if (user != null)
+                {
+                    user.Password = EncryptorClient.Encrypt(model.NewPassword);
+                    //gán lại ResetPasswordCode bằng rỗng
+                    user.ResetPasswordCode = "";
+                    //to avoid validation issues, disable it
 
-                db.Configuration.ValidateOnSaveEnabled = false;
-                db.SaveChanges();
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    db.SaveChanges();
+                }
+                return Json(new
+                {
+                    check = true,
+                    id = user.CusID
+                },JsonRequestBehavior.AllowGet);
             }
-            return View(model);
+            catch
+            {
+                return Json(new
+                {
+                    check = false
+                }, JsonRequestBehavior.AllowGet);
+
+            }
         }
     }
 }

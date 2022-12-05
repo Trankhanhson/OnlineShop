@@ -6,378 +6,13 @@
 
 @section styles{
     <link rel="stylesheet" href="/Assets/css/cart.css">
-    <link href="~/Assets/css/Payment.css" rel="stylesheet" />
-    <style>
-        .discount-block .coupon-public[data-v-e422017c] {
-            margin-top: calc(1.5rem - 10px);
-        }
-        .discount-block .coupon-public .coupons[data-v-e422017c] {
-            overflow-x: hidden;
-            overflow-y: auto;
-            padding-bottom: 10px;
-            padding-top: 10px;
-            max-height: 200px;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom:30px;
-        }
-        .discount-block .coupon-public .coupons .coupon[data-v-e422017c] {
-            display: flex;
-            border: 2px solid black;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all .2s;
-            margin-top:15px;
-        }
-        .discount-block .coupon-public .coupons .coupon-left[data-v-e422017c] {
-            flex: 1;
-            border-right: 2px dashed black;
-            min-width: 20px;
-            max-width: 20px;
-            position: relative;
-        }
-            .discount-block .coupon-public .coupons .coupon-left[data-v-e422017c]:before {
-                content: '';
-                display: block;
-                width: 1.3rem;
-                height: 1.3rem;
-                background: white;
-                top: 50%;
-                left: -2px;
-                transform: translate(-50%, -50%) rotate(45deg);
-                position: absolute;
-                border-top: 2px solid #000;
-                border-right: 2px solid #000;
-                border-bottom: 2px solid #0000;
-                border-left: 2px solid #0000;
-                border-radius: 100em;
-            }
-        .discount-block .coupon-public .coupons .coupon-right[data-v-e422017c] {
-            flex: 2;
-            padding: 0.5rem 1rem 0.5rem 1rem;
-            position: relative;
-        }
-        .discount-block .coupon-public .coupons .coupon-right .coupon-title[data-v-e422017c] {
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .discount-block .coupon-public .coupons .coupon-right .coupon-count[data-v-e422017c] {
-            font-weight: normal;
-            font-size: 0.8em;
-        }
-        .discount-block .coupon-public .coupons .coupon-right .coupon-count[data-v-e422017c] {
-            font-weight: normal;
-            font-size: 0.8em;
-        }
-        .discount-block .coupon-public .coupons .coupon-right .coupon-description[data-v-e422017c] {
-            font-size: 10px;
-            color: #999;
-            display: block;
-            min-width: 135px;
-            transition: .2s all;
-        }
-        .discount-block .coupon-public .coupons .coupon-right[data-v-e422017c]:after {
-            content: '';
-            display: block;
-            width: 1.3rem;
-            height: 1.3rem;
-            background: white;
-            top: 50%;
-            right: -2px;
-            transform: translate(48.5%, -50%) rotate(45deg);
-            position: absolute;
-            border-top: 2px solid #0000;
-            border-right: 2px solid #0000;
-            border-bottom: 2px solid black;
-            border-left: 2px solid black;
-            border-radius: 100em;
-        }
-        .discount-block .coupon-public .coupons .coupon[data-v-e422017c]:hover {
-            border: 2px solid #8e8e8e;
-            background-color: #8e8e8e;
-            color: #231f20;
-        }
-        .discount-block .coupon-public .coupons .coupon:hover .coupon-right .coupon-description[data-v-e422017c] {
-            color: #231f20;
-        }
-        .discount-block .coupon-public .coupons .coupon:hover .coupon-left[data-v-e422017c]:before {
-            border-top: 2px solid #8e8e8e;
-            border-right: 2px solid #8e8e8e;
-            border-bottom: 2px solid #0000;
-            border-left: 2px solid #0000;
-        }
-        .discount-block .coupon-public .coupons .coupon:hover .coupon-right[data-v-e422017c]:after {
-            border-top: 2px solid #0000;
-            border-right: 2px solid #0000;
-            border-bottom: 2px solid #8e8e8e;
-            border-left: 2px solid #8e8e8e;
-        }
-        .discount-block .coupon-public .coupons .coupon.active[data-v-e422017c] {
-            background-color: #2f5acf;
-            border: 2px solid #2f5acf;
-            color: white;
-        }
-        .discount-block .coupon-public .coupons .coupon.active .coupon-left[data-v-e422017c]:before {
-            border-top: 2px solid #2f5acf;
-            border-right: 2px solid #2f5acf;
-            border-bottom: 2px solid #0000;
-            border-left: 2px solid #0000;
-        }
-        .discount-block .coupon-public .coupons .coupon.active .coupon-right[data-v-e422017c]:after {
-            border-top: 2px solid #0000;
-            border-right: 2px solid #0000;
-            border-bottom: 2px solid #2f5acf;
-            border-left: 2px solid #2f5acf;
-        }
-        .discount-block .coupon-public .coupons .coupon.active .coupon-right .coupon-description[data-v-e422017c] {
-            color: #fff;
-        }
-        .discount-block .coupon-public .coupons .coupon.active .coupon-left[data-v-e422017c] {
-            border-color: #fff;
-        }
-    </style>
+    <link href="~/Assets/css/PaymentPage.css" rel="stylesheet" />
 }
 
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script src="~/Assets/js/Cart/UpdateCart.js"></script>
-    <script>
-        //check radio
-        $(".payment-method").click((e) => {
-            $(".payment-method").removeClass("active")
-            $(e.target).addClass("active")
-            let radioInput = $($(e.target).find(".radioPay"))
-            $(radioInput).trigger("checked")
-        })
-
-        //get voucher
-        let checkVoucher = false
-        function getVoucher(input, VoucherId, Name, MiximumMoney, Amount, TypeAmount) {
-            $(".voucher-error").text('')
-            //Add voucher to input
-            if ($(input).hasClass("active") == false) {
-                $(".coupon.active").removeClass("active")
-                $(input).addClass("active")
-                $(".checkout-coupon-form .voucherId").val(VoucherId)
-                $(".checkout-coupon-form .voucher-title").val(Name)
-
-                //check condition to apply
-                updateTotalPrice() //update lại giá cũa
-                let totalBill = JSON.parse($(".total-price").attr("data"))
-                if (MiximumMoney > totalBill) {
-                    let textMiximumMoney = convertPrice(JSON.stringify(MiximumMoney))
-                    $(".voucher-error").text("Mã giảm giá chỉ áp dụng cho đơn hàng tối thiểu " + textMiximumMoney)
-                    $("#errorToast .text-toast").text("Mã giảm giá chỉ áp dụng cho đơn hàng tối thiểu " + textMiximumMoney)
-                    $("#errorToast").toast("show")
-                    checkVoucher = false
-                }
-                else {
-                    checkVoucher = true
-                    let discountExtra = 0
-                    if (TypeAmount == "0") //giảm giá theo đ
-                    {
-                        discountExtra = Amount
-                        totalBill -= discountExtra
-                    }
-                    else //giảm theo %
-                    {
-                        discountExtra = (totalBill * (Amount / 100))
-                        totalBill -= discountExtra
-                    }
-                    //update gia tri cho gia goc
-                    let discountTotal = JSON.parse($(".discount-total").attr("data"))
-                    discountTotal-=discountExtra //trừ thêm tiền được giảm giá
-                    let textDiscountTotal = convertPrice(JSON.stringify(discountTotal))
-
-                    $(".discount-total").text("-" + textDiscountTotal)
-                    $(".total-price").text(convertPrice(JSON.stringify(totalBill)))
-
-                    $(".discount-total").attr("data", discountTotal)
-                    $(".total-price").attr("data", totalBill)
-                }
-            }
-            else {
-                $(".coupon.active").removeClass("active")
-                $(".checkout-coupon-form .voucherId").val('')
-                $(".checkout-coupon-form .voucher-title").val('')
-                updateTotalPrice() //update lại giá cũa
-                checkVoucher = false
-            }
-        }
-
-        //function checkUseVoucher() {
-        //    let list = JSON.parse(localStorage.getItem("Cart"))
-        //    let errorMessage = "Mã giảm giá không áp dụng cho các sản phẩm sau:"
-        //    let checkError = false
-        //    $.each(list, (index, value) => {
-        //        if (value.DiscountPrice > 0) {
-        //            errorMessage += `<br> - ${value.ProName}`
-        //            checkError = true
-        //        }
-        //    })
-        //    return { checkError: checkError, errorMessage: errorMessage }
-        //}
-
-        /*render city district*/
-        var citis = document.getElementById("city");
-        var districts = document.getElementById("district");
-        var wards = document.getElementById("ward");
-        var Parameter = {
-            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-            method: "GET",
-            responseType: "application/json",
-        };
-        var promise = axios(Parameter);
-        promise.then(function (result) {
-            listLocation = result.data
-            renderCity(result.data);
-        });
-
-        function renderCity(data) {
-            for (const x of data) {
-                citis.options[citis.options.length] = new Option(x.Name, x.Id);
-            }
-            citis.onchange = function () {
-                district.length = 1;
-                ward.length = 1;
-                if (this.value != "") {
-                    const result = data.filter(n => n.Id === this.value);
-
-                    for (const k of result[0].Districts) {
-                        district.options[district.options.length] = new Option(k.Name, k.Id);
-                    }
-                }
-            };
-            district.onchange = function () {
-                ward.length = 1;
-                const dataCity = data.filter((n) => n.Id === citis.value);
-                if (this.value != "") {
-                    const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
-
-                    for (const w of dataWards) {
-                        wards.options[wards.options.length] = new Option(w.Name, w.Id);
-                    }
-                }
-            };
-        }
-
-
-        /*Post info bill*/
-        function addError(id, textError) {
-            //thay đổi thuộc tính của thẻ input
-            const element = $(`#${id}`) //element input
-            $(element).removeClass("valid")
-            $(element).addClass("error")
-            $(element).attr("aria-invalid", true)
-
-            //thay đổi thẻ label error
-            const erorrLabel = $(`#${id}-error`)
-            $(erorrLabel).css("display", "inline-block")
-            $(erorrLabel).text(textError)
-        }
-
-
-        $.validator.addMethod('PhoneVN', function (value) {
-            return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(value);
-        }, "Số điện thoại không hợp lệ")
-
-        $.validator.addMethod('letterOnly', function (value) {
-            return /^[a-zA-Z0-9]*$/.test(value);
-        }, "Mật khẩu không được có dấu hoặc kí tự đặc biệt")
-
-        $(".form-Payment").validate({
-            rules: {
-                name: {
-                    required: true
-                },
-                address: {
-                    required: true,
-                    maxlength: 100
-                },
-                phone: {
-                    required: true,
-                    PhoneVN: true
-                },
-                city: "required",
-                district: "required",
-                ward: "required"
-            },
-            messages: {
-                name: {
-                    required: "Họ tên không được để trống",
-                },
-                address: {
-                    required: "Địa chỉ không được để trống",
-                    maxlength: "Địa chỉ khống quá 100 ký tự"
-                },
-                phone: {
-                    required: "Số điện thoại không được để trống"
-                },
-                city: "Bạn cần chọn trường này",
-                district: "Bạn cần chọn trường này",
-                ward: "Bạn cần chọn trường này"
-            }
-        })
-
-        //khi người dùng muốn đặt hàng
-        function listCartItem() {
-            let listResult = []
-            if (localStorage.getItem("Cart") != null) {
-                let list = JSON.parse(localStorage.getItem("Cart"))
-
-                for (let i = 0; i < list.length; i++) {
-                    let cartItem = {
-                        ProId: list[i].ProId,
-                        ProSizeID: list[i].proSizeId,
-                        ProColorID: list[i].proColorId,
-                        Quantity: list[i].Quantity,
-                        Price: list[i].Price,
-                        DiscountPrice: list[i].DiscountPrice
-                    }
-                    listResult.push(cartItem)
-                }
-            }
-            return listResult
-        }
-
-        function payment() {
-            const CusID = $(".form-Payment").attr("data-cusid")
-            const Phone = $("#phone").val().trim()
-            const Note = $("#note").val().trim()
-            const city = $("#city option:selected").text()
-            const district = $("#district option:selected").text()
-            const ward = $("#ward option:selected").text()
-            const address = $("#address").val()
-            const PaymentType = $('.payment-method.active input').val()
-            const MoneyTotal = $(".total-price").attr("data")
-            const VoucherId = checkVoucher == true ? $("input.voucherId").val() : "" //nếu checkVoucher = false thì sẽ không lấy cvoucher
-            if ($(".form-Payment").valid()) {
-                let order = {
-                    CusID: CusID,
-                    ReceivingPhone: Phone,
-                    ReceivingCity: city,
-                    ReceivingDistrict: district,
-                    ReceivingWard: ward,
-                    ReceivingAddress: address,
-                    PaymentType: PaymentType,
-                    Note: Note,
-                    MoneyTotal: MoneyTotal,
-                    VoucherId: VoucherId
-                }
-
-                let cartItems = listCartItem()
-                $.ajax({
-                    url: "/Cart/Order",
-                    type: "POST",
-                    data: { order: order, cartItems: cartItems },
-                    dataType: "Json",
-                    success: function (res) {
-                        localStorage.removeItem("Cart")
-                        location.href = '/Cart/InfoBill/' + res;
-                    }
-                })
-            }
-        }
-    </script>
+    <script src="~/Assets/js/Cart/payment.js"></script>
 }
 
 <main class="border-top">
@@ -419,13 +54,18 @@
                             <form action="" class="form-Payment account-setting-form mt-4" style="max-width:550px" data-cusid="">
                                 <div class="form-group active mb-0">
                                     <label>Họ tên</label>
-                                    <input type="text" value="" name="name" id="name" class="form-control">
+                                    <input type="text" value="@ViewBag.Customer.Name" name="name" id="name" class="form-control">
                                     <label class="error" for="name" style="display: none;"></label>
                                 </div>
                                 <div class="form-group active mt-4 mb-0">
                                     <label>Số điện thoại</label>
-                                    <input type="text" name="phone" id="phone" value="" class="form-control ">
+                                    <input type="text" name="phone" id="phone" value="@ViewBag.Customer.Phone" class="form-control ">
                                     <label id="phone-error" class="error" for="phone" style="display: none;"></label>
+                                </div>
+                                <div class="form-group active mt-4 mb-0">
+                                    <label>Email</label>
+                                    <input type="text" name="email" id="email" value="@ViewBag.Customer.Email" class="form-control ">
+                                    <label id="email-error" class="error" for="email" style="display: none;"></label>
                                 </div>
                                 <select class="form-select form-select-sm mt-4 mb-0" id="city" name="city" aria-label=".form-select-sm">
                                     <option value="" selected>Tỉnh / Thành phố</option>
@@ -438,7 +78,7 @@
                                 </select>
                                 <div class="form-group active mt-4 mb-0">
                                     <label>Địa chỉ</label>
-                                    <input type="text" name="address" id="address" value="" class="form-control ">
+                                    <input type="text" name="address" id="address" value="@ViewBag.Customer.Address" class="form-control ">
                                 </div>
                                 <div class="form-group active mt-4 mb-0">
                                     <label>Ghi chú</label>
@@ -541,7 +181,7 @@
                                         </div>
                                     }
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                         <div class="checkout-step-content" style="padding-bottom: 25px;">
                             <div class="checkout-coupon-form">
@@ -554,10 +194,39 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="payment()" CLASS="btn-order">THANH TOÁN</button>
+                    <button onclick="confirmEmail()" class="btn-order">THANH TOÁN</button>
                 </div>
             </div>
 
         </div>
     </div>
 </main>
+<div class="modal fade block-login" id="ConfirmOrder" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div data-v-07844138="" class="block-content p-3">
+                <h4>Xác thực mua hàng</h4> 
+                <div class="note">
+                    Mã xác thực vừa được gửi đến Email
+                    <span class="toEmail text-dark"></span>
+                    <div id="divOuter" class="pb-3 pt-5">
+                        <div id="divInner">
+                            <input id="partitioned" type="text" maxlength="4" />
+                        </div>
+                    </div>
+                </div>
+                <div class="otp-time">
+                    <span>
+                        <!----><!---->
+                        Thời gian hiệu lực
+                        <span class="time" id="timer">03 : 00</span><!---->
+                    </span>
+                </div>
+                <div class="actions">
+                    <h5 class="btn btn-confirm text-white" onclick="payment()">Xác thực</h5>
+                </div>
+                <div class="actions-secondary"><a href="#">Gửi lại Mã</a></div>
+            </div>
+        </div>
+    </div>
+</div>

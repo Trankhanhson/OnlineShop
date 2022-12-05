@@ -24,7 +24,7 @@ function VoucherController($scope, $http) {
 
     //check startDate và endDate
     let checkDate = true
-    $scope.checkDate = function (startDate, endDate) {
+    $scope.checkDate = function (startDate, endDate, isEdit) {
         checkDate = true
         $scope.errMessage = '';
         var curDate = new Date();
@@ -35,11 +35,13 @@ function VoucherController($scope, $http) {
             checkDate = false
             return false;
         }
-        if (new Date(startDate) < curDate) {
-            $("#errorToast .text-toast").text("Thời gian bắt đầu phải lớn hơn thời gian hiện tại")
-            $("#errorToast").toast("show")
-            checkDate = false
-            return false;
+        if (isEdit == false) {
+            if (new Date(startDate) < curDate) {
+                $("#errorToast .text-toast").text("Thời gian bắt đầu phải lớn hơn thời gian hiện tại")
+                $("#errorToast").toast("show")
+                checkDate = false
+                return false;
+            }
         }
     }
 
@@ -52,7 +54,7 @@ function VoucherController($scope, $http) {
     //khi người dung nhấn lưu thêm mới danh mục
     $scope.SaveAdd = function () {
         if ($scope.createForm.$valid) {
-            $scope.checkDate($scope.Voucher.StartDate, $scope.Voucher.EndDate)
+            $scope.checkDate($scope.Voucher.StartDate, $scope.Voucher.EndDate, false)
             if (checkDate) {
                 $http({
                     method: "POST",
@@ -99,7 +101,7 @@ function VoucherController($scope, $http) {
 
     $scope.SaveEdit = function () {
         if ($scope.editForm.$valid) {
-            $scope.checkDate($scope.Voucher.StartDate, $scope.Voucher.EndDate)
+            $scope.checkDate($scope.Voucher.StartDate, $scope.Voucher.EndDate, true)
             if (checkDate) {
                 if (confirm("Bạn có chắc chắn muốn cập nhật mã giảm giá này")) {
                     $http({

@@ -12,7 +12,7 @@ using Project_3.common;
 
 namespace Project_3.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseClientController
     { 
 
 
@@ -20,28 +20,12 @@ namespace Project_3.Controllers
         {
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAll();
-            var discountNow = new DiscountDAO().getDiscountNow();
+            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow();
             foreach (var p in list)
             {
-                //kiểm tra giảm có giảm giá không
-                foreach (var d in discountNow)
-                {
-                    foreach(var dt in d.DiscountDetails)
-                    {
-                        if (dt.ProId == p.ProId)
-                        {
-                            if (dt.TypeAmount == "0") //giảm giá theo tiền
-                            {
-                                p.DiscountPrice = p.Price.Value - dt.Amount.Value;
-                            }
-                            else  //giảm giá theo %
-                            {
-                                p.Percent = dt.Amount.Value;
-                                p.DiscountPrice = Math.Round(p.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * p.Price.Value), 0);
-                            }
-                        }
-                    }
-                }
+                var a = getDiscount(p, DiscountDetails); //reuturn a product with discountPrice and percent
+                p.DiscountPrice = a.DiscountPrice;
+                p.Percent = a.Percent;
             }
             return View(list);
         }

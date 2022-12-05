@@ -4,34 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section styles{
-    <style>
-        .disabled-size {
-            border: none !important;
-            color: #e8e8ea;
-            position: relative;
-            pointer-events: none;
-            cursor: default;
-        }
-
-            .disabled-size:before {
-                border: 1px solid #e8e8ea;
-                content: '' !important;
-                width: 100%;
-                height: 100%;
-                background-size: 105% 105%;
-                background-repeat: no-repeat;
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 1;
-                border-radius: 0;
-                background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDQiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCA0NCA0NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAuNSA0My41TDQzLjUgMC41IiBzdHJva2U9IiNFOEU4RUEiLz4KPC9zdmc+Cg==);
-                background-clip: border-box;
-            }
-    </style>
-}
-
 @section Menu{
     <!-- Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-start" id="sidebar">
@@ -166,38 +138,57 @@
                         @foreach (var item in Model)
                         {
                             <div class="product" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price","DiscountPrice":"@item.DiscountPrice","Percent":@item.Percent}'>
-                                <div class="product-img">
-                                    <a href="/Home/Detail/@item.ProId">
-                                        <img src="/Upload/Product/@item.ProId/@item.ProductImages.First().Image" width="100%" alt="">
-                                    </a>
-                                    <div class="product-size-wrap">
-                                        <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue wrapActiveToFirstChild">
-                                            @foreach (var size in item.ProductVariations)
-                                            {
-                                                if (size.Quantity > 0)
-                                                {
-                                                    <div class="product-size addActiveItem filter-value" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
-
-                                                }
-                                                else
-                                                {
-                                                    <div class="product-size addActiveItem disabled-size filter-value" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
-
-                                                }
-                                            }
-                                        </div>
-                                        <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
-                                    </div>
-                                    @if (item.Percent != 0)
+                                <div class="wrapActiveToFirstChild">
+                                    @foreach (var proImg in item.ProductImages)
                                     {
-                                        <span class="price-percent text-white">-@item.Percent%</span>
-                                    }
-                                </div>
-                                <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
-                                    @foreach (var color in item.ProductImages)
-                                    {
-                                        <div class="product-color addActiveItem" onclick="changeImgProduct(event)" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                        <div data-id="@proImg.ProColorID" class="wrap-image addActiveItem">
+                                            <div class="product-img">
+                                                <a href="/Home/Detail/@item.ProId">
+                                                    <img src="/Upload/Product/@item.ProId/@proImg.Image" width="100%" alt="">
+                                                </a>
+                                                <div class="product-size-wrap">
+                                                    <div class="d-flex justify-content-center flex-wrap pt-3 wrapActiveToFirstChild">
+                                                        @foreach (var vairiation in item.ProductVariations)
+                                                        {
+                                                            if (vairiation.ProColorID == proImg.ProColorID)
+                                                            {
+                                                                if ((vairiation.Quantity - vairiation.Ordered) > 0)
+                                                                {
+                                                                    <div class="product-size addActiveItem" onclick="addActive(event)" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="product-size addActiveItem disabled-size" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </div>
+                                                    <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
+                                                </div>
+                                                @if (item.Percent != 0)
+                                                {
+                                                    <span class="price-percent text-white">-@item.Percent%</span>
+                                                }
+                                            </div>
+                                            <div class="product-color-list d-flex pt-3 pb-2">
+                                                @foreach (var color in item.ProductImages)
+                                                {
+                                                    if (color.ProColorID == proImg.ProColorID)
+                                                    {
+                                                        <div class="product-color active" onclick="changeProduct(event)" data-idColor ="@color.ProColorID">
+                                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="product-color" onclick="changeProduct(event)" data-idColor ="@color.ProColorID">
+                                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
                                         </div>
                                     }
                                 </div>
@@ -225,7 +216,7 @@
                                 </div>
                             </div>
                         }
-
+                        
                     </div>
                 </div>
             </div>

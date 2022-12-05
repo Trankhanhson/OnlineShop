@@ -18,7 +18,7 @@ namespace Models.DAO
         public List<Voucher> getVoucherNow()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            return db.Vouchers.Where(v=>v.StartDate<=DateTime.Now && v.EndDate>=DateTime.Now).ToList();
+            return db.Vouchers.Where(v=>v.StartDate<=DateTime.Now && v.EndDate>=DateTime.Now && v.MaxUses>v.UsedCurrent).ToList();
         }
 
         public List<Voucher> getAll()
@@ -58,6 +58,13 @@ namespace Models.DAO
         {
             var voucher = db.Vouchers.Find(id);
             db.Vouchers.Remove(voucher);
+            db.SaveChanges();
+        }
+
+        public void UseVoucher(int id)
+        {
+            var v = db.Vouchers.Find(id);
+            v.UsedCurrent = v.UsedCurrent + 1;
             db.SaveChanges();
         }
     }

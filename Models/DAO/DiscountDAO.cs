@@ -29,6 +29,8 @@ namespace Models.DAO
             return db.DiscountProducts.Where(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now).OrderByDescending(d => d.DiscountProductId).ToList();
         }
 
+        
+
         public int Insert(DiscountProduct d)
         {
             var a = db.DiscountProducts.Add(d);

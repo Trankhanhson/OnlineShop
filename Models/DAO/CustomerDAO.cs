@@ -21,7 +21,10 @@ namespace Models.DAO
         {
             try
             {
-                db.Customers.Add(customer);
+                Customer c = db.Customers.Add(customer);
+                Cart cart = new Cart();
+                cart.CusID = c.CusID;
+                db.Carts.Add(cart);
                 db.SaveChanges();
                 return true;
             }

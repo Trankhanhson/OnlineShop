@@ -164,6 +164,7 @@
     <Compile Include="common\MethodCommnon.cs" />
     <Compile Include="common\Paggination.cs" />
     <Compile Include="common\UserLogin.cs" />
+    <Compile Include="Controllers\BaseClientController.cs" />
     <Compile Include="Controllers\BoyController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\GirlController.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Model\ProductDiscount.cs" />
     <Compile Include="Model\RegisterCustomer.cs" />
     <Compile Include="Model\ResetPasswordModel.cs" />
+    <Compile Include="Model\VariationCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -213,7 +215,11 @@
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatCreate.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatEdit.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\ProductHomeAngular.js" />
-    <Content Include="Assets\js\Base2.js" />
+    <Content Include="Assets\css\base.css" />
+    <Content Include="Assets\css\PaymentPage.css" />
+    <Content Include="Assets\img\errorClient.svg" />
+    <Content Include="Assets\js\Cart\addCart.js" />
+    <Content Include="Assets\js\base.js" />
     <Content Include="Assets\js\SearchProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\VoucherAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\UserAngular.js" />
@@ -982,14 +988,12 @@
     <Content Include="Assets\Admin\datepicker\js\bootstrap-datepicker.js" />
     <Content Include="Assets\Admin\datepicker\js\bootstrap.min.js" />
     <Content Include="Assets\Admin\datepicker\js\jquery.min.js" />
-    <Content Include="Assets\css\Base.css" />
     <Content Include="Assets\css\cart.css" />
     <Content Include="Assets\css\customner-account.css" />
     <Content Include="Assets\css\info-customer.css" />
     <Content Include="Assets\css\main.css" />
     <Content Include="Assets\css\order-history.css" />
     <Content Include="Assets\css\outlet.css" />
-    <Content Include="Assets\css\Payment.css" />
     <Content Include="Assets\css\product-detail.css" />
     <Content Include="Assets\css\resposiveDetail.css" />
     <Content Include="Assets\css\resposiveIndex.css" />
@@ -2817,8 +2821,6 @@
     <Content Include="Assets\img\tru-icon.svg" />
     <Content Include="Assets\img\vnpay.svg" />
     <Content Include="Assets\img\youtube-icon.svg" />
-    <Content Include="Assets\js\Base.js" />
-    <Content Include="Assets\js\Cart\AddCart.js" />
     <Content Include="Assets\js\Cart\UpdateCart.js" />
     <Content Include="Assets\js\LoginAndRegis.js" />
     <Content Include="Assets\js\Cart\payment.js" />
@@ -4035,6 +4037,7 @@
     <Folder Include="Upload\NewCkFinder\" />
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
+    <Folder Include="Views\BaseClient\" />
     <Folder Include="Views\ShowCat\" />
   </ItemGroup>
   <ItemGroup>

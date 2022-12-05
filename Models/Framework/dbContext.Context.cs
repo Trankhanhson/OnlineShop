@@ -48,5 +48,8 @@ namespace Models.Framework
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<Cart_item> Cart_item { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
     }
 }

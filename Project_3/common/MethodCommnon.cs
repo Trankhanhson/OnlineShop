@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Web;
 using System.Globalization;
+using System.Threading.Tasks;
+using System.Web.SessionState;
+
 namespace Project_3.common
 {
     public static class MethodCommnon
@@ -54,6 +57,15 @@ namespace Project_3.common
                 DiscountPrice = Math.Round(Price - ((Convert.ToDecimal(Amount) / 100) * Price), 0);
             }
             return DiscountPrice;
+        }
+
+        public static string NextString(this Random random, int length)
+        {
+            const string chars = "0123456789";
+
+            IEnumerable<string> string_Enumerable = Enumerable.Repeat(chars, length);
+            char[] arr = string_Enumerable.Select(s => s[random.Next(s.Length)]).ToArray();
+            return new string(arr);
         }
     }
 }

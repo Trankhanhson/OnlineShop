@@ -5,6 +5,22 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ClothesShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="IdCart" />
+          </Key>
+          <Property Name="IdCart" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CusID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Cart_item">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCart" Type="int" Nullable="false" />
+          <Property Name="ProVariationID" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CatID" />
@@ -55,6 +71,19 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CusID" Type="bigint" />
+          <Property Name="ProVariationID" Type="bigint" />
+          <Property Name="Stars" Type="float" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Image" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Datetime" Type="datetime" />
         </EntityType>
         <EntityType Name="ImportBill">
           <Key>
@@ -270,6 +299,42 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cart_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CusID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="CusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_item_Cart">
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="IdCart" />
+            </Principal>
+            <Dependent Role="Cart_item">
+              <PropertyRef Name="IdCart" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_item_ProductVariation">
+          <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="0..1" />
+          <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariation">
+              <PropertyRef Name="ProVariationID" />
+            </Principal>
+            <Dependent Role="Cart_item">
+              <PropertyRef Name="ProVariationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Credential_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
@@ -315,6 +380,30 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Principal>
             <Dependent Role="DiscountDetail">
               <PropertyRef Name="ProId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CusID" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="CusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_ProductVariation">
+          <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="0..1" />
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariation">
+              <PropertyRef Name="ProVariationID" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="ProVariationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -511,11 +600,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ClothesShopModelStoreContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart_item" EntityType="Self.Cart_item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Credential" EntityType="Self.Credential" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountDetail" EntityType="Self.DiscountDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountProduct" EntityType="Self.DiscountProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportBill" EntityType="Self.ImportBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportBillDetail" EntityType="Self.ImportBillDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="New" EntityType="Self.New" Schema="dbo" store:Type="Tables" />
@@ -546,6 +638,18 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             <End Role="ProductCat" EntitySet="ProductCat" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_Cart_Customer" Association="Self.FK_Cart_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_item_Cart" Association="Self.FK_Cart_item_Cart">
+            <End Role="Cart" EntitySet="Cart" />
+            <End Role="Cart_item" EntitySet="Cart_item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_item_ProductVariation" Association="Self.FK_Cart_item_ProductVariation">
+            <End Role="ProductVariation" EntitySet="ProductVariation" />
+            <End Role="Cart_item" EntitySet="Cart_item" />
+          </AssociationSet>
           <AssociationSet Name="FK_Credential_Role" Association="Self.FK_Credential_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Credential" EntitySet="Credential" />
@@ -561,6 +665,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <AssociationSet Name="FK_DiscountDetail_Product" Association="Self.FK_DiscountDetail_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="DiscountDetail" EntitySet="DiscountDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_Customer" Association="Self.FK_Feedback_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Feedback" EntitySet="Feedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_ProductVariation" Association="Self.FK_Feedback_ProductVariation">
+            <End Role="ProductVariation" EntitySet="ProductVariation" />
+            <End Role="Feedback" EntitySet="Feedback" />
           </AssociationSet>
           <AssociationSet Name="FK_ImportBill_User1" Association="Self.FK_ImportBill_User1">
             <End Role="User" EntitySet="User" />
@@ -840,6 +952,29 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             <End Role="UserGroup" EntitySet="UserGroups" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Carts" EntityType="ClothesShopModel.Cart" />
+          <EntitySet Name="Cart_item" EntityType="ClothesShopModel.Cart_item" />
+          <AssociationSet Name="FK_Cart_Customer" Association="ClothesShopModel.FK_Cart_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_item_Cart" Association="ClothesShopModel.FK_Cart_item_Cart">
+            <End Role="Cart" EntitySet="Carts" />
+            <End Role="Cart_item" EntitySet="Cart_item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_item_ProductVariation" Association="ClothesShopModel.FK_Cart_item_ProductVariation">
+            <End Role="ProductVariation" EntitySet="ProductVariations" />
+            <End Role="Cart_item" EntitySet="Cart_item" />
+          </AssociationSet>
+          <EntitySet Name="Feedbacks" EntityType="ClothesShopModel.Feedback" />
+          <AssociationSet Name="FK_Feedback_Customer" Association="ClothesShopModel.FK_Feedback_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Feedback" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_ProductVariation" Association="ClothesShopModel.FK_Feedback_ProductVariation">
+            <End Role="ProductVariation" EntitySet="ProductVariations" />
+            <End Role="Feedback" EntitySet="Feedbacks" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -903,6 +1038,8 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
           <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Carts" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Customer" ToRole="Cart" />
+          <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_Customer" FromRole="Customer" ToRole="Feedback" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -1069,6 +1206,8 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
           <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
           <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductVariation_ProductColor" FromRole="ProductVariation" ToRole="ProductColor" />
           <NavigationProperty Name="ProductSize" Relationship="ClothesShopModel.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
+          <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="ProductVariation" ToRole="Cart_item" />
+          <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_ProductVariation" FromRole="ProductVariation" ToRole="Feedback" />
         </EntityType>
         <Association Name="FK_ImportBillDetail_ProductVariation">
           <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
@@ -1282,6 +1421,101 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="IdCart" />
+          </Key>
+          <Property Name="IdCart" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CusID" Type="Int64" />
+          <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Cart" ToRole="Customer" />
+          <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart" ToRole="Cart_item" />
+        </EntityType>
+        <EntityType Name="Cart_item">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCart" Type="Int32" Nullable="false" />
+          <Property Name="ProVariationID" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <NavigationProperty Name="Cart" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart_item" ToRole="Cart" />
+          <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="Cart_item" ToRole="ProductVariation" />
+        </EntityType>
+        <Association Name="FK_Cart_Customer">
+          <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CusID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="CusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_item_Cart">
+          <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="1" />
+          <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="IdCart" />
+            </Principal>
+            <Dependent Role="Cart_item">
+              <PropertyRef Name="IdCart" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_item_ProductVariation">
+          <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariation">
+              <PropertyRef Name="ProVariationID" />
+            </Principal>
+            <Dependent Role="Cart_item">
+              <PropertyRef Name="ProVariationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CusID" Type="Int64" />
+          <Property Name="ProVariationID" Type="Int64" />
+          <Property Name="Stars" Type="Double" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Datetime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Feedback_Customer" FromRole="Feedback" ToRole="Customer" />
+          <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_Feedback_ProductVariation" FromRole="Feedback" ToRole="ProductVariation" />
+        </EntityType>
+        <Association Name="FK_Feedback_Customer">
+          <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.Feedback" Role="Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CusID" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="CusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_ProductVariation">
+          <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="0..1" />
+          <End Type="ClothesShopModel.Feedback" Role="Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariation">
+              <PropertyRef Name="ProVariationID" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="ProVariationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1559,6 +1793,38 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
               <MappingFragment StoreEntitySet="UserGroup">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="ClothesShopModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="CusID" ColumnName="CusID" />
+                <ScalarProperty Name="IdCart" ColumnName="IdCart" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cart_item">
+            <EntityTypeMapping TypeName="ClothesShopModel.Cart_item">
+              <MappingFragment StoreEntitySet="Cart_item">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+                <ScalarProperty Name="IdCart" ColumnName="IdCart" />
+                <ScalarProperty Name="CartItemId" ColumnName="CartItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="ClothesShopModel.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Stars" ColumnName="Stars" />
+                <ScalarProperty Name="ProVariationID" ColumnName="ProVariationID" />
+                <ScalarProperty Name="CusID" ColumnName="CusID" />
+                <ScalarProperty Name="FeedbackId" ColumnName="FeedbackId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

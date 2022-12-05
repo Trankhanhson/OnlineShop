@@ -1,5 +1,12 @@
 ﻿/*hiển thị giá*/
-function convertPrice(price) {
+function convertPrice(priceInput) {
+    let price = ""
+    if (typeof priceInput == "number") {
+        price = JSON.stringify(priceInput)
+    }
+    else {
+        price = priceInput
+    }
     let tg = "";
     let length = price.length;
     let count = 0;
@@ -78,8 +85,6 @@ function loadCart() {
         $(".quantity-product").text(0) //hiển thị số lượng phần tử
     }
 }
-loadCart()
-
 
 /**remove item trong cart */
 function deleteCartItem(event, index) {
@@ -90,7 +95,7 @@ function deleteCartItem(event, index) {
     }
     else {
         list.splice(index, 1)
-        localStorage.setItem("Cart", JSON.stringify(list))    
+        localStorage.setItem("Cart", JSON.stringify(list))
     }
     loadCart()
     updateTotalPrice()
@@ -106,7 +111,7 @@ function updateTotalPrice() {
             let DiscountPrice = JSON.parse(list[i].DiscountPrice)
             let Quantity = JSON.parse(list[i].Quantity)
             originPrice += (Price * Quantity)
-            
+
             if (DiscountPrice != 0) {
                 totalPrice += (DiscountPrice * Quantity)
             }
@@ -122,13 +127,12 @@ function updateTotalPrice() {
     let textTotalPrice = convertPrice(JSON.stringify(totalPrice))
     //update gia tri cho gia goc
     $(".original-price").text(textOriTotal)
-    $(".discount-total").text("-"+textDiscountTotal)
+    $(".discount-total").text("-" + textDiscountTotal)
     $(".total-price").text(textTotalPrice)
 
     $(".discount-total").attr("data", totaldisCountPrice)
     $(".total-price").attr("data", totalPrice)
 }
-updateTotalPrice()
 
 function decreaseQuantity(event, index) {
     const input = $($(event.target).parent()).children("input")
@@ -155,8 +159,6 @@ function decreaseQuantity(event, index) {
 
         updateTotalPrice()
     }
-
-
 }
 
 function increaseQuantity(event, index) {
@@ -200,3 +202,36 @@ function increaseQuantity(event, index) {
         }
     })
 }
+
+//đồng bộ cart ở local và ở serverside
+function updateNewCart() {
+    if (localStorage.getItem("Cart") != null) {
+        let list = JSON.parse(localStorage.getItem("Cart"))
+        let variationCarts = []
+        $.each(list, (index, value) => {
+            let v = {
+                ProId: value.ProId,
+                proSizeId: value.proSizeId,
+                proColorId: value.proColorId,
+                Quantity: value.Quantity
+            }
+            variationCarts.push(v)
+        })
+
+        $.ajax({
+            url: "/Cart/getNewCart",
+            dataType: "Json",
+            type: "Post",
+            data: { variationCarts: variationCarts },
+            success: function (res) {
+                localStorage.setItem("Cart", res)
+                loadCart()
+                updateTotalPrice()
+            }
+        })
+    }
+    else {
+        loadCart()
+    }
+}
+updateNewCart()

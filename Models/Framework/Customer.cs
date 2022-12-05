@@ -18,6 +18,8 @@ namespace Models.Framework
         public Customer()
         {
             this.Orders = new HashSet<Order>();
+            this.Carts = new HashSet<Cart>();
+            this.Feedbacks = new HashSet<Feedback>();
         }
     
         public long CusID { get; set; }
@@ -31,5 +33,9 @@ namespace Models.Framework
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Carts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
     }
 }

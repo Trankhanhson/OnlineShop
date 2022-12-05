@@ -78,112 +78,28 @@ $("body").click((e) => {
     $(`.sidebar-form-wrap`).removeClass("active")
 })
 
-
-/**submit form header */
-//var historys = JSON.parse(localStorage.getItem('historySearch')) || []
-
-///**load history */
-//function loadHistory() {
-//    let bodyHistory = ""
-//    for (var h of historys) {
-//        bodyHistory += `<span>${h}</span>`
-//    }
-//    $(".search-history-body").html(bodyHistory)
-//}
-//loadHistory()
-
-///**add history */
-//function addHistory(item) {
-//    historys.push(item)
-//    localStorage.setItem('historySearch', JSON.stringify(historys))
-//}
-
-///*submit form header*/
-//$(".sidebar-form").submit((e) => {
-//    let info = $("#input-search").val()
-//    addHistory(info)
-//    loadHistory();
-//})
-
-///**delete history */
-//$(".search-history__header span").click((e) => {
-//    localStorage.clear()
-//    historys = [];
-//    loadHistory();
-//})
-///**click in history */
-//$(".search-history-body").each(function (index, value) {
-//    $(value).click((e) => {
-//        let historyClick = $(this).text()
-//        $("#input-search").val(historyClick)
-//    })
-//})
-
-/**cart handle */
-
-
-/**modal */
-/**click login */
-//$(".btn-login").click((e) => {
-//    $(".btn-login").addClass("active")
-//    $($(".btn-register")).removeClass("active")
-//    $(".modal-title").text("Cảm ơn bạn đã trở lại.")
-//})
-
-///**click dang ky */
-//$(".btn-register").click((e) => {
-//    $(".modal-title").text("Đăng ký để Canifa có cơ hội phục vụ bạn tốt hơn.")
-//    $(".btn-register").addClass("active")
-//    $(".btn-login").removeClass("active")
-//})
-
-
-/**product handle */
-
-//product list color active
-$(".product-color").each(function (index, value) {
-    $(value).click((e) => {
-
-        let idGrandfather = $(value).parent().parent().attr("id")
-
-        //change border
-        $(`#${idGrandfather} .product-color`).removeClass("active")
-        $(value).addClass("active")
-
-        //change image of product
-        let src = $(value).attr("data")
-        $(`#${idGrandfather} .product-img img`).attr("src", src)
+function changeProduct(e) {
+    let parent = $(e.target).parents(".product")
+    let colorId = $(e.target).attr("data-idColor")
+    let listImage = $(parent).find(".wrap-image")
+    $(listImage).removeClass("active")
+    listImage.each((index, value) => {
+        let id = JSON.parse($(value).attr("data-id"))
+        if (id == colorId) {
+            $(value).addClass("active")
+        }
     })
-})
-function changeImgProduct(e) {
-    if ($(e.target).hasClass("product-color")) {
-        let parent = $(value).parents(".product")
-
-        //change border
-        $(`#${parent} .product-color`).removeClass("active")
-        $(value).addClass("active")
-
-        //change image of product
-        let src = $(value).attr("data")
-        $(`#${parent} .product-img img`).attr("src", src)
-    }
 }
 
-/**product size click */
-$(".product-size").click((e) => {
-    const size = $(e.target).text()
-    $(".product-size").removeClass("active")
+function addActive(e) {
+    let parent = $(e.target).parent()
+    let listItem = $(parent).children()
+    $(listItem).removeClass("active")
     $(e.target).addClass("active")
-})
-
-/**product display size */
-$(".product-open-size").click((e) => {
-    $(".product-size-wrap").css("display", "block")
-})
+}
 
 
 /**toast */
-
 $(".product-btn-addCart").click((e) => {
     var toastElList = [].slice.call(document.querySelectorAll('.toast-addCart'))
     var toastList = toastElList.map(function (toastEl) {

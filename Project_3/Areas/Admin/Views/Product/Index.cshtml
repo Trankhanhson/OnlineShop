@@ -40,13 +40,13 @@
                         <table class="table bg-white table-listProduct mt-3">
                             <thead class="text-dark">
                                 <tr>
-                                    <th class="col-id">STT</th>
-                                    <th class="col-name">Tên hàng</th>
+                                    <th class="col-name">Sản phẩm</th>
                                     <th class="col-procat">Loại hàng</th>
                                     <th class="col-importPrice">Giá vốn</th>
                                     <th class="col-price">Giá bán</th>
                                     <th class="col-status">Trạng thái</th>
                                     <th class="col-quantity">Tồn kho</th>
+                                    <th class="col-ordered">Đã đặt</th>
                                     <th class="col-name"></th>
                                 </tr>
                             </thead>
@@ -55,18 +55,18 @@
                                     <td colspan="10" class="p-0 border-0">
                                         <table class="w-100">
                                             <tbody>
-                                                <tr class="row-product row-product-{{item.ProId}}" ng-click="showVariation(item.ProId)" >
-                                                    <td class="col-id">{{$index}}</td>
+                                                <tr class="row-product row-product-{{item.ProId}}" ng-click="showVariation(item.ProId)">
                                                     <td class="col-name">{{item.ProName}}</td>
                                                     <td class="col-procat">{{item.ProductCat.Name}}</td>
                                                     <td class="col-importPrice">{{item.ImportPrice | number}}đ</td>
                                                     <td class="col-price">{{item.Price | number}}đ</td>
                                                     <td class="col-status">
-                                                        <div class="form-check form-switch" ng-click ="ChangeStatus($event, item.ProId)">
+                                                        <div class="form-check form-switch" ng-click="ChangeStatus($event, item.ProId)">
                                                             <input class="form-check-input" type="checkbox" checked="{{item.Status}}">
                                                         </div>
                                                     </td>
                                                     <td class="col-quantity"></td>
+                                                    <td class="col-ordered"></td>
                                                     <td>
                                                         <a class="btn-update" href="/Admin/Product/Edit/{{item.ProId}}"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
                                                         <a class="btn-delete" onclick="deleteProduct(item.ProId)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
@@ -85,6 +85,7 @@
                                                                 <li class="col-price"></li>
                                                                 <li class="col-status"></li>
                                                                 <li class="col-quantity">{{variation.Quantity}}</li>
+                                                                <li class="col-ordered">{{variation.Ordered}}</li>
                                                             </ul>
                                                     </td>
                                                 </tr>

@@ -64,7 +64,7 @@ namespace Models
 
         public Product getById(long id)
         {
-            return _dbContext.Products.Include(pi => pi.ProductImages).Include(pc=>pc.ProductCat).Include(pv=>pv.ProductVariations).Where(p=>p.ProId==id).FirstOrDefault();
+            return _dbContext.Products.Find(id);
         }
 
         public void EditPrice(List<Product> products)

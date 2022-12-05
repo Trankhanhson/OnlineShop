@@ -29,5 +29,10 @@ namespace Models.DAO
             db.DiscountDetails.AddRange(listNew);
             db.SaveChanges();
         }
+
+        public List<DiscountDetail> getDiscountDetailNow()
+        {
+            return db.DiscountDetails.Where(d=>d.DiscountProduct.StartDate<=DateTime.Now && d.DiscountProduct.EndDate>=DateTime.Now).ToList();
+        }
     }
 }

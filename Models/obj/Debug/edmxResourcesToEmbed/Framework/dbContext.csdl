@@ -209,6 +209,29 @@
       <End Role="UserGroup" EntitySet="UserGroups" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
+    <EntitySet Name="Carts" EntityType="ClothesShopModel.Cart" />
+    <EntitySet Name="Cart_item" EntityType="ClothesShopModel.Cart_item" />
+    <AssociationSet Name="FK_Cart_Customer" Association="ClothesShopModel.FK_Cart_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Cart" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cart_item_Cart" Association="ClothesShopModel.FK_Cart_item_Cart">
+      <End Role="Cart" EntitySet="Carts" />
+      <End Role="Cart_item" EntitySet="Cart_item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cart_item_ProductVariation" Association="ClothesShopModel.FK_Cart_item_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+      <End Role="Cart_item" EntitySet="Cart_item" />
+    </AssociationSet>
+    <EntitySet Name="Feedbacks" EntityType="ClothesShopModel.Feedback" />
+    <AssociationSet Name="FK_Feedback_Customer" Association="ClothesShopModel.FK_Feedback_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Feedback" EntitySet="Feedbacks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedback_ProductVariation" Association="ClothesShopModel.FK_Feedback_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+      <End Role="Feedback" EntitySet="Feedbacks" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
     <Key>
@@ -272,6 +295,8 @@
     <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
     <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Carts" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Customer" ToRole="Cart" />
+    <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_Customer" FromRole="Customer" ToRole="Feedback" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
@@ -438,6 +463,8 @@
     <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
     <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductVariation_ProductColor" FromRole="ProductVariation" ToRole="ProductColor" />
     <NavigationProperty Name="ProductSize" Relationship="ClothesShopModel.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
+    <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="ProductVariation" ToRole="Cart_item" />
+    <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_ProductVariation" FromRole="ProductVariation" ToRole="Feedback" />
   </EntityType>
   <Association Name="FK_ImportBillDetail_ProductVariation">
     <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="1" />
@@ -651,6 +678,101 @@
       </Principal>
       <Dependent Role="User">
         <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="IdCart" />
+    </Key>
+    <Property Name="IdCart" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int64" />
+    <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Cart" ToRole="Customer" />
+    <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart" ToRole="Cart_item" />
+  </EntityType>
+  <EntityType Name="Cart_item">
+    <Key>
+      <PropertyRef Name="CartItemId" />
+    </Key>
+    <Property Name="CartItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdCart" Type="Int32" Nullable="false" />
+    <Property Name="ProVariationID" Type="Int64" />
+    <Property Name="Quantity" Type="Int32" />
+    <NavigationProperty Name="Cart" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart_item" ToRole="Cart" />
+    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="Cart_item" ToRole="ProductVariation" />
+  </EntityType>
+  <Association Name="FK_Cart_Customer">
+    <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cart_item_Cart">
+    <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="1" />
+    <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cart">
+        <PropertyRef Name="IdCart" />
+      </Principal>
+      <Dependent Role="Cart_item">
+        <PropertyRef Name="IdCart" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cart_item_ProductVariation">
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="Cart_item">
+        <PropertyRef Name="ProVariationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Feedback">
+    <Key>
+      <PropertyRef Name="FeedbackId" />
+    </Key>
+    <Property Name="FeedbackId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int64" />
+    <Property Name="ProVariationID" Type="Int64" />
+    <Property Name="Stars" Type="Double" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Datetime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Feedback_Customer" FromRole="Feedback" ToRole="Customer" />
+    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_Feedback_ProductVariation" FromRole="Feedback" ToRole="ProductVariation" />
+  </EntityType>
+  <Association Name="FK_Feedback_Customer">
+    <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Feedback" Role="Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedback_ProductVariation">
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Feedback" Role="Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="ProVariationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

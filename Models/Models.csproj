@@ -80,6 +80,12 @@
     <Compile Include="DAO\ProductSizeDAO.cs" />
     <Compile Include="DAO\ProductVariationDAO.cs" />
     <Compile Include="DAO\VoucherDAO.cs" />
+    <Compile Include="Framework\Cart.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Cart_item.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Framework\Category.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -108,6 +114,9 @@
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\DiscountProduct.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Feedback.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\ImportBill.cs">

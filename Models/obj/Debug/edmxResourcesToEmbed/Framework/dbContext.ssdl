@@ -1,5 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ClothesShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="IdCart" />
+    </Key>
+    <Property Name="IdCart" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CusID" Type="bigint" />
+  </EntityType>
+  <EntityType Name="Cart_item">
+    <Key>
+      <PropertyRef Name="CartItemId" />
+    </Key>
+    <Property Name="CartItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdCart" Type="int" Nullable="false" />
+    <Property Name="ProVariationID" Type="bigint" />
+    <Property Name="Quantity" Type="int" />
+  </EntityType>
   <EntityType Name="Category">
     <Key>
       <PropertyRef Name="CatID" />
@@ -50,6 +66,19 @@
     <Property Name="Name" Type="nvarchar" MaxLength="100" />
     <Property Name="StartDate" Type="datetime" />
     <Property Name="EndDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Feedback">
+    <Key>
+      <PropertyRef Name="FeedbackId" />
+    </Key>
+    <Property Name="FeedbackId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CusID" Type="bigint" />
+    <Property Name="ProVariationID" Type="bigint" />
+    <Property Name="Stars" Type="float" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="Image" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Datetime" Type="datetime" />
   </EntityType>
   <EntityType Name="ImportBill">
     <Key>
@@ -265,6 +294,42 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Cart_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cart_item_Cart">
+    <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+    <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cart">
+        <PropertyRef Name="IdCart" />
+      </Principal>
+      <Dependent Role="Cart_item">
+        <PropertyRef Name="IdCart" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cart_item_ProductVariation">
+    <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="0..1" />
+    <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="Cart_item">
+        <PropertyRef Name="ProVariationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Credential_Role">
     <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
     <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
@@ -310,6 +375,30 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Principal>
       <Dependent Role="DiscountDetail">
         <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedback_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedback_ProductVariation">
+    <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="0..1" />
+    <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductVariation">
+        <PropertyRef Name="ProVariationID" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="ProVariationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -506,11 +595,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="ClothesShopModelStoreContainer">
+    <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cart_item" EntityType="Self.Cart_item" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Credential" EntityType="Self.Credential" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscountDetail" EntityType="Self.DiscountDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscountProduct" EntityType="Self.DiscountProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportBill" EntityType="Self.ImportBill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportBillDetail" EntityType="Self.ImportBillDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="New" EntityType="Self.New" Schema="dbo" store:Type="Tables" />
@@ -541,6 +633,18 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       <End Role="ProductCat" EntitySet="ProductCat" />
       <End Role="Product" EntitySet="Product" />
     </AssociationSet>
+    <AssociationSet Name="FK_Cart_Customer" Association="Self.FK_Cart_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cart_item_Cart" Association="Self.FK_Cart_item_Cart">
+      <End Role="Cart" EntitySet="Cart" />
+      <End Role="Cart_item" EntitySet="Cart_item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cart_item_ProductVariation" Association="Self.FK_Cart_item_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariation" />
+      <End Role="Cart_item" EntitySet="Cart_item" />
+    </AssociationSet>
     <AssociationSet Name="FK_Credential_Role" Association="Self.FK_Credential_Role">
       <End Role="Role" EntitySet="Role" />
       <End Role="Credential" EntitySet="Credential" />
@@ -556,6 +660,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <AssociationSet Name="FK_DiscountDetail_Product" Association="Self.FK_DiscountDetail_Product">
       <End Role="Product" EntitySet="Product" />
       <End Role="DiscountDetail" EntitySet="DiscountDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedback_Customer" Association="Self.FK_Feedback_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Feedback" EntitySet="Feedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedback_ProductVariation" Association="Self.FK_Feedback_ProductVariation">
+      <End Role="ProductVariation" EntitySet="ProductVariation" />
+      <End Role="Feedback" EntitySet="Feedback" />
     </AssociationSet>
     <AssociationSet Name="FK_ImportBill_User1" Association="Self.FK_ImportBill_User1">
       <End Role="User" EntitySet="User" />

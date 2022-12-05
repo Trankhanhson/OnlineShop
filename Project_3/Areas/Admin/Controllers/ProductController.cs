@@ -124,6 +124,7 @@ namespace Project_3.Areas.Admin.Controllers
                     ProductColor = new ProductColor() { NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
                     ProductSize = new ProductSize() { NameSize = pv.ProductSize.NameSize },
                     Quantity = pv.Quantity,
+                    Ordered = pv.Ordered,
                     DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
                 }).ToList()
 

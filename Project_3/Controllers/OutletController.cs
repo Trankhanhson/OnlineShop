@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Project_3.Controllers
 {
-    public class OutletController : Controller
+    public class OutletController : BaseClientController
     {
         // GET: Outlet
         public ActionResult Index()
@@ -37,6 +37,7 @@ namespace Project_3.Controllers
                         ProductColor = new ProductColor() { ProColorID = pv.ProColorID.Value, NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
                         ProductSize = new ProductSize() { ProSizeID = pv.ProSizeID.Value, NameSize = pv.ProductSize.NameSize },
                         Quantity = pv.Quantity,
+                        Ordered = pv.Ordered,
                         DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
                     }).ToList(),
                     ProductImages = p.ProductImages.Select(pi=>new ProductImage()
@@ -62,6 +63,7 @@ namespace Project_3.Controllers
                         ProductColor = new ProductColor() { ProColorID = pv.ProColorID.Value, NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
                         ProductSize = new ProductSize() { ProSizeID = pv.ProSizeID.Value, NameSize = pv.ProductSize.NameSize },
                         Quantity = pv.Quantity,
+                        Ordered = pv.Ordered,
                         DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
                     }).ToList(),
                     ProductImages = p.ProductImages.Select(pi=>new ProductImage()
@@ -73,48 +75,22 @@ namespace Project_3.Controllers
                 }).ToList();
 
             }
-            var discountNow = new DiscountDAO().getDiscountNow();
+            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow();
             List<Product> listProDiscount = new List<Product>();
             foreach (var p in list)
             {
-                //kiểm tra giảm có giảm giá không
-                foreach (var d in discountNow)
-                {
-                    foreach (var dt in d.DiscountDetails)
-                    {
-                        if (dt.ProId == p.ProId)
-                        {
-                            if (dt.TypeAmount == "0") //giảm giá theo tiền
-                            {
-                                p.DiscountPrice = p.Price.Value - dt.Amount.Value;
-                            }
-                            else  //giảm giá theo %
-                            {
-                                p.Percent = dt.Amount.Value;
-                                p.DiscountPrice = Math.Round(p.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * p.Price.Value), 0);
-                            }
-                            break;
-                        }
-                    }
-                }
-                if(p.DiscountPrice > 0)
+                var a = getDiscount(p, DiscountDetails); //reuturn a product with discountPrice and percent
+                p.DiscountPrice = a.DiscountPrice;
+                p.Percent = a.Percent;
+
+                //if product discounted , add to list dicount
+                if (p.DiscountPrice >= minMoney && p.DiscountPrice <= maxMoney)
                 {
                     listProDiscount.Add(p);
                 }
             }
 
-            //lấy danh sách product discount thỏa mãn
-            List<Product> listOutlet = new List<Product>();
-            if (maxMoney == 0) //trường hợp lấy 249 trở lên
-            {
-                listOutlet = listProDiscount.Where(p=>p.DiscountPrice>minMoney).ToList();
-            }
-            else
-            {
-                listOutlet = listProDiscount.Where(p => p.DiscountPrice >= minMoney && p.DiscountPrice <= maxMoney).ToList();
-            }
-
-            var result= JsonConvert.SerializeObject(listOutlet);
+            var result= JsonConvert.SerializeObject(listProDiscount);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

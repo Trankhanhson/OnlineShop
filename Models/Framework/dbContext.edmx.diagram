@@ -11,7 +11,6 @@
         <EntityTypeShape EntityType="ClothesShopModel.ProductImage" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductSize" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClothesShopModel.Slide" Width="1.5" PointX="10.75" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ImportBill" ManuallyRouted="false" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductImage_ProductColor" ManuallyRouted="false" />
         <EntityTypeShape EntityType="ClothesShopModel.Category" Width="1.5" PointX="8.75" PointY="8" />
@@ -49,6 +48,14 @@
         <AssociationConnector Association="ClothesShopModel.FK_ImportBill_User1" />
         <AssociationConnector Association="ClothesShopModel.FK_News_User" />
         <AssociationConnector Association="ClothesShopModel.FK_User_UserGroup" />
+        <EntityTypeShape EntityType="ClothesShopModel.Cart" Width="1.5" PointX="13.75" PointY="16.875" />
+        <EntityTypeShape EntityType="ClothesShopModel.Cart_item" Width="1.5" PointX="16" PointY="2.375" />
+        <AssociationConnector Association="ClothesShopModel.FK_Cart_Customer" />
+        <AssociationConnector Association="ClothesShopModel.FK_Cart_item_Cart" />
+        <AssociationConnector Association="ClothesShopModel.FK_Cart_item_ProductVariation" />
+        <EntityTypeShape EntityType="ClothesShopModel.Feedback" Width="1.5" PointX="18.75" PointY="4" />
+        <AssociationConnector Association="ClothesShopModel.FK_Feedback_Customer" />
+        <AssociationConnector Association="ClothesShopModel.FK_Feedback_ProductVariation" />
         </Diagram>
       <Diagram DiagramId="b3a46f2332c64c989370a0f902c91d0a" Name="Diagram2" >
       </Diagram>

@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ProductImage firstProImage = Model.ProductImages.First();
 }
+
 @section scripts{
     <script src="~/Assets/js/product-detail.js"></script>
     <script>
@@ -43,12 +44,60 @@
             //Thay đổi ảnh to
             $(".main-img").attr('src', listImageClicked.MainImage)
         })
+
+        function changeImageDetail(e, idColor) {
+            $(".detail-color").removeClass("active")
+            $(e.target).addClass("active")
+
+            //change size box
+            let listSizeBox = $(".wrapSizeOfColor")
+            $(listSizeBox).removeClass("active")
+            $(`.wrapSizeOfColor-${idColor}`).addClass("active")
+
+            //đẩy ảnh lên
+            let listImageClicked = JSON.parse($(e.target).attr("data-Images")) //danh sách link ảnh ở thẻ vừa được click
+
+            //Vì dùng slick slider sẽ ren ra nhiều thẻ img chứ không phải chỉ 6 thẻ
+            let listImage = $(".list-img-item")
+            listImage.each((index, value) => {
+                if ($(value).hasClass("MainImage")) {
+                    $(value).attr('src', listImageClicked.MainImage)
+                }
+                else if ($(value).hasClass("Detail1")) {
+                    $(value).attr('src', listImageClicked.Detail1)
+                }
+                else if ($(value).hasClass("Detail2")) {
+                    $(value).attr('src', listImageClicked.Detail2)
+                }
+                else if ($(value).hasClass("Detail3")) {
+                    $(value).attr('src', listImageClicked.Detail3)
+                }
+                else if ($(value).hasClass("Detail4")) {
+                    $(value).attr('src', listImageClicked.Detail4)
+                }
+                else if ($(value).hasClass("Detail5")) {
+                    $(value).attr('src', listImageClicked.Detail5)
+                }
+            })
+
+            //Thay đổi ảnh to
+            $(".main-img").attr('src', listImageClicked.MainImage)
+        }
     </script>
 }
 
 @section styles{
     <link href="~/Assets/css/product-detail.css" rel="stylesheet" />
     <link href="~/Assets/css/resposiveDetail.css" rel="stylesheet" />
+    <style>
+        .wrapSizeOfColor {
+            display: none;
+        }
+
+            .wrapSizeOfColor.active {
+                display: block
+            }
+    </style>
 }
 
 @section Menu{
@@ -134,7 +183,7 @@
 
 <main data='{"ProId":"@Model.ProId","ProName":"@Model.ProName","Price":"@Model.Price","DiscountPrice":"@Model.DiscountPrice","Percent":@Model.Percent}'>
     <div class="topbar text-center text-white">
-        <div>Thêm vào giỏ  499.000 ₫ để  miễn phí vận chuyển</div>
+        <div>Thêm vào giỏ  200.000 ₫ để  miễn phí vận chuyển</div>
         <div>ĐỔI HÀNG MIỄN PHÍ - Tại tất cả cửa hàng trong 30 ngày</div>
     </div>
     <section style="padding: 0 40px;">
@@ -142,7 +191,7 @@
 
             <!--content-->
             <ul class="breadcrumb mt-5 mb-4">
-                <li class="breadcrumb-item"><a href="/Home/Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="/Home/HomePage">Trang chủ</a></li>
                 <li class="breadcrumb-item"><a href="#">@Model.ProductCat.Name</a></li>
                 <li class="breadcrumb-item active">@Model.ProName</li>
             </ul>
@@ -183,7 +232,7 @@
                         <div class="product-color-list d-flex mt-2 mb-3 wrapActiveToFirstChild">
                             @foreach (var item in Model.ProductImages)
                             {
-                                <div class="product-color detail-color addActiveItem" data-srcColor="/Upload/ColorImage/@item.ProductColor.ProColorID/@item.ProductColor.ImageColor" data-nameColor="@item.ProductColor.NameColor" data-idColor="@item.ProColorID" data-Images='{"MainImage":"/Upload/Product/@Model.ProId/@item.Image","Detail1":"/Upload/Product/@Model.ProId/@item.DetailImage1","Detail2":"/Upload/Product/@Model.ProId/@item.DetailImage2","Detail3":"/Upload/Product/@Model.ProId/@item.DetailImage3","Detail4":"/Upload/Product/@Model.ProId/@item.DetailImage4","Detail5":"/Upload/Product/@Model.ProId/@item.DetailImage5"}'>
+                                <div class="product-color detail-color addActiveItem" onclick="changeImageDetail(event,@item.ProColorID)" data-srcColor="/Upload/ColorImage/@item.ProductColor.ProColorID/@item.ProductColor.ImageColor" data-nameColor="@item.ProductColor.NameColor" data-idColor="@item.ProColorID" data-Images='{"MainImage":"/Upload/Product/@Model.ProId/@item.Image","Detail1":"/Upload/Product/@Model.ProId/@item.DetailImage1","Detail2":"/Upload/Product/@Model.ProId/@item.DetailImage2","Detail3":"/Upload/Product/@Model.ProId/@item.DetailImage3","Detail4":"/Upload/Product/@Model.ProId/@item.DetailImage4","Detail5":"/Upload/Product/@Model.ProId/@item.DetailImage5"}'>
                                     <span data="" style="background-image: url('/Upload/ColorImage/@item.ProductColor.ProColorID/@item.ProductColor.ImageColor');pointer-events:none;"></span>
                                 </div>
                             }
@@ -192,19 +241,28 @@
                     </div>
                     <div class="detail-list-size">
                         <p>Kích cỡ: <span class="size-choose">@Model.ProductVariations.First().ProductSize.NameSize</span></p>
-                        <div class="list-size mt-2 filter-sameValue">
-                            @foreach (var item in Model.ProductVariations)
+                        <div class="list-size mt-2 wrapActiveToFirstChild">
+                            @foreach (var proImg in Model.ProductImages)
                             {
-                                if (item.Quantity > 0)
-                                {
-                                    <div class="product-size addActiveItem" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
-                                }
-                                else
-                                {
-                                    <div class="product-size addActiveItem disabled-size" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+                                <div class="wrapSizeOfColor wrapSizeOfColor-@proImg.ProColorID addActiveItem">
+                                    @foreach (var item in Model.ProductVariations)
+                                    {
+                                        if (item.ProColorID == proImg.ProColorID)
+                                        {
+                                            if (item.Quantity - item.Ordered > 0)
+                                            {
+                                                <div class="product-size" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="product-size disabled-size" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize</div>
+                                            }
+                                        }
 
-                                }
+                                    }
+                                </div>
                             }
+
                         </div>
                     </div>
                     <hr style="height: 1px;background-color:#adaaaa;margin: 30px 0;">
@@ -357,7 +415,7 @@
                         </div>
                     </div>
                 }
-                
+
 
             </div>
         </div>

@@ -13,12 +13,8 @@
 
         function OutletController($scope, $http) {
             $scope.Object = 'All'
-            $scope.MinMoney = 99
-            $scope.MaxMoney = 149
-            $scope.addActive = function (e,Class) {
-                $($(e.target).parent()).find(`.${Class}`).removeClass("active")
-                $(e.target).addClass("active")
-            }
+            $scope.MinMoney = 99000
+            $scope.MaxMoney = 149000
 
             $scope.getData = function () {
                 /** Lấy danh sách category*/
@@ -26,30 +22,13 @@
                     params: { o: $scope.Object, minMoney: $scope.MinMoney, maxMoney: $scope.MaxMoney }
                 }).then(function (res) {
                     $scope.listOutlet = JSON.parse(res.data)
-                    $.each($scope.listOutlet, (index, value) => {
-                        value.ProductVariations = $scope.filterSameValue(value.ProductVariations)
-                    })
                 }, function (error) {
                     alert("failed")
                 })
             }
 
-            $scope.filterSameValue = function (list) {
-                let newList = [] //chứa list idSize đã được filter
-                $.each(list,(index, variation) => {
-
-                    //nếu idSize chưa tồn tại trong newList
-                    let checkExist = newList.some((value, index) => {
-                        return value.ProductSize.ProSizeID == variation.ProductSize.ProSizeID
-                    })
-
-                    if (checkExist == false) {
-                        newList.push(variation)
-                    }
-                })
-                return newList
-            }
             $scope.getData()
+
             $scope.changeObject = function (o) {
                 $scope.Object = o
                 $scope.getData()
@@ -173,10 +152,10 @@
         </ul>
 
         <ul class="w-75 d-flex mx-auto mt-4 mb-5" style="background-color: #f6f6f6;">
-            <li class="flex-grow-1 text-center" ng-click="changeMoney(99,149)"><a class="tab-price__link active">99k - 149k</a></li>
-            <li class="flex-grow-1 text-center" ng-click="changeMoney(150,199)"><a class="tab-price__link">150k - 199k</a></li>
-            <li class="flex-grow-1 text-center" ng-click="changeMoney(200,249)"><a class="tab-price__link">200k - 249k</a></li>
-            <li class="flex-grow-1 text-center" ng-click="changeMoney(250,0)"><a class="tab-price__link">Từ 250k</a></li>
+            <li class="flex-grow-1 text-center" ng-click="changeMoney(99000,149000)"><a class="tab-price__link active">99k - 149k</a></li>
+            <li class="flex-grow-1 text-center" ng-click="changeMoney(150000,199000)"><a class="tab-price__link">150k - 199k</a></li>
+            <li class="flex-grow-1 text-center" ng-click="changeMoney(200000,249000)"><a class="tab-price__link">200k - 249k</a></li>
+            <li class="flex-grow-1 text-center" ng-click="changeMoney(250000,10000000)"><a class="tab-price__link">Từ 250k</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -184,31 +163,45 @@
                 <div class="row gx-3 gy-5">
                     <div class="col-xl-3 col-md-4 col-6" ng-repeat="item in listOutlet">
                         <div class="product" data='{"ProId":"{{item.ProId}}","ProName":"{{item.ProName}}","Price":"{{item.Price}}","DiscountPrice":"{{item.DiscountPrice}}","Percent":{{item.Percent}} }'>
-                            <div class="product-img">
-                                <a href="/Home/Detail/{{item.ProId}}">
-                                    <img src="/Upload/Product/{{item.ProId}}/{{item.firstImage}}" width="100%" alt="">
-                                </a>
-                                <div class="product-size-wrap">
-                                    <div class="d-flex justify-content-center flex-wrap pt-3">
-                                         <div ng-repeat="size in item.ProductVariations" class="{{$index == 0 ? 'active' : ''}} product-size" ng-click="addActive($event,'product-size')" data-idSize="{{size.ProductSize.ProSizeID}}">{{size.ProductSize.NameSize}}</div>
-                                    </div>
-                                    <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
-                                </div>
-                            </div>
-                            <div class="product-color-list d-flex pt-3 pb-2">
-                                <div ng-repeat="color in item.ProductImages" class="{{$index == 0 ? 'active' : ''}} product-color" onclick="changeImgProduct(event)" data-idColor="{{color.ProColorID}}" data="~/Upload/Product/{{item.ProId}}/{{color.Image}}">
-                                    <span style="background-image: url('/Upload/ColorImage/{{color.ProColorID}}/{{color.ImageColor}}');pointer-events:none;"></span>
-                                </div>
-                            </div>
-                            <span class="price-percent text-white" ng-if="item.Percent!=0">-{{item.Percent}}%</span>
+                            <div>
 
+                                <div ng-repeat="proImg in item.ProductImages" data-id="{{proImg.ProColorID}}" class="wrap-image {{$index == 0 ? 'active': ''}}">
+                                    <div class="product-img">
+                                        <a href="/Home/Detail/{{item.ProId}}">
+                                            <img src="/Upload/Product/{{item.ProId}}/{{proImg.Image}}" width="100%" alt="">
+                                        </a>
+                                        <div class="product-size-wrap">
+                                            <div class="d-flex justify-content-center flex-wrap pt-3">
+                                                <div ng-repeat="variation in item.ProductVariations">
+                                                    <div ng-if="variation.ProductColor.ProColorID == proImg.ProColorID">
+                                                        <div ng-if="(variation.Quantity - variation.Ordered) > 0" class="product-size" onclick="addActive(event)" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
+                                                        <div ng-if="(variation.Quantity - variation.Ordered) <= 0" class="product-size disabled-size" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
+                                        </div>
+                                        <span ng-if="item.Percent != 0" class="price-percent text-white">-{{item.Percent}}%</span>
+                                    </div>
+                                    <div class="product-color-list d-flex pt-3 pb-2">
+                                        <div ng-repeat="color in item.ProductImages" class="product-color {{color.ProColorID == proImg.ProColorID ? 'active' : ''}}" onclick="changeProduct(event)" data-idColor="{{color.ProColorID}}">
+                                            <span style=" background-image: url('/Upload/ColorImage/{{color.ProColorID}}/{{color.ImageColor}}')"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <a href="/Home/Detail/{{item.ProId}}" class="product-name">
                                 {{item.ProName}}
                             </a>
-                            <div class="d-flex mt-1">
-                                <div class="curent-price me-3">{{item.DiscountPrice}}</div>
-                                <div class="curent-old" data="">{{item.Price}}</div>
+                            <div class="d-flex mt-1" ng-if="item.DiscountPrice != 0">
+                                <div class="curent-price me-3">{{item.DiscountPrice | number}}đ</div>
+                                <div class="curent-old" data="">{{item.Price | number}}đ</div>
                             </div>
+                            <div class="d-flex mt-1" ng-if="item.DiscountPrice == 0">
+                                <div class="curent-price me-3">{{item.Price | number}}đ</div>
+                            </div>
+
                             <div class="product-like">
                                 <span>Yêu thích</span>
                                 <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">

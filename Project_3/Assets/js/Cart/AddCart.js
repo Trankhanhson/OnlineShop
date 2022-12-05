@@ -1,5 +1,12 @@
 ﻿/*hiển thị giá*/
-function convertPrice(price) {
+function convertPrice(priceInput) {
+    let price = ""
+    if (typeof priceInput == "number") {
+        price = JSON.stringify(priceInput)
+    }
+    else {
+        price = priceInput
+    }
     let tg = "";
     let length = price.length;
     let count = 0;
@@ -77,7 +84,37 @@ function loadMiniCart() {
     }
 }
 
-loadMiniCart()
+//update new product in it is changed
+function updateNewCart() {
+    if (localStorage.getItem("Cart") != null) {
+        let list = JSON.parse(localStorage.getItem("Cart"))
+        let variationCarts = []
+        $.each(list, (index, value) => {
+            let v = {
+                ProId: value.ProId,
+                proSizeId: value.proSizeId,
+                proColorId: value.proColorId,
+                Quantity: value.Quantity
+            }
+            variationCarts.push(v)
+        })
+
+        $.ajax({
+            url: "/Cart/getNewCart",
+            dataType: "Json",
+            type: "Post",
+            data: { variationCarts: variationCarts },
+            success: function (res) {
+                localStorage.setItem("Cart", res)
+                loadMiniCart()
+            }
+        })
+    }
+    else {
+        loadMiniCart()
+    }
+}
+updateNewCart()
 
 function deleteMiniCart(event, index) {
     event.stopPropagation();
@@ -98,19 +135,20 @@ function deleteMiniCart(event, index) {
 
 /*ADD CART*/
 function addCart(input) {
-    let parent = $(input).parents(".product")
-    let dataProduct = JSON.parse($(parent).attr("data"))
+    let parentProduct = $(input).parents(".product")
+    let dataProduct = JSON.parse($(parentProduct).attr("data"))
+    let wrapImage = $(input).parents(".wrap-image")
     let CartItem = {
         ProId: dataProduct.ProId,
         ProName: dataProduct.ProName,
         Price: dataProduct.Price,
         DiscountPrice: dataProduct.DiscountPrice,
         Percent: dataProduct.Percent,
-        proSizeId: $($(parent).find(".product-size.active")).data("idsize"),
-        proSizeName: $($(parent).find(".product-size.active")).text(),
-        proColorId: $($(parent).find(".product-color.active")).data("idcolor"),
-        srcColor: $($(parent).find(".product-color.active span")).data("src"),
-        Image: $($(parent).find(".product-img img")).attr("src"),
+        proSizeId: $($(wrapImage).find(".product-size.active")).data("idsize"),
+        proSizeName: $($(wrapImage).find(".product-size.active")).text(),
+        proColorId: $($(wrapImage).find(".product-color.active")).data("idcolor"),
+        srcColor: $($(wrapImage).find(".product-color.active span")).data("src"),
+        Image: $($(wrapImage).find(".product-img img")).attr("src"),
         Quantity: 1
     }
 
@@ -136,8 +174,8 @@ function addCart(input) {
                         if (res) {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                            $("#successToast .text-toast").text("Đã thêm sản phẩm vào giỏ hàng")
-                            $("#successToast").toast("show")
+                            var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
+                            bsAlert.show();//show it   
                         }
                         else {
                             $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")
@@ -149,8 +187,8 @@ function addCart(input) {
             else {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                $("#successToast .text-toast").text("Đã thêm sản phẩm vào giỏ hàng")
-                $("#successToast").toast("show")
+                var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
+                bsAlert.show();//show it   
             }
         }
         else {
@@ -160,11 +198,11 @@ function addCart(input) {
         loadMiniCart()
     }
     else {
-        $("#errorToast .text-toast").text("Bạn chưa chọn kích thước")
-        $("#errorToast").toast("show")
+        $(".toast-errorClient p").text("Bạn chưa chọn kích thước")
+        var bsAlert = new bootstrap.Toast($(".toast-errorClient"));//inizialize it
+        bsAlert.show();//show it   
     }
 }
-
 
 //add cart từ detail
 function addCartFromDetail() {
@@ -207,7 +245,7 @@ function addCartFromDetail() {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
                             var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
-                            bsAlert.show();//show it
+                            bsAlert.show();//show it                           
                         }
                         else {
                             $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")

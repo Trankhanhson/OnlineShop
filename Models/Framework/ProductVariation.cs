@@ -19,6 +19,8 @@ namespace Models.Framework
         {
             this.ImportBillDetails = new HashSet<ImportBillDetail>();
             this.OrderDetails = new HashSet<OrderDetail>();
+            this.Cart_item = new HashSet<Cart_item>();
+            this.Feedbacks = new HashSet<Feedback>();
         }
     
         public long ProVariationID { get; set; }
@@ -28,7 +30,7 @@ namespace Models.Framework
         public Nullable<int> Ordered { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<bool> Status { get; set; }
-        public string DisplayImage { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportBillDetail> ImportBillDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -36,5 +38,9 @@ namespace Models.Framework
         public virtual Product Product { get; set; }
         public virtual ProductColor ProductColor { get; set; }
         public virtual ProductSize ProductSize { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart_item> Cart_item { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
     }
 }

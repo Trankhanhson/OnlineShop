@@ -29,7 +29,6 @@ namespace Project_3.Controllers
                     ProId = p.ProId,
                     Price = p.Price,
                     ProName = p.ProName,
-                    firstImage = p.ProductImages.First().Image,
                     ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                     {
                         ProId = pv.ProId,
@@ -55,7 +54,6 @@ namespace Project_3.Controllers
                     ProId = p.ProId,
                     Price = p.Price,
                     ProName = p.ProName,
-                    firstImage = p.ProductImages.First().Image,
                     ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                     {
                         ProId = pv.ProId,
@@ -75,11 +73,10 @@ namespace Project_3.Controllers
                 }).ToList();
 
             }
-            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow();
             List<Product> listProDiscount = new List<Product>();
             foreach (var p in list)
             {
-                var a = getDiscount(p, DiscountDetails); //reuturn a product with discountPrice and percent
+                var a = getDiscount(p); //reuturn a product with discountPrice and percent
                 p.DiscountPrice = a.DiscountPrice;
                 p.Percent = a.Percent;
 

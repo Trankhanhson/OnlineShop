@@ -9,79 +9,31 @@
 @section scripts{
     <script src="~/Assets/js/product-detail.js"></script>
     <script>
-        //color click
-        let listColorOption = $(".detail-color")
-        listColorOption.click((e) => {
-            $(listColorOption).removeClass("active")
-            $(e.target).addClass("active")
+        ClientApp.controller("FeedbackController", FeedbackController)
 
-            //đẩy ảnh lên
-            let listImageClicked = JSON.parse($(e.target).attr("data-Images")) //danh sách link ảnh ở thẻ vừa được click
+        function FeedbackController($scope, $http) {
+            $scope.ProId = JSON.parse($("main").attr("data")).ProId
+            $scope.star = "0"
+            $scope.Image = "null"
 
-            //Vì dùng slick slider sẽ ren ra nhiều thẻ img chứ không phải chỉ 6 thẻ
-            let listImage = $(".list-img-item")
-            listImage.each((index, value) => {
-                if ($(value).hasClass("MainImage")) {
-                    $(value).attr('src', listImageClicked.MainImage)
-                }
-                else if ($(value).hasClass("Detail1")) {
-                    $(value).attr('src', listImageClicked.Detail1)
-                }
-                else if ($(value).hasClass("Detail2")) {
-                    $(value).attr('src', listImageClicked.Detail2)
-                }
-                else if ($(value).hasClass("Detail3")) {
-                    $(value).attr('src', listImageClicked.Detail3)
-                }
-                else if ($(value).hasClass("Detail4")) {
-                    $(value).attr('src', listImageClicked.Detail4)
-                }
-                else if ($(value).hasClass("Detail5")) {
-                    $(value).attr('src', listImageClicked.Detail5)
+            $http.get("/Admin/Feedback/getTotalReview/" + $scope.ProId).then(function (res) {
+                if (res.data.check) {
+                    $scope.totalReview = res.data.totalReview
+                    $scope.ratingAverage = res.data.ratingAverage
                 }
             })
 
-            //Thay đổi ảnh to
-            $(".main-img").attr('src', listImageClicked.MainImage)
-        })
-
-        function changeImageDetail(e, idColor) {
-            $(".detail-color").removeClass("active")
-            $(e.target).addClass("active")
-
-            //change size box
-            let listSizeBox = $(".wrapSizeOfColor")
-            $(listSizeBox).removeClass("active")
-            $(`.wrapSizeOfColor-${idColor}`).addClass("active")
-
-            //đẩy ảnh lên
-            let listImageClicked = JSON.parse($(e.target).attr("data-Images")) //danh sách link ảnh ở thẻ vừa được click
-
-            //Vì dùng slick slider sẽ ren ra nhiều thẻ img chứ không phải chỉ 6 thẻ
-            let listImage = $(".list-img-item")
-            listImage.each((index, value) => {
-                if ($(value).hasClass("MainImage")) {
-                    $(value).attr('src', listImageClicked.MainImage)
-                }
-                else if ($(value).hasClass("Detail1")) {
-                    $(value).attr('src', listImageClicked.Detail1)
-                }
-                else if ($(value).hasClass("Detail2")) {
-                    $(value).attr('src', listImageClicked.Detail2)
-                }
-                else if ($(value).hasClass("Detail3")) {
-                    $(value).attr('src', listImageClicked.Detail3)
-                }
-                else if ($(value).hasClass("Detail4")) {
-                    $(value).attr('src', listImageClicked.Detail4)
-                }
-                else if ($(value).hasClass("Detail5")) {
-                    $(value).attr('src', listImageClicked.Detail5)
-                }
-            })
-
-            //Thay đổi ảnh to
-            $(".main-img").attr('src', listImageClicked.MainImage)
+            $scope.getData = function () {
+                /** Lấy danh sách category*/
+                $http.get("/Admin/Feedback/getByProduct", {
+                    params: { proId: $scope.ProId, star: $scope.star, Image: $scope.Image }
+                }).then(function (res) {
+                    $scope.feedbacks = JSON.parse(res.data)
+                }, function (error) {
+                    alert("failed")
+                })
+            }
+            $scope.getData()
         }
     </script>
 }
@@ -96,6 +48,133 @@
 
             .wrapSizeOfColor.active {
                 display: block
+            }
+
+        /*feedback */
+        .review-title {
+            padding: 34px 0 34px 64px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 1px solid #d9d9d9;
+        }
+
+        .quantity-review {
+            font-size: 24px;
+            margin-right: 90px;
+            font-weight: 700;
+        }
+
+        .quantity-star {
+            display: flex;
+            align-items: center;
+        }
+
+            .quantity-star span {
+                font-size: 24px;
+                font-weight: 700;
+            }
+
+            .quantity-star i {
+                color: #2F5ACF;
+                font-size: 20px;
+            }
+
+        .review-fillter {
+            padding: 24px 0 24px 70px;
+            border-bottom: 1px solid #d9d9d9;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+            .review-fillter select {
+                border: none;
+                font-weight: 700;
+            }
+
+            .review-fillter > div {
+                width: 150px;
+            }
+
+        .feedback-content {
+            padding: 0 65px;
+        }
+
+        .feedback-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #d9d9d9;
+            display: flex;
+        }
+
+        .feedback-item__rating {
+            padding-left: 6px;
+            width: 155px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+            .feedback-item__rating i {
+                color: #2F5ACF;
+                font-size: 13px;
+                margin-right: 5px;
+            }
+
+        i.disabled {
+            color: #d9d9d8;
+        }
+
+        .feedback-item__body {
+            flex: 1;
+        }
+
+        .feedback-userName {
+            display: block;
+            font-size: 13px;
+            line-height: 15px
+        }
+
+        .feedback-product-type {
+            font-size: 11px;
+            color: rgba(0,0,0,.4);
+        }
+
+        .feedback-of-custom {
+            margin: 10px 0 10px;
+            height: 60px;
+            line-height: 20px;
+            font-size: 14px;
+            display: -webkit-box;
+            padding: 0 30px 0 0;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .feedback-time {
+            color: rgba(0,0,0,.4);
+        }
+
+        .feedback-page {
+            padding: 25px 0 15px;
+            text-align: center;
+        }
+
+            .feedback-page span {
+                font-size: 15px;
+                position: relative;
+                bottom: 0.5px;
+            }
+
+        .btn-page-left,
+        .btn-page-right {
+            padding: 0 5px;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+            .btn-page-left:hover,
+            .btn-page-right:hover {
+                color: #2F5ACF;
             }
     </style>
 }
@@ -186,7 +265,7 @@
         <div>Thêm vào giỏ  200.000 ₫ để  miễn phí vận chuyển</div>
         <div>ĐỔI HÀNG MIỄN PHÍ - Tại tất cả cửa hàng trong 30 ngày</div>
     </div>
-    <section style="padding: 0 40px;">
+    <section style="padding: 0 40px;" id="detail-section">
         <div class="container-main">
 
             <!--content-->
@@ -356,38 +435,56 @@
                 @foreach (var item in ViewBag.RelatedProduct)
                 {
                     <div class="product" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price","DiscountPrice":"@item.DiscountPrice","Percent":@item.Percent}'>
-                        <div class="product-img">
-                            <a href="/Home/Detail/@item.ProId">
-                                <img src="/Upload/Product/@item.ProId/@item.firstImage" width="100%" alt="">
-                            </a>
-                            <div class="product-size-wrap">
-                                <div class="d-flex justify-content-center flex-wrap pt-3 filter-sameValue">
-                                    @foreach (var size in item.ProductVariations)
-                                    {
-                                        if (size.Quantity > 0)
-                                        {
-                                            <div class="product-size addActiveItem" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
-
-                                        }
-                                        else
-                                        {
-                                            <div class="product-size addActiveItem disabled-size" data-idSize="@size.ProductSize.ProSizeID">@size.ProductSize.NameSize</div>
-
-                                        }
-                                    }
-                                </div>
-                                <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
-                            </div>
-                            @if (item.Percent != 0)
+                        <div class="wrapActiveToFirstChild">
+                            @foreach (var proImg in item.ProductImages)
                             {
-                                <span class="price-percent text-white">-@item.Percent%</span>
-                            }
-                        </div>
-                        <div class="product-color-list d-flex pt-3 pb-2 wrapActiveToFirstChild">
-                            @foreach (var color in item.ProductImages)
-                            {
-                                <div class="product-color addActiveItem" data-idColor="@color.ProColorID" data="~/Upload/Product/@item.ProId/@color.Image">
-                                    <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                <div data-id="@proImg.ProColorID" class="wrap-image addActiveItem">
+                                    <div class="product-img">
+                                        <a href="/Home/Detail/@item.ProId">
+                                            <img src="/Upload/Product/@item.ProId/@proImg.Image" width="100%" alt="">
+                                        </a>
+                                        <div class="product-size-wrap">
+                                            <div class="d-flex justify-content-center flex-wrap pt-3 wrapActiveToFirstChild">
+                                                @foreach (var vairiation in item.ProductVariations)
+                                                {
+                                                    if (vairiation.ProColorID == proImg.ProColorID)
+                                                    {
+                                                        if ((vairiation.Quantity - vairiation.Ordered) > 0)
+                                                        {
+                                                            <div class="product-size addActiveItem" onclick="addActive(event)" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="product-size addActiveItem disabled-size" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                            <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
+                                        </div>
+                                        @if (item.Percent != 0)
+                                        {
+                                            <span class="price-percent text-white">-@item.Percent%</span>
+                                        }
+                                    </div>
+                                    <div class="product-color-list d-flex pt-3 pb-2">
+                                        @foreach (var color in item.ProductImages)
+                                        {
+                                            if (color.ProColorID == proImg.ProColorID)
+                                            {
+                                                <div class="product-color active" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                    <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="product-color" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                    <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -418,6 +515,64 @@
 
 
             </div>
+        </div>
+    </section>
+    <section class="feedback-section" ng-controller="FeedbackController">
+        <div class="feedback">
+            <div class="review-title">
+                <p class="quantity-review">{{totalReview}} Đánh giá</p>
+                <div class="quantity-star">
+                    <span>{{ratingAverage}} / 5</span>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+            <div class="review-fillter">
+                <div class="review-fillter__rating">
+                    <select name="" ng-model="star" ng-change="getData()">
+                        <option value="0">Đánh giá</option>
+                        <option value="1">1 sao</option>
+                        <option value="2">2 sao</option>
+                        <option value="3">3 sao</option>
+                        <option value="4">4 sao</option>
+                        <option value="5">5 sao</option>
+                    </select>
+                </div>
+                <div class="review-filter__image">
+                    <select name="" ng-model="Image" ng-change="getData()">
+                        <option value="null">Ảnh</option>
+                        <option value="true">Có ảnh</option>
+                        <option value="false">Không ảnh</option>
+                    </select>
+                </div>
+            </div>
+            <div class="feedback-content">
+                <div class="row">
+                    <div class="col-6 p-6" dir-paginate="f in feedbacks | itemsPerPage: 10">
+                        <div class="feedback-item row">
+                            <div class="d-flex flex-column col-2">
+                                <div class="feedback-item__rating p-0 mb-2">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star {{f.Stars < 2 ? 'disabled' : ''}}"></i>
+                                    <i class="fa-solid fa-star {{f.Stars < 3 ? 'disabled' : ''}}"></i>
+                                    <i class="fa-solid fa-star {{f.Stars < 4 ? 'disabled' : ''}}"></i>
+                                    <i class="fa-solid fa-star {{f.Stars < 5 ? 'disabled' : ''}}"></i>
+
+                                </div>
+                                <div class="p-2" ng-if="f.Image">
+                                    <img src="~/Upload/Feedback/{{f.FeedbackId}}.jpg" style="width:100%; max-height: 100px; border-radius: 2px;" alt="">
+                                </div>
+                            </div>
+                            <div class="feedback-item__body col-10">
+                                <b class="feedback-userName">{{f.Customer.Name}}</b>
+                                <i class="feedback-product-type">{{f.ProductVariation.ProductColor.NameColor}}/{{f.ProductSize.NameSize}}</i>
+                                <p class="feedback-of-custom">{{f.Content}}.</p>
+                                <p class="feedback-time">{{f.Datetime | date:"dd/MM/yyyy 'lúc' h:mma"}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3"><dir-pagination-controls></dir-pagination-controls></div>
         </div>
     </section>
 </main>

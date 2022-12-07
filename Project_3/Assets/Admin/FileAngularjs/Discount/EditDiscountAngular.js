@@ -175,7 +175,8 @@ discountApp.controller("discountController", function ($scope, $http) {
             if ($scope.discountForm.$valid) {
                 $scope.checkDate($scope.discountPro.StartDate, $scope.discountPro.EndDate)
                 if (checkDate) {
-                    if (confirm("Bạn có chắc chắn muốn cập nhật")) {
+                    if (confirm("Bạn có chắc chắn muốn cập nhật"))
+                    {
                         let listDiscountDetail = []
                         $.each($scope.listProConfirmed, (index, value) => {
                             let discountDetail = {

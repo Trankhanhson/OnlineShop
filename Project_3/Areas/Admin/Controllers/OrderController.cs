@@ -49,9 +49,7 @@ namespace Project_3.Areas.Admin.Controllers
                 StatusOrderId = o.StatusOrderId 
             }).Where(a=>a.StatusOrderId==id).ToList();
 
-            //loại bỏ các phần tử bị lặp và tuần tự hóa thành json
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(list, Formatting.Indented, jss);
+            var result = JsonConvert.SerializeObject(list);
             return Json(new
             {
                 result = result
@@ -66,6 +64,7 @@ namespace Project_3.Areas.Admin.Controllers
             orderDTO.OrdID = order.OrdID;
             orderDTO.VoucherId = order.VoucherId;
             orderDTO.ReceivingPhone = order.ReceivingPhone;
+            orderDTO.ReceivingMail = order.ReceivingMail;
             orderDTO.ReceivingCity = order.ReceivingCity;
             orderDTO.ReceivingDistrict = order.ReceivingDistrict;
             orderDTO.ReceivingWard = order.ReceivingWard;

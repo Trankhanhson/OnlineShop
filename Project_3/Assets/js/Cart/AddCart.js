@@ -174,12 +174,10 @@ function addCart(input) {
                         if (res) {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                            var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
-                            bsAlert.show();//show it   
+                            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
                         }
                         else {
-                            $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")
-                            $("#errorToast").toast("show")
+                            alertError("Đã vượt quá số lượng tồn kho của sản phẩm này")
                         }
                     }
                 })
@@ -214,11 +212,11 @@ function addCartFromDetail() {
         Price: dataProduct.Price,
         DiscountPrice: dataProduct.DiscountPrice,
         Percent: dataProduct.Percent,
-        proSizeId: $(".product-size.active").attr("data-idSize"),
-        proSizeName: $(".product-size.active").text(),
-        proColorId: $(".product-color.active").attr("data-idColor"),
-        srcColor: $($(parent).find(".product-color.active")).attr("data-srcColor"),
-        Image: $($(parent).find(".product-img img")).attr("src"),
+        proSizeId: $("#detail-section .product-size.active").attr("data-idSize"),
+        proSizeName: $("#detail-section .product-size.active").text(),
+        proColorId: $("#detail-section .product-color.active").attr("data-idColor"),
+        srcColor: $($(parent).find("#detail-section .product-color.active")).attr("data-srcColor"),
+        Image: $($(parent).find("#detail-section .product-img img")).attr("src"),
         Quantity: 1
     }
 
@@ -244,12 +242,10 @@ function addCartFromDetail() {
                         if (res) {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                            var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
-                            bsAlert.show();//show it                           
+                            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")                      
                         }
                         else {
-                            $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")
-                            $("#errorToast").toast("show")
+                            alertError("Đã vượt quá số lượng tồn kho của sản phẩm này")
                         }
                     }
                 })
@@ -257,8 +253,7 @@ function addCartFromDetail() {
             else {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
-                bsAlert.show();//show it
+                alertSuccess("Đã thêm sản phẩm vào giỏ hàng")     
             }
         }
         else {
@@ -269,8 +264,7 @@ function addCartFromDetail() {
 
     }
     else {
-        $("#errorToast .text-toast").text("Bạn chưa chọn kích thước")
-        $("#errorToast").toast("show")
+        alertError("Bạn chưa chọn kích thước")
     }
 
 }

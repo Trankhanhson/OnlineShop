@@ -20,10 +20,9 @@ namespace Project_3.Controllers
         {
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAll();
-            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow();
             foreach (var p in list)
             {
-                var a = getDiscount(p, DiscountDetails); //reuturn a product with discountPrice and percent
+                var a = getDiscount(p); //reuturn a product with discountPrice and percent
                 p.DiscountPrice = a.DiscountPrice;
                 p.Percent = a.Percent;
             }
@@ -33,33 +32,19 @@ namespace Project_3.Controllers
         public ActionResult Detail(long id)
         {
             Product product = new ProductDAO().getById(id);
-            DiscountDAO discountDAO = new DiscountDAO();
-            List<DiscountProduct> list = discountDAO.CheckDiscount();
-            //if (d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
-            //{
-            //    foreach (var dt in d.DiscountDetails)
-            //    {
-            //        if (dt.ProId == product.ProId)
-            //        {
-            //            if (dt.TypeAmount == "0") //giảm giá theo tiền
-            //            {
-            //                product.DiscountPrice = product.Price.Value - dt.Amount.Value;
-            //            }
-            //            else  //giảm giá theo %
-            //            {
-            //                product.Percent = dt.Amount.Value;
-            //                product.DiscountPrice = Math.Round(product.Price.Value - ((Convert.ToDecimal(dt.Amount.Value) / 100) * product.Price.Value), 0);
-            //            }
-            //        }
-            //    }
-            //}
+
+            var pDiscount = getDiscount(product);
+            product.DiscountPrice = pDiscount.DiscountPrice;
+            product.Percent = pDiscount.Percent;
 
             //lấy 10 sản phẩm cung loại
             ProductDAO dao = new ProductDAO();
             List<Product> relatedList = dao.get10ByProCat(product.ProCatId);
-            foreach(var p in relatedList)
+            foreach (var p in relatedList)
             {
-                p.firstImage = p.ProductImages.First().Image; //thêm hình ảnh đc hiển thị đầu tiên
+                var a = getDiscount(p); //reuturn a product with discountPrice and percent
+                p.DiscountPrice = a.DiscountPrice;
+                p.Percent = a.Percent;
             }
             ViewBag.RelatedProduct = relatedList;
             return View(product);

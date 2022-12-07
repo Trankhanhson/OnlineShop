@@ -56,6 +56,7 @@
     <Property Name="DiscountProductId" Type="int" />
     <Property Name="Amount" Type="int" />
     <Property Name="TypeAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="priceAfter" Type="decimal" Precision="18" Scale="0" />
     <Property Name="MaxQuantityPerUser" Type="int" />
   </EntityType>
   <EntityType Name="DiscountProduct">
@@ -74,9 +75,9 @@
     <Property Name="FeedbackId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CusID" Type="bigint" />
     <Property Name="ProVariationID" Type="bigint" />
-    <Property Name="Stars" Type="float" />
+    <Property Name="Stars" Type="int" />
     <Property Name="Content" Type="nvarchar(max)" />
-    <Property Name="Image" Type="nvarchar" MaxLength="50" />
+    <Property Name="Image" Type="bit" />
     <Property Name="Status" Type="bit" />
     <Property Name="Datetime" Type="datetime" />
   </EntityType>
@@ -156,6 +157,9 @@
     <Property Name="Slug" Type="varchar" MaxLength="300" />
     <Property Name="Status" Type="bit" />
     <Property Name="ImportDate" Type="datetime" />
+    <Property Name="TotalQty" Type="int" />
+    <Property Name="DiscountPrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Percent" Type="int" />
   </EntityType>
   <EntityType Name="ProductCat">
     <Key>
@@ -188,6 +192,7 @@
     <Property Name="DetailImage2" Type="nvarchar(max)" />
     <Property Name="DetailImage3" Type="nvarchar(max)" />
     <Property Name="DetailImage4" Type="nvarchar(max)" />
+    <Property Name="ImageColor" Type="nvarchar(max)" />
     <Property Name="DetailImage5" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="ProductSize">
@@ -208,6 +213,7 @@
     <Property Name="Ordered" Type="int" />
     <Property Name="Quantity" Type="int" />
     <Property Name="Status" Type="bit" />
+    <Property Name="DisplayImage" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Role">
     <Key>

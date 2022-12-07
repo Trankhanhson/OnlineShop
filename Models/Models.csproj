@@ -66,6 +66,7 @@
     <Compile Include="DAO\CustomerDAO.cs" />
     <Compile Include="DAO\DiscountDAO.cs" />
     <Compile Include="DAO\DiscountDetailDAO.cs" />
+    <Compile Include="DAO\FeedbackDAO.cs" />
     <Compile Include="DAO\ImportBillDAO.cs" />
     <Compile Include="DAO\ImportBillDetailDAO.cs" />
     <Compile Include="DAO\NewDAO.cs" />

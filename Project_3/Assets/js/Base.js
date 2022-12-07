@@ -100,13 +100,23 @@ function addActive(e) {
 
 
 /**toast */
-$(".product-btn-addCart").click((e) => {
-    var toastElList = [].slice.call(document.querySelectorAll('.toast-addCart'))
+
+function alertSuccess(message) {
+    var toastElList = [].slice.call(document.querySelectorAll('.toast-successClient'))
     var toastList = toastElList.map(function (toastEl) {
         return new bootstrap.Toast(toastEl)
     })
+    $(".toast-successClient p").text(message)
     toastList.forEach(toast => toast.show())
-})
+}
+function alertError(message) {
+    var toastElList = [].slice.call(document.querySelectorAll('.toast-errorClient'))
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl)
+    })
+    $(".toast-errorClient p").text(message)
+    toastList.forEach(toast => toast.show())
+}
 
 
 $(".product-like").click((e) => {

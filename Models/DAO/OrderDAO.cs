@@ -32,7 +32,22 @@ namespace Models.DAO
         public List<Order> getAll()
         {
             db.Configuration.LazyLoadingEnabled = false;
-            return db.Orders.Include(o=>o.OrderDetails).ToList();
+            return db.Orders.Include(o=>o.OrderDetails).Include(s=>s.StatusOrder).ToList();
+        }
+
+        public List<Order> getOrderByCusId(int id, int statusId)
+        {
+            List<Order> orders = new List<Order>();
+            if (statusId == 0)
+            {
+                orders = db.Orders.Where(o => o.CusID == id).OrderByDescending(d => d.OrderDate).ToList();
+            }
+            else
+            {
+                orders = db.Orders.Where(o => o.CusID == id && o.StatusOrderId == statusId).OrderByDescending(d => d.OrderDate).ToList();
+
+            }
+            return orders;
         }
 
         /// <summary>

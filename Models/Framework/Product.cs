@@ -17,8 +17,8 @@ namespace Models.Framework
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.ProductImages = new HashSet<ProductImage>();
             this.DiscountDetails = new HashSet<DiscountDetail>();
+            this.ProductImages = new HashSet<ProductImage>();
             this.ProductVariations = new HashSet<ProductVariation>();
         }
     
@@ -32,15 +32,15 @@ namespace Models.Framework
         public string Slug { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> ImportDate { get; set; }
-        public string firstImage { get; set; }
-        public int TotalQty { get; set; }
-        public decimal DiscountPrice { get; set; }
-        public int Percent { get; set; }
+        public Nullable<int> TotalQty { get; set; }
+        public Nullable<decimal> DiscountPrice { get; set; }
+        public Nullable<int> Percent { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
         public virtual ProductCat ProductCat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductVariation> ProductVariations { get; set; }
     }

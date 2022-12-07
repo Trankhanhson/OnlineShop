@@ -467,3 +467,9 @@ span.error {
 .text-dragenter{
     display:none;
 }
+
+.oneLine {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

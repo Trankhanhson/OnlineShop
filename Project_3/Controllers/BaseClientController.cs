@@ -6,12 +6,15 @@ using System.Web;
 using System.Web.Mvc;
 using Models;
 using Models.DAO;
+using Project_3.Model;
+
 namespace Project_3.Controllers
 {
     public class BaseClientController : Controller
     {
-        public Product getDiscount(Product p, List<DiscountDetail> DiscountDetails)
+        public Product getDiscount( Product p)
         {
+            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow();
             foreach (var dt in DiscountDetails)
             {
                 if (dt.ProId == p.ProId)

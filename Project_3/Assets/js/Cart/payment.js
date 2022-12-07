@@ -253,6 +253,7 @@ function payment() {
 
     const CusID = $(".form-Payment").attr("data-cusid")
     const Phone = $("#phone").val().trim()
+    const Name = $("#name").val().trim()
     const Email = $("#email").val()
     const Note = $("#note").val().trim()
     const city = $("#city option:selected").text()
@@ -267,6 +268,7 @@ function payment() {
         let order = {
             CusID: CusID,
             ReceivingPhone: Phone,
+            ReceivingName: Name,
             ReceivingMail: Email,
             ReceivingCity: city,
             ReceivingDistrict: district,

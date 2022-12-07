@@ -82,8 +82,7 @@ namespace Project_3.Areas.Admin.Controllers
                     ProName = p.ProName,
                     Price = p.Price,
                     Status = p.Status,
-                    Slug = p.Slug,
-                    firstImage = p.ProductImages.First().Image
+                    Slug = p.Slug
                 }).ToList();
                 var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
                 products = products.Where(p => p.Slug.Contains(a)).ToList();

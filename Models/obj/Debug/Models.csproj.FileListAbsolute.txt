@@ -3,10 +3,12 @@ C:\Work\Môn MVC\Project_3\Models\bin\Debug\Models.dll
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\Models.pdb
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\EntityFramework.dll
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\EntityFramework.SqlServer.dll
+C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.dll
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\PagedList.dll
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\PagedList.Mvc.dll
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\EntityFramework.xml
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\EntityFramework.SqlServer.xml
+C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.xml
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\PagedList.xml
 C:\Work\Môn MVC\Project_3\Models\bin\Debug\PagedList.Mvc.xml
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.csproj.AssemblyReference.cache
@@ -14,5 +16,3 @@ C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.csproj.CoreCompileInputs.cach
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.csproj.CopyComplete
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.dll
 C:\Work\Môn MVC\Project_3\Models\obj\Debug\Models.pdb
-C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.dll
-C:\Work\Môn MVC\Project_3\Models\bin\Debug\Newtonsoft.Json.xml

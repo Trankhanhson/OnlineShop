@@ -17,9 +17,9 @@ namespace Models.Framework
         public long FeedbackId { get; set; }
         public Nullable<long> CusID { get; set; }
         public Nullable<long> ProVariationID { get; set; }
-        public Nullable<double> Stars { get; set; }
+        public Nullable<int> Stars { get; set; }
         public string Content { get; set; }
-        public string Image { get; set; }
+        public Nullable<bool> Image { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> Datetime { get; set; }
     

@@ -144,6 +144,7 @@
     <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
     <Compile Include="Areas\Admin\Controllers\DiscountController.cs" />
     <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FeedbackController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportBillController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
@@ -215,11 +216,12 @@
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatCreate.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\LoadProcatEdit.js" />
     <Content Include="Assets\Admin\FileAngularjs\Product\ProductHomeAngular.js" />
-    <Content Include="Assets\css\base.css" />
+    <Content Include="Assets\css\BaseClient.css" />
     <Content Include="Assets\css\PaymentPage.css" />
     <Content Include="Assets\img\errorClient.svg" />
     <Content Include="Assets\js\Cart\addCart.js" />
     <Content Include="Assets\js\base.js" />
+    <Content Include="Assets\js\OrderHistory.js" />
     <Content Include="Assets\js\SearchProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\VoucherAngular.js" />
     <Content Include="Assets\Admin\FileAngularjs\UserAngular.js" />
@@ -3976,6 +3978,7 @@
     <Content Include="Areas\Admin\Views\Customer\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Error\Error_401.cshtml" />
     <Content Include="Areas\Admin\Views\Position\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Feedback\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
     <Content Include="Scripts\dirPagination.tpl.html" />
@@ -4000,6 +4003,7 @@
     <Content Include="Scripts\ng-file-upload-shim.min.js" />
     <Content Include="Scripts\ng-file-upload.js" />
     <Content Include="Scripts\ng-file-upload.min.js" />
+    <Content Include="Upload\no-img.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -4034,6 +4038,7 @@
     <Folder Include="Areas\Admin\Views\Base\" />
     <Folder Include="Upload\CatPro\" />
     <Folder Include="Upload\ColorImage\" />
+    <Folder Include="Upload\Feedback\" />
     <Folder Include="Upload\NewCkFinder\" />
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />

@@ -92,7 +92,6 @@ namespace Project_3.Areas.Admin.Controllers
                     Product = new Product()
                     {
                         ProId = d.Product.ProId,
-                        firstImage = d.Product.ProductImages.First().Image,
                         ProName = d.Product.ProName,
                         Price = d.Product.Price
                     },

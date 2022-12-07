@@ -72,7 +72,6 @@ function UploadImgToServer(idColor, idProduct) {
             }
             else {
                 ListNoSelect.push("Selected")
-
             }
         })
         var fileMain = $(imgItem).find('.input-file__main').get(0).files;

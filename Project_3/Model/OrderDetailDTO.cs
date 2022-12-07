@@ -17,5 +17,7 @@ namespace Project_3.Model
         public string NameSize { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> Price { get; set; }
+        public Nullable<int> DiscountPrice { get; set; }
+        public long FeedbackId { get; set; }
     }
 }

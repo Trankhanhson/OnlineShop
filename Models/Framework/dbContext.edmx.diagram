@@ -8,11 +8,9 @@
         <EntityTypeShape EntityType="ClothesShopModel.ImportBill" Width="1.5" PointX="8.625" PointY="15" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ImportBillDetail" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductColor" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClothesShopModel.ProductImage" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductSize" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ClothesShopModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
         <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ImportBill" ManuallyRouted="false" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_ProductColor" ManuallyRouted="false" />
         <EntityTypeShape EntityType="ClothesShopModel.Category" Width="1.5" PointX="8.75" PointY="8" />
         <EntityTypeShape EntityType="ClothesShopModel.ProductCat" Width="1.5" PointX="11" PointY="7.75" />
         <AssociationConnector Association="ClothesShopModel.FK_ProductCat_Category" />
@@ -22,22 +20,10 @@
         <EntityTypeShape EntityType="ClothesShopModel.StatusOrder" Width="1.5" PointX="13.375" PointY="14" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_Customer" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_StatusOrder" />
-        <EntityTypeShape EntityType="ClothesShopModel.Product" Width="1.5" PointX="13.25" PointY="7.625" />
-        <AssociationConnector Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_Product" />
-        <EntityTypeShape EntityType="ClothesShopModel.DiscountDetail" Width="1.5" PointX="18.5" PointY="11.875" />
-        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_Product" />
         <EntityTypeShape EntityType="ClothesShopModel.OrderDetail" Width="1.5" PointX="17.875" PointY="7.875" />
         <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_Order" />
-        <EntityTypeShape EntityType="ClothesShopModel.ProductVariation" Width="1.5" PointX="15.5" PointY="5.375" />
-        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" />
-        <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_ProductVariation" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_Product" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" />
-        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" />
         <EntityTypeShape EntityType="ClothesShopModel.DiscountProduct" Width="1.5" PointX="6.375" PointY="0.875" />
         <EntityTypeShape EntityType="ClothesShopModel.Voucher" Width="1.5" PointX="5.375" PointY="8" />
-        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct" />
         <AssociationConnector Association="ClothesShopModel.FK_Order_Voucher" />
         <EntityTypeShape EntityType="ClothesShopModel.Credential" Width="1.5" PointX="1.625" PointY="15.375" />
         <EntityTypeShape EntityType="ClothesShopModel.Role" Width="1.5" PointX="1.25" PointY="13.125" />
@@ -52,8 +38,22 @@
         <EntityTypeShape EntityType="ClothesShopModel.Cart_item" Width="1.5" PointX="16" PointY="2.375" />
         <AssociationConnector Association="ClothesShopModel.FK_Cart_Customer" />
         <AssociationConnector Association="ClothesShopModel.FK_Cart_item_Cart" />
+        <EntityTypeShape EntityType="ClothesShopModel.DiscountDetail" Width="1.5" PointX="8.625" PointY="15.5" />
+        <EntityTypeShape EntityType="ClothesShopModel.Product" Width="1.5" PointX="0.75" PointY="26" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductImage" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="ClothesShopModel.ProductVariation" Width="1.5" PointX="9" PointY="4.375" />
         <AssociationConnector Association="ClothesShopModel.FK_Cart_item_ProductVariation" />
-        <EntityTypeShape EntityType="ClothesShopModel.Feedback" Width="1.5" PointX="18.75" PointY="4" />
+        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct" />
+        <AssociationConnector Association="ClothesShopModel.FK_DiscountDetail_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation" />
+        <AssociationConnector Association="ClothesShopModel.FK_OrderDetail_ProductVariation" />
+        <AssociationConnector Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_Product" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductImage_ProductColor" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductColor" />
+        <AssociationConnector Association="ClothesShopModel.FK_ProductVariation_ProductSize" />
+        <EntityTypeShape EntityType="ClothesShopModel.Feedback" Width="1.5" PointX="15.625" PointY="5.5" />
         <AssociationConnector Association="ClothesShopModel.FK_Feedback_Customer" />
         <AssociationConnector Association="ClothesShopModel.FK_Feedback_ProductVariation" />
         </Diagram>

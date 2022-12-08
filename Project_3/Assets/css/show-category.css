@@ -1,0 +1,129 @@
+.sidebar-list{
+    margin-bottom: 20px;
+}
+.category-left{
+    margin-top: 56px;
+}
+.sidebar-item_heading a{
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+.sidebar-item_heading:hover a{
+    color: #da291c;
+}
+.sidebar-item_heading.active a {
+    color: #da291c;
+}
+.sidebar_link{
+    display: block;
+    font-weight: 400;
+    line-height: 34px;
+}
+.sidebar_link:hover{
+    color: #da291c;
+    text-decoration: underline;
+}
+
+.sidebar_link.active{
+    color: #da291c;
+
+}
+
+input[type='radio'] {
+    pointer-events: none;
+    border: 2px solid #333F48;
+}
+.block-price.active input[type='radio']{
+    accent-color: #fff;
+    border: 2px solid #fff;
+}
+
+.block-price{
+    background-color: rgba(246,246,246,.4);
+    padding: 12px 0 12px 20px;
+    cursor: pointer;
+}
+
+.block-price.active{
+    background-color: #333F48;
+}
+.block-price.active span{
+    color: white;
+}
+
+
+.fillter-default{
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.fillter-default:hover{
+    color: #da291c;
+}
+
+.fillter-color{
+    
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 17px 17px 0;
+    background-clip: content-box;
+    cursor: pointer;
+}
+.fillter-color.active{
+    padding: 3px;
+    border:1px solid #333F48;
+
+}
+.filter-size{
+    width: 40px;
+    LINE-height: 38px;
+    vertical-align: baseline;
+    border: 1px solid #333F48;
+    color:#333F48;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 8px 17px 0;
+}
+.filter-size.active{
+    font-weight: 600;
+    background-image: url(../img/filter-size.svg);
+    background-repeat: no-repeat;
+    background-position: right -1px bottom -1px;
+    background-size:14px 14px ;
+}
+
+.delete-all{
+    background-color: #f6f6f6;
+    line-height: 48px;
+    width: 160px;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.apply{
+    background-color: #333F48;
+    line-height: 48px;
+    width: 160px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+}
+.apply:hover{
+    color: #fff;
+}
+.delete-all:hover{
+    color: #333F48;
+}
+.fillter-btn{
+    display: inline-block;
+}
+.fillter-close{
+    display: none;
+}
+.fillter-content{
+    display: none;
+}

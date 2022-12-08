@@ -218,7 +218,9 @@
     <Content Include="Assets\Admin\FileAngularjs\Product\ProductHomeAngular.js" />
     <Content Include="Assets\css\BaseClient.css" />
     <Content Include="Assets\css\PaymentPage.css" />
+    <Content Include="Assets\css\show-category.css" />
     <Content Include="Assets\img\errorClient.svg" />
+    <Content Include="Assets\img\Filter.svg" />
     <Content Include="Assets\js\Cart\addCart.js" />
     <Content Include="Assets\js\base.js" />
     <Content Include="Assets\js\OrderHistory.js" />
@@ -2828,6 +2830,7 @@
     <Content Include="Assets\js\Cart\payment.js" />
     <Content Include="Assets\js\OutletAngular.js" />
     <Content Include="Assets\js\product-detail.js" />
+    <Content Include="Assets\js\show-category.js" />
     <Content Include="Assets\js\subIndex.js" />
     <Content Include="Assets\js\UpdateInfoAccount.js" />
     <Content Include="Assets\Plugin\ckeditor\adapters\jquery.js" />
@@ -4031,6 +4034,10 @@
     <Content Include="Views\Home\HomePage.cshtml" />
     <Content Include="Views\LoginClient\ResetPassword.cshtml" />
     <Content Include="Views\LoginClient\LoginView.cshtml" />
+    <Content Include="Views\ShowCat\ShowCat.cshtml" />
+    <Content Include="Views\ShowCat\SideBar_ShowCat.cshtml" />
+    <Content Include="Views\ShowCat\ShowProCat.cshtml" />
+    <Content Include="Views\ShowCat\SideBar_ShowProCat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4043,7 +4050,6 @@
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
     <Folder Include="Views\BaseClient\" />
-    <Folder Include="Views\ShowCat\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

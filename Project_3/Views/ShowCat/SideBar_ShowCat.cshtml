@@ -1,0 +1,20 @@
+﻿@model List<Models.Framework.Category>
+@using Models.Framework
+
+@foreach (var item in Model)
+{
+    <ul class="sidebar-list">
+        @if (item.CatID == ViewBag.CatId)
+        {
+            <li class="sidebar-item_heading active"><a href="/ShowCat/ShowCat/@item.CatID">@item.Name</a></li>
+        }
+        else
+        {
+            <li class="sidebar-item_heading"><a href="/ShowCat/ShowCat/@item.CatID">@item.Name</a></li>
+        }
+        @foreach (var procat in item.ProductCats)
+        {
+            <li><a class="sidebar_link" href="/ShowCat/ShowProCat/@procat.ProCatId">@procat.Name</a></li>
+        }
+    </ul>   
+}

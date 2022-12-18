@@ -40,7 +40,33 @@
                 $scope.getData()
             }
 
-
+            $scope.LikeProduct = function(e, ProId) {
+                let CusId = readCookie("CustomerId")
+                if (CusId != null) {
+                    $http({
+                        method: "POST",
+                        url: "/InfoCustomer/ProductLike",
+                        datatype: 'Json',
+                        data: { ProId: ProId, CusId: CusId }
+                    }).then(function (res) {
+                        if (res.data.check) {
+                            if (res.IsAdd) {
+                                alertSuccess("Đã thêm sản phẩm vào danh sách yêu thích")
+                            }
+                            else {
+                                alertSuccess("Đã xóa sản phẩm vào danh sách yêu thích")
+                            }
+                            $(e.target).toggleClass("active")
+                        }
+                        else {
+                            alertError("Đã có lỗi xảy ra")
+                        }
+                    }
+                }
+                else {
+                    alertError("Bạn chưa đăng nhập tài khoản")
+                }
+            }
         }
     </script>
 }
@@ -202,7 +228,12 @@
                                 <div class="curent-price me-3">{{item.Price | number}}đ</div>
                             </div>
 
-                            <div class="product-like">
+                            <div class="product-like active" ng-if="item.Liked" ng-click="LikeProduct($event,item.ProId)">
+                                <span>Yêu thích</span>
+                                <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                <i class="product-like-img2 fa-solid fa-heart"></i>
+                            </div>
+                            <div class="product-like" ng-if="item.Liked==false" ng-click="LikeProduct($event,item.ProId)">
                                 <span>Yêu thích</span>
                                 <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
                                 <i class="product-like-img2 fa-solid fa-heart"></i>

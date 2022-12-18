@@ -24,68 +24,15 @@ namespace Project_3.Controllers
             List<Product> list = new List<Product>();
             if (o == "All")
             {
-                list = db.Products.ToList().Select(p=>new Product()
-                {
-                    ProId = p.ProId,
-                    Price = p.Price,
-                    ProName = p.ProName,
-                    ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
-                    {
-                        ProId = pv.ProId,
-                        ProVariationID = pv.ProVariationID,                       
-                        ProductColor = new ProductColor() { ProColorID = pv.ProColorID.Value, NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
-                        ProductSize = new ProductSize() { ProSizeID = pv.ProSizeID.Value, NameSize = pv.ProductSize.NameSize },
-                        Quantity = pv.Quantity,
-                        Ordered = pv.Ordered,
-                        DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
-                    }).ToList(),
-                    ProductImages = p.ProductImages.Select(pi=>new ProductImage()
-                    {
-                        ProColorID = pi.ProColorID,
-                        Image = pi.Image,
-                        ImageColor = pi.ProductColor.ImageColor
-                    }).ToList()
-                }).ToList();
+                list = db.Products.ToList();
             }
             else
             {
-                list = db.Products.Where(p => p.ProductCat.Category.type == o).ToList().Select(p => new Product()
-                {
-                    ProId = p.ProId,
-                    Price = p.Price,
-                    ProName = p.ProName,
-                    ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
-                    {
-                        ProId = pv.ProId,
-                        ProVariationID = pv.ProVariationID,                       
-                        ProductColor = new ProductColor() { ProColorID = pv.ProColorID.Value, NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
-                        ProductSize = new ProductSize() { ProSizeID = pv.ProSizeID.Value, NameSize = pv.ProductSize.NameSize },
-                        Quantity = pv.Quantity,
-                        Ordered = pv.Ordered,
-                        DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
-                    }).ToList(),
-                    ProductImages = p.ProductImages.Select(pi=>new ProductImage()
-                    {
-                        ProColorID = pi.ProColorID,
-                        Image = pi.Image,
-                        ImageColor = pi.ProductColor.ImageColor
-                    }).ToList()
-                }).ToList();
-
+                list = db.Products.Where(p => p.ProductCat.Category.type == o).ToList();
             }
             List<Product> listProDiscount = new List<Product>();
-            foreach (var p in list)
-            {
-                var a = getDiscount(p); //reuturn a product with discountPrice and percent
-                p.DiscountPrice = a.DiscountPrice;
-                p.Percent = a.Percent;
-
-                //if product discounted , add to list dicount
-                if (p.DiscountPrice >= minMoney && p.DiscountPrice <= maxMoney)
-                {
-                    listProDiscount.Add(p);
-                }
-            }
+            listProDiscount = getListDiscount(list);
+            listProDiscount = selectProduct(listProDiscount).Where(p=> p.DiscountPrice >= minMoney && p.DiscountPrice <= maxMoney).ToList();
 
             var result= JsonConvert.SerializeObject(listProDiscount);
             return Json(result, JsonRequestBehavior.AllowGet);

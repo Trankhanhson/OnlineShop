@@ -101,7 +101,7 @@
         </ul>
         <!--Banner-->
         <section class="banner pb-4">
-            <img src="https://media.canifa.com/Simiconnector/banner_name_tablet1660711457.jpg" width="100%" alt="">
+            <img src="~/Upload/Slide/5.jpg" width="100%" alt="">
         </section>
 
 
@@ -109,48 +109,16 @@
         <section class="pt-lg-5 pt-4 pb-5 border-bottom border-1">
             <h2 class="section-heading mb-4">Danh mục sản phẩm</h2>
             <div class="category-slider">
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639497541.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo phông</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639497503.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo polo</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639531301.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Bộ mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530678.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Váy liền thân</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1629478506.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Quần mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530755.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Áo mặc nhà</a>
-                </div>
-                <div class="text-center category-item">
-                    <a href="#">
-                        <img width="100%" class="rounded-circle" src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1639530445.png" alt="">
-                    </a>
-                    <a href="#" class="mt-3" style="color: var(--primary-text-color);">Quần shorts</a>
-                </div>
+                @foreach (var item in ViewBag.ProductCategory)
+                {
+                    <div class="text-center category-item">
+                        <a href="#">
+                            <img width="100%" class="rounded-circle" src="~/Upload/CatPro/@item.ProCatId/@item.Image" alt="">
+                        </a>
+                        <a href="#" class="mt-3" style="color: var(--primary-text-color);">@item.Name</a>
+                    </div>
+                }
+
             </div>
         </section>
 

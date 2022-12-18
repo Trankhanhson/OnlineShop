@@ -1,21 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ClothesShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="Cart">
-    <Key>
-      <PropertyRef Name="IdCart" />
-    </Key>
-    <Property Name="IdCart" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CusID" Type="bigint" />
-  </EntityType>
-  <EntityType Name="Cart_item">
-    <Key>
-      <PropertyRef Name="CartItemId" />
-    </Key>
-    <Property Name="CartItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="IdCart" Type="int" Nullable="false" />
-    <Property Name="ProVariationID" Type="bigint" />
-    <Property Name="Quantity" Type="int" />
-  </EntityType>
   <EntityType Name="Category">
     <Key>
       <PropertyRef Name="CatID" />
@@ -143,6 +127,13 @@
     <Property Name="DiscountPrice" Type="int" />
     <Property Name="Price" Type="int" />
   </EntityType>
+  <EntityType Name="Page">
+    <Key>
+      <PropertyRef Name="PageId" />
+    </Key>
+    <Property Name="PageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Product">
     <Key>
       <PropertyRef Name="ProId" />
@@ -158,6 +149,7 @@
     <Property Name="Status" Type="bit" />
     <Property Name="ImportDate" Type="datetime" />
     <Property Name="TotalQty" Type="int" />
+    <Property Name="Liked" Type="bit" />
     <Property Name="DiscountPrice" Type="decimal" Precision="18" Scale="0" />
     <Property Name="Percent" Type="int" />
   </EntityType>
@@ -195,6 +187,22 @@
     <Property Name="ImageColor" Type="nvarchar(max)" />
     <Property Name="DetailImage5" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="ProductLike">
+    <Key>
+      <PropertyRef Name="ProductLikeId" />
+    </Key>
+    <Property Name="ProductLikeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CusID" Type="bigint" />
+    <Property Name="ProId" Type="bigint" />
+  </EntityType>
+  <EntityType Name="ProductSection">
+    <Key>
+      <PropertyRef Name="ProductSectionId" />
+    </Key>
+    <Property Name="ProductSectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProId" Type="bigint" />
+    <Property Name="SectionId" Type="int" />
+  </EntityType>
   <EntityType Name="ProductSize">
     <Key>
       <PropertyRef Name="ProSizeID" />
@@ -222,17 +230,29 @@
     <Property Name="RoleId" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Section">
+    <Key>
+      <PropertyRef Name="SectionId" />
+    </Key>
+    <Property Name="SectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" />
+    <Property Name="Image1" Type="bit" />
+    <Property Name="Image2" Type="bit" />
+    <Property Name="Image3" Type="bit" />
+    <Property Name="Link1" Type="nvarchar(max)" />
+    <Property Name="Link2" Type="nvarchar(max)" />
+    <Property Name="Link3" Type="nvarchar(max)" />
+    <Property Name="PageId" Type="int" />
+    <Property Name="DisplayOrder" Type="int" />
+  </EntityType>
   <EntityType Name="Slide">
     <Key>
-      <PropertyRef Name="ID" />
+      <PropertyRef Name="SlideId" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="Image" Type="nvarchar" MaxLength="250" />
-    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="SlideId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Image" Type="bit" />
     <Property Name="Link" Type="nvarchar" MaxLength="250" />
-    <Property Name="Status" Type="bit" />
+    <Property Name="PageId" Type="int" />
   </EntityType>
   <EntityType Name="StatusOrder">
     <Key>
@@ -297,42 +317,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Principal>
       <Dependent Role="Product">
         <PropertyRef Name="ProCatId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Cart_Customer">
-    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
-    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customer">
-        <PropertyRef Name="CusID" />
-      </Principal>
-      <Dependent Role="Cart">
-        <PropertyRef Name="CusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Cart_item_Cart">
-    <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
-    <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Cart">
-        <PropertyRef Name="IdCart" />
-      </Principal>
-      <Dependent Role="Cart_item">
-        <PropertyRef Name="IdCart" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Cart_item_ProductVariation">
-    <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="0..1" />
-    <End Role="Cart_item" Type="Self.Cart_item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductVariation">
-        <PropertyRef Name="ProVariationID" />
-      </Principal>
-      <Dependent Role="Cart_item">
-        <PropertyRef Name="ProVariationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -552,6 +536,54 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ProductLike_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="ProductLike" Type="Self.ProductLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="ProductLike">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductLike_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="ProductLike" Type="Self.ProductLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductLike">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSection_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="ProductSection" Type="Self.ProductSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductSection">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSection_Section">
+    <End Role="Section" Type="Self.Section" Multiplicity="0..1" />
+    <End Role="ProductSection" Type="Self.ProductSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Section">
+        <PropertyRef Name="SectionId" />
+      </Principal>
+      <Dependent Role="ProductSection">
+        <PropertyRef Name="SectionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ProductVariation_Product">
     <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
     <End Role="ProductVariation" Type="Self.ProductVariation" Multiplicity="*" />
@@ -588,6 +620,30 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Section_Page">
+    <End Role="Page" Type="Self.Page" Multiplicity="0..1" />
+    <End Role="Section" Type="Self.Section" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Page">
+        <PropertyRef Name="PageId" />
+      </Principal>
+      <Dependent Role="Section">
+        <PropertyRef Name="PageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Slide_Page">
+    <End Role="Page" Type="Self.Page" Multiplicity="0..1" />
+    <End Role="Slide" Type="Self.Slide" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Page">
+        <PropertyRef Name="PageId" />
+      </Principal>
+      <Dependent Role="Slide">
+        <PropertyRef Name="PageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_User_UserGroup">
     <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -601,8 +657,6 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="ClothesShopModelStoreContainer">
-    <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Cart_item" EntityType="Self.Cart_item" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Credential" EntityType="Self.Credential" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
@@ -614,42 +668,26 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <EntitySet Name="New" EntityType="Self.New" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Page" EntityType="Self.Page" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductCat" EntityType="Self.ProductCat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductColor" EntityType="Self.ProductColor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductImage" EntityType="Self.ProductImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductLike" EntityType="Self.ProductLike" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductSection" EntityType="Self.ProductSection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSize" EntityType="Self.ProductSize" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductVariation" EntityType="Self.ProductVariation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Slide" EntityType="Self.Slide" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StatusOrder" EntityType="Self.StatusOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserGroup" EntityType="Self.UserGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Voucher" EntityType="Self.Voucher" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Slide" EntityType="Self.Slide" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [Slide].[ID] AS [ID], 
-    [Slide].[Image] AS [Image], 
-    [Slide].[DisplayOrder] AS [DisplayOrder], 
-    [Slide].[Link] AS [Link], 
-    [Slide].[Status] AS [Status]
-    FROM [dbo].[Slide] AS [Slide]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="Self.FK__Product__ProCatI__6AEFE058">
       <End Role="ProductCat" EntitySet="ProductCat" />
       <End Role="Product" EntitySet="Product" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Cart_Customer" Association="Self.FK_Cart_Customer">
-      <End Role="Customer" EntitySet="Customer" />
-      <End Role="Cart" EntitySet="Cart" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Cart_item_Cart" Association="Self.FK_Cart_item_Cart">
-      <End Role="Cart" EntitySet="Cart" />
-      <End Role="Cart_item" EntitySet="Cart_item" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Cart_item_ProductVariation" Association="Self.FK_Cart_item_ProductVariation">
-      <End Role="ProductVariation" EntitySet="ProductVariation" />
-      <End Role="Cart_item" EntitySet="Cart_item" />
     </AssociationSet>
     <AssociationSet Name="FK_Credential_Role" Association="Self.FK_Credential_Role">
       <End Role="Role" EntitySet="Role" />
@@ -723,6 +761,22 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
       <End Role="ProductColor" EntitySet="ProductColor" />
       <End Role="ProductImage" EntitySet="ProductImage" />
     </AssociationSet>
+    <AssociationSet Name="FK_ProductLike_Customer" Association="Self.FK_ProductLike_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="ProductLike" EntitySet="ProductLike" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductLike_Product" Association="Self.FK_ProductLike_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductLike" EntitySet="ProductLike" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSection_Product" Association="Self.FK_ProductSection_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductSection" EntitySet="ProductSection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSection_Section" Association="Self.FK_ProductSection_Section">
+      <End Role="Section" EntitySet="Section" />
+      <End Role="ProductSection" EntitySet="ProductSection" />
+    </AssociationSet>
     <AssociationSet Name="FK_ProductVariation_Product" Association="Self.FK_ProductVariation_Product">
       <End Role="Product" EntitySet="Product" />
       <End Role="ProductVariation" EntitySet="ProductVariation" />
@@ -734,6 +788,14 @@ warning 6002: The table/view 'ClothesShop.dbo.Slide' does not have a primary key
     <AssociationSet Name="FK_ProductVariation_ProductSize" Association="Self.FK_ProductVariation_ProductSize">
       <End Role="ProductSize" EntitySet="ProductSize" />
       <End Role="ProductVariation" EntitySet="ProductVariation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Section_Page" Association="Self.FK_Section_Page">
+      <End Role="Page" EntitySet="Page" />
+      <End Role="Section" EntitySet="Section" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Slide_Page" Association="Self.FK_Slide_Page">
+      <End Role="Page" EntitySet="Page" />
+      <End Role="Slide" EntitySet="Slide" />
     </AssociationSet>
     <AssociationSet Name="FK_User_UserGroup" Association="Self.FK_User_UserGroup">
       <End Role="UserGroup" EntitySet="UserGroup" />

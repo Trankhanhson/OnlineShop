@@ -11,8 +11,9 @@ using Project_3.Model;
 
 namespace Project_3.Controllers
 {
-    public class InfoCustomerController : Controller
+    public class InfoCustomerController : BaseClientController
     {
+        ClothesShopEntities db = new ClothesShopEntities();
         // GET: InfoCustomer
         public ActionResult InfoAccount()
         {
@@ -162,6 +163,60 @@ namespace Project_3.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
 
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ProductLike(long ProId, long CusId)
+        {
+            try
+            {
+                var pl1 = db.ProductLikes.Where(p => p.ProId == ProId && p.CusID == CusId).FirstOrDefault();
+                bool IsAdd = true;
+                if (pl1 == null)
+                {
+                    ProductLike pl = new ProductLike();
+                    pl.ProId = ProId;
+                    pl.CusID = CusId;
+                    db.ProductLikes.Add(pl);
+                }
+                else
+                {
+                    IsAdd = false;
+                    db.ProductLikes.Remove(pl1);
+
+                }
+                db.SaveChanges();
+                return Json(new
+                {
+                    check = true,
+                    IsAdd = IsAdd
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new
+                {
+                    check = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ProductLike()
+        {
+            if (Request.Cookies["CustomerId"] != null)
+            {
+                int idCus = int.Parse(Request.Cookies["CustomerId"].Value);
+                ViewBag.Name = db.Customers.Find(idCus).Name;
+                var cus = db.Customers.Find(idCus);
+                List<Product> list = db.ProductLikes.Where(pl => pl.CusID == idCus).OrderByDescending(l=>l.ProductLikeId).Select(p => p.Product).ToList();
+                list = getListDiscount(list);
+
+                return View(list);
+            }
+            else
+            {
+                return RedirectToAction("HomePage", "Home");
             }
         }
     }

@@ -14,5 +14,6 @@ namespace Project_3.Model
         public string firstImage { get; set; }
         public int TotalQty { get; set; }
         public bool Check { get; set; }
+        public decimal DiscountPrice { get; set; }
     }
 }

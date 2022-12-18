@@ -544,6 +544,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
             return Json(check, JsonRequestBehavior.AllowGet);
         }
+
         public void DeleteFileFromFolder(string StrFilename,string ProId)
         {
 

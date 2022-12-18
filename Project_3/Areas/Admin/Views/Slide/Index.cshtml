@@ -1,0 +1,118 @@
+﻿@model List<Models.Framework.Slide>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        function UpdateClick(Link, id,PageId) {
+            $("#SlideId").val(id)
+            $("#Link").val(Link)
+            $("#PageId").val(PageId)
+        }
+    </script>
+    }
+
+<main id="main" class="main">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <table class="table table-hover pt-4" id="dataTable">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Hình ảnh</th>
+                                    <th>
+                                        Đường dẫn
+                                    </th>
+                                    <th>
+                                        Trang
+                                    </th>
+                                    <th>
+                                        Sửa
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td style="width:20%">
+                                            @if (item.Image.Value)
+                                            {
+                                                <img src="~/Upload/Slide/@(item.PageId).jpg" width="100px"/>
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Upload/no-img.png"  width="80px"/>
+                                            }
+                                        </td>
+                                        <td  style="width:45%">
+                                            <p class="p-0 oneline w-100">
+                                                @item.Link
+                                            </p>
+                                        </td>
+                                        <td style="width:15%">
+                                            @item.Page.PageName
+                                        </td>
+                                        <td>
+                                            @if (item.Link == null)
+                                            {
+                                                <a class="btn-update" onclick="UpdateClick('',@item.SlideId,@item.PageId,@item.Image)" data-bs-toggle="modal" data-bs-target="#EditSlide"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <a class="btn-update" onclick="UpdateClick('@item.Link',@item.SlideId,@item.PageId,@item.Image)" data-bs-toggle="modal" data-bs-target="#EditSlide"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="EditSlide" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sửa banner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Edit", "Slide", FormMethod.Post, new {@enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-horizontal">
+                            <input type="hidden" name="SlideId" id="SlideId" value="" />
+                            <input type="hidden" name="PageId" id="PageId" value="" />
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="file" name="file" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-4 col-form-label">Đường dẫn</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="Link" id="Link">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button class="btn btn-primary" type="submit">Lưu</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

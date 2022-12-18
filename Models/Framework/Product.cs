@@ -19,7 +19,9 @@ namespace Models.Framework
         {
             this.DiscountDetails = new HashSet<DiscountDetail>();
             this.ProductImages = new HashSet<ProductImage>();
+            this.ProductLikes = new HashSet<ProductLike>();
             this.ProductVariations = new HashSet<ProductVariation>();
+            this.ProductSections = new HashSet<ProductSection>();
         }
     
         public long ProId { get; set; }
@@ -33,6 +35,7 @@ namespace Models.Framework
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> ImportDate { get; set; }
         public Nullable<int> TotalQty { get; set; }
+        public Nullable<bool> Liked { get; set; }
         public Nullable<decimal> DiscountPrice { get; set; }
         public Nullable<int> Percent { get; set; }
     
@@ -42,6 +45,10 @@ namespace Models.Framework
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductLike> ProductLikes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductVariation> ProductVariations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductSection> ProductSections { get; set; }
     }
 }

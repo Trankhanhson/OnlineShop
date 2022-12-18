@@ -24,7 +24,7 @@ namespace Models.Framework
         public string ImageColor { get; set; }
         public string DetailImage5 { get; set; }
     
-        public virtual Product Product { get; set; }
         public virtual ProductColor ProductColor { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

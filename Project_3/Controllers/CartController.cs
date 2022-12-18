@@ -70,8 +70,8 @@ namespace Project_3.Controllers
                         }
 
                         item.Price = p.Price.Value;
-                        item.DiscountPrice = p.DiscountPrice.Value;
-                        item.Percent = p.Percent.Value;
+                        item.DiscountPrice = p.DiscountPrice==null? 0 : p.DiscountPrice.Value;
+                        item.Percent = p.Percent==null? 0 : p.Percent.Value;
                         item.ProName = p.ProName;
                         var proImg = p.ProductImages.Where(pi => pi.ProColorID == item.proColorId).FirstOrDefault();
                         item.Image = "/Upload/Product/" + item.ProId + "/" + proImg.Image;

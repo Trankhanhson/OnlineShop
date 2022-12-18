@@ -74,6 +74,7 @@
     <Compile Include="DAO\OrderDetailDAO.cs" />
     <Compile Include="DAO\PositionDAO.cs" />
     <Compile Include="DAO\ProductCategoryDAO.cs" />
+    <Compile Include="DAO\SectionDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="DAO\ProductColorDAO.cs" />
     <Compile Include="DAO\ProductImagesDAO.cs" />
@@ -81,12 +82,6 @@
     <Compile Include="DAO\ProductSizeDAO.cs" />
     <Compile Include="DAO\ProductVariationDAO.cs" />
     <Compile Include="DAO\VoucherDAO.cs" />
-    <Compile Include="Framework\Cart.cs">
-      <DependentUpon>dbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Framework\Cart_item.cs">
-      <DependentUpon>dbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Framework\Category.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -135,6 +130,9 @@
     <Compile Include="Framework\OrderDetail.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Framework\Page.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Framework\Product.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -147,6 +145,12 @@
     <Compile Include="Framework\ProductImage.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Framework\ProductLike.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\ProductSection.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Framework\ProductSize.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
@@ -154,6 +158,9 @@
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Role.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Section.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Slide.cs">

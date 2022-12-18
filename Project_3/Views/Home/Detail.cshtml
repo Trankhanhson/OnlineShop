@@ -294,7 +294,7 @@
                 <div class="col-md-4" style="padding-left: 60px;">
                     <h4>@Model.ProName</h4>
                     <DIV class="d-flex fs-5 align-items-center mt-3">
-                        @if (Model.DiscountPrice != 0)
+                        @if (Model.DiscountPrice != 0 && Model.DiscountPrice!=null)
                         {
                             <div class="detail-current-price me-3 price">@Model.DiscountPrice</div>
                             <div class="detail-old-price text text-decoration-line-through price" style="font-size:18px;color:#fdaa63">@Model.Price</div>

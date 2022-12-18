@@ -145,23 +145,4 @@ function CategoryController($scope, $http) {
         })
     }
 
-    //sắp xếp
-    $scope.sortColumn = 'Name'
-    $scope.reverse = 'false'
-    $scope.SortData = function (column) {
-        if ($scope.sortColumn == column) {
-            $scope.reverse = !$scope.reverse
-        }
-        else {
-            $scope.reverse = false //sort increase
-        }
-        $scope.sortColumn = column
-    }
-    $scope.getSortClass = function (column) {
-        //khi reverse thay doi thi nd-class dc kich hoat
-        if ($scope.sortColumn == column) {
-            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
-        }
-        return ''
-    }
 }

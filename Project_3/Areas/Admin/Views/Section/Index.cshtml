@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Scripts/dirPagination.js"></script>
+    <script>
+        var SectionApp = angular.module("SectionApp", ['angularUtils.directives.dirPagination']);
+
+        SectionApp.controller("SectionController", SectionController);
+
+        function SectionController($scope, $http) {
+            $scope.maxSize = 3;
+            $scope.totalCount = 0;
+            $scope.searchText = ""
+            $scope.pageSize = "5"
+            $scope.pageId = 1
+
+            $scope.getPage = function (newPage) {
+                $scope.pageNumber = newPage
+                /** Lấy danh sách category*/
+                $http.get("/Admin/Section/getPageData", {
+                    params: { PageId: $scope.pageId, searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize }
+                }).then(function (res) {
+                    let pageData = JSON.parse(res.data)
+                    $scope.sections = pageData.Data
+                    $scope.totalCount = pageData.TotalCount
+                }, function (error) {
+                    alert("failed")
+                })
+            }
+
+            $scope.getPage(1)
+
+        }
+    </script>
+}
+
+<main id="main" class="main" ng-app="SectionApp" ng-controller="SectionController">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-4">
+                        <div class="text-end mb-3 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="input-searchView me-3" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo tiêu đề" />
+                                <select ng-model="pageSize" class="limitShow">
+                                    <option ng-click="getPageSize('5')" value="5">5</option>
+                                    <option ng-click="getPageSize('10')" value="10">10</option>
+                                    <option ng-click="getPageSize('15')" value="15">15</option>
+                                    <option ng-click="getPageSize('20')" value="20">20</option>
+                                </select>
+                            </div>
+                            <a class="btn btn-primary me-2" href="/Admin/Section/Create"><i class="fa-solid fa-plus"></i> Thêm mục</a>
+
+                        </div>
+                        <table class="table table-striped table-hover table-bordered pt-4" id="dataTable">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>
+                                        Tiêu đề
+                                    </th>
+                                    <th style="width:30%">
+                                        Vị trí
+                                    </th>
+                                    <th style="width:15%">
+                                        Tùy chỉnh
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="category-wrap">
+                                <tr dir-paginate="s in sections | itemsPerPage: pageSize" total-items="totalCount">
+                                    <td>
+                                        {{s.Title}}
+                                    </td>
+                                    <td>
+                                        {{s.DisplayOrder}}
+                                    </td>
+                                    <td>
+                                        <a class="btn-update" href="/Admin/Section/Edit?sectionId={{s.SectionId}}&pageId={{s.Page.PageId}}"><i class="fa-solid fa-pen-to-square" style="pointer-events:none;"></i></a>
+                                        <a class="btn-delete btn-deleteHome" href="Admin//Section/Delete/{{s.SectionId}}"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+

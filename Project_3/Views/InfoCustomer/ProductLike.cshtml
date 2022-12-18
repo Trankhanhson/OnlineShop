@@ -1,0 +1,267 @@
+﻿@model List<Models.Framework.Product>
+@using Models.Framework
+@{
+    ViewBag.Title = "ProductLike";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Menu{
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebar">
+        <div class="offcanvas-header pt-4">
+            <a class="offcanvas-title header-brand" href="/Home/HomePage/">
+                <img src="/Assets/img/logo.svg" alt="" />
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="mb-3">
+                <li class="header-item">
+                    <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Man/Index/">NAM</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Women/Index/">NỮ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+                </li>
+            </ul>
+            <div class="sidebar-form-wrap ">
+                <form class="d-flex sidebar-form">
+                    <button class="search-btn">
+                        <span></span>
+                    </button>
+                    <input type="text"
+                           placeholder="Bạn tìm gì"
+                           id="input-sidebar-search"
+                           autocomplete="off" />
+                </form>
+                <div class="search-history">
+                    <div class="d-flex justify-content-between search-history__header">
+                        <p>Lịch sử tìm kiếm</p>
+                        <span style="cursor: pointer;">Xóa</span>
+                    </div>
+                    <div class="search-history-body pt-2">
+                        <span>áo polo</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Button to open the offcanvas sidebar -->
+    <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <ul class="header-list d-none d-xl-flex me-auto ms-5">
+        <li class="header-item">
+            <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Man/Index/">NAM</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Women/Index/">NỮ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Girl/Index/">BÉ GÁI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+        </li>
+    </ul>
+}
+
+@section styles{
+    <link href="~/Assets/css/info-customer.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script>
+        function DisLike(element, ProId) {
+            let CusId = readCookie("CustomerId")
+            if (CusId != null) {
+                $.ajax({
+                    url: "/InfoCustomer/ProductLike",
+                    type: "POST",
+                    data: { ProId: ProId, CusId: CusId },
+                    dataType: "Json",
+                    success: function (res) {
+                        if (res.check) {
+                            alertSuccess("Đã xóa sản phẩm vào danh sách yêu thích")
+                            $($(element).parents(".product")).remove()
+                        }
+                        else {
+                            alertError("Đã có lỗi xảy ra")
+                        }
+                    }
+                })
+            }
+            else {
+                alertError("Bạn chưa đăng nhập tài khoản")
+            }
+        }
+    </script>
+    }
+
+<main>
+    <div class="topbar text-center text-white">
+        <div>Thêm vào giỏ 200.000 ₫ để miễn phí vận chuyển</div>
+        <div>ĐỔI HÀNG MIỄN PHÍ - Tại tất cả cửa hàng trong 30 ngày</div>
+    </div>
+    <div class="site-main">
+        <div class="account-container my-account">
+            <div class="page-title-wrapper">
+                Yêu thích
+            </div>
+            <div class="account-sidebar">
+                <div class="profile">
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">@ViewBag.Name</div> <button class="btn btn-email">
+                            <span class="count"></span>
+                        </button>
+                    </div>
+                    <div class="profile-cpoint">
+                        <div class="profile-cpoint-item">
+                            <div class="title">C-point</div>
+                            <div class="value" style="color: rgb(218, 41, 28);">30</div>
+                        </div>
+                        <div class="profile-cpoint-line"></div>
+                        <div class="profile-cpoint-item">
+                            <div class="title">Điểm KHTT</div>
+                            <div class="value" style="color: rgb(99, 177, 188);">0</div>
+                        </div>
+                        <div class="profile-cpoint-line"></div>
+                        <div class="profile-cpoint-item">
+                            <div class="title">Hạng thẻ</div>
+                            <div class="label" style="background: rgb(116, 170, 80);">Green</div>
+                        </div>
+                    </div>
+                    <div class="profile-usermenu">
+                        <ul>
+                            <li active="Tài khoản"
+                                class=" active profile-usermenu-order"><a href="/InfoCustomer/OrderHistory">Đơn hàng của tôi</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-sale"><a href="#">Khuyến mại</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-cpoint"><a href="#">C-points</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-khtt"><a href="#">Thẻ KHTT</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-wishlist"><a href="">Yêu thích</a></li>
+                            <li active="Tài khoản"
+                                class=" profile-usermenu-account"><a href="/InfoCustomer/InfoAccount">Tài khoản</a></li>
+                            <li active="Tài khoản" class="profile-usermenu-logout"><a href="/LoginClient/Logout">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                    <div class="profile-support">
+                        <b>Bạn cần hỗ trợ?</b>
+                        <p>Vui lòng gọi <a href="#">1800 6061</a> (miễn phí cước gọi)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="account-column-main">
+                <!----> <!----> <!----> <!----> <!----> <div>
+                    <div>
+                        <div class="row">
+                            @foreach (var item in Model)
+                            {
+                                <div class="product col-6 col-md-4" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price","DiscountPrice":"@item.DiscountPrice","Percent":@item.Percent}'>
+                                    <div class="wrapActiveToFirstChild">
+                                        @foreach (var proImg in item.ProductImages)
+                                        {
+                                            <div data-id="@proImg.ProColorID" class="wrap-image addActiveItem">
+                                                <div class="product-img">
+                                                    <a href="/Home/Detail/@item.ProId">
+                                                        <img src="/Upload/Product/@item.ProId/@proImg.Image" width="100%" alt="">
+                                                    </a>
+                                                    <div class="product-size-wrap">
+                                                        <div class="d-flex justify-content-center flex-wrap pt-3 wrapActiveToFirstChild">
+                                                            @foreach (var vairiation in item.ProductVariations)
+                                                            {
+                                                                if (vairiation.ProColorID == proImg.ProColorID)
+                                                                {
+                                                                    if ((vairiation.Quantity - vairiation.Ordered) > 0)
+                                                                    {
+                                                                        <div class="product-size addActiveItem" onclick="addActive(event)" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="product-size addActiveItem disabled-size" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
+                                                    </div>
+                                                    @if (item.Percent != 0 && item.Percent != null)
+                                                    {
+                                                        <span class="price-percent text-white">-@item.Percent%</span>
+                                                    }
+                                                </div>
+                                                <div class="product-color-list d-flex pt-3 pb-2">
+                                                    @foreach (var color in item.ProductImages)
+                                                    {
+                                                        if (color.ProColorID == proImg.ProColorID)
+                                                        {
+                                                            <div class="product-color active" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                                <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="product-color" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                                <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <a href="/Home/Detail/@item.ProId" class="product-name">
+                                        @item.ProName
+                                    </a>
+                                    @if (item.DiscountPrice != 0 && item.DiscountPrice != null)
+                                    {
+                                        <div class="d-flex mt-1">
+                                            <div class="curent-price price me-3">@item.DiscountPrice</div>
+                                            <div class="curent-old price" data="">@item.Price</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex mt-1">
+                                            <div class="curent-price price me-3">@item.Price</div>
+
+                                        </div>
+                                    }
+                                <div class="product-like active" onclick="DisLike(this,@item.ProId)">
+                                    <span>Yêu thích</span>
+                                    <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                    <i class="product-like-img2 fa-solid fa-heart"></i>
+                                </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div> <!----> <!---->
+            </div>
+        </div>
+    </div>
+</main>
+

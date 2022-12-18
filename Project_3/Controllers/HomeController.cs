@@ -20,12 +20,7 @@ namespace Project_3.Controllers
         {
             ProductDAO productDAO = new ProductDAO();
             List<Product> list = productDAO.getAll();
-            foreach (var p in list)
-            {
-                var a = getDiscount(p); //reuturn a product with discountPrice and percent
-                p.DiscountPrice = a.DiscountPrice;
-                p.Percent = a.Percent;
-            }
+            list = getListDiscountAndLike(list);
             return View(list);
         }
 

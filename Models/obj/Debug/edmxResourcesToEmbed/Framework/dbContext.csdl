@@ -51,16 +51,6 @@
     <Property Name="version" Type="Int32" />
     <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
-  <EntityType Name="Slide">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
-    <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="DisplayOrder" Type="Int32" />
-    <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Status" Type="Boolean" />
-  </EntityType>
   <Association Name="FK_ImportBillDetail_ImportBill">
     <End Role="ImportBill" Type="Self.ImportBill" Multiplicity="1" />
     <End Role="ImportBillDetail" Type="Self.ImportBillDetail" Multiplicity="*" />
@@ -79,7 +69,6 @@
     <EntitySet Name="ProductColors" EntityType="Self.ProductColor" />
     <EntitySet Name="ProductSizes" EntityType="Self.ProductSize" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-    <EntitySet Name="Slides" EntityType="Self.Slide" />
     <AssociationSet Name="FK_ImportBillDetail_ImportBill" Association="Self.FK_ImportBillDetail_ImportBill">
       <End Role="ImportBill" EntitySet="ImportBills" />
       <End Role="ImportBillDetail" EntitySet="ImportBillDetails" />
@@ -137,30 +126,11 @@
       <End Role="UserGroup" EntitySet="UserGroups" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
-    <EntitySet Name="Carts" EntityType="ClothesShopModel.Cart" />
-    <EntitySet Name="Cart_item" EntityType="ClothesShopModel.Cart_item" />
-    <AssociationSet Name="FK_Cart_Customer" Association="ClothesShopModel.FK_Cart_Customer">
-      <End Role="Customer" EntitySet="Customers" />
-      <End Role="Cart" EntitySet="Carts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Cart_item_Cart" Association="ClothesShopModel.FK_Cart_item_Cart">
-      <End Role="Cart" EntitySet="Carts" />
-      <End Role="Cart_item" EntitySet="Cart_item" />
-    </AssociationSet>
     <EntitySet Name="DiscountDetails" EntityType="ClothesShopModel.DiscountDetail" />
-    <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
     <EntitySet Name="ProductImages" EntityType="ClothesShopModel.ProductImage" />
     <EntitySet Name="ProductVariations" EntityType="ClothesShopModel.ProductVariation" />
-    <AssociationSet Name="FK_Cart_item_ProductVariation" Association="ClothesShopModel.FK_Cart_item_ProductVariation">
-      <End Role="ProductVariation" EntitySet="ProductVariations" />
-      <End Role="Cart_item" EntitySet="Cart_item" />
-    </AssociationSet>
     <AssociationSet Name="FK_DiscountDetail_DiscountProduct" Association="ClothesShopModel.FK_DiscountDetail_DiscountProduct">
       <End Role="DiscountProduct" EntitySet="DiscountProducts" />
-      <End Role="DiscountDetail" EntitySet="DiscountDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DiscountDetail_Product" Association="ClothesShopModel.FK_DiscountDetail_Product">
-      <End Role="Product" EntitySet="Products" />
       <End Role="DiscountDetail" EntitySet="DiscountDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_ImportBillDetail_ProductVariation" Association="ClothesShopModel.FK_ImportBillDetail_ProductVariation">
@@ -170,18 +140,6 @@
     <AssociationSet Name="FK_OrderDetail_ProductVariation" Association="ClothesShopModel.FK_OrderDetail_ProductVariation">
       <End Role="ProductVariation" EntitySet="ProductVariations" />
       <End Role="OrderDetail" EntitySet="OrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
-      <End Role="ProductCat" EntitySet="ProductCats" />
-      <End Role="Product" EntitySet="Products" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ProductImage_Product" Association="ClothesShopModel.FK_ProductImage_Product">
-      <End Role="Product" EntitySet="Products" />
-      <End Role="ProductImage" EntitySet="ProductImages" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ProductVariation_Product" Association="ClothesShopModel.FK_ProductVariation_Product">
-      <End Role="Product" EntitySet="Products" />
-      <End Role="ProductVariation" EntitySet="ProductVariations" />
     </AssociationSet>
     <AssociationSet Name="FK_ProductImage_ProductColor" Association="ClothesShopModel.FK_ProductImage_ProductColor">
       <End Role="ProductColor" EntitySet="ProductColors" />
@@ -203,6 +161,52 @@
     <AssociationSet Name="FK_Feedback_ProductVariation" Association="ClothesShopModel.FK_Feedback_ProductVariation">
       <End Role="ProductVariation" EntitySet="ProductVariations" />
       <End Role="Feedback" EntitySet="Feedbacks" />
+    </AssociationSet>
+    <EntitySet Name="Products" EntityType="ClothesShopModel.Product" />
+    <EntitySet Name="ProductLikes" EntityType="ClothesShopModel.ProductLike" />
+    <AssociationSet Name="FK_ProductLike_Customer" Association="ClothesShopModel.FK_ProductLike_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="ProductLike" EntitySet="ProductLikes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscountDetail_Product" Association="ClothesShopModel.FK_DiscountDetail_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="DiscountDetail" EntitySet="DiscountDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__ProCatI__6AEFE058" Association="ClothesShopModel.FK__Product__ProCatI__6AEFE058">
+      <End Role="ProductCat" EntitySet="ProductCats" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductImage_Product" Association="ClothesShopModel.FK_ProductImage_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductImage" EntitySet="ProductImages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductLike_Product" Association="ClothesShopModel.FK_ProductLike_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductLike" EntitySet="ProductLikes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductVariation_Product" Association="ClothesShopModel.FK_ProductVariation_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductVariation" EntitySet="ProductVariations" />
+    </AssociationSet>
+    <EntitySet Name="Pages" EntityType="ClothesShopModel.Page" />
+    <EntitySet Name="ProductSections" EntityType="ClothesShopModel.ProductSection" />
+    <AssociationSet Name="FK_ProductSection_Product" Association="ClothesShopModel.FK_ProductSection_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ProductSection" EntitySet="ProductSections" />
+    </AssociationSet>
+    <EntitySet Name="Slides" EntityType="ClothesShopModel.Slide" />
+    <AssociationSet Name="FK_Slide_Page" Association="ClothesShopModel.FK_Slide_Page">
+      <End Role="Page" EntitySet="Pages" />
+      <End Role="Slide" EntitySet="Slides" />
+    </AssociationSet>
+    <EntitySet Name="Sections" EntityType="ClothesShopModel.Section" />
+    <AssociationSet Name="FK_Section_Page" Association="ClothesShopModel.FK_Section_Page">
+      <End Role="Page" EntitySet="Pages" />
+      <End Role="Section" EntitySet="Sections" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSection_Section" Association="ClothesShopModel.FK_ProductSection_Section">
+      <End Role="Section" EntitySet="Sections" />
+      <End Role="ProductSection" EntitySet="ProductSections" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Category">
@@ -267,8 +271,8 @@
     <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="Orders" Relationship="ClothesShopModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
     <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Carts" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Customer" ToRole="Cart" />
     <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_Customer" FromRole="Customer" ToRole="Feedback" />
+    <NavigationProperty Name="ProductLikes" Relationship="ClothesShopModel.FK_ProductLike_Customer" FromRole="Customer" ToRole="ProductLike" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
@@ -494,50 +498,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Cart">
-    <Key>
-      <PropertyRef Name="IdCart" />
-    </Key>
-    <Property Name="IdCart" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CusID" Type="Int64" />
-    <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_Cart_Customer" FromRole="Cart" ToRole="Customer" />
-    <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart" ToRole="Cart_item" />
-  </EntityType>
-  <EntityType Name="Cart_item">
-    <Key>
-      <PropertyRef Name="CartItemId" />
-    </Key>
-    <Property Name="CartItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="IdCart" Type="Int32" Nullable="false" />
-    <Property Name="ProVariationID" Type="Int64" />
-    <Property Name="Quantity" Type="Int32" />
-    <NavigationProperty Name="Cart" Relationship="ClothesShopModel.FK_Cart_item_Cart" FromRole="Cart_item" ToRole="Cart" />
-    <NavigationProperty Name="ProductVariation" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="Cart_item" ToRole="ProductVariation" />
-  </EntityType>
-  <Association Name="FK_Cart_Customer">
-    <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customer">
-        <PropertyRef Name="CusID" />
-      </Principal>
-      <Dependent Role="Cart">
-        <PropertyRef Name="CusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Cart_item_Cart">
-    <End Type="ClothesShopModel.Cart" Role="Cart" Multiplicity="1" />
-    <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Cart">
-        <PropertyRef Name="IdCart" />
-      </Principal>
-      <Dependent Role="Cart_item">
-        <PropertyRef Name="IdCart" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="DiscountDetail">
     <Key>
       <PropertyRef Name="DiscountDetailId" />
@@ -551,28 +511,6 @@
     <Property Name="MaxQuantityPerUser" Type="Int32" />
     <NavigationProperty Name="DiscountProduct" Relationship="ClothesShopModel.FK_DiscountDetail_DiscountProduct" FromRole="DiscountDetail" ToRole="DiscountProduct" />
     <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_DiscountDetail_Product" FromRole="DiscountDetail" ToRole="Product" />
-  </EntityType>
-  <EntityType Name="Product">
-    <Key>
-      <PropertyRef Name="ProId" />
-    </Key>
-    <Property Name="ProId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProCatId" Type="Int32" Nullable="false" />
-    <Property Name="ProName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="Material" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Price" Type="Int32" />
-    <Property Name="ImportPrice" Type="Int32" />
-    <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="Status" Type="Boolean" />
-    <Property Name="ImportDate" Type="DateTime" Precision="3" />
-    <Property Name="TotalQty" Type="Int32" />
-    <Property Name="DiscountPrice" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="Percent" Type="Int32" />
-    <NavigationProperty Name="DiscountDetails" Relationship="ClothesShopModel.FK_DiscountDetail_Product" FromRole="Product" ToRole="DiscountDetail" />
-    <NavigationProperty Name="ProductCat" Relationship="ClothesShopModel.FK__Product__ProCatI__6AEFE058" FromRole="Product" ToRole="ProductCat" />
-    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
-    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="Product" ToRole="ProductVariation" />
   </EntityType>
   <EntityType Name="ProductImage">
     <Key>
@@ -588,8 +526,8 @@
     <Property Name="DetailImage4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="ImageColor" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DetailImage5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="ProductImage" ToRole="Product" />
     <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductImage_ProductColor" FromRole="ProductImage" ToRole="ProductColor" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="ProductImage" ToRole="Product" />
   </EntityType>
   <EntityType Name="ProductVariation">
     <Key>
@@ -603,26 +541,13 @@
     <Property Name="Quantity" Type="Int32" />
     <Property Name="Status" Type="Boolean" />
     <Property Name="DisplayImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Cart_item" Relationship="ClothesShopModel.FK_Cart_item_ProductVariation" FromRole="ProductVariation" ToRole="Cart_item" />
     <NavigationProperty Name="ImportBillDetails" Relationship="ClothesShopModel.FK_ImportBillDetail_ProductVariation" FromRole="ProductVariation" ToRole="ImportBillDetail" />
     <NavigationProperty Name="OrderDetails" Relationship="ClothesShopModel.FK_OrderDetail_ProductVariation" FromRole="ProductVariation" ToRole="OrderDetail" />
-    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
     <NavigationProperty Name="ProductColor" Relationship="ClothesShopModel.FK_ProductVariation_ProductColor" FromRole="ProductVariation" ToRole="ProductColor" />
     <NavigationProperty Name="ProductSize" Relationship="ClothesShopModel.FK_ProductVariation_ProductSize" FromRole="ProductVariation" ToRole="ProductSize" />
     <NavigationProperty Name="Feedbacks" Relationship="ClothesShopModel.FK_Feedback_ProductVariation" FromRole="ProductVariation" ToRole="Feedback" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="ProductVariation" ToRole="Product" />
   </EntityType>
-  <Association Name="FK_Cart_item_ProductVariation">
-    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.Cart_item" Role="Cart_item" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductVariation">
-        <PropertyRef Name="ProVariationID" />
-      </Principal>
-      <Dependent Role="Cart_item">
-        <PropertyRef Name="ProVariationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_DiscountDetail_DiscountProduct">
     <End Type="ClothesShopModel.DiscountProduct" Role="DiscountProduct" Multiplicity="0..1" />
     <End Type="ClothesShopModel.DiscountDetail" Role="DiscountDetail" Multiplicity="*" />
@@ -632,18 +557,6 @@
       </Principal>
       <Dependent Role="DiscountDetail">
         <PropertyRef Name="DiscountProductId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DiscountDetail_Product">
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.DiscountDetail" Role="DiscountDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProId" />
-      </Principal>
-      <Dependent Role="DiscountDetail">
-        <PropertyRef Name="ProId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -668,42 +581,6 @@
       </Principal>
       <Dependent Role="OrderDetail">
         <PropertyRef Name="ProVariationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Product__ProCatI__6AEFE058">
-    <End Type="ClothesShopModel.ProductCat" Role="ProductCat" Multiplicity="1" />
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductCat">
-        <PropertyRef Name="ProCatId" />
-      </Principal>
-      <Dependent Role="Product">
-        <PropertyRef Name="ProCatId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ProductImage_Product">
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="1" />
-    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProId" />
-      </Principal>
-      <Dependent Role="ProductImage">
-        <PropertyRef Name="ProID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ProductVariation_Product">
-    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
-    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProId" />
-      </Principal>
-      <Dependent Role="ProductVariation">
-        <PropertyRef Name="ProId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -779,6 +656,207 @@
       </Principal>
       <Dependent Role="Feedback">
         <PropertyRef Name="ProVariationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProId" />
+    </Key>
+    <Property Name="ProId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProCatId" Type="Int32" Nullable="false" />
+    <Property Name="ProName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Material" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Int32" />
+    <Property Name="ImportPrice" Type="Int32" />
+    <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="ImportDate" Type="DateTime" Precision="3" />
+    <Property Name="TotalQty" Type="Int32" />
+    <Property Name="Liked" Type="Boolean" />
+    <Property Name="DiscountPrice" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Percent" Type="Int32" />
+    <NavigationProperty Name="DiscountDetails" Relationship="ClothesShopModel.FK_DiscountDetail_Product" FromRole="Product" ToRole="DiscountDetail" />
+    <NavigationProperty Name="ProductCat" Relationship="ClothesShopModel.FK__Product__ProCatI__6AEFE058" FromRole="Product" ToRole="ProductCat" />
+    <NavigationProperty Name="ProductImages" Relationship="ClothesShopModel.FK_ProductImage_Product" FromRole="Product" ToRole="ProductImage" />
+    <NavigationProperty Name="ProductLikes" Relationship="ClothesShopModel.FK_ProductLike_Product" FromRole="Product" ToRole="ProductLike" />
+    <NavigationProperty Name="ProductVariations" Relationship="ClothesShopModel.FK_ProductVariation_Product" FromRole="Product" ToRole="ProductVariation" />
+    <NavigationProperty Name="ProductSections" Relationship="ClothesShopModel.FK_ProductSection_Product" FromRole="Product" ToRole="ProductSection" />
+  </EntityType>
+  <EntityType Name="ProductLike">
+    <Key>
+      <PropertyRef Name="ProductLikeId" />
+    </Key>
+    <Property Name="ProductLikeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CusID" Type="Int64" />
+    <Property Name="ProId" Type="Int64" />
+    <NavigationProperty Name="Customer" Relationship="ClothesShopModel.FK_ProductLike_Customer" FromRole="ProductLike" ToRole="Customer" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductLike_Product" FromRole="ProductLike" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK_ProductLike_Customer">
+    <End Type="ClothesShopModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductLike" Role="ProductLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CusID" />
+      </Principal>
+      <Dependent Role="ProductLike">
+        <PropertyRef Name="CusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscountDetail_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.DiscountDetail" Role="DiscountDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="DiscountDetail">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__ProCatI__6AEFE058">
+    <End Type="ClothesShopModel.ProductCat" Role="ProductCat" Multiplicity="1" />
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductCat">
+        <PropertyRef Name="ProCatId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ProCatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductImage_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="ClothesShopModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductImage">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductLike_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductLike" Role="ProductLike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductLike">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductVariation_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductVariation" Role="ProductVariation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductVariation">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Page">
+    <Key>
+      <PropertyRef Name="PageId" />
+    </Key>
+    <Property Name="PageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Slides" Relationship="ClothesShopModel.FK_Slide_Page" FromRole="Page" ToRole="Slide" />
+    <NavigationProperty Name="Sections" Relationship="ClothesShopModel.FK_Section_Page" FromRole="Page" ToRole="Section" />
+  </EntityType>
+  <EntityType Name="ProductSection">
+    <Key>
+      <PropertyRef Name="ProductSectionId" />
+    </Key>
+    <Property Name="ProductSectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProId" Type="Int64" />
+    <Property Name="SectionId" Type="Int32" />
+    <NavigationProperty Name="Product" Relationship="ClothesShopModel.FK_ProductSection_Product" FromRole="ProductSection" ToRole="Product" />
+    <NavigationProperty Name="Section" Relationship="ClothesShopModel.FK_ProductSection_Section" FromRole="ProductSection" ToRole="Section" />
+  </EntityType>
+  <Association Name="FK_ProductSection_Product">
+    <End Type="ClothesShopModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductSection" Role="ProductSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProId" />
+      </Principal>
+      <Dependent Role="ProductSection">
+        <PropertyRef Name="ProId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Slide">
+    <Key>
+      <PropertyRef Name="SlideId" />
+    </Key>
+    <Property Name="SlideId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Image" Type="Boolean" />
+    <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="PageId" Type="Int32" />
+    <NavigationProperty Name="Page" Relationship="ClothesShopModel.FK_Slide_Page" FromRole="Slide" ToRole="Page" />
+  </EntityType>
+  <Association Name="FK_Slide_Page">
+    <End Type="ClothesShopModel.Page" Role="Page" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Slide" Role="Slide" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Page">
+        <PropertyRef Name="PageId" />
+      </Principal>
+      <Dependent Role="Slide">
+        <PropertyRef Name="PageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Section">
+    <Key>
+      <PropertyRef Name="SectionId" />
+    </Key>
+    <Property Name="SectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Image1" Type="Boolean" />
+    <Property Name="Image2" Type="Boolean" />
+    <Property Name="Image3" Type="Boolean" />
+    <Property Name="Link1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Link2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Link3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PageId" Type="Int32" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <NavigationProperty Name="Page" Relationship="ClothesShopModel.FK_Section_Page" FromRole="Section" ToRole="Page" />
+    <NavigationProperty Name="ProductSections" Relationship="ClothesShopModel.FK_ProductSection_Section" FromRole="Section" ToRole="ProductSection" />
+  </EntityType>
+  <Association Name="FK_Section_Page">
+    <End Type="ClothesShopModel.Page" Role="Page" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.Section" Role="Section" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Page">
+        <PropertyRef Name="PageId" />
+      </Principal>
+      <Dependent Role="Section">
+        <PropertyRef Name="PageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSection_Section">
+    <End Type="ClothesShopModel.Section" Role="Section" Multiplicity="0..1" />
+    <End Type="ClothesShopModel.ProductSection" Role="ProductSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Section">
+        <PropertyRef Name="SectionId" />
+      </Principal>
+      <Dependent Role="ProductSection">
+        <PropertyRef Name="SectionId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

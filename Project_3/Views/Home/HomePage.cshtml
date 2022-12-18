@@ -95,7 +95,7 @@
     <div class="container-main">
         <!--Banner-->
         <section class="banner py-4">
-            <img src="https://media.canifa.com/Simiconnector/banner_name_tablet1661792546.jpg" width="100%" alt="">
+            <img src="~/Upload/Slide/1.jpg" width="100%" alt="">
         </section>
 
         <!--Endow-->
@@ -166,7 +166,7 @@
                                                     </div>
                                                     <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
                                                 </div>
-                                                @if (item.Percent != 0)
+                                                @if (item.Percent != 0 && item.Percent != null)
                                                 {
                                                     <span class="price-percent text-white">-@item.Percent%</span>
                                                 }
@@ -176,13 +176,13 @@
                                                 {
                                                     if (color.ProColorID == proImg.ProColorID)
                                                     {
-                                                        <div class="product-color active" onclick="changeProduct(event)" data-idColor ="@color.ProColorID">
+                                                        <div class="product-color active" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
                                                             <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
                                                         </div>
                                                     }
                                                     else
                                                     {
-                                                        <div class="product-color" onclick="changeProduct(event)" data-idColor ="@color.ProColorID">
+                                                        <div class="product-color" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
                                                             <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
                                                         </div>
                                                     }
@@ -194,7 +194,7 @@
                                 <a href="/Home/Detail/@item.ProId" class="product-name">
                                     @item.ProName
                                 </a>
-                                @if (item.DiscountPrice != 0)
+                                @if (item.DiscountPrice != 0 && item.DiscountPrice != null)
                                 {
                                     <div class="d-flex mt-1">
                                         <div class="curent-price price me-3">@item.DiscountPrice</div>
@@ -208,11 +208,22 @@
 
                                     </div>
                                 }
-                                <div class="product-like">
-                                    <span>Yêu thích</span>
-                                    <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                    <i class="product-like-img2 fa-solid fa-heart"></i>
-                                </div>
+                                @if (item.Liked==false || item.Liked==null)
+                                {
+                                    <div class="product-like" onclick="LikeProduct(this,@item.ProId)">
+                                        <span>Yêu thích</span>
+                                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                        <i class="product-like-img2 fa-solid fa-heart"></i>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="product-like active" onclick="LikeProduct(this,@item.ProId)">
+                                        <span>Yêu thích</span>
+                                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                        <i class="product-like-img2 fa-solid fa-heart"></i>
+                                    </div>
+                                }
                             </div>
                         }
                         

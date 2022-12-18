@@ -153,7 +153,9 @@
     <Compile Include="Areas\Admin\Controllers\PositionController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductCatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\SizeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SlideController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Controllers\validateantiforgerytokenAttribute.cs" />
     <Compile Include="Areas\Admin\Controllers\VoucherController.cs" />
@@ -221,8 +223,8 @@
     <Content Include="Assets\css\show-category.css" />
     <Content Include="Assets\img\errorClient.svg" />
     <Content Include="Assets\img\Filter.svg" />
+    <Content Include="Assets\js\BaseClient.js" />
     <Content Include="Assets\js\Cart\addCart.js" />
-    <Content Include="Assets\js\base.js" />
     <Content Include="Assets\js\OrderHistory.js" />
     <Content Include="Assets\js\SearchProduct.js" />
     <Content Include="Assets\Admin\FileAngularjs\VoucherAngular.js" />
@@ -3982,6 +3984,10 @@
     <Content Include="Areas\Admin\Views\Error\Error_401.cshtml" />
     <Content Include="Areas\Admin\Views\Position\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedback\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Slide\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Section\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Section\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Section\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dirPagination.js" />
     <Content Include="Scripts\dirPagination.tpl.html" />
@@ -4038,6 +4044,7 @@
     <Content Include="Views\ShowCat\SideBar_ShowCat.cshtml" />
     <Content Include="Views\ShowCat\ShowProCat.cshtml" />
     <Content Include="Views\ShowCat\SideBar_ShowProCat.cshtml" />
+    <Content Include="Views\InfoCustomer\ProductLike.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4049,7 +4056,8 @@
     <Folder Include="Upload\NewCkFinder\" />
     <Folder Include="Upload\New\" />
     <Folder Include="Upload\Product\" />
-    <Folder Include="Views\BaseClient\" />
+    <Folder Include="Upload\Section\" />
+    <Folder Include="Upload\Slide\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

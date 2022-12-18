@@ -32,7 +32,7 @@ namespace Models.DAO
 
         public List<DiscountDetail> getDiscountDetailNow()
         {
-            return db.DiscountDetails.Where(d=>d.DiscountProduct.StartDate<=DateTime.Now && d.DiscountProduct.EndDate>=DateTime.Now).ToList();
+            return db.DiscountDetails.Where(d=>d.DiscountProduct.StartDate<=DateTime.Now && d.DiscountProduct.EndDate>=DateTime.Now).OrderByDescending(dt=>dt.DiscountDetailId).ToList();
         }
     }
 }

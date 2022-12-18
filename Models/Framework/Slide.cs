@@ -14,10 +14,11 @@ namespace Models.Framework
     
     public partial class Slide
     {
-        public int ID { get; set; }
-        public string Image { get; set; }
-        public Nullable<int> DisplayOrder { get; set; }
+        public int SlideId { get; set; }
+        public Nullable<bool> Image { get; set; }
         public string Link { get; set; }
-        public Nullable<bool> Status { get; set; }
+        public Nullable<int> PageId { get; set; }
+    
+        public virtual Page Page { get; set; }
     }
 }

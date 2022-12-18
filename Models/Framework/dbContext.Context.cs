@@ -30,7 +30,6 @@ namespace Models.Framework
         public virtual DbSet<ProductColor> ProductColors { get; set; }
         public virtual DbSet<ProductSize> ProductSizes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Slide> Slides { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ProductCat> ProductCats { get; set; }
         public virtual DbSet<New> News { get; set; }
@@ -44,12 +43,15 @@ namespace Models.Framework
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
-        public virtual DbSet<Cart> Carts { get; set; }
-        public virtual DbSet<Cart_item> Cart_item { get; set; }
         public virtual DbSet<DiscountDetail> DiscountDetails { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<ProductVariation> ProductVariations { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductLike> ProductLikes { get; set; }
+        public virtual DbSet<Page> Pages { get; set; }
+        public virtual DbSet<ProductSection> ProductSections { get; set; }
+        public virtual DbSet<Slide> Slides { get; set; }
+        public virtual DbSet<Section> Sections { get; set; }
     }
 }

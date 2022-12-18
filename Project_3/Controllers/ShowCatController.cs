@@ -24,44 +24,11 @@ namespace Project_3.Controllers
             return View(c);
         }
 
-        public List<Product> selectProduct(List<Product> list)
-        {
-            return list.Select(p => new Product()
-            {
-                ProId = p.ProId,
-                Price = p.Price,
-                ProName = p.ProName,
-                ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
-                {
-                    ProId = pv.ProId,
-                    ProVariationID = pv.ProVariationID,
-                    ProductColor = new ProductColor() { ProColorID = pv.ProColorID.Value, NameColor = pv.ProductColor.NameColor, ImageColor = pv.ProductColor.ImageColor },
-                    ProductSize = new ProductSize() { ProSizeID = pv.ProSizeID.Value, NameSize = pv.ProductSize.NameSize },
-                    Quantity = pv.Quantity,
-                    Ordered = pv.Ordered,
-                    DisplayImage = p.ProductImages.Where(pi => pi.ProID == p.ProId && pi.ProColorID == pv.ProColorID).FirstOrDefault().Image
-                }).ToList(),
-                DiscountPrice = p.DiscountPrice,
-                Percent = p.Percent,
-                ProductImages = p.ProductImages.Select(pi => new ProductImage()
-                {
-                    ProColorID = pi.ProColorID,
-                    Image = pi.Image,
-                    ImageColor = pi.ProductColor.ImageColor
-                }).ToList()
-            }).ToList();
-        }
-
         public ActionResult getCatData(int CatId, int? colorId, int? minPrice, int? maxPrice, int pageNumber = 1, int pageSize = 20)
         {
             //lấy danh sách product của cat và lấy discount
             var listProduct = productDAO.getAll().Where(p => p.ProductCat.CatID == CatId).ToList(); 
-            foreach(var item in listProduct)
-            {
-                var a = getDiscount(item);
-                item.DiscountPrice = a.DiscountPrice;
-                item.Percent = a.Percent;
-            }
+            listProduct = getListDiscount(listProduct);
 
             if(colorId == null && minPrice != null && maxPrice != null)
             {
@@ -103,12 +70,7 @@ namespace Project_3.Controllers
         {
             //lấy danh sách product của cat và lấy discount
             var listProduct = productDAO.getAll().Where(p => p.ProCatId == ProCatId).ToList();
-            foreach (var item in listProduct)
-            {
-                var a = getDiscount(item);
-                item.DiscountPrice = a.DiscountPrice;
-                item.Percent = a.Percent;
-            }
+            listProduct = getListDiscount(listProduct);
 
             if (colorId == null && minPrice != null && maxPrice != null)
             {

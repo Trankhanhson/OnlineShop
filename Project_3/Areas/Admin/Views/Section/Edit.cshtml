@@ -1,0 +1,554 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Assets/Admin/css/DiscountProduct.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script>
+        /*hiển thị giá*/
+        function convertPrice(price) {
+            let tg = "";
+            let length = price.length;
+            let count = 0;
+            for (var i = length - 1; i >= 0; --i) {
+                if (count % 3 == 0 && count != 0) {
+                    tg = price[i] + '.' + tg;
+                }
+                else {
+                    tg = price[i] + tg;
+                }
+                count++;
+            }
+            return tg + "đ";
+        }
+
+        /**uppload file */
+        var clickFile = document.createElement('div') //lưu thẻ bọc 1 ảnh khi click để truy xuất đến các phẩn tử con
+        function fileBoxClick(input) {
+            clickFile = input
+        }
+
+        //Hiển thị hình ảnh vừa chọn lên view
+        function uploadImg(input) {
+            const reader = new FileReader()
+
+            // Lấy thông tin tập tin được đăng tải
+            const file = input.files
+            // Đọc thông tin tập tin đã được đăng tải
+            reader.readAsDataURL(file[0])
+            // Lắng nghe quá trình đọc tập tin hoàn thành
+            reader.addEventListener("load", (event) => {
+                // Lấy chuỗi Binary thông tin hình ảnh
+                const img = event.target.result;
+                // Thực hiện hành động thêm chuỗi giá trị này vào thẻ IMG
+                $(clickFile).find('.file-upload-image').attr('src', img);
+                $(clickFile).find('.file-upload-content').show();
+                $(clickFile).find('.image-upload-wrap').hide();
+            })
+        }
+
+        function dropImg(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            this.file = event.dataTransfer.files[0];
+            event.target.files = event.dataTransfer.files
+            const reader = new FileReader();
+            reader.onload = e => {
+                this.url = reader.result;
+
+                const dropDiv = $(event.target).parents(".wrap-file-box")
+                $(dropDiv).find('.file-upload-image').attr('src', this.url);
+                $(dropDiv).find('.file-upload-content').show();
+                $(dropDiv).find('.image-upload-wrap').hide();
+            };
+            reader.readAsDataURL(this.file);
+        }
+
+        function DragEnter(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            const parent = $(event.target).parents(".image-upload-wrap")
+            $(parent).find(".text-dragenter").show()
+            $(parent).find(".text-nodragenter").hide()
+            $(parent).css("border", "2px dashed #0a58ca")
+        }
+
+
+        function dragLeaveBox(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            const parent = $(event.target).parents(".image-upload-wrap")
+            $(parent).find(".text-dragenter").hide()
+            $(parent).find(".text-nodragenter").show()
+            $(parent).css("border", "2px dashed #999")
+
+        }
+
+        function removeImg(input) {
+            let parentBox = $(input).parents(".wrap-file-box")
+            let file = $(parentBox).find('.input-file')
+            $(file).val('')
+            let Image = $(parentBox).find('.file-upload-image')
+            $(Image).attr("src", "")
+            $(parentBox).find('.file-upload-content').hide();
+            $(parentBox).find('.image-upload-wrap').show();
+        }
+
+        $('.image-upload-wrap').bind('dragover', function () {
+            $('.image-upload-wrap').addClass('image-dropping');
+        });
+        $('.image-upload-wrap').bind('dragleave', function () {
+            $('.image-upload-wrap').removeClass('image-dropping');
+        });
+    </script>
+    <script src="~/Scripts/dirPagination.js"></script>
+    <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
+    <script src="~/Scripts/ng-file-upload.min.js"></script>
+    <script>
+        var SectionApp = angular.module("SectionApp", ['ngFileUpload', 'angularUtils.directives.dirPagination']);
+
+        SectionApp.controller("SectionController", function ($scope, Upload, $http) {
+
+            /**get section */
+            let id = $("main").attr("data-Id")
+            $http({
+                method: "GET",
+                url: "/Admin/Section/getById/" + id,
+                datatype: 'Json'
+            }).then(function (res) {
+                $scope.section = res.data.s
+                $scope.section.DisplayOrder = JSON.stringify($scope.section.DisplayOrder)
+                $scope.listProConfirmed = JSON.parse(res.data.listProduct)
+                $('.file-upload-content').show();
+                $('.image-upload-wrap').hide();
+            })
+
+            /**handle product */
+            $scope.maxSize = 3;
+            $scope.totalCount = 0;
+            $scope.searchText = ""
+            $scope.pageSize = '5'
+            $scope.fileImage1 = null
+            $scope.fileImage2 = null
+            $scope.fileImage3 = null
+
+            $scope.getPage = function (newPage) {
+                $scope.pageNumber = newPage
+                /** Lấy danh sách loại sản phẩm*/
+                $http.get("/Admin/Section/getProductOnly", {
+                    params: { searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize }
+                }).then(function (res) {
+                    let pageData = JSON.parse(res.data.result)
+                    $scope.productList = pageData.Data
+                    //kiểm tra các sản phẩm đã được check khi trả về
+                    $.each($scope.productList, (index, value) => {
+                        let checkExist = $scope.listProConfirmed.some((v, i) => {
+                            return value.ProId == v.ProId
+                        })
+                        if (checkExist) {
+                            value.Check = true
+                        }
+                    })
+                    $scope.totalCount = pageData.TotalCount
+                })
+            }
+            $scope.getPage(1)
+
+            $scope.listProConfirmed = []
+            $scope.selectProduct = function (value) {
+                let indexExist = 0
+                let checkExist = $scope.listProConfirmed.some((v, index) => {
+                    indexExist = index
+                    return value.ProId == v.ProId
+                })
+                if (checkExist == false) {
+                    let ProConfirm = {
+                        ProId: value.ProId,
+                        firstImage: value.firstImage,
+                        ProName: value.ProName,
+                        Price: value.Price,
+                        DiscountPrice: value.DiscountPrice
+                    }
+                    $scope.listProConfirmed.push(ProConfirm)
+                    $scope.checkProduct = true
+                }
+                else {
+                    if (value.Check) {
+                        $scope.listProConfirmed.splice(indexExist, 1)
+                        if ($scope.listProConfirmed.length == 0) {
+                            $scope.checkProduct = false
+                        }
+                    }
+                }
+            }
+
+            $scope.deleteProductSelect = function (index) {
+                if ($scope.listProConfirmed.length == 1) {
+                    $scope.listProConfirmed.splice(index, 1)
+                    $scope.checkProduct = false //display table
+                }
+                else {
+                    $scope.listProConfirmed.splice(index, 1)
+
+                }
+            }
+
+            //lưu file người dùng upload
+            $scope.SelectImage = function (file, numberFile) {
+                if (numberFile == 1) {
+                    $scope.fileImage1 = file
+                }
+                else if (numberFile == 2) {
+                    $scope.fileImage2 = file
+                }
+                else {
+                    $scope.fileImage3 = file
+                }
+            }
+
+            $scope.removeImg = function (numberFile) {
+                if (numberFile == 1) {
+                    $scope.fileImage1 = null
+                }
+                else if (numberFile == 2) {
+                    $scope.fileImage2 = null
+                }
+                else {
+                    $scope.fileImage3 = null
+                }
+            }
+
+            $scope.UploadFiles = function (sectionId, listSignal) {
+                Upload.upload({
+                    url: '/Section/UploadEdit',
+                    data: { file1: $scope.fileImage1, file2: $scope.fileImage2, file3: $scope.fileImage3, sectionId: sectionId, listSignal: listSignal }
+                }).then(function (res) {
+
+                }), function (error) {
+                    alert("Lỗi upload ảnh")
+                    checkUpload = false
+                }
+            }
+
+            function getListSignal() {
+                let listSignal = []
+                let srcImage1 = $(".fileImage1").attr("src")
+                let srcImage2 = $(".fileImage2").attr("src")
+                let srcImage3 = $(".fileImage3").attr("src")
+                //Image 1
+                //add new image
+                if ($scope.fileImage1 != null) {
+                    listSignal.push("add")
+                    $scope.section.Image1 = true
+                }
+                else if (srcImage1.trim() == "" && $scope.section.Image1 == true) //delete old img and don't add new image
+                {
+                    $scope.section.Image1 = false
+                    listSignal.push("delete")
+                }
+                else {
+                    listSignal.push("origin")
+                }
+                //Image 2
+                //add new image
+                if ($scope.fileImage2 != null) {
+                    listSignal.push("add")
+                    $scope.section.Image2 = true
+                }
+                else if (srcImage2.trim() == "" && $scope.section.Image2 == true) //delete old img and don't add new image
+                {
+                    $scope.section.Image2 = false
+                    listSignal.push("delete")
+                }
+                else {
+                    listSignal.push("origin")
+                }
+                //Image 3
+                //add new image
+                if ($scope.fileImage3 != null) {
+                    listSignal.push("add")
+                    $scope.section.Image3 = true
+                }
+                else if (srcImage3.trim() == "" && $scope.section.Image3 == true) //delete old img and don't add new image
+                {
+                    $scope.section.Image3 = false
+                    listSignal.push("delete")
+                }
+                else {
+                    listSignal.push("origin")
+                }
+                return listSignal
+            }
+
+            $scope.submit = function () {
+                if ($scope.listProConfirmed.length <= 0) {
+                    $("#errorToast .text-toast").text("Bạn chưa thêm sản phẩm nào")
+                    $("#errorToast").toast("show")
+                    return false
+                }
+                if ($scope.sectionForm.$valid) {
+
+                    let listSignal = getListSignal()
+
+                    let productSections = []
+                    $.each($scope.listProConfirmed, (index, value) => {
+                        let productSection = {
+                            ProId: value.ProId,
+                            SectionId: $scope.section.SectionId
+                        }
+                        productSections.push(productSection)
+                    })
+
+                    $http({
+                        method: "POST",
+                        url: "/Admin/Section/Edit",
+                        datatype: 'Json',
+                        data: { s: $scope.section, productSections: productSections }
+                    }).then(function (res) {
+                        if (res.data) {
+                            $scope.UploadFiles($scope.section.SectionId, listSignal)
+                            location.href = '/Admin/Section/Index';
+                        }
+                        else {
+                            $("#errorToast .text-toast").text("Đã có lỗi xảy ra")
+                            $("#errorToast").toast("show")
+                        }
+                    })
+                }
+            }
+        });
+    </script>
+}
+<main id="main" data-id="@ViewBag.Id" class="main" ng-app="SectionApp" ng-controller="SectionController" ng-init="checkProduct = true">
+    <h2>{{section.Page.PageName}}</h2>
+    <form name="sectionForm" novalidate>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body pt-4">
+                            <div class="row">
+                                <div class="d-flex mb-4 col-6">
+                                    <label for="inputText" class="label-create col-form-label">Tiêu đề</label>
+                                    <div class="flex-grow-1 position-relative">
+                                        <input type="text" max="100" id="Title" name="Title" ng-model="section.Title" class="form-control text-dark" required>
+                                        <span ng-show="sectionForm.$submitted">
+                                            <span class="error" ng-show="sectionForm.Title.$error.required">Bạn chưa nhập trường này</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-4 col-6">
+                                    <label for="inputText" class="label-create col-form-label">Vị trí</label>
+                                    <div class="flex-grow-1 position-relative">
+                                        <select class="form-select" id="DisplayOrder" aria-label="Default select example" ng-model="section.DisplayOrder">
+                                            @for (int i = 1; i <= ViewBag.length; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-3">
+                                    <div class="d-flex col-3">
+                                        <div class="wrap-file-box mt-0" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__main input-file" type="file" accept="image/*" ngf-select="SelectImage($files,1)" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)">
+                                                <div class="drag-text">
+                                                    <p class="text-nodragenter">Ảnh 1</p>
+                                                    <p class="text-dragenter text-secondary" style="font-size:12px"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image rounded-2 fileImage1" src="~/Upload/Section/{{section.SectionId}}/1.jpg" alt="your image">
+                                                <div class="image-title-wrap" ng-click="removeImg(1)">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center col-9">
+                                        <label for="inputText" class="label-create col-form-label">Liên kết 1</label>
+                                        <div class="flex-grow-1 position-relative">
+                                            <input type="text" id="EndDate" name="EndDate" ng-model="section.Link1" class="form-control text-dark">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-3">
+                                    <div class="d-flex col-3">
+                                        <div class="wrap-file-box mt-0" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__main input-file" type="file" accept="image/*" ngf-select="SelectImage($files,2)" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)">
+                                                <div class="drag-text">
+                                                    <p class="text-nodragenter">Ảnh 2</p>
+                                                    <p class="text-dragenter text-secondary" style="font-size:12px"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image rounded-2 fileImage2" src="~/Upload/Section/{{section.SectionId}}/2.jpg" alt="your image">
+                                                <div class="image-title-wrap" ng-click="removeImg(2)">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center col-9">
+                                        <label for="inputText" class="label-create col-form-label">Liên kết 2</label>
+                                        <div class="flex-grow-1 position-relative">
+                                            <input type="text" id="Link2" name="Link2" ng-model="section.Link2" class="form-control text-dark">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-3">
+                                    <div class="d-flex col-3">
+                                        <div class="wrap-file-box mt-0" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__main input-file" type="file" accept="image/*" ngf-select="SelectImage($files,3)" ondrop="dropImg(event)" ondragleave="dragLeaveBox(event)" ondragenter="DragEnter(event)" onchange="uploadImg(this)">
+                                                <div class="drag-text">
+                                                    <p class="text-nodragenter">Ảnh 3</p>
+                                                    <p class="text-dragenter text-secondary" style="font-size:12px"><i class="fa-solid fa-plus"></i> Thêm ảnh</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image rounded-2 fileImage3" src="~/Upload/Section/{{section.SectionId}}/3.jpg" alt="your image">
+                                                <div class="image-title-wrap" ng-click="removeImg(3)">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center col-9">
+                                        <label for="inputText" class="label-create col-form-label">Liên kết 3</label>
+                                        <div class="flex-grow-1 position-relative">
+                                            <input type="text" id="Link3" name="Link3" ng-model="section.Link3" class="form-control text-dark">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body pt-4">
+                            <div class="text-end">
+                                <a class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ExtralargeModal"><i class="fa-solid fa-plus"></i> Thêm sản phẩm</a>
+                                <button class="btn btn-primary me-2" type="submit" ng-click="submit()"><i class="fa-solid fa-check"></i> Hoàn tất</button>
+                                <a href="Index" class="btn-cancel btn bg-secondary text-white"><i class="fa-solid fa-backward"></i> Về danh sách</a>
+
+                            </div>
+                            <div ng-if="checkProduct" class="mt-4">
+                                <div class="order-details-items">
+                                    <table class="table-order-items table-product-selected rounded-2">
+                                        <thead>
+                                            <tr>
+                                                <th class="col name">Sản phẩm</th>
+                                                <th class="col originPrice">Giá gốc</th>
+                                                <th class="col">Giảm giá</th>
+                                                <th class="col">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr ng-repeat="item in listProConfirmed" class="product-{{$index}}" data-proid="{{item.ProId}}">
+                                                <td class="col name">
+                                                    <div class="order-product">
+                                                        <div class="order-product-photo">
+                                                            <img src="/Upload/Product/{{item.ProId}}/{{item.firstImage}}" alt="">
+                                                        </div>
+                                                        <div class="order-product-details">
+                                                            <div class="order-product-name">
+                                                                {{item.ProName}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="col originPrice">{{item.Price | number: 0}}đ</td>
+                                                <td class="col">
+                                                    {{item.DiscountPrice | number: 0}}đ
+                                                </td>
+                                                <td class="col"><a class="btn-delete" ng-click="deleteProductSelect($index)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <div class="modal fade" id="ExtralargeModal" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chọn sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="search-form d-flex align-items-center position-relative">
+                        <input type="search" name="query" class="search-product w-100" ng-model="searchText" ng-change="getPage(1)" placeholder="Nhập tên để tìm kiếm" title="Enter search keyword">
+                        <button type="submit" title="Search">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                    <div class="order-details-items mt-4">
+                        <table class="table-order-items rounded-2">
+                            <thead>
+                                <tr>
+                                    <th width="5%"></th>
+                                    <th class="col" style="width:50%;">Sản phẩm</th>
+                                    <th class="col" style="width:15%">Giá</th>
+                                    <th class="col" style="width:15%">Giảm Giá</th>
+                                    <th class="col" style="width:15%;">Kho</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-app>
+                                <!-- ngRepeat: item in Order.OrderDetailDTOs -->
+                                <tr dir-paginate="item in productList | itemsPerPage: pageSize" total-items="totalCount">
+                                    <td>
+                                        <input type="checkbox" ng-model="item.Check" ng-click="selectProduct(item)" name="name" style="width:17px;height:17px;cursor:pointer" />
+                                    </td>
+                                    <td class="col">
+                                        <div class="order-product">
+                                            <div class="order-product-photo">
+                                                <img src="/Upload/Product/{{item.ProId}}/{{item.firstImage}}" alt="">
+                                            </div>
+                                            <div class="order-product-details">
+                                                <div class="order-product-name">
+                                                    {{item.ProName}}
+                                                </div>
+                                                <p>Mã: {{item.ProId}}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col">{{item.Price | number: 0}}đ</td>
+                                    <td class="col">{{item.DiscountPrice | number: 0}}đ</td>
+                                    <td class="col">{{item.TotalQty}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination sortPagiBar ms-auto">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+

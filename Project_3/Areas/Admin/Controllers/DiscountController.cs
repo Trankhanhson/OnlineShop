@@ -16,6 +16,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class DiscountController : BaseController
     {
         // GET: Admin/Discount
+        [HasCredential(RoleID = "VIEW_DISCOUNT")]
         public ActionResult Index()
         {
             return View();
@@ -71,7 +72,7 @@ namespace Project_3.Areas.Admin.Controllers
             int total = 0;
             foreach (var item in list)
             {
-                total += item.Quantity.Value;
+                total += item.Quantity.Value - item.Ordered.Value;
             }
             return total;
         }
@@ -106,6 +107,7 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         // GET: Admin/Discount/Create
+        [HasCredential(RoleID = "ADD_DISCOUNT")]
         public ActionResult Create()
         {
             return View();
@@ -137,6 +139,7 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         // GET: Admin/Discount/Edit/5
+        [HasCredential(RoleID = "EDIT_DISCOUNT")]
         public ActionResult Edit(int id)
         {
             ViewBag.Id = id;
@@ -163,6 +166,7 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [HasCredential(RoleID = "DELETE_DISCOUNT")]
         public ActionResult Delete(int id)
         {
             try

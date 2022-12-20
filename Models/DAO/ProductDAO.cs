@@ -79,7 +79,7 @@ namespace Models
             _dbContext.SaveChanges();
         }
 
-        public bool Edit(Product product)
+        public bool Edit(Product product, List<ProductVariation> variations)
         {
             try
             {
@@ -90,6 +90,42 @@ namespace Models
                 p.ProCatId = product.ProCatId;
                 p.ImportPrice = product.ImportPrice;
                 p.Price = product.Price;
+
+                var oldVariation = p.ProductVariations;
+                List<ProductVariation> listAdd = new List<ProductVariation>();
+                List<ProductVariation> listRemove = new List<ProductVariation>();
+
+                //Tìm các biến thể bị xóa => danh sách cũ có, mới không có
+                foreach(var o in oldVariation)
+                {
+                    ProductVariation pv = variations.Where(n => n.ProSizeID == o.ProSizeID && n.ProColorID == o.ProColorID).FirstOrDefault();
+                    //Phần tử cũ không tồn tại trong danh sách mới
+                    if(pv == null)
+                    {
+                        listRemove.Add(o);
+                    }
+                }
+
+                //Tìm các biến thể sẽ được thêm => danh sách cũ có, mới không có
+                foreach (var n in variations)
+                {
+                    ProductVariation po = oldVariation.Where(o=>o.ProColorID == n.ProColorID && o.ProSizeID == n.ProSizeID).FirstOrDefault();
+                    //phẩn tử mới không tồn tại trong danh sách cũ
+                    if (po == null)
+                    {
+                        n.Ordered = 0;
+                        listAdd.Add(n);
+                    }
+                }
+
+                if(listRemove.Count > 0)
+                {
+                    _dbContext.ProductVariations.RemoveRange(listRemove);
+                }
+                if(listAdd.Count > 0)
+                {
+                    _dbContext.ProductVariations.AddRange(listAdd);
+                }
                 _dbContext.SaveChanges();
                 return true;
             }

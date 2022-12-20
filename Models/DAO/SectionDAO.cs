@@ -16,7 +16,7 @@ namespace Models.DAO
             _dbcontext = new ClothesShopEntities();
         }
 
-        public List<Section> getSectionOfList(int PageId)
+        public List<Section> getSectionOfPage(int PageId)
         {
             return _dbcontext.Sections.Where(s => s.PageId == PageId).ToList();
         }
@@ -60,25 +60,25 @@ namespace Models.DAO
             _dbcontext.SaveChanges();
         }
 
-        public bool Delete(int id)
+        public void Delete(Section section)
         {
-            try
-            {
-                var section = _dbcontext.Sections.Find(id);
                 _dbcontext.ProductSections.RemoveRange(section.ProductSections);
                 _dbcontext.Sections.Remove(section);
-                _dbcontext.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+        }
+
+        public void SaveChange()
+        {
+            _dbcontext.SaveChanges();
         }
 
         public Section getById(int id)
         {
             return _dbcontext.Sections.Find(id);
+        }
+
+        public string getPageName(int id)
+        {
+            return _dbcontext.Pages.Find(id).PageName;
         }
 
         public List<Product> getProBySection(int id)

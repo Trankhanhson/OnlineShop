@@ -13,6 +13,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class VoucherController : BaseController
     {
         // GET: Admin/Voucher
+        [HasCredential(RoleID = "VIEW_VOUCHER")]
         public ActionResult Index()
         {
             return View();
@@ -32,7 +33,6 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         // POST: Admin/Voucher/Create
-
         [HttpPost]
         public JsonResult Create(Voucher Voucher)
         {
@@ -74,6 +74,7 @@ namespace Project_3.Areas.Admin.Controllers
             }
 
         }
+
         // POST: Admin/Voucher/Delete/5
         [HttpPost]
         public ActionResult Delete(int id)

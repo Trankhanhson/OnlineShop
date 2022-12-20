@@ -34,8 +34,8 @@
             <thead style="background-color: #333f48; color:white;">
                 <tr>
                     <th class="col item">Sản phẩm</th>
-                    <th class="col">Giá tiền</th>
-                    <th class="col">Giảm giá</th>
+                    <th class="col">Giá gốc</th>
+                    <th class="col">Giá giảm</th>
                     <th class="col">Số lượng</th>
                     <th class="col">Tổng tiền</th>
                 </tr>
@@ -62,7 +62,16 @@
                         <td class="col ">
                             <span class="price">@item.Price</span>
                         </td>
-                        <td class="col "><span class="price">@item.DiscountPrice</span></td>
+                        <td class="col ">
+                            @if (item.DiscountPrice == 0)
+                            {
+                                <span class="price">@item.Price</span>
+                            }
+                            else
+                            {
+                                <span class="price">@item.DiscountPrice</span>
+                            }
+                        </td>
                         <td class="col">
                             @item.Quantity
                         </td>

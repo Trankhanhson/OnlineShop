@@ -7,6 +7,7 @@ using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.EnterpriseServices;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -19,6 +20,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class ProductController : BaseController
     {
         // GET: Admin/Product
+        [HasCredential(RoleID = "VIEW_PRODUCT")]
         public ActionResult Index()
         {
             return View();
@@ -54,7 +56,7 @@ namespace Project_3.Areas.Admin.Controllers
 
                 }).ToList();
                 var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
-                products = products.Where(p => p.Slug.Contains(a)).ToList();
+                products = products.Where(p => MethodCommnon.ToUrlSlug(p.ProName).Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
                 //Convert to Json
                 result = JsonConvert.SerializeObject(products);
                 check = true;
@@ -148,6 +150,7 @@ namespace Project_3.Areas.Admin.Controllers
 
 
         // GET: Admin/Product/Create
+        [HasCredential(RoleID = "ADD_PRODUCT")]
         public ActionResult Create()
         {
             //Danh sách danh mục
@@ -192,6 +195,7 @@ namespace Project_3.Areas.Admin.Controllers
         }
 
         // GET: Admin/Product/Edit/5
+        [HasCredential(RoleID = "EDIT_PRODUCT")]
         public ActionResult Edit(long id)
         {
             //các danh sách dùng để select
@@ -207,23 +211,61 @@ namespace Project_3.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult Edit(Product product, List<ProductVariation> listVariation)
         {
+            bool check = true;
+            string message = "";
             try
             {
                 ProductDAO productDAO = new ProductDAO();
-                ProductImagesDAO productImagesDAO = new ProductImagesDAO();
                 ProductVariationDAO productVariationDAO = new ProductVariationDAO();
-                if (productDAO.Edit(product)) 
+                ProductImagesDAO productImgDAO = new ProductImagesDAO();
+                check = productDAO.Edit(product, listVariation);
+                if (check)
                 {
-                    productVariationDAO.Edit(listVariation);
+                    //xóa các ảnh theo màu bị xóa trên giao diện
+                    var listOldImage = productImgDAO.getByIdPro(product.ProId);
+                    var listDeleteProImg = new List<ProductImage>();
+                    foreach(var image in listOldImage)
+                    {
+                        var vari = listVariation.Where(pv => pv.ProColorID == image.ProColorID).FirstOrDefault();
+
+                        //trong danh sách không còn màu này nữa => đã xóa các biến thể của màu này
+                        if(vari == null)
+                        {
+                            string pathDelete = "~/Upload/Product/" + product.ProId + "/" + image.ProColorID;
+                            //xóa các file ảnh của màu này
+                            for(int i=0;i <= 5; i++)
+                            {
+                                string strPhysicalFolder = Server.MapPath(pathDelete + i + ".jpg");
+
+                                if (System.IO.File.Exists(strPhysicalFolder))
+                                {
+                                    System.IO.File.Delete(strPhysicalFolder);
+                                }
+                            }
+                            listDeleteProImg.Add(image);
+                        }
+                    }
+                    if(listDeleteProImg.Count > 0)
+                    {
+                        productImgDAO.DeleteRange(listDeleteProImg);
+                    }
+
+                    message = "Sửa sản phẩm thành công";
+                }
+                else
+                {
+                    message = "Xảy ra lỗi vì bạn đã xóa biến thể được dùng ở nơi khác";
                 }
             }
             catch
             {
-
+                check = false;
             }
             return Json(new
             {
-                Proid = product.ProId
+                Proid = product.ProId,
+                check = check,
+                message = message
             });
         }
 
@@ -372,6 +414,13 @@ namespace Project_3.Areas.Admin.Controllers
 
             ProductImage oldProImg = productsDAO.getByKey(productImage.ProID, productImage.ProColorID);
 
+            //Thêm một ProductImage mới
+            if(oldProImg == null)
+            {
+                UploadImg(ProId, ProColorId, file, file1, file2, file3, file4, file5);
+                return "";
+            }
+
             //tạo đường dẫn có mục là idproduct
             var _path = Server.MapPath("~/Upload/Product/" + ProId + "/");
             if (!Directory.Exists(_path))
@@ -380,7 +429,6 @@ namespace Project_3.Areas.Admin.Controllers
             }
 
             //lưu ảnh bằng cách ProColorId + số ảnh mấy
-            
             if (file != null) //nếu người dùng  upload file mới
             {
                 //Xóa ảnh cũ trong folder

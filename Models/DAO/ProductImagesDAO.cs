@@ -51,7 +51,17 @@ namespace Models
         public void Delete(long ProId)
         {
             var list = _dbContext.ProductImages.Where(x => x.ProID == ProId).ToList();
-            _dbContext.ProductImages.RemoveRange(list);
+            if(list.Count > 0)
+            {
+                _dbContext.ProductImages.RemoveRange(list);
+                _dbContext.SaveChanges();
+            }
+        }
+        
+        public void DeleteRange(List<ProductImage> productImages)
+        {
+
+            _dbContext.ProductImages.RemoveRange(productImages);
             _dbContext.SaveChanges();
         }
     }

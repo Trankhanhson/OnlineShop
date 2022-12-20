@@ -74,24 +74,6 @@ namespace Models
                 return false;
             }
         }
-
-        public bool Edit(List<ProductVariation> variations)
-        {
-            try
-            {
-                var proId = variations[0].ProId;
-                var oldVariations = _dbContext.ProductVariations.Where(x => x.ProId == proId).ToList();
-                _dbContext.ProductVariations.RemoveRange(oldVariations); //xóa các biến thê cũ
-                _dbContext.ProductVariations.AddRange(variations); //thêm danh sách biến thể mới
-                _dbContext.SaveChanges();
-                return true;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
         
         public ProductVariation getByForeignKey(long ProId,int ProColorId,int ProSizeId)
         {

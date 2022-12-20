@@ -16,6 +16,7 @@ namespace Project_3.Areas.Admin.Controllers
     {
         private FeedbackDAO feedbackDAO = new FeedbackDAO();
         // GET: Admin/Feedback
+        [HasCredential(RoleID = "VIEW_FEEDBACK")]
         public ActionResult Index()
         {
             return View();

@@ -4,32 +4,50 @@ userApp.controller("UserController", UserController);
 
 function UserController($scope, $http) {
 
+    $scope.maxSize = 3;
+    $scope.totalCount = 0;
+    $scope.searchText = ""
+    $scope.pageSize = "5"
 
-    /** Lấy danh sách category*/
-    $http.get("/Admin/User/getAllData").then(function (res) {
-        $scope.listUser = JSON.parse(res.data)
-    }, function (error) {
-        alert("failed")
-    })
+
+    $scope.getPage = function (newPage) {
+        $scope.pageNumber = newPage
+        /** Lấy danh sách category*/
+        $http.get("/Admin/User/getPageData", {
+            params: { searchText: $scope.searchText, pageNumber: $scope.pageNumber, pageSize: $scope.pageSize }
+        }).then(function (res) {
+            let pageData = JSON.parse(res.data)
+
+            $scope.listUser = pageData.Data
+            $scope.totalCount = pageData.TotalCount
+        }, function (error) {
+            alert("failed")
+        })
+    }
+    $scope.getPage(1)
 
     /**Thêm danh mục */
-
     //khi người dùng nhấn thêm
     $scope.Add = function () {
         $scope.user = null
-        
     }
 
     //khi người dung nhấn lưu thêm mới danh mục
     $scope.SaveAdd = function (closeOrNew) {
         if ($scope.createForm.$valid) {
+            $scope.checkConfirm = $scope.user.Password == $scope.comfirmPassword
+            if ($scope.checkConfirm == false) {
+                $("#errorToast .text-toast").text("Xác nhân mật khẩu không trùng khớp")
+                $("#errorToast").toast("show")
+                return false
+            }
             $http({
                 method: "POST",
                 url: "/Admin/User/Create",
                 datatype: 'Json',
                 data: { user: $scope.user }
             }).then(function (res) {
-                if (res.data.message) {
+                if (res.data.check) {
                     $scope.listUser.push(res.data.u) //hiển thị thêm đối tượng vừa thêm
 
                     //nếu người dùng chỉ nhấn lưu
@@ -42,11 +60,11 @@ function UserController($scope, $http) {
                     }
 
                     //hiển thị thông báo thành công
-                    $("#successToast .text-toast").text("Thêm nhân viên thành công")
+                    $("#successToast .text-toast").text(res.data.message)
                     $("#successToast").toast("show")
                 }
                 else {
-                    $("#errorToast .text-toast").text("Thêm thất bại")
+                    $("#errorToast .text-toast").text(res.data.message)
                     $("#errorToast").toast("show")
                 }
             })
@@ -60,11 +78,18 @@ function UserController($scope, $http) {
 
     $scope.Edit = function (u, index) {
         //nếu gán thẳng thì nó sẽ thay đổi luôn ở view trong khi chưa sửa
-        $scope.user = { UserID: u.UserID, Name: u.Name, UserName: u.UserName, Password: u.Password, UserAdress: u.UserAdress, UserPhone: u.UserPhone, Status: u.Status }
+        $scope.user = { UserID: u.UserID, Name: u.Name, UserName: u.UserName, UserAdress: u.UserAdress, GroupId: JSON.stringify(u.GroupId), UserPhone: u.UserPhone, Status: u.Status }
+        $scope.comfirmPassword = null
         indexEdit = index
     }
 
     $scope.SaveEdit = function () {
+        $scope.checkConfirm = $scope.user.Password == $scope.comfirmPassword
+        if ($scope.checkConfirm == false) {
+            $("#errorToast .text-toast").text("Xác nhân mật khẩu không trùng khớp")
+            $("#errorToast").toast("show")
+            return false
+        }
         if ($scope.editForm.$valid) {
             $http({
                 method: "POST",
@@ -72,15 +97,15 @@ function UserController($scope, $http) {
                 datatype: 'Json',
                 data: { user: $scope.user }
             }).then(function (res) {
-                if (res.data) {
+                if (res.data.check) {
                     //Tìm phần tử vừa được sửa trong danh sách
                     var newUser = $scope.user
                     $scope.listUser.splice(indexEdit, 1, newUser)
-                    $("#successToast .text-toast").text("Sửa nhân viên thành công")
+                    $("#successToast .text-toast").text(res.data.message)
                     $("#successToast").toast("show") //hiển thị thông báo thành công
                 }
                 else {
-                    $("#errorToast .text-toast").text("Sửa thất bại")
+                    $("#errorToast .text-toast").text(res.data.message)
                     $("#errorToast").toast("show") //hiển thị thông báo thành công
                 }
                 $(".btn-close").trigger('click') //đóng modal sửa
@@ -131,31 +156,5 @@ function UserController($scope, $http) {
                 }
             })
         }
-    }
-
-    //sắp xếp
-    $scope.sortColumn = 'Name'
-    $scope.reverse = 'false'
-    $scope.SortData = function (column) {
-        if ($scope.sortColumn == column) {
-            $scope.reverse = !$scope.reverse
-        }
-        else {
-            $scope.reverse = false //sort increase
-        }
-        $scope.sortColumn = column
-    }
-    $scope.getSortClass = function (column) {
-        //khi reverse thay doi thi nd-class dc kich hoat
-        if ($scope.sortColumn == column) {
-            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
-        }
-        return ''
-    }
-
-    //paging
-    $scope.pageSize = "5"
-    $scope.getPageSize = function (pageSize) {
-        $scope.pageSize = pageSize
     }
 }

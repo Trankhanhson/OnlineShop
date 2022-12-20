@@ -62,8 +62,8 @@ function addValue(e) {
         if (checkExist != true) {
             //thêm 1 size vào box nếu value chưa tồn tại
             $(".wrap-size").prepend(`<span class="method-values" data-idSize="${idSize}">${valueInput}<span class="method-remove" ><i class="fa-solid fa-xmark"></i></span></sp>`)
+            addVariation(idSize, valueInput, "size")
         }
-        addVariation(idSize, valueInput, "size")
     }
 
 }

@@ -46,11 +46,18 @@
         dataType: "json",
         type: "POST",
         success: function (response) {
-            for (var i = 0; i < listColorId.length; i++) {
-                UploadImgToServer(listColorId[i], response.Proid) //upload ảnh mới của product
+            if (response.check) {
+                for (var i = 0; i < listColorId.length; i++) {
+                    UploadImgToServer(listColorId[i], response.Proid) //upload ảnh mới của product
+                }
+                location.reload()
+                $("#successToast .text-toast").text(response.message)
+                $("#successToast").toast("show") //hiển thị thông báo thành công
             }
-            $("#successToast .text-toast").text("Đã cập nhật sản phẩm thành công")
-            $("#successToast").toast("show") //hiển thị thông báo thành công
+            else {
+                $("#errorToast .text-toast").text(response.message)
+                $("#errorToast").toast("show") //hiển thị thông báo thành công
+            }
         }
     })
 }
@@ -100,10 +107,6 @@ function UploadImgToServer(idColor, idProduct) {
             processData: false, //không xử lý dữ liệu
             data: formData,
             success: function (urlImage) {
-                $.ajax({
-                    type: 'GET',
-                    url: '/Admin/Product/Index'
-                })
             },
             error: function (err) {
                 alert('có lỗi khi upload: ' + err.statusText);

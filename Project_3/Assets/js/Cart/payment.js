@@ -292,8 +292,7 @@ function payment() {
                     location.href = '/Cart/InfoBill/' + res;
                 }
                 else {
-                    var bsAlert = new bootstrap.Toast($(".toast-errorClient"));//inizialize it
-                    bsAlert.show();//show it
+                    alertError("Dã có lỗi xảy ra")
                 }
             }
         })

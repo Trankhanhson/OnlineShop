@@ -50,6 +50,14 @@ namespace Models.DAO
             return orders;
         }
 
+        public void Delete(long id)
+        {
+            Order o = db.Orders.Find(id);
+            db.OrderDetails.RemoveRange(o.OrderDetails);
+            db.Orders.Remove(o);
+            db.SaveChanges();
+        }
+
         /// <summary>
         /// Trả về status của order
         /// </summary>
@@ -66,7 +74,7 @@ namespace Models.DAO
         public Order CancelOrder(long id)
         {
             Order o = db.Orders.Find(id);
-            o.StatusOrderId = 5;
+            o.StatusOrderId = 4;
             var productVariations = db.ProductVariations;
             foreach (var item in o.OrderDetails)
             {

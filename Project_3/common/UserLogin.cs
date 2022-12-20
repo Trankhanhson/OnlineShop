@@ -11,6 +11,7 @@ namespace Project_3.common
         {
 
             public long UserID { get; set; }
+            public string Name { get; set; }
             public string UserName { get; set; }
             public int GroupId { get; set; }
         }

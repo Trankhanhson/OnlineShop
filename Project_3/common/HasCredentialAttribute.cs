@@ -18,7 +18,7 @@ namespace Project_3.common
 
             List<string> privilegeLevels = (List<string>)HttpContext.Current.Session[CommonConstants.SESSION_CREDENTIALS]; // Call another method to get rights of the user from DB
 
-            if (privilegeLevels.Contains(this.RoleID) || session.GroupId == 1)
+            if (privilegeLevels.Contains(this.RoleID) || session.GroupId == 1 || session.GroupId == 2)
             {
                 return true;
             }

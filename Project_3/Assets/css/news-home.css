@@ -1,0 +1,50 @@
+.video-item__img img{
+    position: relative;
+    width: 100%; 
+}
+.video-item__img::before{
+    content: "";
+    display: inline-block;
+    background-image: url(../img/play.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 60px;
+    height: 60px;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease 0.2s;
+}
+.video-item__img:hover::before{
+    background-color: #da291c;
+}
+.video-img__name{
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 15px;
+    padding-right: 20px;
+}
+.video-img__name:hover{
+    color: #da291c;
+}
+
+.video-item{
+    padding: 0 5px !important;
+}
+
+.list-video{
+    margin: 0 -5px;
+}
+
+.news-item{
+    padding: 0 8px;
+}
+
+.list-news{
+    margin: 0 -8px;
+}

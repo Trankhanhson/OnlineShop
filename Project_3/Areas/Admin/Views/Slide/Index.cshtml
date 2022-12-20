@@ -15,7 +15,7 @@
     }
 
 <main id="main" class="main">
-
+    <h4 class="fw-bold">TDanh sách slide</h4>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -44,14 +44,14 @@
                                         <td style="width:20%">
                                             @if (item.Image.Value)
                                             {
-                                                <img src="~/Upload/Slide/@(item.PageId).jpg" width="100px"/>
+                                                <img src="~/Upload/Slide/@(item.PageId).jpg" width="100px" />
                                             }
                                             else
                                             {
-                                                <img src="~/Upload/no-img.png"  width="80px"/>
+                                                <img src="~/Upload/no-img.png" width="80px" />
                                             }
                                         </td>
-                                        <td  style="width:45%">
+                                        <td style="width:45%">
                                             <p class="p-0 oneline w-100">
                                                 @item.Link
                                             </p>
@@ -87,7 +87,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @using (Html.BeginForm("Edit", "Slide", FormMethod.Post, new {@enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("Edit", "Slide", FormMethod.Post, new { @enctype = "multipart/form-data" }))
                     {
                         <div class="form-horizontal">
                             <input type="hidden" name="SlideId" id="SlideId" value="" />

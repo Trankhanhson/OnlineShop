@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Data.Entity;
 
 namespace Models.DAO
 {
@@ -20,9 +20,14 @@ namespace Models.DAO
             _dbContext = new ClothesShopEntities();
         }
 
+        public List<UserGroup> GetUserGroups()
+        {
+            return _dbContext.UserGroups.Where(u=>u.GroupId!=1).ToList();
+        }
+
         public List<User> getAll()
         {
-            _dbContext.Configuration.LazyLoadingEnabled = false;
+            _dbContext.Configuration.LazyLoadingEnabled = true;
             List<User> users = _dbContext.Users.ToList();
             return users;
         }
@@ -54,23 +59,19 @@ namespace Models.DAO
             return u;
         }
 
-        public bool Update(User entity)
+        public void Update(User entity)
         {
-            try
+            User user = _dbContext.Users.Find(entity.UserID);
+            user.Name = entity.Name;
+            user.UserAdress = entity.UserAdress;
+            user.UserPhone = entity.UserPhone;
+            user.UserName = entity.UserName.Trim();
+            user.GroupId = entity.GroupId;
+            if (entity.Password.Trim() != "")
             {
-                User user = _dbContext.Users.Find(entity.UserID);
-                user.Name = entity.Name;
-                user.UserAdress = entity.UserAdress;
-                user.UserPhone=entity.UserPhone;
-                user.UserName = entity.UserName;
                 user.Password = entity.Password;
-                _dbContext.SaveChanges();
-                return true;
             }
-            catch
-            {
-                return false;
-            }
+            _dbContext.SaveChanges();
         }
 
         public bool? ChangeSattus(int id)
@@ -150,6 +151,31 @@ namespace Models.DAO
                     }
                 }
                 
+            }
+        }
+
+        public bool ExistUserName(string userName)
+        {
+            var u = _dbContext.Users.Where(us => us.UserName == userName).FirstOrDefault();
+            if (u != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool ExistUserNameEdit(User user)
+        {
+            var u = _dbContext.Users.Where(us => us.UserName == user.UserName && us.UserID != user.UserID).FirstOrDefault();
+            if (u != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

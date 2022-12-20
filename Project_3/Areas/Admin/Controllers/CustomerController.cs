@@ -13,6 +13,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class CustomerController : Controller
     {
         // GET: Admin/Customer
+        [HasCredential(RoleID = "VIEW_CUSTOMER")]
         public ActionResult Index()
         {
             return View();

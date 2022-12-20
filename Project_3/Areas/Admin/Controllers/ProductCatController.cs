@@ -17,6 +17,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class ProductCatController : BaseController
     {
         // GET: Admin/ProductCat
+        [HasCredential(RoleID = "VIEW_PRODUCTCATEGORY")]
         public ActionResult Index()
         {
             //Danh sách danh mục

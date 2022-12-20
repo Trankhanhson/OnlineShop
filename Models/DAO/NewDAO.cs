@@ -18,9 +18,18 @@ namespace Models.DAO
 
         public List<New> getAll()
         {
-            _dbContext.Configuration.ProxyCreationEnabled = false;
             List<New> News = _dbContext.News.Include(x=>x.User).ToList();
             return News;
+        }
+
+        public List<New> getAllActive()
+        {
+            return _dbContext.News.Where(n=>n.Status == true).ToList();
+        }
+
+        public List<New> take10Reccent()
+        {
+            return _dbContext.News.Where(n => n.Status == true).OrderByDescending(d => d.PublicDate).Take(10).ToList();
         }
 
         public New getById(int id)

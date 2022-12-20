@@ -19,6 +19,7 @@ namespace Project_3.Model
         public string PaymentType { get; set; }
         public Nullable<int> StatusOrderId { get; set; }
         public Nullable<int> MoneyTotal { get; set; }
+        public int TotalOriginPrice { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
         public string Note { get; set; }
         public int StatusOderId { get; set; }

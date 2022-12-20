@@ -31,6 +31,7 @@ namespace Project_3.Areas.Admin.Controllers
                     var user = dao.getByUserName(account.UserName);
                     var userSession = new UserLogin();
                     userSession.UserName = user.UserName;
+                    userSession.Name = user.Name;
                     userSession.UserID = user.UserID;
                     userSession.GroupId = user.GroupId.Value;
                     var listCredential = dao.GetListCredential(user);
@@ -61,6 +62,15 @@ namespace Project_3.Areas.Admin.Controllers
                 }
             }
             return View("Index");
+        }
+
+        public ActionResult Logout()
+        {
+            if (Session[CommonConstants.USER_SESSION] != null)
+            {
+                Session[CommonConstants.USER_SESSION] = null;
+            }
+            return RedirectToAction("Index");
         }
     }
 }

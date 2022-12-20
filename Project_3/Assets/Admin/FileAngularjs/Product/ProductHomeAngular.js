@@ -27,4 +27,39 @@ function ProductController($scope, $http) {
         $(`.row-variation-${proId}`).toggle()
         $(`.row-product-${proId}`).toggleClass("active")
     }
+
+    $scope.ChangeStatus = function (event, id) {
+        event.stopPropagation()
+        if (confirm("Bạn có chắc chắn muốn đổi trạng thái")) {
+            $http.get("/Admin/Product/ChangeStatus/" + id).then(function (res) {
+                if (res.data) {
+                    $("#successToast .text-toast").text("Đã cập nhật trạng thái thành công")
+                    $("#successToast").toast("show")
+                }
+                else {
+                    $("#errorToast .text-toast").text("Cập nhật trạng thái thất bại")
+                    $("#errorToast").toast("show")
+                }
+            })
+            
+        }
+    }
+
+    $scope.deleteProduct = function (id) {
+        if (confirm("Bạn có chắc chắn muốn xóa")) {
+            $http("/Admin/Product/Delete" + id).then(function (res) {
+                if (res.data.check) {
+                    $("#successToast .text-toast").text("Đã xóa thành công")
+                    $("#successToast").toast("show") //hiển thị thông báo thành công
+                    //remove khỏi view
+                    $(`#${id}`).remove()
+                    $(`.row-variation-${id}`).remove()
+                }
+                else {
+                    $("#errorToast .text-toast").text("Sản phẩm này đang được dùng ở nơi khác")
+                    $("#errorToast").toast("show")
+                }
+            })
+        }
+    }
 }

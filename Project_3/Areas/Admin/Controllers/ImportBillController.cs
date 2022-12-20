@@ -16,6 +16,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class ImportBillController : BaseController
     {
         // GET: Admin/ImportBill
+        [HasCredential(RoleID = "VIEW_IMPORTBILL")]
         public ActionResult Index()
         {
             return View();
@@ -42,6 +43,7 @@ namespace Project_3.Areas.Admin.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HasCredential(RoleID = "ADD_IMPORTBILL")]
         public ActionResult Create()
         {
             ViewBag.listUser = new UserDAO().getAll();

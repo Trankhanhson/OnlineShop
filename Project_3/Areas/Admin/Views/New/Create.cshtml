@@ -10,7 +10,6 @@
 
     <!--để ckfinder trên editor-->
     <script src="~/Assets/Plugin/ckeditor/ckeditor.js"></script>
-    <script src="~/Assets/Plugin/ckfinder/ckfinder.js"></script>
     <script src="~/Assets/Admin/FileAngularjs/New/CreateNewAngularjs.js"></script>
 
     <script>
@@ -19,7 +18,7 @@
 }
 
 <main id="main" class="main" ng-app="NewApp" ng-controller="NewController">
-
+    <h4 class="fw-bold">Thêm bài viết</h4>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -36,17 +35,8 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Nhân viên</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-select" id="select-cat" aria-label="Default select example" ng-model="New.UserID">
-                                            @foreach (var item in ViewBag.ListUser)
-                                            {
-                                                <option value="@item.UserID">@item.Name</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
+                                @{ var user = Session["USER_SESSION"] as Project_3.common.UserLogin;}
+                                <input type="hidden" name="" id="UserID" value="@user.UserID" />
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">Ảnh</label>
                                     <div class="col-sm-10">
@@ -60,12 +50,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary">Đóng</button>
+                                <button class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
+                                <a class="btn btn-primary" href="/Admin/New/Index">Trang chủ</a>
+                            </div>
                         </form>
-                        <div>
-                            <button type="button" class="btn btn-secondary">Đóng</button>
-                            <button class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
-                            <a class="btn btn-primary" href="/Admin/New/Index">Trang chủ</a>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -154,16 +154,9 @@ discountApp.controller("discountController", function ($scope, $http) {
     $scope.checkDate = function (startDate, endDate) {
         checkDate = true
         $scope.errMessage = '';
-        var curDate = new Date();
 
         if (new Date(startDate) > new Date(endDate)) {
             $("#errorToast .text-toast").text("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc")
-            $("#errorToast").toast("show")
-            checkDate = false
-            return false;
-        }
-        if (new Date(startDate) < curDate) {
-            $("#errorToast .text-toast").text("Thời gian bắt đầu phải lớn hơn thời gian hiện tại")
             $("#errorToast").toast("show")
             checkDate = false
             return false;
@@ -183,8 +176,7 @@ discountApp.controller("discountController", function ($scope, $http) {
                                 DiscountProductId: $scope.discountPro.DiscountProductId,
                                 ProId: value.ProId,
                                 Amount: value.Amount,
-                                TypeAmount: value.TypeAmount,
-                                MaxQuantityPerUser: value.MaxQuantityPerUser
+                                TypeAmount: value.TypeAmount
                             }
                             listDiscountDetail.push(discountDetail)
                         })
@@ -232,9 +224,6 @@ discountApp.controller("discountController", function ($scope, $http) {
                         else {
                             value.priceAfter = value.Price - value.Amount;
                         }
-                    }
-                    if ($scope.generalSetting.MaxQuantityPerUser != null) {
-                        value.MaxQuantityPerUser = $scope.generalSetting.MaxQuantityPerUser
                     }
                 })
             }

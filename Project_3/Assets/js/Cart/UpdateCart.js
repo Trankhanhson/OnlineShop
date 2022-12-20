@@ -196,8 +196,7 @@ function increaseQuantity(event, index) {
                 updateTotalPrice()
             }
             else {
-                $("#errorToast .text-toast").text("Đã vượt quá số lượng tồn kho của sản phẩm này")
-                $("#errorToast").toast("show")
+                alertError("Đã vượt quá số lượng tồn kho của sản phẩm này")
             }
         }
     })

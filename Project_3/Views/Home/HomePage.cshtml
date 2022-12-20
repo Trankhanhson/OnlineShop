@@ -1,4 +1,4 @@
-﻿@model List<Models.Framework.Product>
+﻿@model List<Models.Framework.Section>
 @{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -124,114 +124,134 @@
         </section>
 
         <!--Product-show-->
-        <section class="pt-lg-5 pt-4 pb-4">
-            <h2 class="section-heading">Style at home</h2>
-            <div class="row gx-3 mt-3">
-                <div class="col-lg-3 d-lg-block d-none pe-xl-4 pe-lg-2 pe-0 product-banner-slider">
-                    <img src="/Assets/img/list_image_tablet_third1650513698.png" alt="">
-                    <img src="/Assets/img/list_image_tablet1650513698.png" alt="">
-                    <img src="/Assets/img/list_image_tablet_second1650513698.png" alt="">
-
-                </div>
-                <div class="col-lg-9 col-12">
-                    <div class="product-slider">
-                        @foreach (var item in Model)
+        @foreach (var Section in Model)
+        {
+            <section class="pt-lg-5 pt-4 pb-4">
+                <h2 class="section-heading">@Section.Title</h2>
+                <div class="row gx-3 mt-3">
+                    <div class="col-lg-3 d-lg-block d-none pe-xl-4 pe-lg-2 pe-0 product-banner-slider">
+                        @if (Section.Image1.Value)
                         {
-                            <div class="product" data='{"ProId":"@item.ProId","ProName":"@item.ProName","Price":"@item.Price","DiscountPrice":"@item.DiscountPrice","Percent":@item.Percent}'>
-                                <div class="wrapActiveToFirstChild">
-                                    @foreach (var proImg in item.ProductImages)
-                                    {
-                                        <div data-id="@proImg.ProColorID" class="wrap-image addActiveItem">
-                                            <div class="product-img">
-                                                <a href="/Home/Detail/@item.ProId">
-                                                    <img src="/Upload/Product/@item.ProId/@proImg.Image" width="100%" alt="">
-                                                </a>
-                                                <div class="product-size-wrap">
-                                                    <div class="d-flex justify-content-center flex-wrap pt-3 wrapActiveToFirstChild">
-                                                        @foreach (var vairiation in item.ProductVariations)
-                                                        {
-                                                            if (vairiation.ProColorID == proImg.ProColorID)
-                                                            {
-                                                                if ((vairiation.Quantity - vairiation.Ordered) > 0)
-                                                                {
-                                                                    <div class="product-size addActiveItem" onclick="addActive(event)" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                            <a href="@Section.Link1">
+                                <img src="~/Upload/Section/@(Section.SectionId)/1.jpg" alt="">
+                            </a>
+                            
+                        }
+                        @if (Section.Image2.Value)
+                        {
+                            <a href="@Section.Link2">
+                                <img src="~/Upload/Section/@(Section.SectionId)/2.jpg" alt="">
+                            </a>
+                            
+                        }
+                        @if (Section.Image3.Value)
+                        {
+                            <a href="@Section.Link3">
+                                <img src="~/Upload/Section/@(Section.SectionId)/3.jpg" alt="">
+                            </a>
+                        }
 
-                                                                }
-                                                                else
+                    </div>
+                    <div class="col-lg-9 col-12">
+                        <div class="product-slider">
+                            @foreach (var item in Section.ProductSections)
+                            {
+                                <div class="product" data='{"ProId":"@item.Product.ProId","ProName":"@item.Product.ProName","Price":"@item.Product.Price","DiscountPrice":"@item.Product.DiscountPrice","Percent":@item.Product.Percent}'>
+                                    <div class="wrapActiveToFirstChild">
+                                        @foreach (var proImg in item.Product.ProductImages)
+                                        {
+                                            <div data-id="@proImg.ProColorID" class="wrap-image addActiveItem">
+                                                <div class="product-img">
+                                                    <a href="/Home/Detail/@item.Product.ProId">
+                                                        <img src="/Upload/Product/@item.Product.ProId/@proImg.Image" width="100%" alt="">
+                                                    </a>
+                                                    <div class="product-size-wrap">
+                                                        <div class="d-flex justify-content-center flex-wrap pt-3 wrapActiveToFirstChild">
+                                                            @foreach (var vairiation in item.Product.ProductVariations)
+                                                            {
+                                                                if (vairiation.ProColorID == proImg.ProColorID)
                                                                 {
-                                                                    <div class="product-size addActiveItem disabled-size" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                                                                    if ((vairiation.Quantity - vairiation.Ordered) > 0)
+                                                                    {
+                                                                        <div class="product-size addActiveItem" onclick="addActive(event)" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="product-size addActiveItem disabled-size" data-idSize="@vairiation.ProductSize.ProSizeID">@vairiation.ProductSize.NameSize</div>
+                                                                    }
                                                                 }
                                                             }
-                                                        }
+                                                        </div>
+                                                        <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
                                                     </div>
-                                                    <a class="product-btn-addCart bg-dark text-white d-inline-block p-2" onclick="addCart(this)" style="font-weight:500;font-size: 12px;cursor:pointer">THÊM VÀO GIỎ HÀNG</a>
+                                                    @if (item.Product.Percent != 0 && item.Product.Percent != null)
+                                                    {
+                                                        <span class="price-percent text-white">-@item.Product.Percent%</span>
+                                                    }
                                                 </div>
-                                                @if (item.Percent != 0 && item.Percent != null)
-                                                {
-                                                    <span class="price-percent text-white">-@item.Percent%</span>
-                                                }
-                                            </div>
-                                            <div class="product-color-list d-flex pt-3 pb-2">
-                                                @foreach (var color in item.ProductImages)
-                                                {
-                                                    if (color.ProColorID == proImg.ProColorID)
+                                                <div class="product-color-list d-flex pt-3 pb-2">
+                                                    @foreach (var color in item.Product.ProductImages)
                                                     {
-                                                        <div class="product-color active" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
-                                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
-                                                        </div>
+                                                        if (color.ProColorID == proImg.ProColorID)
+                                                        {
+                                                            <div class="product-color active" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                                <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor')" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="product-color" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
+                                                                <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
+                                                            </div>
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        <div class="product-color" onclick="changeProduct(event)" data-idColor="@color.ProColorID">
-                                                            <span style="background-image: url('/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor');" data-src="/Upload/ColorImage/@color.ProductColor.ProColorID/@color.ProductColor.ImageColor"></span>
-                                                        </div>
-                                                    }
-                                                }
+                                                </div>
                                             </div>
+                                        }
+                                    </div>
+                                    <a href="/Home/Detail/@item.Product.ProId" class="product-name">
+                                        @item.Product.ProName
+                                    </a>
+                                    @if (item.Product.DiscountPrice != 0 && item.Product.DiscountPrice != null)
+                                    {
+                                        <div class="d-flex mt-1">
+                                            <div class="curent-price price me-3">@item.Product.DiscountPrice</div>
+                                            <div class="curent-old price" data="">@item.Product.Price</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex mt-1">
+                                            <div class="curent-price price me-3">@item.Product.Price</div>
+
+                                        </div>
+                                    }
+                                    @if (item.Product.Liked == false || item.Product.Liked == null)
+                                    {
+                                        <div class="product-like" onclick="LikeProduct(this,@item.Product.ProId)">
+                                            <span>Yêu thích</span>
+                                            <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                            <i class="product-like-img2 fa-solid fa-heart"></i>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="product-like active" onclick="LikeProduct(this,@item.Product.ProId)">
+                                            <span>Yêu thích</span>
+                                            <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
+                                            <i class="product-like-img2 fa-solid fa-heart"></i>
                                         </div>
                                     }
                                 </div>
-                                <a href="/Home/Detail/@item.ProId" class="product-name">
-                                    @item.ProName
-                                </a>
-                                @if (item.DiscountPrice != 0 && item.DiscountPrice != null)
-                                {
-                                    <div class="d-flex mt-1">
-                                        <div class="curent-price price me-3">@item.DiscountPrice</div>
-                                        <div class="curent-old price" data="">@item.Price</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="d-flex mt-1">
-                                        <div class="curent-price price me-3">@item.Price</div>
+                            }
 
-                                    </div>
-                                }
-                                @if (item.Liked==false || item.Liked==null)
-                                {
-                                    <div class="product-like" onclick="LikeProduct(this,@item.ProId)">
-                                        <span>Yêu thích</span>
-                                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="product-like active" onclick="LikeProduct(this,@item.ProId)">
-                                        <span>Yêu thích</span>
-                                        <img class="product-like-img1" src="/Assets/img/heart-icon.svg" alt="">
-                                        <i class="product-like-img2 fa-solid fa-heart"></i>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </section>
+            </section>
+        }
 
 
         <!--new product-->

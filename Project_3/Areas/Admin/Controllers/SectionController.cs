@@ -17,6 +17,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class SectionController : BaseController
     {
         // GET: Admin/Section
+        [HasCredential(RoleID = "VIEW_SECTION")]
         public ActionResult Index()
         {
             return View();
@@ -25,7 +26,7 @@ namespace Project_3.Areas.Admin.Controllers
 
         public JsonResult getPageData(int PageId, string searchText, int pageNumber = 1, int pageSize = 5)
         {
-            List<Section> sections = new SectionDAO().getSectionOfList(PageId).Select(s=>new Section()
+            List<Section> sections = new SectionDAO().getSectionOfPage(PageId).Select(s=>new Section()
             {
                 SectionId = s.SectionId,
                 Title = s.Title,    
@@ -34,7 +35,8 @@ namespace Project_3.Areas.Admin.Controllers
             }).ToList();
             if (searchText.Trim() != "")
             {
-                sections = sections.Where(s=>MethodCommnon.ToUrlSlug(s.Title.Trim()).Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
+                searchText = searchText.ToLower();
+                sections = sections.Where(s=>MethodCommnon.ToUrlSlug(s.Title.ToLower()).Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
             }
 
             var pageData = Paggination.PagedResult(sections, pageNumber, pageSize);
@@ -58,6 +60,7 @@ namespace Project_3.Areas.Admin.Controllers
                 Slug = p.Slug,
                 DiscountPrice = 0,
                 firstImage = p.ProductImages.First().Image,
+                TotalQty = CountTotalQuantity(p.ProductVariations.ToList()),
                 Check = false
             }).ToList();
             listResult = getListDiscount(listResult);
@@ -71,17 +74,19 @@ namespace Project_3.Areas.Admin.Controllers
             int total = 0;
             foreach (var item in list)
             {
-                total += item.Quantity.Value;
+                total += item.Quantity.Value-item.Ordered.Value;
             }
             return total;
         }
 
+        [HasCredential(RoleID = "ADD_SECTION")]
         public ActionResult Create(int id)
         {
-            var list = new SectionDAO().getSectionOfList(id);
+            SectionDAO dao = new SectionDAO();
+            var list = dao.getSectionOfPage(id);
             ViewBag.length = list.Count;
             ViewBag.PageId = id;
-            ViewBag.PageName = list[0].Page.PageName;
+            ViewBag.PageName = dao.getPageName(id);
             return View();
         }
 
@@ -92,7 +97,7 @@ namespace Project_3.Areas.Admin.Controllers
             {
                 SectionDAO sectionDAO = new SectionDAO();
                 //nếu muốn thay thế vị trí của section cũ
-                var newDisplayOrder = sectionDAO.getSectionOfList(pageId).Count + 1;
+                var newDisplayOrder = sectionDAO.getSectionOfPage(pageId).Count + 1;
                 if (s.DisplayOrder != newDisplayOrder)
                 {
                     //chuyển vị trị của section bị thay thế về sau cùng
@@ -114,10 +119,11 @@ namespace Project_3.Areas.Admin.Controllers
             }
         }
 
+        [HasCredential(RoleID = "EDIT_SECTION")]
         public ActionResult Edit(int sectionId,int pageId)
         {
             ViewBag.Id = sectionId;
-            ViewBag.length = new SectionDAO().getSectionOfList(pageId).Count;
+            ViewBag.length = new SectionDAO().getSectionOfPage(pageId).Count;
             return View();
         }
         
@@ -168,6 +174,36 @@ namespace Project_3.Areas.Admin.Controllers
             catch
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HasCredential(RoleID = "DELETE_SECTION")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                SectionDAO dao = new SectionDAO();
+                //rearranging displayOrder
+                var section = dao.getById(id);
+                var sectionOfPage = dao.getSectionOfPage(section.PageId.Value);
+                if(sectionOfPage != null)
+                {
+                    foreach (var item in sectionOfPage)
+                    {
+                        if (item.DisplayOrder.Value > section.DisplayOrder.Value)
+                        {
+                            item.DisplayOrder = item.DisplayOrder - 1;
+                        }
+                    }
+                }
+                dao.Delete(section);
+                dao.SaveChange();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+
             }
         }
 

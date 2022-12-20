@@ -188,7 +188,7 @@ namespace Project_3.Controllers
                     orderDetailDAO.Insert(listOrderDetail);
                     productVariationDAO.editOrdered(listOrderDetail);
 
-                    if (o.VoucherId != 0)
+                    if (o.VoucherId != null)
                     {
                         VoucherDAO voucherDAO = new VoucherDAO();
                         voucherDAO.UseVoucher(o.VoucherId.Value);

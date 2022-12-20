@@ -6,14 +6,14 @@
 
 @section scripts{
 <script src="~/Scripts/dirPagination.js"></script>
-<script src="~/Assets/Admin/FileAngularjs/OrderAngular.js"></script>
+<script src="~/Assets/Admin/FileAngularjs/orderAngularj.js"></script>
 }
 
 @section styles{
     <link href="~/Assets/Admin/css/Order.css" rel="stylesheet" />
 }
-<main id="main" class="main" ng-app="OrderApp" ng-controller="OrderController" data-statusId="3">
-
+<main id="main" class="main" ng-app="OrderApp" ng-controller="OrderController" data-statusId="2">
+    <h4 class="fw-bold">Danh sách đơn hàng đang vận chuyển</h4>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -21,12 +21,12 @@
                     <div class="card-body pt-4">
                         <div class="text-end mb-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <input type="text" class="input-searchView me-3" ng-model="search.ReceivingPhone" placeholder="Tìm kiếm theo tên" />
-                                <select ng-model="pageSize" class="limitShow">
-                                    <option ng-click="getPageSize('5')" value="5">5</option>
-                                    <option ng-click="getPageSize('10')" value="10">10</option>
-                                    <option ng-click="getPageSize('15')" value="15">15</option>
-                                    <option ng-click="getPageSize('20')" value="20">20</option>
+                                <input type="text" class="input-searchView me-3" style="width:300px;" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo số điện thoại hoặc email" />
+                                <select ng-model="pageSize" ng-change="getPage(1)" class="limitShow">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
                                 </select>
                             </div>
                         </div>
@@ -37,33 +37,40 @@
                                     <th>
                                         Số điện thoại
                                     </th>
+                                    <th>Email</th>
                                     <th>
                                         Thời gian đặt
                                     </th>
                                     <th>
-                                        Chi tiết
+                                        Tùy chỉnh
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="category-wrap">
-                                <tr dir-paginate="o in OrderList | itemsPerPage: pageSize | filter: search">
+                                <tr dir-paginate="o in OrderList | itemsPerPage: pageSize" total-items="totalCount">
                                     <td>{{o.OrdID}}</td>
                                     <td>
                                         {{o.ReceivingPhone}}
                                     </td>
+                                    <td>{{o.ReceivingMail}}</td>
                                     <td>
-                                        {{o.OrderDate}}
+                                        {{o.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}
                                     </td>
                                     <td>
-                                        <a ng-click="ChangeStatus($index,o)" class="btn-tool" style=" background: #4bac4d;"><i class="fa-solid fa-check"></i></a>
-                                        <a class=" btn-tool bg-primary" ng-click="showDetail(o.OrdID)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
-                                        <a class="btn-delete btn-tool" ng-click="cancel($index,o)"><i class="fa-solid fa-trash" style="pointer-events:none;"></i></a>
+                                        <a ng-click="ChangeStatus($index,o)" title="Xác nhận" class="btn-tool" style=" background: #4bac4d;"><i class="fa-solid fa-check"></i></a>
+                                        <a class=" btn-tool bg-primary" title="Chi tiết" ng-click="showDetail(o.OrdID)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
+                                        <a class="btn-delete btn-tool" title="Hủy" ng-click="cancel($index,o)"><i class="fa-solid fa-ban" style="pointer-events:none;"></i></a>
 
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <dir-pagination-controls></dir-pagination-controls>
+                        <div class="pagination sortPagiBar">
+                            <dir-pagination-controls max-size="maxSize"
+                                                     boundary-links="true"
+                                                     direction-links="true"
+                                                     on-page-change="getPage(newPageNumber)"></dir-pagination-controls>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,7 +87,7 @@
                                     Chi tiết đơn hàng <span>#ĐH{{Order.OrdID}}</span>
                                 </h1>
                             </div>
-                            <div class="order-date"><span class="label">Ngày đặt hàng:</span> <span>{{Order.OrderDate}}</span></div> <span class="order-status" style="color: rgb(99, 177, 188);">{{Order.Status}}</span>
+                            <div class="order-date"><span class="label">Ngày đặt hàng:</span> <span>{{Order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</span></div> <span class="order-status" style="color: rgb(99, 177, 188);">{{Order.Status}}</span>
                         </div>
                         <div class="order-details-view">
                             <div class="row">
@@ -262,8 +269,8 @@
                                     <tr>
                                         <th class="col name">Sản phẩm</th>
                                         <th class="col qty">Số lượng</th>
-                                        <th class="col price">Giá tiền</th>
-                                        <th class="col price-sale">Giảm giá</th>
+                                        <th class="col">Giá gốc</th>
+                                        <th class="col price-sale">Giá giảm</th>
                                         <th class="col total">Tổng tiền</th>
                                     </tr>
                                 </thead>
@@ -291,12 +298,18 @@
                                         </td>
                                         <td class="col qty">{{item.Quantity}}</td>
                                         <td class="col">
-                                            {{item.Price}}
+                                            {{item.Price | number}}₫
                                         </td>
                                         <td class="col price-sale">
-                                            0 ₫
+                                            <span ng-if="item.DiscountPrice ==0">{{item.Price | number}}₫</span>
+                                            <span ng-if="item.DiscountPrice > 0">{{item.DiscountPrice | number}}₫</span>
+
                                         </td>
-                                        <td class="col total">{{item.Price * item.Quantity}}</td>
+                                        <td class="col total">
+                                            <span ng-if="item.DiscountPrice == 0">{{item.Price * item.Quantity | number}}₫</span>
+                                            <span ng-if="item.DiscountPrice > 0">{{item.DiscountPrice * item.Quantity | number}}₫</span>
+
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -304,30 +317,23 @@
                         <div class="order-details-totals">
                             <table>
                                 <tbody>
-                                    <tr class="quantity">
-                                        <th>Tổng sản phẩm</th>
-                                        <td>{{Order.OrderDetailDTOs.length}}</td>
-                                    </tr>
                                     <tr class="sub-totals">
                                         <th>Tổng giá bán</th>
-                                        <td>{{Order.MoneyTotal}}</td>
+                                        <td>{{Order.TotalOriginPrice | number}}₫</td>
                                     </tr>
                                     <tr>
                                         <th>Chiết khấu</th>
-                                        <td>0 ₫</td>
+                                        <td>{{Order.TotalOriginPrice - Order.MoneyTotal | number}} ₫</td>
                                     </tr>
-                                    <!---->
-                                    <!---->
-                                    <!---->
                                     <tr>
                                         <th>Vận chuyển</th>
-                                        <td>30.000 ₫</td>
+                                        <td>25.000 ₫</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="grand-totals">
                                         <th style="color: rgb(51, 63, 72); font-weight: 600;">Tổng tiền thanh toán</th>
-                                        <td style="font-weight: 600;">{{Order.MoneyTotal}}</td>
+                                        <td style="font-weight: 600;">{{Order.MoneyTotal + 25000 | number}}₫</td>
                                     </tr>
                                 </tfoot>
                             </table>

@@ -1,0 +1,109 @@
+﻿@model Models.Framework.New
+@{
+    ViewBag.Title = "DetailNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Menu{
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebar">
+        <div class="offcanvas-header pt-4">
+            <a class="offcanvas-title header-brand" href="/Home/HomePage/">
+                <img src="/Assets/img/logo.svg" alt="" />
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="mb-3">
+                <li class="header-item">
+                    <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Man/Index/">NAM</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Women/Index/">NỮ</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+                </li>
+                <li class="header-item">
+                    <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+                </li>
+            </ul>
+            <div class="sidebar-form-wrap ">
+                <form class="d-flex sidebar-form">
+                    <button class="search-btn">
+                        <span></span>
+                    </button>
+                    <input type="text"
+                           placeholder="Bạn tìm gì"
+                           id="input-sidebar-search"
+                           autocomplete="off" />
+                </form>
+                <div class="search-history">
+                    <div class="d-flex justify-content-between search-history__header">
+                        <p>Lịch sử tìm kiếm</p>
+                        <span style="cursor: pointer;">Xóa</span>
+                    </div>
+                    <div class="search-history-body pt-2">
+                        <span>áo polo</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Button to open the offcanvas sidebar -->
+    <button class="btn-menu d-xl-none d-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <ul class="header-list d-none d-xl-flex me-auto ms-5">
+        <li class="header-item">
+            <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Man/Index/">NAM</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Women/Index/">NỮ</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link" href="/Girl/Index/">BÉ GÁI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link " href="/Boy/Index/">BÉ TRAI</a>
+        </li>
+        <li class="header-item">
+            <a class="header-link" href="/Outlet/Index/">OUTLET</a>
+        </li>
+    </ul>
+}
+
+@section Styles{
+    <link href="~/Assets/css/news-detail.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/Assets/js/news-home.js"></script>
+}
+
+<!--Body-->
+<main>
+    <div class="blog-wrap">
+        <h1 style="font-weight: 700;font-size: 36px;color:#333f48" class="news-detail__title">@Model.Title</h1>
+        <p class="news-detail__date"><span class="day">@Model.PublicDate.Value.Day</span>/<span class="month">@Model.PublicDate.Value.Month</span>/<span class="year">@Model.PublicDate.Value.Year</span></p>
+        <div class="blog-thumbnail mt-5">
+            <img src="~/Upload/New/@(Model.NewID).jpg" width="100%" alt="">
+        </div>
+        <div class="blog-content pt-4">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+
+</main>
+

@@ -18,17 +18,21 @@ namespace Project_3.Controllers
 
         public ActionResult HomePage()
         {
-            ProductDAO productDAO = new ProductDAO();
-            List<Product> list = productDAO.getAll();
-            list = getListDiscountAndLike(list);
-            return View(list);
+            List<Section> sections = new SectionDAO().getSectionOfPage(1);
+            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow(); //lấy danh sách discountDetail giảm dần thoe thời gian tạo
+            foreach (var item in sections)
+            {
+                item.ProductSections = getListDiscountAndLike(item.ProductSections.ToList(), DiscountDetails);
+            }
+            return View(sections);
         }
 
         public ActionResult Detail(long id)
         {
             Product product = new ProductDAO().getById(id);
 
-            var pDiscount = getDiscount(product);
+            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow(); //lấy danh sách discountDetail giảm dần thoe thời gian tạo
+            var pDiscount = getDiscount(product,DiscountDetails);
             product.DiscountPrice = pDiscount.DiscountPrice;
             product.Percent = pDiscount.Percent;
 
@@ -37,7 +41,7 @@ namespace Project_3.Controllers
             List<Product> relatedList = dao.get10ByProCat(product.ProCatId);
             foreach (var p in relatedList)
             {
-                var a = getDiscount(p); //reuturn a product with discountPrice and percent
+                var a = getDiscount(p, DiscountDetails); //reuturn a product with discountPrice and percent
                 p.DiscountPrice = a.DiscountPrice;
                 p.Percent = a.Percent;
             }

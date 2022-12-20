@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Models.DAO;
@@ -21,14 +22,31 @@ namespace Project_3.Areas.Admin.Controllers
         [HasCredential(RoleID = "VIEW_USER")]
         public ActionResult Index()
         {
+            ViewBag.ListGroups = new UserDAO().GetUserGroups();
             return View();
         }
 
-        public JsonResult getAllData()
+        public JsonResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
         {
-            var listUser = new UserDAO().getAll();
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(listUser, Formatting.Indented, jss);
+            List<User> users = new UserDAO().getAll().Select(u=>new User()
+            {
+                UserID = u.UserID,
+                Name = u.Name,
+                UserName = u.UserName,
+                UserPhone = u.UserPhone,
+                UserAdress = u.UserAdress,
+                Password = u.Password,
+                Status = u.Status,
+                GroupId = u.GroupId,
+                UserGroup = new UserGroup() { Name = u.UserGroup.Name}
+            }).ToList();
+            if (searchText.Trim() != "")
+            {
+                users = users.Where(c => MethodCommnon.ToUrlSlug(c.Name).Contains(MethodCommnon.ToUrlSlug(searchText)) || c.UserPhone.Contains(searchText)).ToList();
+            }
+
+            var pageData = Paggination.PagedResult(users, pageNumber, pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -40,23 +58,38 @@ namespace Project_3.Areas.Admin.Controllers
             try
             {
                 UserDAO UserDAO = new UserDAO();
-                if (user.Status == null)
+                if (UserDAO.ExistUserName(user.UserName.Trim()))
                 {
-                    user.Status = true;
+                    return Json(new
+                    {
+                        check = false,
+                        message = "Tên tài khoản đã tồn tại"
+                    });
                 }
-                User u = UserDAO.Insert(user);
-
-                return Json(new
+                else
                 {
-                    message = true,
-                    u = u
-                });
+                    if (user.Status == null)
+                    {
+                        user.Status = true;
+                    }
+                    user.Password = Encryptor.MD5Hash(user.Password);
+                    User u = UserDAO.Insert(user);
+                    return Json(new
+                    {
+                        check = true,
+                        message = "Thêm người dùng thành công",
+                        u = u
+                    });
+                }
+
+
             }
             catch
             {
                 return Json(new
                 {
-                    message = false
+                    check = false,
+                    message = "Đã có lỗi xảy ra"
                 });
             }
         }
@@ -67,16 +100,36 @@ namespace Project_3.Areas.Admin.Controllers
         public JsonResult Edit(User user)
         {
             bool check = true;
+            string message = "";
             try
             {
                 UserDAO UserDAO = new UserDAO();
-                check = UserDAO.Update(user);
-                return Json(check);
+                if (UserDAO.ExistUserNameEdit(user))
+                {
+                    check = false;
+                    message = "Tên đăng nhập đã tồn tại";
+                }
+                else
+                {
+                    if (user.Password.Trim() != "")
+                    {
+                        user.Password = Encryptor.MD5Hash(user.Password);
+                    }
+                    UserDAO.Update(user);
+                    check = true;
+                    message = "Cập nhật thành công";
+                }
             }
             catch
             {
-                return Json(check);
+                check = false;
+                message = "Đã có lỗi xảy ra";
             }
+            return Json(new
+            {
+                check = check,
+                message = message
+            },JsonRequestBehavior.AllowGet);
 
         }
         // POST: Admin/User/Delete/5
@@ -110,7 +163,6 @@ namespace Project_3.Areas.Admin.Controllers
             });
         }
 
-
         [HttpPost]
         public JsonResult ChangeStatus(int id)
         {
@@ -126,5 +178,6 @@ namespace Project_3.Areas.Admin.Controllers
             }
             
         }
+
     }
 }

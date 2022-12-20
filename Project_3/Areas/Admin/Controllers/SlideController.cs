@@ -1,9 +1,11 @@
 ﻿using Models.Framework;
+using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Project_3.Areas.Admin.Controllers
 {
@@ -11,6 +13,7 @@ namespace Project_3.Areas.Admin.Controllers
     {
         ClothesShopEntities db = new ClothesShopEntities();
         // GET: Admin/Slide
+        [HasCredential(RoleID = "VIEW_SLIDE")]
         public ActionResult Index()
         {
 

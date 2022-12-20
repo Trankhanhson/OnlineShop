@@ -146,8 +146,7 @@ discountApp.controller("discountController", function ($scope, $http) {
                         let discountDetail = {
                             ProId: value.ProId,
                             Amount: value.Amount,
-                            TypeAmount: value.TypeAmount,
-                            MaxQuantityPerUser: value.MaxQuantityPerUser
+                            TypeAmount: value.TypeAmount
                         }
                         listDiscountDetail.push(discountDetail)
                     })
@@ -159,7 +158,7 @@ discountApp.controller("discountController", function ($scope, $http) {
                         data: { discountPro: $scope.discountPro, listDiscountDetail: listDiscountDetail }
                     }).then(function (res) {
                         if (res.data) {
-                            location.reload()
+                            location.href = "/Admin/Discount/Index"
 
                             $("#successToast .text-toast").text("Đã thêm chương tình khuyến mãi thành công")
                             $("#successToast").toast("show")
@@ -193,9 +192,6 @@ discountApp.controller("discountController", function ($scope, $http) {
                         else {
                             value.priceAfter = value.Price - value.Amount;
                         }
-                    }
-                    if ($scope.generalSetting.MaxQuantityPerUser != null) {
-                        value.MaxQuantityPerUser = $scope.generalSetting.MaxQuantityPerUser
                     }
                 })
             }

@@ -14,6 +14,7 @@ namespace Project_3.Areas.Admin.Controllers
     public class CategoryController : BaseController
     {
         // GET: Admin/Category
+        [HasCredential(RoleID = "VIEW_CATEGORY")]
         public ActionResult Index()
         {
             //Danh sách dối tượng

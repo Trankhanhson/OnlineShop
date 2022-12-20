@@ -4,7 +4,7 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
 
     $scope.New = {
         Title: '',
-        UserID: '',
+        UserID: $("#UserID").val(),
         Content: ''
     }
     //lưu file người dùng upload
@@ -33,9 +33,6 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
     //khi người dung nhấn lưu thêm mới danh mục
     $scope.SaveAdd = function (closeOrNew) {
         $scope.New.Content = CKEDITOR.instances['Content'].getData();
-        if ($scope.fileImage !== undefined) {
-            $scope.New.Image = $scope.fileImage[0].name
-        }
         if ($scope.createForm.$valid) {
             $http({
                 method: "POST",
@@ -46,7 +43,9 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
                 if (res.data.check) //tạo mới thành công
                 {
                     //upload ảnh khi thêm đối tượng thành công
-                    $scope.UploadFiles($scope.fileImage, res.data.newHasId.NewID)
+                    if ($scope.fileImage !== undefined) {
+                        $scope.UploadFiles($scope.fileImage, res.data.newHasId.NewID)
+                    }
                     if (checkUpload === false) {
                         //khi upload fail thì xóa đối tượng vừa tạo
                         $http({
@@ -62,6 +61,7 @@ NewApp.controller("NewController", function ($scope, Upload, $http) {
                     //hiển thị thông báo thành công
                     $("#successToast .text-toast").text("Thêm bài viết thành công")
                     $("#successToast").toast("show")
+                    location.href = "/Admin/New/Index"
                 }
                 else {
                     $("#errorToast .text-toast").text("Thêm thất bại")

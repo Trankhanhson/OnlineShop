@@ -1,6 +1,7 @@
 ﻿using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using Project_3.common;
 using Project_3.Model;
 using System;
 using System.Collections.Generic;
@@ -8,55 +9,72 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Project_3.Areas.Admin.Controllers
 {
     public class OrderController : BaseController
     {
         // GET: Admin/Order
-        public ActionResult WaitConfirm()
-        {
-            return View();
-        }
 
+        [HasCredential(RoleID = "VIEW_ORDER")]
         public ActionResult WaitProcess()
         {
             return View();
         }
 
+        [HasCredential(RoleID = "VIEW_ORDER")]
         public ActionResult Tranfering()
         {
             return View();
         }
 
+        [HasCredential(RoleID = "VIEW_ORDER")]
         public ActionResult Success()
         {
             return View();
         }
 
+        [HasCredential(RoleID = "VIEW_ORDER")]
         public ActionResult Canceled()
         {
             return View();
         }
 
-        public JsonResult getAllData(int id)
+        public JsonResult getPageData(int statusId,string searchText, int pageNumber = 1, int pageSize = 5)
         {
-            List<Order> list = new OrderDAO().getAll().Select(o=>new Order()
+            List<Order> list = new OrderDAO().getAll().Where(a => a.StatusOrderId == statusId).Select(o => new Order()
             {
                 OrdID = o.OrdID,
+                ReceivingMail = o.ReceivingMail,
                 ReceivingPhone = o.ReceivingPhone,
                 OrderDate = o.OrderDate,
-                StatusOrderId = o.StatusOrderId 
-            }).Where(a=>a.StatusOrderId==id).ToList();
-
-            var result = JsonConvert.SerializeObject(list);
-            return Json(new
+                StatusOrderId = o.StatusOrderId
+            }).ToList();
+            if (searchText.Trim() != "")
             {
-                result = result
-            }, JsonRequestBehavior.AllowGet);
+                list = list.Where(c => c.ReceivingMail.Contains(searchText) || c.ReceivingPhone.Contains(searchText)).ToList();
+            }
+
+            var pageData = Paggination.PagedResult(list, pageNumber, pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        
+        public JsonResult Delete(long id)
+        {
+            try
+            {
+                OrderDAO dao = new OrderDAO();
+                dao.Delete(id);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult getOrderById(long id)
         {
             Order order = new OrderDAO().getById(id);
@@ -73,10 +91,11 @@ namespace Project_3.Areas.Admin.Controllers
             orderDTO.OrderDate = order.OrderDate;
             orderDTO.Status = order.StatusOrder.Status;
             orderDTO.Note = order.Note;
-            orderDTO.CustomerName = order.Customer.Name;
+            orderDTO.CustomerName = order.ReceivingName;
             orderDTO.MoneyTotal = order.MoneyTotal;
-            List<OrderDetailDTO> list = new List<OrderDetailDTO>();
 
+            int totalOriginPrice = 0;
+            List<OrderDetailDTO> list = new List<OrderDetailDTO>();
             foreach (var item in order.OrderDetails)
             {
                 OrderDetailDTO dto = new OrderDetailDTO();
@@ -89,8 +108,11 @@ namespace Project_3.Areas.Admin.Controllers
                 dto.NameSize = item.ProductVariation.ProductSize.NameSize;
                 dto.Quantity = item.Quantity;
                 dto.Price = item.Price;
+                dto.DiscountPrice = item.DiscountPrice;
                 list.Add(dto);
+                totalOriginPrice += (dto.Price.Value* dto.Quantity.Value);
             }
+            orderDTO.TotalOriginPrice = totalOriginPrice;
             orderDTO.OrderDetailDTOs = list;
             var result = JsonConvert.SerializeObject(orderDTO);
             return Json(result,JsonRequestBehavior.AllowGet);
@@ -102,10 +124,6 @@ namespace Project_3.Areas.Admin.Controllers
             Order o = dao.ChangeStatus(id);
             string message = "";
             if(o.StatusOrderId == 2)
-            {
-                message = "Chờ xử lý";
-            } 
-            else if(o.StatusOrderId == 3)
             {
                 message = "Đang vận chuyển";
             }

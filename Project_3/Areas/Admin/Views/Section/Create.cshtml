@@ -269,6 +269,7 @@
                             if ($scope.fileImage1 != null || $scope.fileImage2 != null || $scope.fileImage3 != null) {
                                 $scope.UploadFiles(res.data.sectionId)
                             }
+                            location.href = "/Admin/Section/Index"
                             $("#successToast .text-toast").text("Đã thêm thành công")
                             $("#successToast").toast("show")
                         }
@@ -283,7 +284,7 @@
     </script>
 }
 <main id="main" data-pageId="@ViewBag.PageId" class="main" ng-app="SectionApp" ng-controller="SectionController" ng-init="checkProduct = false">
-    <h2>@ViewBag.PageName</h2>
+    <h4 class="fw-bold">Thêm mục vào trang @ViewBag.PageName</h4>
     <form name="sectionForm" novalidate>
         <section class="section">
             <div class="row">
@@ -469,7 +470,7 @@
                                     <th class="col" style="width:15%">Giá</th>
                                     <th class="col" style="width:15%">Giảm giá</th>
 
-                                    <th class="col" style="width:15%;">Kho</th>
+                                    <th class="col" style="width:15%;">Có thể bán</th>
                                 </tr>
                             </thead>
                             <tbody ng-app>

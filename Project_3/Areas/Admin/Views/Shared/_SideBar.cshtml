@@ -48,11 +48,6 @@
                 class="nav-content collapse"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="/Admin/Order/WaitConfirm">
-                        <i class="bi bi-circle"></i><span>Chờ xác nhận</span>
-                    </a>
-                </li>
-                <li>
                     <a href="/Admin/Order/WaitProcess">
                         <i class="bi bi-circle"></i><span>Chờ xử lý</span>
                     </a>
@@ -74,7 +69,11 @@
                 </li>
             </ul>
         </li>
-
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/Admin/Customer/Index">
+                <i class="bi bi-person"></i><span>Khách hàng</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed"
                data-bs-target="#discount-nav"
@@ -87,7 +86,7 @@
                 data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="/Admin/Discount/Index">
-                        <i class="bi bi-circle"></i><span>Giảm giá</span>
+                        <i class="bi bi-circle"></i><span>Chương trình giảm giá</span>
                     </a>
                 </li>
                 <li>
@@ -120,21 +119,21 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed"
-               data-bs-target="#sell-nav"
+               data-bs-target="#section-nav"
                data-bs-toggle="collapse"
                href="#">
                 <i class="bi bi-journal-text"></i><span>Hiển thị</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="sell-nav"
+            <ul id="section-nav"
                 class="nav-content collapse"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="/Slide/Index">
+                    <a href="/Admin/Slide/Index">
                         <i class="bi bi-circle"></i><span>Banner</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/Section/Index">
+                    <a href="/Admin/Section/Index">
                         <i class="bi bi-circle"></i><span>Cấu hình trang</span>
                     </a>
                 </li>

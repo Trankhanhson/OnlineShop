@@ -185,20 +185,18 @@ function addCart(input) {
             else {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                var bsAlert = new bootstrap.Toast($(".toast-addCart"));//inizialize it
-                bsAlert.show();//show it   
+                alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
             }
         }
         else {
             listCartItem = [CartItem]
             localStorage.setItem("Cart", JSON.stringify(listCartItem))
+            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
         }
         loadMiniCart()
     }
     else {
-        $(".toast-errorClient p").text("Bạn chưa chọn kích thước")
-        var bsAlert = new bootstrap.Toast($(".toast-errorClient"));//inizialize it
-        bsAlert.show();//show it   
+        alertError("Bạn chưa chọn kích thước")
     }
 }
 
@@ -242,7 +240,7 @@ function addCartFromDetail() {
                         if (res) {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")                      
+                            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
                         }
                         else {
                             alertError("Đã vượt quá số lượng tồn kho của sản phẩm này")
@@ -253,12 +251,13 @@ function addCartFromDetail() {
             else {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
-                alertSuccess("Đã thêm sản phẩm vào giỏ hàng")     
+                alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
             }
         }
         else {
             listCartItem = [CartItem]
             localStorage.setItem("Cart", JSON.stringify(listCartItem))
+            alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
         }
         loadMiniCart()
 

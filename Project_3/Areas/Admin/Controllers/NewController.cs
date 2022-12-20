@@ -1,12 +1,14 @@
 ﻿using Models.DAO;
 using Models.Framework;
 using Newtonsoft.Json;
+using Project_3.common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Xml.Linq;
 
 namespace Project_3.Areas.Admin.Controllers
@@ -14,25 +16,36 @@ namespace Project_3.Areas.Admin.Controllers
     public class NewController : BaseController
     {
         // GET: Admin/News
+        [HasCredential(RoleID = "VIEW_CONTENT")]
         public ActionResult Index()
         {
-
             return View();
         }
 
-        public JsonResult getAllData()
+
+        public JsonResult getPageData(string searchText, int pageNumber = 1, int pageSize = 5)
         {
-            List<New> list = new NewDAO().getAll();
-            JsonSerializerSettings jss = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var result = JsonConvert.SerializeObject(list, Formatting.Indented, jss);
-            var firstUserID = new UserDAO().getAll().First().UserID;
-            return Json(new
+            List<New> news = new NewDAO().getAll().Select(n=>new New()
             {
-                result = result,
-                firstUserID = firstUserID
-            }, JsonRequestBehavior.AllowGet);
+                NewID = n.NewID,
+                Title = n.Title,
+                UserID = n.UserID,
+                User = new User() { Name=n.User.Name},
+                Status = n.Status,
+                Image = n.Image,
+                PublicDate = n.PublicDate
+            }).ToList();
+            if (searchText.Trim() != "")
+            {
+                news = news.Where(ne => MethodCommnon.ToUrlSlug(ne.Title).Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
+            }
+
+            var pageData = Paggination.PagedResult(news, pageNumber, pageSize);
+            var result = JsonConvert.SerializeObject(pageData);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HasCredential(RoleID = "ADD_CONTENT")]
         public ActionResult Create()
         {
             //Danh sách nhân viên
@@ -70,7 +83,7 @@ namespace Project_3.Areas.Admin.Controllers
         {
             try
             {
-                string path = Server.MapPath("~/Upload/New/" + NewID + "/");
+                string path = Server.MapPath("~/Upload/New/");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -78,7 +91,7 @@ namespace Project_3.Areas.Admin.Controllers
                 foreach (string key in Request.Files)
                 {
                     HttpPostedFileBase pf = Request.Files[key];
-                    pf.SaveAs(path + pf.FileName);
+                    pf.SaveAs(path + NewID + ".jpg");
                 }
             }
             catch
@@ -88,6 +101,7 @@ namespace Project_3.Areas.Admin.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
+        [HasCredential(RoleID = "EDIT_CONTENT")]
         public ActionResult Edit(int id)
         {
             //Danh sách nhân viên
@@ -99,22 +113,15 @@ namespace Project_3.Areas.Admin.Controllers
 
         // POST: Admin/New/Edit/5
         [HttpPost]
-        public JsonResult Edit(New n, string nameOldImg)
+        public JsonResult Edit(New n, bool editImage)
         {
             bool UpdateSuccess = true;
             try
             {
-                ////kiểm tra xem đã tồn tại đường dẫn với ảnh mưới chưa
-                //string pathNew = Path.Combine("~/Upload/New/" + n.NewID + "/" + n.Image);
-                //if (!(System.IO.File.Exists(pathNew))) //nếu ảnh cũ chưa tồn tại
-                //{
-                //    //xóa ảnh cũ để thêm ảnh mới
-                //    string path = Server.MapPath("~/Upload/New/" + n.NewID + "/" + nameOldImg);
-                //    System.IO.File.Delete(path);
-
-                //    checkExistImg = false; //sẽ upload ảnh mới
-                //}
-                DeleteAllImgByIdPro(n.NewID);
+                if (editImage)
+                {
+                    DeleteFileFromFolder(n.NewID);
+                }
                 NewDAO dao = new NewDAO();
                 UpdateSuccess = dao.Update(n); //update đối tượng
                 //khi update thành công thành công thì upload ảnh
@@ -129,31 +136,19 @@ namespace Project_3.Areas.Admin.Controllers
             });
         }
 
-        public void DeleteAllImgByIdPro(long idNew)
+        public void DeleteFileFromFolder(long newId)
         {
-            string path = Server.MapPath("~/Upload/New/" + idNew);
-            if (Directory.Exists(path))
+
+            string strPhysicalFolder = Server.MapPath("~/Upload/New/" + newId + ".jpg");
+
+            if (System.IO.File.Exists(strPhysicalFolder))
             {
-                DirectoryInfo directory = new DirectoryInfo(path);
-                EmptyFolder(directory);
+                System.IO.File.Delete(strPhysicalFolder);
             }
         }
 
-        public void EmptyFolder(DirectoryInfo directory)
-        {
-            foreach (FileInfo file in directory.GetFiles())
-            {
-                file.Delete();
-            }
 
-            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
-            {
-                EmptyFolder(subdirectory);
-                subdirectory.Delete();
-            }
-        }
-
-        // POST: Admin/New/Delete/5
+        [HasCredential(RoleID = "DELETE_CONTENT")]
         [HttpPost]
         public ActionResult Delete(New n)
         {
@@ -166,9 +161,7 @@ namespace Project_3.Areas.Admin.Controllers
                 if (check)
                 {
 
-                    //xóa ảnh trong folder
-                    string path = Server.MapPath("~/Upload/New/" + n.NewID + "/" + n.Image);
-                    System.IO.File.Delete(path);
+                    DeleteFileFromFolder(n.NewID);
 
                     message = "Xóa thành công";
                 }

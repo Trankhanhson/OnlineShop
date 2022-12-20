@@ -49,7 +49,7 @@
                 UploadImgToServer(listColorId[i], response.Proid)
             }
 
-            location.reload()
+            location.href = "/Admin/Product/Index"
             $("#successToast .text-toast").text("Đã thêm sản phẩm thành công")
             $("#successToast").toast("show") //hiển thị thông báo thành công
         }

@@ -43,7 +43,7 @@
     <script src="~/Assets/Admin/FileAngularjs/ImportBill/CreateImportBill.js"></script>
 }
 <main id="main" class="main" ng-app="importBillApp" ng-controller="importBillController">
-
+    <h4 class="fw-bold">Thêm hóa đơn nhập</h4>
     <section class="section">
 
         <div class="card-body px-0 pt-4">
@@ -86,10 +86,10 @@
                                         <td class="col-quantity">
                                         </td>
                                         <td class="col-importPrice">
-                                            <input type="number" class="input-price" min="0" ng-change="countTotalBill()"  oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" onclick="stopPropagation(event)" ng-model="pd.ImportPrice" value="{{pd.ImportPrice}}">
+                                            <input type="number" class="input-price" min="0" ng-change="countTotalBill()" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" onclick="stopPropagation(event)" ng-model="pd.ImportPrice" value="{{pd.ImportPrice}}">
                                         </td>
                                         <td class="col-price">
-                                            <input type="number" class="input-price" min="0"  oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" onclick="stopPropagation(event)" ng-model="pd.Price" value="{{pd.Price}}">
+                                            <input type="number" class="input-price" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0" onclick="stopPropagation(event)" ng-model="pd.Price" value="{{pd.Price}}">
                                         </td>
                                         <td class="col-subtotal price"></td>
                                         <td class="col-action">
@@ -110,7 +110,7 @@
                                                     </div>
                                                 </li>
                                                 <li class="col-quantity p-2 d-flex align-items-center border-bottom">
-                                                    <input type="number" class="input-quantity" ng-model="pv.Quantity" ng-change="countTotalBill()" value="{{pv.Quantity}}"  oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1">
+                                                    <input type="number" class="input-quantity" ng-model="pv.Quantity" ng-change="countTotalBill()" value="{{pv.Quantity}}" oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : 1">
                                                 </li>
                                                 <li class="col-importPrice p-2 border-bottom"></li>
                                                 <li class="col-price p-2 border-bottom"></li>

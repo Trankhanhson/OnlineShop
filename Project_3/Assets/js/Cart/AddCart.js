@@ -241,6 +241,7 @@ function addCartFromDetail() {
                             listCartItem[indexItem].Quantity += 1;
                             localStorage.setItem("Cart", JSON.stringify(listCartItem))
                             alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
+                            loadMiniCart()
                         }
                         else {
                             alertError("Đã vượt quá số lượng tồn kho của sản phẩm này")
@@ -252,14 +253,16 @@ function addCartFromDetail() {
                 listCartItem.push(CartItem)
                 localStorage.setItem("Cart", JSON.stringify(listCartItem))
                 alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
+                loadMiniCart()
             }
         }
         else {
             listCartItem = [CartItem]
             localStorage.setItem("Cart", JSON.stringify(listCartItem))
             alertSuccess("Đã thêm sản phẩm vào giỏ hàng")
+            loadMiniCart()
         }
-        loadMiniCart()
+        
 
     }
     else {

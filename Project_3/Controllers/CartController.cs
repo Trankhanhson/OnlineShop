@@ -138,7 +138,7 @@ namespace Project_3.Controllers
             try
             {
                 ProductVariationDAO productVariationDAO = new ProductVariationDAO();
-                DateTime dt = new DateTime(2021, 11, 2);
+                DateTime dt = new DateTime(2022, 12, 3);
                 order.OrderDate = dt;
                 order.StatusOrderId = 1;
                 var o = new OrderDAO().Insert(order);

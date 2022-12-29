@@ -38,11 +38,7 @@ namespace Project_3.Controllers
             var cusOld = dao.getById(cus.CusID);
             try
             {
-                if (cus.Email != cusOld.Email && dao.CheckEmail(cus.Email))
-                {
-                    message = "ExistEmail";
-                }
-                else if (cus.Phone != cusOld.Phone && dao.CheckPhone(cus.Phone))
+                if (cus.Phone != cusOld.Phone && dao.CheckPhone(cus.Phone))
                 {
                     message = "ExistPhone";
                 }

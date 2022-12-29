@@ -114,7 +114,7 @@ namespace Project_3.Areas.Admin.Controllers
                 Price = p.Price,
                 ImportPrice = p.ImportPrice,
                 Status = p.Status,
-                ProductCat = new ProductCat() { Name = p.ProName, ProCatId = p.ProCatId },
+                ProductCat = new ProductCat() { Name = p.ProductCat.Name, ProCatId = p.ProCatId },
                 Slug = p.Slug,
                 ProductVariations = p.ProductVariations.Select(pv => new ProductVariation()
                 {

@@ -140,13 +140,11 @@ function Login() {
                     addError("passwordLogin", "Mật khẩu không đúng")
                 }
                 else if (res.message == "fail") {
-                    $("#errorToast .text-toast").text("Đăng nhập thất bại")
-                    $("#errorToast").toast("show")
+                    alertError("Đăng nhập thất bại")
                 }
                 else {
                     location.reload();
-                    $("#successToast .text-toast").text("Đã đăng nhập thành công")
-                    $("#successToast").toast("show")
+                    alertSuccess("Đăng nhập thành công")
                 }
             }
         })
@@ -244,6 +242,7 @@ function confirmPhone() {
                 sendOtp()
                 $(".toPhone").text(Phone)
                 $("#partitioned").val('')
+                $("#ModalGetPassword").modal("hide")
                 $("#ConfirmOtp").modal("show")
             }
             else {
@@ -327,10 +326,10 @@ function LoginView() {
             data: { username: username, password: password },
             success: function (res) {
                 if (res.message == "usename") {
-                    addError("userName", "Tại khoản không tồn tại")
+                    addError("Phone", "Tại khoản không tồn tại")
                 }
                 else if (res.message == "password") {
-                    addError("passwordLogin", "Mật khẩu không đúng")
+                    addError("Password", "Mật khẩu không đúng")
                 }
                 else if (res.message == "fail") {
                     alertError("Đăng nhập thất bại")

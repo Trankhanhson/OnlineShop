@@ -178,6 +178,13 @@
                     alertError("Bạn chưa đăng nhập tài khoản")
                 }
             }
+
+            $scope.addActive = function (e) {
+                let parent = $(e.target).parents(".product-size-wrap")
+                let listItem = $(parent).find(".product-size")
+                $(listItem).removeClass("active")
+                $(e.target).addClass("active")
+            }
         }
     </script>
 }
@@ -311,7 +318,7 @@
                                                 <div class="d-flex justify-content-center flex-wrap pt-3">
                                                     <div ng-repeat="variation in item.ProductVariations">
                                                         <div ng-if="variation.ProductColor.ProColorID == proImg.ProColorID">
-                                                            <div ng-if="(variation.Quantity - variation.Ordered) > 0" class="product-size" onclick="addActive(event)" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
+                                                            <div ng-if="(variation.Quantity - variation.Ordered) > 0" class="product-size" ng-click="addActive($event)" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
                                                             <div ng-if="(variation.Quantity - variation.Ordered) <= 0" class="product-size disabled-size" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
                                                         </div>
                                                     </div>

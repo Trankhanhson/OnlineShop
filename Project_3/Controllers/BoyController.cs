@@ -19,7 +19,7 @@ namespace Project_3.Controllers
 
             ProductDAO productDAO = new ProductDAO();
             NewDAO newDAO = new NewDAO();
-            List<Section> sections = new SectionDAO().getSectionOfPage(2);
+            List<Section> sections = new SectionDAO().getSectionOfPage(4);
             var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow(); //lấy danh sách discountDetail giảm dần thoe thời gian tạo
             foreach (var item in sections)
             {

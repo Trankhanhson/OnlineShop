@@ -132,7 +132,8 @@ namespace Project_3.Areas.Admin.Controllers
                 dao.onSuccess(o.OrderDetails.ToList());
 
                 //cập thật thống kê
-                var Statistical = statisticalDAO.getAll().Where(s=>s.Date.Value.Date == DateTime.Now.Date).FirstOrDefault();
+                DateTime dt = new DateTime(2022, 12, 5);
+                var Statistical = statisticalDAO.getAll().Where(s=>s.Date.Value.Date == dt).FirstOrDefault();
                 //nếu thống kê của ngày hôm nay đã tồn tại
                 if(Statistical != null)
                 {
@@ -155,7 +156,6 @@ namespace Project_3.Areas.Admin.Controllers
                 {
                     Statistical statisticalNew = new Statistical();
                     statisticalNew.Revenue = o.MoneyTotal;
-                    DateTime dt = new DateTime(2021, 11, 4);
                     statisticalNew.Date = dt;
                     statisticalNew.Quantity = 0;
                     statisticalNew.Profit = 0;

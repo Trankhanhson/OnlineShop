@@ -21,11 +21,14 @@ namespace Models.DAO
 
         public List<ProductCat> getAll()
         {
-            _dbContext.Configuration.LazyLoadingEnabled = false;
             var ProductCats = _dbContext.ProductCats.Include(x => x.Category).ToList();
             return ProductCats;
         }
       
+        public List<ProductCat> getByType(string type)
+        {
+            return _dbContext.ProductCats.Where(c=>c.Category.type == type).ToList();
+        }
 
         public List<ProductCat> getByCatID(int CatID)
         {

@@ -28,21 +28,22 @@ namespace Project_3.Areas.Admin.Controllers
 
         public JsonResult getPagedData(string searchText,int pageNumber = 1, int pageSize = 5)
         {
-            List<ProductCat> list = new ProductCategoryDAO().getAll().Select(pc=>new ProductCat()
+            List<ProductCat> list = new ProductCategoryDAO().getAll();
+
+            if (searchText.Trim() != "")
+            {
+                list = list.Where(pc => MethodCommnon.ToUrlSlug(pc.Name).Contains(MethodCommnon.ToUrlSlug(searchText)) || pc.Category.type.Contains(searchText)).ToList();
+            }
+
+            list = list.Select(pc => new ProductCat()
             {
                 CatID = pc.CatID,
                 ProCatId = pc.ProCatId,
                 Image = pc.Image,
                 Name = pc.Name,
-                Category = new Category() { Name= pc.Category.Name,type = pc.Category.type},
-                Status = pc.Status,
-                Slug = pc.Slug
+                Category = new Category() { Name = pc.Category.Name, type = pc.Category.type },
+                Status = pc.Status
             }).ToList();
-
-            if (searchText.Trim() != "")
-            {
-                list = list.Where(pc => pc.Slug.Contains(MethodCommnon.ToUrlSlug(searchText.ToLower()))).ToList();
-            }
 
             var pagedData = Paggination.PagedResult(list,pageNumber,pageSize);
             

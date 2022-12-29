@@ -46,14 +46,13 @@ namespace Project_3.Areas.Admin.Controllers
             List<Order> list = new OrderDAO().getAll().Where(a => a.StatusOrderId == statusId).Select(o => new Order()
             {
                 OrdID = o.OrdID,
-                ReceivingMail = o.ReceivingMail,
                 ReceivingPhone = o.ReceivingPhone,
                 OrderDate = o.OrderDate,
                 StatusOrderId = o.StatusOrderId
             }).ToList();
             if (searchText.Trim() != "")
             {
-                list = list.Where(c => c.ReceivingMail.Contains(searchText) || c.ReceivingPhone.Contains(searchText)).ToList();
+                list = list.Where(c => c.ReceivingPhone.Contains(searchText)).ToList();
             }
 
             var pageData = Paggination.PagedResult(list, pageNumber, pageSize);
@@ -82,7 +81,6 @@ namespace Project_3.Areas.Admin.Controllers
             orderDTO.OrdID = order.OrdID;
             orderDTO.VoucherId = order.VoucherId;
             orderDTO.ReceivingPhone = order.ReceivingPhone;
-            orderDTO.ReceivingMail = order.ReceivingMail;
             orderDTO.ReceivingCity = order.ReceivingCity;
             orderDTO.ReceivingDistrict = order.ReceivingDistrict;
             orderDTO.ReceivingWard = order.ReceivingWard;
@@ -121,6 +119,7 @@ namespace Project_3.Areas.Admin.Controllers
         public ActionResult ChangeStatus(long id)
         {
             OrderDAO dao = new OrderDAO();
+            StatisticalDAO statisticalDAO = new StatisticalDAO();
             Order o = dao.ChangeStatus(id);
             string message = "";
             if(o.StatusOrderId == 2)
@@ -131,6 +130,51 @@ namespace Project_3.Areas.Admin.Controllers
             {
                 message = "Thành công";
                 dao.onSuccess(o.OrderDetails.ToList());
+
+                //cập thật thống kê
+                var Statistical = statisticalDAO.getAll().Where(s=>s.Date.Value.Date == DateTime.Now.Date).FirstOrDefault();
+                //nếu thống kê của ngày hôm nay đã tồn tại
+                if(Statistical != null)
+                {
+                    Statistical.Revenue += o.MoneyTotal;
+                    foreach(var d in o.OrderDetails)
+                    {
+                        Statistical.Quantity+=d.Quantity;
+                        if(d.DiscountPrice > 0)
+                        {
+                            Statistical.Profit += (d.DiscountPrice - d.ProductVariation.Product.ImportPrice) * d.Quantity;
+                        }
+                        else
+                        {
+                            Statistical.Profit += (d.Price - d.ProductVariation.Product.ImportPrice) * d.Quantity;
+                        }
+                    }
+                    Statistical.Total_Order += 1;
+                }
+                else //Trương hợp thống kê hôm nay chưa tồn tại
+                {
+                    Statistical statisticalNew = new Statistical();
+                    statisticalNew.Revenue = o.MoneyTotal;
+                    DateTime dt = new DateTime(2021, 11, 4);
+                    statisticalNew.Date = dt;
+                    statisticalNew.Quantity = 0;
+                    statisticalNew.Profit = 0;
+                    foreach (var d in o.OrderDetails)
+                    {
+                        statisticalNew.Quantity += d.Quantity;
+                        if (d.DiscountPrice > 0)
+                        {
+                            statisticalNew.Profit += (d.DiscountPrice - d.ProductVariation.Product.ImportPrice) * d.Quantity;
+                        }
+                        else
+                        {
+                            statisticalNew.Profit += (d.Price - d.ProductVariation.Product.ImportPrice) * d.Quantity;
+                        }
+                    }
+                    statisticalNew.Total_Order = 1;
+                    statisticalDAO.Insert(statisticalNew);
+                }
+                statisticalDAO.Savechages();
             }
 
             return Json(message,JsonRequestBehavior.AllowGet);

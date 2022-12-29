@@ -26,13 +26,16 @@
         }
     </style>
 }
+@section scripts{
+    <script src="~/Assets/js/LoginAndRegis.js"></script>
+    }
 
 <div class="w-50 mx-auto ">
     <h3 class="text-center mb-5">Đăng nhập</h3>
     <form id="LoginView">
         <div class="form-group mb-3">
-            <input type="text" name="Email" id="Email" value="@ViewBag.Email" class="form-control Email" placeholder="Email của bạn">
-            <label id="Email-error" class="error" for="Email" style="display: none;"></label>
+            <input type="text" name="Phone" id="Phone" value="@ViewBag.Phone" class="form-control Email" placeholder="Nhập số điện thoại của bạn">
+            <label id="Phone-error" class="error" for="Phone" style="display: none;"></label>
         </div>
         <div class="form-group mb-3">
             <input type="password" value="@ViewBag.Password" id="Password" name="Password" class="form-control Password" placeholder="Mật khẩu">

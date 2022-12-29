@@ -99,27 +99,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Orders">
-      <EntityTypeMapping TypeName="ClothesShopModel.Order">
-        <MappingFragment StoreEntitySet="Order">
-          <ScalarProperty Name="ReceivingMail" ColumnName="ReceivingMail" />
-          <ScalarProperty Name="ReceivingName" ColumnName="ReceivingName" />
-          <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-          <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />
-          <ScalarProperty Name="StatusOrderId" ColumnName="StatusOrderId" />
-          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-          <ScalarProperty Name="ReceivingAddress" ColumnName="ReceivingAddress" />
-          <ScalarProperty Name="ReceivingWard" ColumnName="ReceivingWard" />
-          <ScalarProperty Name="ReceivingDistrict" ColumnName="ReceivingDistrict" />
-          <ScalarProperty Name="ReceivingCity" ColumnName="ReceivingCity" />
-          <ScalarProperty Name="ReceivingPhone" ColumnName="ReceivingPhone" />
-          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
-          <ScalarProperty Name="CusID" ColumnName="CusID" />
-          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="StatusOrders">
       <EntityTypeMapping TypeName="ClothesShopModel.StatusOrder">
         <MappingFragment StoreEntitySet="StatusOrder">
@@ -262,26 +241,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Products">
-      <EntityTypeMapping TypeName="ClothesShopModel.Product">
-        <MappingFragment StoreEntitySet="Product">
-          <ScalarProperty Name="Percent" ColumnName="Percent" />
-          <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
-          <ScalarProperty Name="Liked" ColumnName="Liked" />
-          <ScalarProperty Name="TotalQty" ColumnName="TotalQty" />
-          <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Slug" ColumnName="Slug" />
-          <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Material" ColumnName="Material" />
-          <ScalarProperty Name="ProName" ColumnName="ProName" />
-          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
-          <ScalarProperty Name="ProId" ColumnName="ProId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ProductLikes">
       <EntityTypeMapping TypeName="ClothesShopModel.ProductLike">
         <MappingFragment StoreEntitySet="ProductLike">
@@ -331,6 +290,59 @@
           <ScalarProperty Name="Image1" ColumnName="Image1" />
           <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="SectionId" ColumnName="SectionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="ClothesShopModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="Saled" ColumnName="Saled" />
+          <ScalarProperty Name="Percent" ColumnName="Percent" />
+          <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
+          <ScalarProperty Name="Liked" ColumnName="Liked" />
+          <ScalarProperty Name="TotalQty" ColumnName="TotalQty" />
+          <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Slug" ColumnName="Slug" />
+          <ScalarProperty Name="ImportPrice" ColumnName="ImportPrice" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Material" ColumnName="Material" />
+          <ScalarProperty Name="ProName" ColumnName="ProName" />
+          <ScalarProperty Name="ProCatId" ColumnName="ProCatId" />
+          <ScalarProperty Name="ProId" ColumnName="ProId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="ClothesShopModel.Order">
+        <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="MoneyTotal" ColumnName="MoneyTotal" />
+          <ScalarProperty Name="StatusOrderId" ColumnName="StatusOrderId" />
+          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+          <ScalarProperty Name="ReceivingAddress" ColumnName="ReceivingAddress" />
+          <ScalarProperty Name="ReceivingWard" ColumnName="ReceivingWard" />
+          <ScalarProperty Name="ReceivingDistrict" ColumnName="ReceivingDistrict" />
+          <ScalarProperty Name="ReceivingCity" ColumnName="ReceivingCity" />
+          <ScalarProperty Name="ReceivingPhone" ColumnName="ReceivingPhone" />
+          <ScalarProperty Name="ReceivingName" ColumnName="ReceivingName" />
+          <ScalarProperty Name="VoucherId" ColumnName="VoucherId" />
+          <ScalarProperty Name="CusID" ColumnName="CusID" />
+          <ScalarProperty Name="OrdID" ColumnName="OrdID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Statisticals">
+      <EntityTypeMapping TypeName="ClothesShopModel.Statistical">
+        <MappingFragment StoreEntitySet="Statistical">
+          <ScalarProperty Name="Total_Order" ColumnName="Total_Order" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Profit" ColumnName="Profit" />
+          <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="statisticalId" ColumnName="statisticalId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

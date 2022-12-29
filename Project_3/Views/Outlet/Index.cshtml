@@ -7,68 +7,7 @@
     <link rel="stylesheet" href="/Assets/css/outlet.css">
 }
 @section scripts{
-    <script>
-
-        ClientApp.controller("OutletController", OutletController);
-
-        function OutletController($scope, $http) {
-            $scope.Object = 'All'
-            $scope.MinMoney = 99000
-            $scope.MaxMoney = 149000
-
-            $scope.getData = function () {
-                /** Lấy danh sách category*/
-                $http.get("/Outlet/FilterOutlet", {
-                    params: { o: $scope.Object, minMoney: $scope.MinMoney, maxMoney: $scope.MaxMoney }
-                }).then(function (res) {
-                    $scope.listOutlet = JSON.parse(res.data)
-                }, function (error) {
-                    alert("failed")
-                })
-            }
-
-            $scope.getData()
-
-            $scope.changeObject = function (o) {
-                $scope.Object = o
-                $scope.getData()
-            }
-
-            $scope.changeMoney = function (minMoney, maxMoney) {
-                $scope.MinMoney = minMoney
-                $scope.MaxMoney = maxMoney
-                $scope.getData()
-            }
-
-            $scope.LikeProduct = function(e, ProId) {
-                let CusId = readCookie("CustomerId")
-                if (CusId != null) {
-                    $http({
-                        method: "POST",
-                        url: "/InfoCustomer/ProductLike",
-                        datatype: 'Json',
-                        data: { ProId: ProId, CusId: CusId }
-                    }).then(function (res) {
-                        if (res.data.check) {
-                            if (res.IsAdd) {
-                                alertSuccess("Đã thêm sản phẩm vào danh sách yêu thích")
-                            }
-                            else {
-                                alertSuccess("Đã xóa sản phẩm vào danh sách yêu thích")
-                            }
-                            $(e.target).toggleClass("active")
-                        }
-                        else {
-                            alertError("Đã có lỗi xảy ra")
-                        }
-                    }
-                }
-                else {
-                    alertError("Bạn chưa đăng nhập tài khoản")
-                }
-            }
-        }
-    </script>
+    <script src="~/Assets/js/OutletAngularjs.js"></script>
 }
 @section Menu{
     <!-- Offcanvas Sidebar -->
@@ -82,22 +21,22 @@
         <div class="offcanvas-body">
             <ul class="mb-3">
                 <li class="header-item">
-                    <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+                    <a class="header-link " href="/Home/HomePage">TRANG CHỦ</a>
                 </li>
                 <li class="header-item">
-                    <a class="header-link " href="/Home/man/">NAM</a>
+                    <a class="header-link" href="/Man/Index">NAM</a>
                 </li>
                 <li class="header-item">
-                    <a class="header-link " href="/Home/women/">NỮ</a>
+                    <a class="header-link " href="/Women/Index">NỮ</a>
                 </li>
                 <li class="header-item">
-                    <a class="header-link " href="/Home/baby_girl/">BÉ GÁI</a>
+                    <a class="header-link " href="/Girl/Index">BÉ GÁI</a>
                 </li>
                 <li class="header-item">
-                    <a class="header-link " href="/Home/baby_boy/">BÉ TRAI</a>
+                    <a class="header-link " href="/Boy/Index">BÉ TRAI</a>
                 </li>
                 <li class="header-item">
-                    <a class="header-link active" href="/Home/outlet/">OUTLET</a>
+                    <a class="header-link active" href="/Outlet/Index">OUTLET</a>
                 </li>
             </ul>
             <div class="sidebar-form-wrap ">
@@ -131,22 +70,22 @@
     </button>
     <ul class="header-list d-none d-xl-flex me-auto ms-5">
         <li class="header-item">
-            <a class="header-link " href="/Home/HomePage/">TRANG CHỦ</a>
+            <a class="header-link " href="/Home/HomePage">TRANG CHỦ</a>
         </li>
         <li class="header-item">
-            <a class="header-link " href="/Home/man/">NAM</a>
+            <a class="header-link" href="/Man/Index">NAM</a>
         </li>
         <li class="header-item">
-            <a class="header-link " href="/Home/women/">NỮ</a>
+            <a class="header-link " href="/Women/Index">NỮ</a>
         </li>
         <li class="header-item">
-            <a class="header-link " href="/Home/baby_girl/">BÉ GÁI</a>
+            <a class="header-link " href="/Girl/Index">BÉ GÁI</a>
         </li>
         <li class="header-item">
-            <a class="header-link " href="/Home/baby_boy/">BÉ TRAI</a>
+            <a class="header-link " href="/Boy/Index">BÉ TRAI</a>
         </li>
         <li class="header-item">
-            <a class="header-link active" href="/Home/outlet/">OUTLET</a>
+            <a class="header-link active" href="/Outlet/Index">OUTLET</a>
         </li>
     </ul>
 }
@@ -200,7 +139,7 @@
                                             <div class="d-flex justify-content-center flex-wrap pt-3">
                                                 <div ng-repeat="variation in item.ProductVariations">
                                                     <div ng-if="variation.ProductColor.ProColorID == proImg.ProColorID">
-                                                        <div ng-if="(variation.Quantity - variation.Ordered) > 0" class="product-size" onclick="addActive(event)" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
+                                                        <div ng-if="(variation.Quantity - variation.Ordered) > 0" class="product-size" ng-click="addActive($event)" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
                                                         <div ng-if="(variation.Quantity - variation.Ordered) <= 0" class="product-size disabled-size" data-idSize="{{variation.ProductSize.ProSizeID}}">{{variation.ProductSize.NameSize}}</div>
                                                     </div>
                                                 </div>

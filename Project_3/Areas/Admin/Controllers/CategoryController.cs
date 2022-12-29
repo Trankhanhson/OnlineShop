@@ -34,11 +34,12 @@ namespace Project_3.Areas.Admin.Controllers
                 CatID = c.CatID,
                 Name = c.Name,
                 type = c.type,
-                Status = c.Status
+                Status = c.Status,
+                Slug = c.Slug
             }).ToList();
             if (searchText.Trim() != "")
             {
-                categories = categories.Where(pc => pc.Slug.Contains(MethodCommnon.ToUrlSlug(searchText.ToLower()))).ToList();
+                categories = categories.Where(pc => MethodCommnon.ToUrlSlug(pc.Name).Contains(MethodCommnon.ToUrlSlug(searchText)) || pc.type.Contains(searchText)).ToList();
             }
 
             var pageData = Paggination.PagedResult(categories,pageNumber,pageSize);

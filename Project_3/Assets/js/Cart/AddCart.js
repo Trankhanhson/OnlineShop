@@ -214,7 +214,7 @@ function addCartFromDetail() {
         proSizeName: $("#detail-section .product-size.active").text(),
         proColorId: $("#detail-section .product-color.active").attr("data-idColor"),
         srcColor: $($(parent).find("#detail-section .product-color.active")).attr("data-srcColor"),
-        Image: $($(parent).find("#detail-section .product-img img")).attr("src"),
+        Image: $($(parent).find("#detail-section .main-img")).attr("src"),
         Quantity: 1
     }
 

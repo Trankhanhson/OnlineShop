@@ -21,7 +21,7 @@
                     <div class="card-body pt-4">
                         <div class="text-end mb-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <input type="text" class="input-searchView me-3" style="width:300px;" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo số điện thoại hoặc email" />
+                                <input type="text" class="input-searchView me-3" style="width:300px;" ng-model="searchText" ng-change="getPage(1)" placeholder="Tìm kiếm theo số điện thoại" />
                                 <select ng-model="pageSize" ng-change="getPage(1)" class="limitShow">
                                     <option value="5">5</option>
                                     <option value="10">10</option>
@@ -37,11 +37,10 @@
                                     <th>
                                         Số điện thoại
                                     </th>
-                                    <th>Email</th>
                                     <th>
                                         Thời gian đặt
                                     </th>
-                                    <th>
+                                    <th style="width:10%">
                                         Tùy chỉnh
                                     </th>
                                 </tr>
@@ -52,12 +51,11 @@
                                     <td>
                                         {{o.ReceivingPhone}}
                                     </td>
-                                    <td>{{o.ReceivingMail}}</td>
                                     <td>
                                         {{o.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}
                                     </td>
                                     <td>
-                                        <a class=" btn-tool bg-primary" title="Chi tiết" ng-click="showDetail(o.OrdID)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
+                                        <a class=" btn-tool bg-primary" title="Chi tiết" ng-click="showDetail($index,o.OrdID)" data-bs-toggle="modal" data-bs-target="#SeeDtail"><i class="fa-solid fa-eye"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -118,7 +116,6 @@
                                         <strong class="box-title">
                                             Theo dõi đơn
                                             hàng
-                                            <a style="cursor: pointer;">Chi tiết</a>
                                         </strong>
                                         <div class="box-content">
                                             <div class="status">

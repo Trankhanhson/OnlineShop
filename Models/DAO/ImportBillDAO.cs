@@ -40,6 +40,20 @@ namespace Models.DAO
             }
         }
 
-      
+        public void Delete(long id)
+        {
+            var im = _dbContext.ImportBills.Find(id);
+            foreach(var detail in im.ImportBillDetails)
+            {
+                var pv = _dbContext.ProductVariations.Find(detail.ProVariationID);
+                if(pv != null)
+                {
+                    pv.Quantity = pv.Quantity - detail.Quantity;
+                }
+            }
+            _dbContext.ImportBillDetails.RemoveRange(im.ImportBillDetails);
+            _dbContext.ImportBills.Remove(im);
+            _dbContext.SaveChanges();
+        }
     }
 }

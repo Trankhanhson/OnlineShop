@@ -74,3 +74,8 @@ label.error{
     position: absolute;
     top: 94%
 }
+.profile.show{
+    display:none !important;
+    left:100px;
+
+}

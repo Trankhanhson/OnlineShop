@@ -61,14 +61,6 @@
         </div>
         <div class="header-group-icon d-flex justify-content-between me-xl-0 me-sm-5">
             <div>
-                <a href="#" class="header-icon header-store"> </a>
-
-            </div>
-            <div>
-                <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="header-icon header-heart"> </a>
-
-            </div>
-            <div>
                 @if (Request.Cookies["CustomerId"] == null)
                 {
                     <button data-bs-toggle="modal" href="#ModalLogin" style="background-color:transparent" class="header-icon header-login"> </button>
@@ -228,7 +220,7 @@
                 <form id="formLogin">
                     <div class="modal-body">
                         <p class="modal-title fs-6">Cảm ơn bạn đã trở lại.</p>
-                        <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Email của bạn">
+                        <input type="text" id="userName" name="userName" class="input-loginAndRegis NameAccount mt-4" placeholder="Số điện thoại của bạn">
                         <label id="userName-error" class="error" for="userName" style="display: none;"></label>
                         <input type="password" id="passwordLogin" name="passwordLogin" class="input-loginAndRegis PassWord mt-3" placeholder="Mật khẩu">
                         <label id="passwordLogin-error" class="error" for="passwordLogin" style="display: none;"></label>
@@ -251,17 +243,17 @@
                 <div class="position-relative d-flex ">
                     <div class="pt-4 text-center w-100">
                         <h3>Lấy lại mật khẩu</h3>
-                        <p>Vui lòng nhập email của bạn để xác nhận</p>
+                        <p>Vui lòng nhập số điện thoại của bạn để xác nhận</p>
                     </div>
                     <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formConfirmEmail">
+                <form>
                     <div class="modal-body">
-                        <input type="text" id="EmailConfirm" name="EmailConfirm" class="input-loginAndRegis NameAccount mt-4" placeholder="Email của bạn">
-                        <label id="EmailConfirm-error" class="error" for="EmailConfirm" style="display: none;"></label>
+                        <input type="text" id="PhoneConfirm" name="PhoneConfirm" class="input-loginAndRegis NameAccount mt-4" placeholder="Số điện thoại của bạn">
+                        <label id="PhoneConfirm-error" class="error" for="PhoneConfirm" style="display: none;"></label>
                     </div>
                     <div class="modal-footer">
-                        <div onclick="ConfirmEmail()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
+                        <div onclick="confirmPhone()" class="submit-regisLogin submit-modal fw-bold text-white py-3 text-center w-100" style="background-color: #333f48;">
                             Tiếp tục
                         </div>
                     </div>
@@ -270,16 +262,24 @@
         </div>
     </div>
 
-    <!--modal forget pass-->
-    <div class="modal fade" id="ConfirmedEmail" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal fade block-login" id="ConfirmOtp" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="position-relative d-flex ">
-                    <div class="py-5 text-center w-100">
-                        <h3>Yêu Cầu Thành Công</h3>
-                        <p>Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu.</p>
+                <div data-v-07844138="" class="block-content p-3">
+                    <h4>Xác thực số điện thoại</h4>
+                    <div class="note">
+                        Mã OTP vừa được gửi đến số điện thoại
+                        <span class="toPhone text-dark"></span>
+                        <div class="my-4 text-center">
+                            <input id="partitioned" class="border border-secondary p-2" placeholder="Nhập mã OTP" type="text" maxlength="6" />
+                        </div>
                     </div>
-                    <button type="button" class="btn-close btn-close-modal position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="actions">
+                        <button class="btn btn-confirm text-white mb-2" onclick="codeverity()">Xác thực</button>
+                        <div class="d-none" id="Confirm"></div>
+                    </div>
+                    <div class="actions-secondary" onclick="Resend()"><a>Gửi lại Mã</a></div>
                 </div>
             </div>
         </div>
@@ -299,8 +299,6 @@
                         <p class="modal-title fs-6">Đăng ký để Canifa có cơ hội phục vụ bạn tốt hơn.</p>
                         <input type="text" name="Name" id="Name" class="input-loginAndRegis mt-3" placeholder="Tên của bạn">
                         <input type="text" name="Address" id="Address" class="input-loginAndRegis mt-3" placeholder="Địa chỉ">
-                        <input type="text" name="Email" id="Email" class="input-loginAndRegis mt-3" placeholder="Email">
-                        <label id="Email-error" class="error" for="Email" style="display: none;"></label>
                         <input type="text" name="Phone" id="Phone" class="input-loginAndRegis mt-3" placeholder="SĐT của bạn">
                         <label id="Phone-error" class="error" for="Phone" style="display: none;"></label>
                         <input type="password" autocomplete="new-password" name="Password" id="Password" class="input-loginAndRegis mt-3" placeholder="Mật khẩu">
@@ -368,8 +366,9 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Assets/js/BaseClient.js"></script>
-    <script src="~/Assets/js/Cart/AddCart.js"></script>
-    <script src="~/Assets/js/LoginAndRegis.js"></script>
+    <script src="~/Assets/js/Cart/addCart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+    <script src="~/Assets/js/LoginAndRegister.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="~/Scripts/dirPagination.js"></script>
     <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
@@ -377,7 +376,36 @@
     <script>
         var ClientApp = angular.module("ClientApp", ['ngFileUpload', 'angularUtils.directives.dirPagination']);
     </script>
-    <script src="~/Assets/js/SearchProduct.js"></script>
+    <script>
+
+        ClientApp.controller("searchProController", searchProController);
+
+        function searchProController($scope, $http) {
+            $scope.searchText = ""
+            $scope.emptyProduct = true;
+            $scope.getData = function () {
+
+                /** Lấy danh sách loại sản phẩm*/
+                $http.get("/Home/getSearchDataClient", {
+                    params: { searchText: $scope.searchText }
+                }).then(function (res) {
+                    if (res.data.check) {
+                        $scope.productResult = JSON.parse(res.data.result)
+
+                    }
+                    else {
+                        $scope.productResult = []
+                    }
+
+                    if ($scope.productResult.length == 0) {
+                        $scope.emptyProduct = true
+                    } else {
+                        $scope.emptyProduct = false
+                    }
+                })
+            }
+        }
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

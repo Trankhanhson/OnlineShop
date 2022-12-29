@@ -104,7 +104,6 @@
     <Property Name="CusID" Type="bigint" />
     <Property Name="VoucherId" Type="int" />
     <Property Name="ReceivingName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ReceivingMail" Type="nvarchar(max)" />
     <Property Name="ReceivingPhone" Type="varchar" MaxLength="10" />
     <Property Name="ReceivingCity" Type="nvarchar" MaxLength="100" />
     <Property Name="ReceivingDistrict" Type="nvarchar" MaxLength="100" />
@@ -152,6 +151,7 @@
     <Property Name="Liked" Type="bit" />
     <Property Name="DiscountPrice" Type="decimal" Precision="18" Scale="0" />
     <Property Name="Percent" Type="int" />
+    <Property Name="Saled" Type="int" />
   </EntityType>
   <EntityType Name="ProductCat">
     <Key>
@@ -253,6 +253,17 @@
     <Property Name="Image" Type="bit" />
     <Property Name="Link" Type="nvarchar" MaxLength="250" />
     <Property Name="PageId" Type="int" />
+  </EntityType>
+  <EntityType Name="Statistical">
+    <Key>
+      <PropertyRef Name="statisticalId" />
+    </Key>
+    <Property Name="statisticalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Revenue" Type="int" />
+    <Property Name="Profit" Type="int" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Total_Order" Type="int" />
   </EntityType>
   <EntityType Name="StatusOrder">
     <Key>
@@ -680,6 +691,7 @@
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Slide" EntityType="Self.Slide" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Statistical" EntityType="Self.Statistical" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StatusOrder" EntityType="Self.StatusOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />

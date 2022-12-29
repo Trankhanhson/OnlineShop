@@ -75,7 +75,7 @@ namespace Models.DAO
 
         public int Login(string usename, string password)
         {
-            Customer cus = db.Customers.Where(c => c.Email == usename).SingleOrDefault();
+            Customer cus = db.Customers.Where(c => c.Phone == usename).FirstOrDefault();
             if (cus == null)
             {
                 return 0; //sai username
@@ -100,12 +100,7 @@ namespace Models.DAO
 
         public long getIdByUsername(string username)
         {
-            return db.Customers.Where(c=>c.Email==username).SingleOrDefault().CusID;
-        }
-
-        public Customer getByEmail(string email)
-        {
-            return db.Customers.Where(c=>c.Email==email).SingleOrDefault();
+            return db.Customers.Where(c=>c.Phone==username).FirstOrDefault().CusID;
         }
     }
 }

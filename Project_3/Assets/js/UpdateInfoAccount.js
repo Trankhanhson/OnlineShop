@@ -37,10 +37,6 @@ $(".account-setting-form").validate({
         phone: {
             required: true,
             PhoneVN: true
-        },
-        email: {
-            required: true,
-            isEmail: true
         }
     },
     messages: {
@@ -53,9 +49,6 @@ $(".account-setting-form").validate({
         },
         phone: {
             required: "Bạn cần nhập số điện thoại"
-        },
-        email: {
-            required: "Bạn cần nhập Email"
         }
     }
 })
@@ -65,13 +58,11 @@ function UpdateInfo() {
         const CusID = $(".account-setting-form").attr("data-idcustomer")
         const Name = $("#name").val()
         const Address = $("#address").val()
-        const Email = $("#email").val()
         const Phone = $("#phone").val().trim()
         const cus = {
             CusID: CusID,
             Name: Name,
             Address: Address,
-            Email: Email,
             Phone: Phone
         }
         $.ajax({
@@ -80,9 +71,6 @@ function UpdateInfo() {
             dataType: "Json",
             data: { cus: cus },
             success: function (res) {
-                if (res.message == "ExistEmail") {
-                    addError("email", "Email này đã tồn tại")
-                }
                 if (res.message == "ExistPhone") {
                     addError("phone", "SĐT này đã tồn tại")
                 }

@@ -18,7 +18,7 @@ namespace Models.Framework
         public Nullable<long> ProId { get; set; }
         public Nullable<int> SectionId { get; set; }
     
-        public virtual Product Product { get; set; }
         public virtual Section Section { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

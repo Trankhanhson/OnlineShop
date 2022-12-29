@@ -271,7 +271,7 @@
             <!--content-->
             <ul class="breadcrumb mt-5 mb-4">
                 <li class="breadcrumb-item"><a href="/Home/HomePage">Trang chủ</a></li>
-                <li class="breadcrumb-item"><a href="#">@Model.ProductCat.Name</a></li>
+                <li class="breadcrumb-item"><a href="/ShowCat/ShowProCat/@Model.ProductCat.ProCatId">@Model.ProductCat.Name</a></li>
                 <li class="breadcrumb-item active">@Model.ProName</li>
             </ul>
             <div class="row">
@@ -281,19 +281,37 @@
                             <img class="main-img" src="/Upload/Product/@Model.ProId/@firstProImage.Image">
                         </div>
                         <div class="list-img pb-1">
-                            <img class="list-img-item MainImage" src="/Upload/Product/@Model.ProId/@firstProImage.Image" alt="">
-                            <img class="list-img-item Detail1" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage1" alt="">
-                            <img class="list-img-item Detail2" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage2" alt="">
-                            <img class="list-img-item Detail3" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage3" alt="">
-                            <img class="list-img-item Detail4" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage4" alt="">
-                            <img class="list-img-item Detail5" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage5" alt="">
+                            @if (firstProImage.Image != "")
+                            {
+                                <img class="list-img-item MainImage" src="/Upload/Product/@Model.ProId/@firstProImage.Image" alt="">
+                            }
+                            @if (firstProImage.DetailImage1 != "")
+                            {
+                                <img class="list-img-item Detail1" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage1" alt="">
+                            }
+                            @if (firstProImage.DetailImage2 != "")
+                            {
+                                <img class="list-img-item Detail2" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage2" alt="">
+                            }
+                            @if (firstProImage.DetailImage3 != "")
+                            {
+                                <img class="list-img-item Detail3" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage3" alt="">
+                            }
+                            @if (firstProImage.DetailImage4 != "")
+                            {
+                                <img class="list-img-item Detail4" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage4" alt="">
+                            }
+                            @if (firstProImage.DetailImage5 != "")
+                            {
+                                <img class="list-img-item Detail5" src="/Upload/Product/@Model.ProId/@firstProImage.DetailImage5" alt="">
+                            }
                         </div>
                     </div>
 
                 </div>
                 <div class="col-md-4" style="padding-left: 60px;">
                     <h4>@Model.ProName</h4>
-                    <DIV class="d-flex fs-5 align-items-center mt-3">
+                    <div class="d-flex fs-5 align-items-center mt-3">
                         @if (Model.DiscountPrice != 0 && Model.DiscountPrice!=null)
                         {
                             <div class="detail-current-price me-3 price">@Model.DiscountPrice</div>
@@ -304,7 +322,7 @@
                             <div class="detail-current-price me-3 price">@Model.Price</div>
 
                         }
-                    </DIV>
+                    </div>
                     <hr style="height: 1px;background-color:#adaaaa;margin: 30px 0;">
                     <div class="detail-list-color">
                         <p>Màu sắc: <span class="color-chose">@firstProImage.ProductColor.NameColor</span></p>
@@ -319,7 +337,7 @@
                         </div>
                     </div>
                     <div class="detail-list-size">
-                        <p>Kích cỡ: <span class="size-choose">@Model.ProductVariations.First().ProductSize.NameSize</span></p>
+                        <p>Kích cỡ: <span class="size-choose"></span></p>
                         <div class="list-size mt-2 wrapActiveToFirstChild">
                             @foreach (var proImg in Model.ProductImages)
                             {
@@ -545,6 +563,9 @@
                     </select>
                 </div>
             </div>
+            <div class="mt-4 text-center">
+                <h3>Chưa có phản hồi nào</h3>
+            </div>
             <div class="feedback-content">
                 <div class="row">
                     <div class="col-6 p-6" dir-paginate="f in feedbacks | itemsPerPage: 10">
@@ -571,8 +592,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex justify-content-end mt-3"><dir-pagination-controls></dir-pagination-controls></div>
             </div>
-            <div class="d-flex justify-content-end mt-3"><dir-pagination-controls></dir-pagination-controls></div>
+            
         </div>
     </section>
 </main>

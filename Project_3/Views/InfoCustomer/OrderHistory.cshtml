@@ -194,36 +194,18 @@
                         </button>
                     </div>
                     <div class="profile-cpoint">
-                        <div class="profile-cpoint-item">
-                            <div class="title">C-point</div>
-                            <div class="value" style="color: rgb(218, 41, 28);">30</div>
-                        </div>
-                        <div class="profile-cpoint-line"></div>
-                        <div class="profile-cpoint-item">
-                            <div class="title">Điểm KHTT</div>
-                            <div class="value" style="color: rgb(99, 177, 188);">0</div>
-                        </div>
-                        <div class="profile-cpoint-line"></div>
-                        <div class="profile-cpoint-item">
-                            <div class="title">Hạng thẻ</div>
-                            <div class="label" style="background: rgb(116, 170, 80);">Green</div>
-                        </div>
+
                     </div>
                     <div class="profile-usermenu">
                         <ul>
                             <li active="Tài khoản"
-                                class=" active profile-usermenu-order"><a href="/InfoCustomer/OrderHistory">Đơn hàng của tôi</a></li>
+                                class="  profile-usermenu-order active"><a href="/InfoCustomer/OrderHistory">Đơn hàng của tôi</a></li>
                             <li active="Tài khoản"
-                                class="profile-usermenu-sale"><a href="#">Khuyến mại</a></li>
-                            <li active="Tài khoản"
-                                class="profile-usermenu-cpoint"><a href="#">C-points</a></li>
-                            <li active="Tài khoản"
-                                class="profile-usermenu-khtt"><a href="#">Thẻ KHTT</a></li>
-                            <li active="Tài khoản"
-                                class="profile-usermenu-wishlist"><a href="#">Yêu thích</a></li>
+                                class="profile-usermenu-wishlist"><a href="/InfoCustomer/ProductLike">Yêu thích</a></li>
                             <li active="Tài khoản"
                                 class=" profile-usermenu-account"><a href="/InfoCustomer/InfoAccount">Tài khoản</a></li>
-                            <li active="Tài khoản" class="profile-usermenu-logout"><a href="/LoginClient/Logout">Đăng xuất</a></li>
+                            <li active="Tài khoản"
+                                class="profile-usermenu-logout"><a href="/LoginClient/Logout">Đăng xuất</a></li>
                         </ul>
                     </div>
                     <div class="profile-support">
@@ -240,11 +222,10 @@
                     <div class="account-page-filter">
                         <ul>
                             <li class="filer-order-0 active" ng-click="getOrder(0)" style="cursor:pointer"><a>Tất cả đơn hàng</a></li>
-                            <li class="filer-order-1" ng-click="getOrder(1)" style="cursor:pointer"><a>Chờ xác nhận</a></li>
-                            <li class="filer-order-2 " ng-click="getOrder(2)" style="cursor:pointer"><a>Chờ xử lý</a></li>
-                            <li class="filer-order-3" ng-click="getOrder(3)" style="cursor:pointer"><a>Đang vận chuyển</a></li>
-                            <li class="filer-order-4" ng-click="getOrder(4)" style="cursor:pointer"><a>Thành công</a></li>
-                            <li class="filer-order-5" ng-click="getOrder(5)" style="cursor:pointer"><a>Đã hủy</a></li>
+                            <li class="filer-order-1" ng-click="getOrder(1)" style="cursor:pointer"><a>Chờ xử lý</a></li>
+                            <li class="filer-order-2" ng-click="getOrder(2)" style="cursor:pointer"><a>Đang vận chuyển</a></li>
+                            <li class="filer-order-3" ng-click="getOrder(3)" style="cursor:pointer"><a>Thành công</a></li>
+                            <li class="filer-order-4" ng-click="getOrder(4)" style="cursor:pointer"><a>Đã hủy</a></li>
                         </ul>
                     </div>
                     <div class="order-list">
@@ -281,7 +262,7 @@
 
                             <div class="order-date"><span class="label">Ngày đặt hàng:</span> <span>{{Order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</span></div>
                             <span class="order-status mb-3" style="color: rgb(99, 177, 188);">{{Order.Status}}</span>
-                            <button ng-click="CancelOrder(Order.OrdID)" ng-if="Order.StatusOderId == 1 || Order.StatusOderId == 2" class="btn-sm btn-danger btn-cancelOrder">Hủy đơn hàng</button>
+                            <button ng-click="CancelOrder(Order.OrdID)" ng-if="Order.StatusOderId == 1" class="btn-sm btn-danger btn-cancelOrder">Hủy đơn hàng</button>
                         </div>
                         <div class="order-details-view">
                             <div class="row">
@@ -480,8 +461,8 @@
                                                         <span>Màu: {{item.NameColor}} / {{item.NameSize}}</span>
                                                     </div>
 
-                                                    <button ng-if="Order.StatusOderId == 4 && item.FeedbackId == 0" ng-click="AddF(item.ProVariationID)" data-bs-toggle="modal" data-bs-target="#AddReview" class="btn btn-sm mt-2 btn-primary">Đánh giá sản phẩm</button>
-                                                    <button ng-if="Order.StatusOderId == 4 && item.FeedbackId != 0" ng-click="EditF(item.FeedbackId)" data-bs-toggle="modal" data-bs-target="#AddReview" class="btn btn-sm mt-2 btn-primary">Sửa đánh giá</button>
+                                                    <button ng-if="Order.StatusOderId == 3 && item.FeedbackId == 0" ng-click="AddF(item.ProVariationID)" data-bs-toggle="modal" data-bs-target="#AddReview" class="btn btn-sm mt-2 btn-primary">Đánh giá sản phẩm</button>
+                                                    <button ng-if="Order.StatusOderId == 3 && item.FeedbackId != 0" ng-click="EditF(item.FeedbackId)" data-bs-toggle="modal" data-bs-target="#AddReview" class="btn btn-sm mt-2 btn-primary">Sửa đánh giá</button>
                                                 </div>
                                             </div>
                                         </td>

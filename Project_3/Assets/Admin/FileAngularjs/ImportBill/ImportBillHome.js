@@ -35,30 +35,23 @@ function importBillController($scope, $http) {
     }
 
     $scope.cancel = function (index, im) {
-        if (confirm(`Bạn có muốn hủy đơn hàng mã ${im.ImpIdD}`)) {
+        if (confirm(`Bạn có muốn hủy đơn hàng mã ${im.ImpId}`)) {
             $http({
                 method: "GET",
-                url: "/Admin/ImportBill/CancelBill/" + im.ImpIdD,
+                url: "/Admin/ImportBill/CancelBill/" + im.ImpId,
                 dataType: 'Json'
             }).then(function (res) {
                 if (res.data) {
                     $scope.ImportBills.splice(index, 1)
-                    $("#successToast .text-toast").text(`Hóa đơn nhập ${im.ImpIdD} đã được hủy`)
+                    $("#successToast .text-toast").text(`Hóa đơn nhập ${im.ImpId} đã được hủy`)
                     $("#successToast").toast("show")
                 }
                 else {
-                    $("#erorrToast .text-toast").text(`Không thể hủy hóa đơn nhập ${im.ImpIdD}`)
+                    $("#erorrToast .text-toast").text(`Không thể hủy hóa đơn nhập ${im.ImpId}`)
                     $("#erorrToast").toast("show")
                 }
             })
         }
     }
 
-    $scope.getSortClass = function (column) {
-        //khi reverse thay doi thi nd-class dc kich hoat
-        if ($scope.sortColumn == column) {
-            return $scope.reverse ? 'fa-solid fa-arrow-down' : 'fa-solid fa-arrow-up'
-        }
-        return ''
-    }
 }

@@ -8,164 +8,7 @@
 @section scripts{
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Assets/Admin/js/product/product.js"></script>
-    <script>
-        function SaveData() {
-
-            //lấy dữ liệu của product
-            var ProId = $("#main").attr("data-idPro")
-            var ProName = $("#name").val()
-            var Material = $("#material").val()
-            var Description = $("#description").val()
-            var ProCatId = $("#ProCatId").val()
-            var ImportPrice = $("#importPrice").val()
-            var Price = $("#Price").val()
-            var product = {
-                ProId: ProId,
-                ProName: ProName,
-                Material: Material,
-                Description: Description,
-                ProCatId: ProCatId,
-                ImportPrice: ImportPrice,
-                Price: Price
-            }
-
-            var listVariation = [] //danh sách biến thể
-            var variationWrap = $(".table-create tbody tr")
-
-            variationWrap.each((index, value) => {
-                let colorId = $($(value).find(".colorOption")).attr("data-idColor")
-                let variation = {
-                    ProId: ProId,
-                    ProColorID: colorId,
-                    ProSizeID: $($(value).find(".sizeOption")).attr("data-idSize"),
-                    Quantity: $($(value).find(".input-create")).val()
-                }
-                listVariation.push(variation)
-            })
-
-            //Lấy list Color
-            var listColorId = []
-            let listSpanColor = $(".wrap-color").children("span")
-            listSpanColor.each((index, value) => {
-                listColorId.push($(value).attr("data-idColor"))
-            })
-
-            //thêm sản phẩm và danh sách biến thể bằng ajax và lấy về idproduct mới
-            $.ajax({
-                url: "/Admin/Product/Edit",
-                data: { product: product, listVariation: listVariation },
-                dataType: "json",
-                type: "POST",
-                success: function (response) {
-                    if (response.check) {
-                        for (var i = 0; i < listColorId.length; i++) {
-                            UploadImgToServer(listColorId[i], response.Proid) //upload ảnh mới của product
-                        }
-                        location.reload()
-                        $("#successToast .text-toast").text(response.message)
-                        $("#successToast").toast("show") //hiển thị thông báo thành công
-                    }
-                    else {
-                        $("#errorToast .text-toast").text(response.message)
-                        $("#errorToast").toast("show") //hiển thị thông báo thành công
-                    }
-                }
-            })
-        }
-
-        function UploadImgToServer(idColor, idProduct) {
-            //upload img
-            //kiểm tra trình duyệt có hỗ trợ FormData oject không
-            if (window.FormData != undefined) {
-                //Lấy dữ liệu trên file upload
-                //lấy thẻ input theo idcolor
-                var imgItem = $(`.imgItem[data-idColor=${idColor}]`)
-                var listImgElement = $(imgItem).find(".file-upload-image")
-                var ListNoSelect = []
-                listImgElement.each((index, value) => {
-                    //nếu có ảnh thì là chưa select ngược lại không có ảnh là đã
-                    let src = $(value).attr("src")
-                    if (src != "") {
-                        ListNoSelect.push("noSelect")
-                    }
-                    else {
-                        ListNoSelect.push("Selected")
-                    }
-                })
-                var fileMain = $(imgItem).find('.input-file__main').get(0).files;
-                var fileDetail1 = $(imgItem).find('.input-file__detail1').get(0).files;
-                var fileDetail2 = $(imgItem).find('.input-file__detail2').get(0).files;
-                var fileDetail3 = $(imgItem).find('.input-file__detail3').get(0).files;
-                var fileDetail4 = $(imgItem).find('.input-file__detail4').get(0).files;
-                var fileDetail5 = $(imgItem).find('.input-file__detail5').get(0).files;
-                //Tạo đối trượng formData
-                var formData = new FormData();
-                //tạo các key,value cho data
-                formData.append("file", fileMain[0])
-                formData.append("file1", fileDetail1[0])
-                formData.append("file2", fileDetail2[0])
-                formData.append("file3", fileDetail3[0])
-                formData.append("file4", fileDetail4[0])
-                formData.append("file5", fileDetail5[0])
-                formData.append("ProId", idProduct)
-                formData.append("ListNoSelect", ListNoSelect)
-                formData.append("ProColorId", idColor)
-                $.ajax({
-                    async: true,
-                    type: 'POST',
-                    url: '/Admin/Product/UploadImgEdit',
-                    contentType: false, //Không có header
-                    processData: false, //không xử lý dữ liệu
-                    data: formData,
-                    success: function (urlImage) {
-                    },
-                    error: function (err) {
-                        alert('có lỗi khi upload: ' + err.statusText);
-                    }
-                })
-            }
-        }
-
-        $(".btn-edit").click((e) => {
-
-            var variationWrap = $(".table-create tbody tr")
-            //kiểm tra xem đã thêm variation chưa
-            if (variationWrap.length > 0) {
-                if ($('#formProduct').valid()) {
-                    SaveData()
-                }
-            }
-            else {
-                $("#errorToast .text-toast").text("Bạn chưa thêm biến thể nào")
-                $("#errorToast").toast("show")
-            }
-        })
-
-
-        //hiển thị ảnh khi load
-        $('.file-upload-content').show();
-        $('.image-upload-wrap').hide();
-
-
-        /**loại các size bị trung trên giao diện*/
-        /**cách dùng : đưa class filter-sameValue và thẻ bọc các size và class filter-value vào các thẻ có data-idSize*/
-        var parentSizes = $(".filter-sameValue") //danh sách các element chứa các size
-        parentSizes.each((index, wrapSize) => {
-            let listSize = $(wrapSize).find(".filter-value") //danh sách size
-            let newList = [] //chứa list idSize đã được filter
-            listSize.each((index1, sizeElement) => {
-                let idSize = $(sizeElement).attr("data-idSize")
-
-                //nếu idSize chưa tồn tại trong newList
-                if (newList.indexOf(idSize) == -1) {
-                    newList.push(idSize)
-                }
-                else {
-                    $(sizeElement).remove() //xóa phần element nếu đã tồn tại
-                }
-            })
-        })
-    </script>
+    <script src="~/Assets/Admin/js/product/editProduct.js"></script>
 
     <script src="~/Scripts/ng-file-upload-shim.min.js"></script>
     <script src="~/Scripts/ng-file-upload.min.js"></script>
@@ -256,342 +99,342 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between px-3 py-2 mt-3 align-items-center text-dark font-weight-bold method-header" data-bs-toggle="collapse" href="#method" aria-expanded="false" aria-controls="method">
-                                <span>Thuộc tính</span>
-                                <span><i class="fa-solid fa-chevron-up"></i></span>
-                            </div>
-                            <div class="collapse method-content px-4 pt-4 p2-3" id="method">
-                                <div class="d-flex align-items-center justify-content-between mb-4" ng-controller="ColorController">
-                                    <label for="" class="text-dark mb-0 font-weight-bold">Màu sắc</label>
-                                    <div class="flex-grow-1 wrap-color wrap-property d-flex">
-                                        @foreach (var item in Model.ProductImages)
-                                        {
-                                            <span data-idColor="@item.ProductColor.ProColorID" class="method-values">@item.ProductColor.NameColor<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
-                                        }
-                                        <div class="dropdown method-dropdown__wrap">
-                                            <div class="btn dropdown-toggle method-dropdown" style="border: none;border-bottom: 2px solid rgb(202, 202, 202); border-radius: 0px;" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <input type="text" ng-model="searchColor" class="border-0" style="outline: none; width: 97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
-                                            </div>
-                                            <ul class="shadow dropdown-menu" aria-labelledby="dropdownColor">
-                                                <li class="" ng-repeat="item in ColorList | filter : searchColor"><a class="dropdown-item method-dropdown__item-link " ng-click="addValue($event)" data-idColor="{{item.ProColorID}}"><img class="method-image-color" src="/Upload/ColorImage/{{item.ProColorID}}/{{item.ImageColor}}"><p>{{item.NameColor}}</p><div data-bs-toggle="modal" data-bs-target="#EditColor" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="my-auto px-1" style="cursor:pointer" ng-click="Add()" data-bs-toggle="modal" data-bs-target="#AddColor"><i class="fa-solid fa-plus"></i></div>
-
-                                    </div>
-
-                                    <!--Thêm color-->
-                                    <div class="modal fade" id="AddColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Thêm màu</h5>
-                                                    <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form name="createColorForm" novalidate>
-                                                        <div class="form-horizontal">
-
-                                                            <div class="row mb-3">
-                                                                <label for="inputText" class="col-sm-4 col-form-label">Màu</label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control" name="NameColor" ng-model="proColor.NameColor" required>
-                                                                    <span ng-show="createColorForm.$submitted">
-                                                                        <span class="error" ng-show="createColorForm.NameColor.$error.required">Bạn cần nhập tên màu</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row mb-3">
-                                                                <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
-                                                                <div class="col-sm-8">
-                                                                    <input class="form-control" type="file" ngf-select="SelectImage($files)">
-                                                                    <span>
-                                                                        <span class="error" ng-show="errorImage">Bạn cần chọn hình ảnh</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
-                                                        </div>
-                                                    </form>
-
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--Sửa color-->
-                                    <div class="modal fade" id="EditColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Sửa màu</h5>
-                                                    <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form name="editColorForm" novalidate>
-                                                        <div class="form-horizontal">
-
-                                                            <div class="row mb-3">
-                                                                <p for="inputText" class="col-sm-3 col-form-label">Màu</p>
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" class="form-control" name="NameColor" ng-model="proColor.NameColor" required>
-                                                                    <span ng-show="editColorForm.$submitted ">
-                                                                        <span class="error" ng-show="editColorForm.NameColor.$error.required">Bạn cần nhập tên màu</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row mb-3">
-                                                                <p for="inputNumber" class="col-sm-3 col-form-label">Ảnh</p>
-                                                                <div class="col-sm-9">
-                                                                    <input class="form-control" type="file" ngf-select="SelectImage($files)">
-                                                                    <span>
-                                                                        <span class="error" ng-show="errorImage">Bạn cần chọn hình ảnh</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn btn-primary" ng-click="SaveEdit()">Lưu</button>
-                                                            <div class="btn btn-primary bg-danger" ng-click="Delete(proColor)">Xóa</div>
-                                                        </div>
-                                                    </form>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="wrap-imgItem">
+                        </form>
+                        <div class="d-flex justify-content-between px-3 py-2 mt-3 align-items-center text-dark font-weight-bold method-header" data-bs-toggle="collapse" href="#method" aria-expanded="false" aria-controls="method">
+                            <span>Thuộc tính</span>
+                            <span><i class="fa-solid fa-chevron-up"></i></span>
+                        </div>
+                        <div class="collapse method-content px-4 pt-4 p2-3" id="method">
+                            <div class="d-flex align-items-center justify-content-between mb-4" ng-controller="ColorController">
+                                <label for="" class="text-dark mb-0 font-weight-bold">Màu sắc</label>
+                                <div class="flex-grow-1 wrap-color wrap-property d-flex">
                                     @foreach (var item in Model.ProductImages)
                                     {
-                                        <div class="d-flex justify-content-between mb-4 imgItem" data-idColor="@item.ProColorID">
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file__main input-file" type="file" accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
+                                        <span data-idColor="@item.ProductColor.ProColorID" class="method-values">@item.ProductColor.NameColor<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
+                                    }
+                                    <div class="dropdown method-dropdown__wrap">
+                                        <div class="btn dropdown-toggle method-dropdown" style="border: none;border-bottom: 2px solid rgb(202, 202, 202); border-radius: 0px;" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <input type="text" ng-model="searchColor" class="border-0" style="outline: none; width: 97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
+                                        </div>
+                                        <ul class="shadow dropdown-menu" style="flex-wrap: wrap" aria-labelledby="dropdownColor">
+                                            <li class="" ng-repeat="item in ColorList | filter : searchColor"><a class="dropdown-item method-dropdown__item-link " ng-click="addValue($event)" data-idColor="{{item.ProColorID}}"><img class="method-image-color" src="/Upload/ColorImage/{{item.ProColorID}}/{{item.ImageColor}}"><p>{{item.NameColor}}</p><div data-bs-toggle="modal" data-bs-target="#EditColor" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="my-auto px-1" style="cursor:pointer" ng-click="Add()" data-bs-toggle="modal" data-bs-target="#AddColor"><i class="fa-solid fa-plus"></i></div>
+
+                                </div>
+
+                                <!--Thêm color-->
+                                <div class="modal fade" id="AddColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Thêm màu</h5>
+                                                <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="createColorForm" novalidate>
+                                                    <div class="form-horizontal">
+
+                                                        <div class="row mb-3">
+                                                            <label for="inputText" class="col-sm-4 col-form-label">Màu</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" name="NameColor" ng-model="proColor.NameColor" required>
+                                                                <span ng-show="createColorForm.$submitted">
+                                                                    <span class="error" ng-show="createColorForm.NameColor.$error.required">Bạn cần nhập tên màu</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label for="inputNumber" class="col-sm-4 col-form-label">Ảnh</label>
+                                                            <div class="col-sm-8">
+                                                                <input class="form-control" type="file" ngf-select="SelectImage($files)">
+                                                                <span>
+                                                                    <span class="error" ng-show="errorImage">Bạn cần chọn hình ảnh</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.Image" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit" class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
                                                     </div>
+                                                </form>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Sửa color-->
+                                <div class="modal fade" id="EditColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Sửa màu</h5>
+                                                <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="editColorForm" novalidate>
+                                                    <div class="form-horizontal">
+
+                                                        <div class="row mb-3">
+                                                            <p for="inputText" class="col-sm-3 col-form-label">Màu</p>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="NameColor" ng-model="proColor.NameColor" required>
+                                                                <span ng-show="editColorForm.$submitted ">
+                                                                    <span class="error" ng-show="editColorForm.NameColor.$error.required">Bạn cần nhập tên màu</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <p for="inputNumber" class="col-sm-3 col-form-label">Ảnh</p>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control" type="file" ngf-select="SelectImage($files)">
+                                                                <span>
+                                                                    <span class="error" ng-show="errorImage">Bạn cần chọn hình ảnh</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit" class="btn btn-primary" ng-click="SaveEdit()">Lưu</button>
+                                                        <div class="btn btn-primary bg-danger" ng-click="Delete(proColor)">Xóa</div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wrap-imgItem">
+                                @foreach (var item in Model.ProductImages)
+                                {
+                                    <div class="d-flex justify-content-between mb-4 imgItem" data-idColor="@item.ProColorID">
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__main input-file" type="file" accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
                                                 </div>
                                             </div>
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file__detail1 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
-                                                    </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage1" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file__detail2 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
-                                                    </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage2" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file input-file__detail3" type='file' accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
-                                                    </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage3" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file input-file__detail4" type='file' accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
-                                                    </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage4" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="wrap-file-box" onclick="fileBoxClick(this)">
-                                                <div class="image-upload-wrap">
-                                                    <input class="input-file input-file__detail5" type='file' accept="image/*" onchange="uploadImg(this)" />
-                                                    <div class="drag-text">
-                                                        <p>Ảnh @item.ProductColor.NameColor</p>
-                                                    </div>
-                                                </div>
-                                                <div class="file-upload-content">
-                                                    <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage5" alt="No Image" />
-                                                    <div class="image-title-wrap">
-                                                        <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
-                                                    </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.Image" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__detail1 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage1" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file__detail2 input-file" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage2" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file input-file__detail3" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage3" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file input-file__detail4" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage4" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wrap-file-box" onclick="fileBoxClick(this)">
+                                            <div class="image-upload-wrap">
+                                                <input class="input-file input-file__detail5" type='file' accept="image/*" onchange="uploadImg(this)" />
+                                                <div class="drag-text">
+                                                    <p>Ảnh @item.ProductColor.NameColor</p>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content">
+                                                <img class="file-upload-image" src="/Upload/Product/@Model.ProId/@item.DetailImage5" alt="No Image" />
+                                                <div class="image-title-wrap">
+                                                    <button type="button" class="remove-image" onclick="removeImg(this)">Xóa</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between mb-4 mt-5" ng-controller="SizeController">
+                                <label for="" class="text-dark mb-0 font-weight-bold">Kích thước</label>
+                                <div class="flex-grow-1 d-flex wrap-size wrap-property filter-sameValue">
+                                    @foreach (var item in Model.ProductVariations)
+                                    {
+                                        <span class="method-values filter-value" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
                                     }
+                                    <div class="dropdown method-dropdown__wrap">
+                                        <div class="btn dropdown-toggle method-dropdown " style="border: none;border-bottom: 2px solid rgb(202, 202, 202);border-radius:0px;" id="dropdownSize" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <input type="text" ng-model="searchSize" class="border-0" style="outline:none; width:97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
+                                        </div>
+                                        <ul class="dropdown-menu shadow" style="flex-wrap: wrap" aria-labelledby="dropdownSize">
+                                            <li class="method-dropdown__item" ng-repeat="item in ListSize | filter : searchSize"><a class="dropdown-item method-dropdown__item-link" ng-click="addValue($event)" data-idSize="{{item.ProSizeID}}" href="#"><p>{{item.NameSize}}</p><div data-bs-toggle="modal" data-bs-target="#EditSize" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="my-auto px-1" style="cursor:pointer" ng-click="Add()" data-bs-toggle="modal" data-bs-target="#AddSize"><i class="fa-solid fa-plus"></i></div>
                                 </div>
 
-                                <div class="d-flex align-items-center justify-content-between mb-4 mt-5" ng-controller="SizeController">
-                                    <label for="" class="text-dark mb-0 font-weight-bold">Kích thước</label>
-                                    <div class="flex-grow-1 d-flex wrap-size wrap-property filter-sameValue">
+                                <!--Thêm Size-->
+                                <div class="modal fade" id="AddSize" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Thêm kích thước</h5>
+                                                <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="createSizeForm" novalidate>
+                                                    <div class="form-horizontal">
+
+                                                        <div class="row mb-3">
+                                                            <p for="inputText" class="col-sm-3 col-form-label">Kích thước</p>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="NameSize" ng-model="proSize.NameSize" required>
+                                                                <span ng-show="createSizeForm.$submitted">
+                                                                    <span class="error" ng-show="createSizeForm.NameSize.$error.required">Bạn cần nhập tên kích thước</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit" class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Sửa Size-->
+                                <div class="modal fade" id="EditSize" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Sửa kích thước</h5>
+                                                <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="editSizeForm" novalidate>
+                                                    <div class="form-horizontal">
+
+                                                        <div class="row mb-3">
+                                                            <p for="inputText" class="col-sm-3 col-form-label">Kích thước</p>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="NameSize" ng-model="proSize.NameSize" required>
+                                                                <span ng-show="editSizeForm.$submitted || editSizeForm.NameSize.$dirty">
+                                                                    <span class="error" ng-show="editSizeForm.NameSize.$error.required">Bạn cần nhập tên kích thước</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <div class="btn btn-primary" ng-click="SaveEdit()">Lưu</div>
+                                                        <button type="submit" class="btn btn-primary bg-danger" ng-click="Delete(proSize)">Xóa</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="box-options mt-4 mb-4">
+                            <div class=" px-3 py-2  text-dark font-weight-bold options-header">
+                                <span>Danh sách các hàng hóa cùng loại</span>
+                            </div>
+                            <div class="options-content px-4">
+                                <table class="table table-create table-borderless">
+                                    <thead>
+                                        <tr class="text-dark ">
+                                            <th class="border-top-0 font-weight-heading" style="width:10%">Màu</th>
+                                            <th class="border-top-0 font-weight-heading">Kích thước</th>
+                                            <th class="border-top-0 font-weight-heading">Tồn kho</th>
+                                            <th class="border-top-0 "></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         @foreach (var item in Model.ProductVariations)
                                         {
-                                            <span class="method-values filter-value" data-idSize="@item.ProductSize.ProSizeID">@item.ProductSize.NameSize<span class="method-remove"><i class="fa-solid fa-xmark"></i></span></span>
-                                        }
-                                        <div class="dropdown method-dropdown__wrap">
-                                            <div class="btn dropdown-toggle method-dropdown " style="border: none;border-bottom: 2px solid rgb(202, 202, 202);border-radius:0px;" id="dropdownSize" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <input type="text" ng-model="searchSize" class="border-0" style="outline:none; width:97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
-                                            </div>
-                                            <ul class="dropdown-menu shadow" aria-labelledby="dropdownSize">
-                                                <li class="method-dropdown__item" ng-repeat="item in ListSize | filter : searchSize"><a class="dropdown-item method-dropdown__item-link" ng-click="addValue($event)" data-idSize="{{item.ProSizeID}}" href="#"><p>{{item.NameSize}}</p><div data-bs-toggle="modal" data-bs-target="#EditSize" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="my-auto px-1" style="cursor:pointer" ng-click="Add()" data-bs-toggle="modal" data-bs-target="#AddSize"><i class="fa-solid fa-plus"></i></div>
-                                    </div>
-
-                                    <!--Thêm Size-->
-                                    <div class="modal fade" id="AddSize" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Thêm kích thước</h5>
-                                                    <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form name="createSizeForm" novalidate>
-                                                        <div class="form-horizontal">
-
-                                                            <div class="row mb-3">
-                                                                <p for="inputText" class="col-sm-3 col-form-label">Kích thước</p>
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" class="form-control" name="NameSize" ng-model="proSize.NameSize" required>
-                                                                    <span ng-show="createSizeForm.$submitted">
-                                                                        <span class="error" ng-show="createSizeForm.NameSize.$error.required">Bạn cần nhập tên kích thước</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn btn-primary" ng-click="SaveAdd()">Lưu</button>
-                                                        </div>
-                                                    </form>
-
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--Sửa Size-->
-                                    <div class="modal fade" id="EditSize" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Sửa kích thước</h5>
-                                                    <button type="button" class="btn-close btn-closeModel" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form name="editSizeForm" novalidate>
-                                                        <div class="form-horizontal">
-
-                                                            <div class="row mb-3">
-                                                                <p for="inputText" class="col-sm-3 col-form-label">Kích thước</p>
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" class="form-control" name="NameSize" ng-model="proSize.NameSize" required>
-                                                                    <span ng-show="editSizeForm.$submitted || editSizeForm.NameSize.$dirty">
-                                                                        <span class="error" ng-show="editSizeForm.NameSize.$error.required">Bạn cần nhập tên kích thước</span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                            <div class="btn btn-primary" ng-click="SaveEdit()">Lưu</div>
-                                                            <button type="submit" class="btn btn-primary bg-danger" ng-click="Delete(proSize)">Xóa</button>
-                                                        </div>
-                                                    </form>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="box-options mt-4 mb-4">
-                                <div class=" px-3 py-2  text-dark font-weight-bold options-header">
-                                    <span>Danh sách các hàng hóa cùng loại</span>
-                                </div>
-                                <div class="options-content px-4">
-                                    <table class="table table-create table-borderless">
-                                        <thead>
-                                            <tr class="text-dark ">
-                                                <th class="border-top-0 font-weight-heading" style="width:10%">Màu</th>
-                                                <th class="border-top-0 font-weight-heading">Kích thước</th>
-                                                <th class="border-top-0 font-weight-heading">Tồn kho</th>
-                                                <th class="border-top-0 "></th>
+                                            <tr>
+                                                <td>
+                                                    <p class="colorOption text-dark" data-idColor="@item.ProColorID">@item.ProductColor.NameColor</p>
+                                                </td>
+                                                <td>
+                                                    <p class="sizeOption text-dark" data-idSize="@item.ProSizeID">@item.ProductSize.NameSize</p>
+                                                </td>
+                                                <td>
+                                                    <div class=" d-flex">
+                                                        <input type="number" name="Quantity" value="@item.Quantity" class="input-create input-quantity text-dark" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="text-end"><span class="delete-option"><i class="fa-solid fa-trash-can"></i></span></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.ProductVariations)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <p class="colorOption text-dark" data-idColor="@item.ProColorID">@item.ProductColor.NameColor</p>
-                                                    </td>
-                                                    <td>
-                                                        <p class="sizeOption text-dark" data-idSize="@item.ProSizeID">@item.ProductSize.NameSize</p>
-                                                    </td>
-                                                    <td>
-                                                        <div class=" d-flex">
-                                                            <input type="number" name="Quantity" value="@item.Quantity" class="input-create input-quantity text-dark" readonly>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end"><span class="delete-option"><i class="fa-solid fa-trash-can"></i></span></td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table><div class="text-end mb-4 pe-4"></div>
-                                </div>
+                                        }
+                                    </tbody>
+                                </table><div class="text-end mb-4 pe-4"></div>
                             </div>
-                            <div class="text-end">
-                                <div class="btn btn-primary me-3 btn-edit"><i class="fa-solid fa-floppy-disk"></i> Lưu</div>
-                                <a class="btn btn-primary me-3" href="/Admin/Product/Index"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
-                                <div class="btn-cancel btn bg-danger text-white" onclick="CancelClick()"><i class="fa-solid fa-delete-left"></i> Hủy</div>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="text-end">
+                            <div class="btn btn-primary me-3 btn-edit"><i class="fa-solid fa-floppy-disk"></i> Lưu</div>
+                            <a class="btn btn-primary me-3" href="/Admin/Product/Index"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
+                            <div class="btn-cancel btn bg-danger text-white" onclick="CancelClick()"><i class="fa-solid fa-delete-left"></i> Hủy</div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,32 +1,4 @@
-﻿//handle input code
-var obj = document.getElementById('partitioned');
-obj.addEventListener('keydown', stopCarret);
-obj.addEventListener('keyup', stopCarret);
-
-function stopCarret() {
-    if (obj.value.length > 3) {
-        setCaretPosition(obj, 3);
-    }
-}
-
-function setCaretPosition(elem, caretPos) {
-    if (elem != null) {
-        if (elem.createTextRange) {
-            var range = elem.createTextRange();
-            range.move('character', caretPos);
-            range.select();
-        }
-        else {
-            if (elem.selectionStart) {
-                elem.focus();
-                elem.setSelectionRange(caretPos, caretPos);
-            }
-            else
-                elem.focus();
-        }
-    }
-}
-
+﻿
 
 //handle countdown timer
 function checkSecond(sec) {
@@ -42,6 +14,7 @@ function startTimer() {
     var s = checkSecond((timeArray[1] - 1));
     if (s == 59) { m = m - 1 }
     if (m < 0) {
+        $(".btn-confirm").addClass("disabled")
         return
     }
 
@@ -133,45 +106,38 @@ $.validator.addMethod('isEmail', function (value) {
 
 
 $(".form-Payment").validate({
-        rules: {
-            name: {
-                required: true
-            },
-            address: {
-                required: true,
-                maxlength: 100
-            },
-            phone: {
-                required: true,
-                PhoneVN: true
-            },
-            email: {
-                required: true,
-                isEmail: true
-            },
-            city: "required",
-            district: "required",
-            ward: "required"
+    rules: {
+        name: {
+            required: true
         },
-        messages: {
-            name: {
-                required: "Họ tên không được để trống",
-            },
-            address: {
-                required: "Địa chỉ không được để trống",
-                maxlength: "Địa chỉ khống quá 100 ký tự"
-            },
-            phone: {
-                required: "Số điện thoại không được để trống"
-            },
-            email: {
-                required: "Email không được để trống"
-            },
-            city: "Bạn cần chọn trường này",
-            district: "Bạn cần chọn trường này",
-            ward: "Bạn cần chọn trường này"
-        }
-    })
+        address: {
+            required: true,
+            maxlength: 100
+        },
+        phone: {
+            required: true,
+            PhoneVN: true
+        },
+        city: "required",
+        district: "required",
+        ward: "required"
+    },
+    messages: {
+        name: {
+            required: "Họ tên không được để trống",
+        },
+        address: {
+            required: "Địa chỉ không được để trống",
+            maxlength: "Địa chỉ khống quá 100 ký tự"
+        },
+        phone: {
+            required: "Số điện thoại không được để trống"
+        },
+        city: "Bạn cần chọn trường này",
+        district: "Bạn cần chọn trường này",
+        ward: "Bạn cần chọn trường này"
+    }
+})
 
 //khi người dùng muốn đặt hàng
 function listCartItem() {
@@ -230,10 +196,10 @@ function getVoucher(input, VoucherId, Name, MiximumMoney, Amount, TypeAmount) {
             }
             //update gia tri cho gia goc
             let discountTotal = JSON.parse($(".discount-total").attr("data"))
-            discountTotal -= discountExtra //trừ thêm tiền được giảm giá
+            discountTotal += discountExtra //trừ thêm tiền được giảm giá
             let textDiscountTotal = convertPrice(JSON.stringify(discountTotal))
 
-            $(".discount-total").text(textDiscountTotal)
+            $(".discount-total").text("-" + textDiscountTotal)
             $(".total-price").text(convertPrice(JSON.stringify(totalBill)))
 
             $(".discount-total").attr("data", discountTotal)
@@ -254,7 +220,6 @@ function payment() {
     const CusID = $(".form-Payment").attr("data-cusid")
     const Phone = $("#phone").val().trim()
     const Name = $("#name").val().trim()
-    const Email = $("#email").val()
     const Note = $("#note").val().trim()
     const city = $("#city option:selected").text()
     const district = $("#district option:selected").text()
@@ -263,13 +228,11 @@ function payment() {
     const PaymentType = $('.payment-method.active input').val()
     const MoneyTotal = $(".total-price").attr("data")
     const VoucherId = checkVoucher == true ? $("input.voucherId").val() : null //nếu checkVoucher = false thì sẽ không lấy cvoucher
-    let code = $("#partitioned").val() //code xác nhận 
     if ($(".form-Payment").valid()) {
         let order = {
             CusID: CusID,
             ReceivingPhone: Phone,
             ReceivingName: Name,
-            ReceivingMail: Email,
             ReceivingCity: city,
             ReceivingDistrict: district,
             ReceivingWard: ward,
@@ -284,7 +247,7 @@ function payment() {
         $.ajax({
             url: "/Cart/Order",
             type: "POST",
-            data: { order: order, cartItems: cartItems, code: code },
+            data: { order: order, cartItems: cartItems},
             dataType: "Json",
             success: function (res) {
                 if (res != 0) {
@@ -299,24 +262,91 @@ function payment() {
     }
 }
 
-function confirmEmail() {
+function sendOtp() {
+    const firebaseConfig = {
+        apiKey: "AIzaSyB1FuGkBfcS7oHWqFGLtHSUxY3btvXiWaM",
+        authDomain: "otpconfirm-de0b8.firebaseapp.com",
+        projectId: "otpconfirm-de0b8",
+        storageBucket: "otpconfirm-de0b8.appspot.com",
+        messagingSenderId: "1551170791",
+        appId: "1:1551170791:web:9cc9ae02118876e6f8b642",
+        measurementId: "G-QV2VCK2XHB"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    var a = document.getElementById('phone').value;
+    var b = "+84";
+    var number = b + a.slice(-9);
+
+    const appVerifier = new firebase.auth.RecaptchaVerifier('Confirm', { size: 'invisible' });
+    firebase.auth().signInWithPhoneNumber(number, appVerifier).then(function (confirmationResult) {
+        window.confirmationResult = confirmationResult;
+        coderesult = confirmationResult;
+        appVerifier.reset();
+    }).catch(function (error) {
+        alert(error.message);
+        appVerifier.reset();
+    });
+}
+
+function Resend() {
+    event.preventDefault()
+    $(".btn-confirm").removeClass("disabled")
+    const firebaseConfig = {
+        apiKey: "AIzaSyB1FuGkBfcS7oHWqFGLtHSUxY3btvXiWaM",
+        authDomain: "otpconfirm-de0b8.firebaseapp.com",
+        projectId: "otpconfirm-de0b8",
+        storageBucket: "otpconfirm-de0b8.appspot.com",
+        messagingSenderId: "1551170791",
+        appId: "1:1551170791:web:9cc9ae02118876e6f8b642",
+        measurementId: "G-QV2VCK2XHB"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    } else {
+        firebase.app(); // if already initialized, use that one
+    }
+
+    var a = document.getElementById('phone').value;
+    var b = "+84";
+    var number = b + a.slice(-9);
+
+    if (!window.recaptchaVerifier) {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('Confirm', {
+            'size': 'invisible',
+            'callback': (response) => {
+                console.log(response)
+            },
+            'expired-callback': () => {
+            }
+        });
+    }
+    firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+        window.confirmationResult = confirmationResult;
+        coderesult = confirmationResult;
+    }).catch(function (error) {
+        alert(error.message);
+    });
+}
+
+function codeverity() {
+    var code = document.getElementById('partitioned').value;
+    coderesult.confirm(code).then(function () {
+        payment()
+    }).catch(function (error) {
+        alertError("Mã OTP không hợp lệ")
+    })
+}
+
+function confirmPhone() {
     if ($(".form-Payment").valid()) {
         //show modal end countdown
-        const Email = $("#email").val()
+        const Phone = $("#phone").val()
+        $(".toPhone").text(Phone)
         $("#partitioned").val('')
         document.getElementById('timer').innerHTML = 03 + ":" + 00;
         $("#ConfirmOrder").modal("show")
-        $(".toEmail").text(Email)
         startTimer();
-        //sendEmail
-        $.ajax({
-            url: "/Cart/confirmEmail",
-            data: { email: Email },
-            type: "Post",
-            dataType: "Json",
-            success: function (res) {
-            }
-        })
+        sendOtp()
     }
-
 }

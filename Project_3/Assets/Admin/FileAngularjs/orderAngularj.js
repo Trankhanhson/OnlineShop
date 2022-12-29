@@ -23,7 +23,9 @@ OrderApp.controller("OrderController", function ($scope, $http) {
 
     $scope.getPage(1)
 
-    $scope.showDetail = function (id) {
+    let indexChange = 0
+    $scope.showDetail = function (index, id) {
+        indexChange = index
         $http({
             method: "GET",
             url: "/Admin/Order/getOrderById/" + id,
@@ -33,16 +35,18 @@ OrderApp.controller("OrderController", function ($scope, $http) {
         })
     }
 
-    $scope.ChangeStatus = function (index, o) {
-        if (confirm(`Bạn có muốn thay đổi trạng thái đơn hàng mã ${o.OrdID}`)) {
+    $scope.ChangeStatus = function (id) {
+        if (confirm(`Bạn có muốn duyệt đơn hàng mã ${id}`)) {
             $http({
                 method: "GET",
-                url: "/Admin/Order/ChangeStatus/" + o.OrdID,
+                url: "/Admin/Order/ChangeStatus/" + id,
                 dataType: 'Json'
             }).then(function (res) {
-                $scope.OrderList.splice(index, 1)
-                $("#successToast .text-toast").text(`Đơn hàng ${o.OrdID} đã được chuyển sang trạng thái ${res.data}`)
+                $scope.OrderList.splice(indexChange, 1)
+                $(".modal-footer .close-modal").trigger("click")
+                $("#successToast .text-toast").text(`Đơn hàng ${id} đã được chuyển sang trạng thái ${res.data}`)
                 $("#successToast").toast("show")
+                
             })
         }
     }

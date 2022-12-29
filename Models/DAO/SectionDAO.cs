@@ -18,7 +18,7 @@ namespace Models.DAO
 
         public List<Section> getSectionOfPage(int PageId)
         {
-            return _dbcontext.Sections.Where(s => s.PageId == PageId).ToList();
+            return _dbcontext.Sections.OrderBy(a=>a.DisplayOrder).Where(s => s.PageId == PageId).ToList();
         }
 
         public int Insert(Section s, List<ProductSection> productSections)

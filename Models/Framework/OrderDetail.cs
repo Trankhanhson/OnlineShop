@@ -20,7 +20,7 @@ namespace Models.Framework
         public Nullable<int> DiscountPrice { get; set; }
         public Nullable<int> Price { get; set; }
     
-        public virtual Order Order { get; set; }
         public virtual ProductVariation ProductVariation { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

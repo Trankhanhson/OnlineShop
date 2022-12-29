@@ -28,7 +28,6 @@ namespace Models.Framework
         public string UserAdress { get; set; }
         public string UserPhone { get; set; }
         public Nullable<int> GroupId { get; set; }
-        public string UserGroupName { get; set; }
         public string UserEmail { get; set; }
         public Nullable<bool> Status { get; set; }
     

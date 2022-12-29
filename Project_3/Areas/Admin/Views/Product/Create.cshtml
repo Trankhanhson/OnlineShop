@@ -113,7 +113,7 @@
                                         <div class="btn dropdown-toggle method-dropdown" style="border: none;border-bottom: 2px solid rgb(202, 202, 202); border-radius: 0px;" id="dropdownColor" data-bs-toggle="dropdown" aria-expanded="false">
                                             <input type="text" ng-model="searchColor" class="border-0" style="outline: none; width: 97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
                                         </div>
-                                        <ul class="shadow dropdown-menu" aria-labelledby="dropdownColor">
+                                        <ul class="shadow dropdown-menu" style="flex-wrap:wrap" aria-labelledby="dropdownColor">
                                             <li class="" ng-repeat="item in ColorList | filter : searchColor"><a class="dropdown-item method-dropdown__item-link " ng-click="addValue($event)" data-idColor="{{item.ProColorID}}"><img class="method-image-color" src="/Upload/ColorImage/{{item.ProColorID}}/{{item.ImageColor}}"><p>{{item.NameColor}}</p><div data-bs-toggle="modal" data-bs-target="#EditColor" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
                                         </ul>
                                     </div>
@@ -217,10 +217,10 @@
                                 <label for="" class="text-dark mb-0 font-weight-bold">Kích thước</label>
                                 <div class="flex-grow-1 d-flex wrap-size wrap-property">
                                     <div class="dropdown method-dropdown__wrap">
-                                        <div class="btn dropdown-toggle method-dropdown " style="border: none;border-bottom: 2px solid rgb(202, 202, 202);border-radius:0px;" id="dropdownSize" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="btn dropdown-toggle method-dropdown " style="border: none; border-bottom: 2px solid rgb(202, 202, 202); border-radius: 0px; " id="dropdownSize" data-bs-toggle="dropdown" aria-expanded="false">
                                             <input type="text" ng-model="searchSize" class="border-0" style="outline:none; width:97%" placeholder="Nhập để tìm kiếm" name="name" value="" />
                                         </div>
-                                        <ul class="dropdown-menu shadow" aria-labelledby="dropdownSize">
+                                        <ul class="dropdown-menu shadow" style="flex-wrap: wrap" aria-labelledby="dropdownSize">
                                             <li class="method-dropdown__item" ng-repeat="item in ListSize | filter : searchSize"><a class="dropdown-item method-dropdown__item-link" ng-click="addValue($event)" data-idSize="{{item.ProSizeID}}" href="#"><p>{{item.NameSize}}</p><div data-bs-toggle="modal" data-bs-target="#EditSize" ng-click="Edit(item,$index,$event)" class="method-edit"><i class="text-secondary m-auto fa-solid fa-pen"></i></div></a></li>
                                         </ul>
                                     </div>

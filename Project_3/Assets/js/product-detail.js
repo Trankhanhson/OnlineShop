@@ -73,6 +73,7 @@ function changeImageDetail(e, idColor) {
     $(" .product-size").removeClass("active")
     $(".detail-color").removeClass("active")
     $(e.target).addClass("active")
+    $(".color-chose").text($(e.target).attr("data-nameColor"))
 
     //change size box
     let listSizeBox = $(".wrapSizeOfColor")

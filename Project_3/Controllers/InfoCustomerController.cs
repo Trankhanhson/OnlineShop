@@ -108,7 +108,6 @@ namespace Project_3.Controllers
             orderDTO.OrdID = order.OrdID;
             orderDTO.VoucherId = order.VoucherId;
             orderDTO.ReceivingPhone = order.ReceivingPhone;
-            orderDTO.ReceivingMail = order.ReceivingMail;
             orderDTO.ReceivingCity = order.ReceivingCity;
             orderDTO.ReceivingDistrict = order.ReceivingDistrict;
             orderDTO.ReceivingWard = order.ReceivingWard;

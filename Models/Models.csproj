@@ -75,6 +75,7 @@
     <Compile Include="DAO\PositionDAO.cs" />
     <Compile Include="DAO\ProductCategoryDAO.cs" />
     <Compile Include="DAO\SectionDAO.cs" />
+    <Compile Include="DAO\StatisticalDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="DAO\ProductColorDAO.cs" />
     <Compile Include="DAO\ProductImagesDAO.cs" />
@@ -164,6 +165,9 @@
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Slide.cs">
+      <DependentUpon>dbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Statistical.cs">
       <DependentUpon>dbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\StatusOrder.cs">

@@ -32,7 +32,9 @@ namespace Project_3.Areas.Admin.Controllers
             var check = false;
             if (searchText.Trim() != "")
             {
-                List<Product> products = new ProductDAO().getAll().Select(p => new Product()
+                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
+                List<Product> products = new ProductDAO().getAll()
+                    .Where(p => MethodCommnon.ToUrlSlug(p.ProName).Contains(a) || p.ProductCat.Category.type.Contains(searchText)).Select(p => new Product()
                 {
                     ProId = p.ProId,
                     ProName = p.ProName,
@@ -55,8 +57,6 @@ namespace Project_3.Areas.Admin.Controllers
                     }).ToList()
 
                 }).ToList();
-                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
-                products = products.Where(p => MethodCommnon.ToUrlSlug(p.ProName).Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
                 //Convert to Json
                 result = JsonConvert.SerializeObject(products);
                 check = true;
@@ -84,11 +84,11 @@ namespace Project_3.Areas.Admin.Controllers
                     ProName = p.ProName,
                     Price = p.Price,
                     Status = p.Status,
-                    Slug = p.Slug
+                    Slug = p.Slug,
+                    firstImage = p.ProductImages.First().Image
                 }).ToList();
-                var a = MethodCommnon.ToUrlSlug(searchText.ToLower());
-                products = products.Where(p => p.Slug.Contains(a)).ToList();
                 //Convert to Json
+                products = products.Where(p => p.Slug.Contains(MethodCommnon.ToUrlSlug(searchText))).ToList();
                 result = JsonConvert.SerializeObject(products);
                 check = true;
             }
@@ -169,7 +169,7 @@ namespace Project_3.Areas.Admin.Controllers
             //thêm sản phẩm
             ProductDAO pModel = new ProductDAO();
             product.Slug = common.MethodCommnon.ToUrlSlug(product.ProName); //chuyển tên sản phâm thành slug
-
+            product.Saled = 0;
             product.Status = true;
             if (product.Price==null)
             {

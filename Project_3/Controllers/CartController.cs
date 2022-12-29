@@ -118,36 +118,6 @@ namespace Project_3.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult confirmEmail(string email)
-        {
-            try
-            {
-                Random random = new Random();
-                string ma = random.NextString(4);
-                Session["CodeConfirm"] = ma;
-                Session["VerificationTime"] = DateTime.Now;
-                string content = "<p>Mã xác nhận của bạn là: </p>" + ma + "<p>Vui lòng nhập mã này để xác nhận mua hàng</p>";
-                MailHelper.SendMail(email, "Xác nhận mua hàng", content);
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public ActionResult checkConfirm(string id)
-        {
-            if((string)Session["CodeConfirm"] == id && ((DateTime)Session["VerificationTime"]).AddMinutes(3) >= DateTime.Now)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
 
         public ActionResult InfoBill(long id)
         {
@@ -163,43 +133,36 @@ namespace Project_3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Order(Order order,List<CartItem> cartItems,string code)
+        public ActionResult Order(Order order,List<CartItem> cartItems)
         {
             try
             {
-                if ((string)Session["CodeConfirm"] == code && ((DateTime)Session["VerificationTime"]).AddMinutes(3) >= DateTime.Now)
+                ProductVariationDAO productVariationDAO = new ProductVariationDAO();
+                DateTime dt = new DateTime(2021, 11, 2);
+                order.OrderDate = dt;
+                order.StatusOrderId = 1;
+                var o = new OrderDAO().Insert(order);
+                var listOrderDetail = new List<OrderDetail>();
+                foreach (var item in cartItems)
                 {
-                    ProductVariationDAO productVariationDAO = new ProductVariationDAO();
-                    order.OrderDate = DateTime.Now;
-                    order.StatusOrderId = 1;
-                    var o = new OrderDAO().Insert(order);
-                    var listOrderDetail = new List<OrderDetail>();
-                    foreach (var item in cartItems)
-                    {
-                        OrderDetail orderDetail = new OrderDetail();
-                        orderDetail.OrdID = o.OrdID;
-                        orderDetail.ProVariationID = productVariationDAO.getByForeignKey(item.ProId, item.ProColorID, item.ProSizeID).ProVariationID;
-                        orderDetail.Price = item.Price;
-                        orderDetail.Quantity = item.Quantity;
-                        orderDetail.DiscountPrice = item.DiscountPrice;
-                        listOrderDetail.Add(orderDetail);
-                    }
-                    OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-                    orderDetailDAO.Insert(listOrderDetail);
-                    productVariationDAO.editOrdered(listOrderDetail);
-
-                    if (o.VoucherId != null)
-                    {
-                        VoucherDAO voucherDAO = new VoucherDAO();
-                        voucherDAO.UseVoucher(o.VoucherId.Value);
-                    }
-                    return Json(o.OrdID,JsonRequestBehavior.AllowGet);
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OrdID = o.OrdID;
+                    orderDetail.ProVariationID = productVariationDAO.getByForeignKey(item.ProId, item.ProColorID, item.ProSizeID).ProVariationID;
+                    orderDetail.Price = item.Price;
+                    orderDetail.Quantity = item.Quantity;
+                    orderDetail.DiscountPrice = item.DiscountPrice;
+                    listOrderDetail.Add(orderDetail);
                 }
-                else
+                OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+                orderDetailDAO.Insert(listOrderDetail);
+                productVariationDAO.editOrdered(listOrderDetail);
+
+                if (o.VoucherId != null)
                 {
-                    return Json(0, JsonRequestBehavior.AllowGet);
+                    VoucherDAO voucherDAO = new VoucherDAO();
+                    voucherDAO.UseVoucher(o.VoucherId.Value);
                 }
-
+                return Json(o.OrdID, JsonRequestBehavior.AllowGet);
             }
             catch
             {

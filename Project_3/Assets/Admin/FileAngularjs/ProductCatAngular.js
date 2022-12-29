@@ -68,24 +68,10 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                         $scope.ProCatList.push(productCat) //hiển thị thêm đối tượng vừa thêm
                         //upload ảnh khi thêm đối tượng thành công
                         $scope.UploadFiles($scope.fileImage, productCat.ProCatId)
-                        if (checkUpload === false) {
-                            //khi upload fail thì xóa đối tượng vừa tạo
-                            $http({
-                                method: 'Post',
-                                url: '/Admin/ProductCat/Delete',
-                                data: { id: productCat.ProCatId }
-                            })
-                        }
-                        else {
-
-                        }
 
                         $scope.errorImage = false
 
-                        //nếu người dùng chỉ nhấn lưu
-                        if (closeOrNew) {
-                            $(".btn-close").trigger('click') //đóng modal thêm
-                        }
+
 
                         //hiển thị thông báo thành công
                         $("#successToast .text-toast").text("Thêm loại sản phẩm thành công")
@@ -95,6 +81,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                         $("#errorToast .text-toast").text("Thêm thất bại")
                         $("#errorToast").toast("show")
                     }
+                    location.reload()
                 })
             }
             else {
@@ -143,7 +130,7 @@ proCatApp.controller("ProCatController", function ($scope, Upload, $http) {
                     $("#errorToast .text-toast").text("Sửa thất bại")
                     $("#errorToast").toast("show") //hiển thị thông báo thành công
                 }
-                $(".btn-close").trigger('click') //đóng modal sửa
+                location.reload()
             })
         }
 

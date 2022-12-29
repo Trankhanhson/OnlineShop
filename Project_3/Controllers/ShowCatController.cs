@@ -29,25 +29,63 @@ namespace Project_3.Controllers
             //lấy danh sách product của cat và lấy discount
             var listProduct = productDAO.getAll().Where(p => p.ProductCat.CatID == CatId).ToList(); 
             listProduct = getListDiscount(listProduct);
+            List<Product> listResult = new List<Product>();
 
             if(colorId == null && minPrice != null && maxPrice != null)
             {
                 //chỉ tìm giá
-                listProduct = listProduct.Where(p =>p.DiscountPrice >=minPrice && p.DiscountPrice<=maxPrice).ToList();
+                foreach (var item in listProduct)
+                {
+                    if (item.DiscountPrice > 0)
+                    {
+                        if(item.DiscountPrice >= minPrice && item.DiscountPrice <= maxPrice)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Price >= minPrice && item.Price <= maxPrice)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                }
+                
             }
             else if(colorId != null && minPrice != null && maxPrice != null)
             {
                 //tìm cả gái và color
-                listProduct = listProduct.Where(p => p.ProductVariations.Where(pv=>pv.ProColorID == colorId).FirstOrDefault() != null &&  p.DiscountPrice >= minPrice && p.DiscountPrice <= maxPrice).ToList();
+                foreach (var item in listProduct)
+                {
+                    if (item.DiscountPrice > 0)
+                    {
+                        if (item.DiscountPrice >= minPrice && item.DiscountPrice <= maxPrice && item.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Price >= minPrice && item.Price <= maxPrice && item.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                }
             }
             else if(colorId != null && minPrice == null && maxPrice == null)
             {
                 //Chỉ tìm color
-                listProduct = listProduct.Where(p => p.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null).ToList();
+                listResult = listProduct.Where(p => p.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null).ToList();
+            }
+            else
+            {
+                listResult = listProduct;
             }
 
-            listProduct = selectProduct(listProduct);
-            var pageData = Paggination.PagedResult(listProduct, pageNumber, pageSize);
+            listResult = selectProduct(listResult);
+            var pageData = Paggination.PagedResult(listResult, pageNumber, pageSize);
             var result = JsonConvert.SerializeObject(pageData);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -71,25 +109,63 @@ namespace Project_3.Controllers
             //lấy danh sách product của cat và lấy discount
             var listProduct = productDAO.getAll().Where(p => p.ProCatId == ProCatId).ToList();
             listProduct = getListDiscount(listProduct);
+            List<Product> listResult = new List<Product>();
 
             if (colorId == null && minPrice != null && maxPrice != null)
             {
                 //chỉ tìm giá
-                listProduct = listProduct.Where(p => p.DiscountPrice >= minPrice && p.DiscountPrice <= maxPrice).ToList();
+                foreach (var item in listProduct)
+                {
+                    if (item.DiscountPrice > 0)
+                    {
+                        if (item.DiscountPrice >= minPrice && item.DiscountPrice <= maxPrice)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Price >= minPrice && item.Price <= maxPrice)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                }
+
             }
             else if (colorId != null && minPrice != null && maxPrice != null)
             {
                 //tìm cả gái và color
-                listProduct = listProduct.Where(p => p.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null && p.DiscountPrice >= minPrice && p.DiscountPrice <= maxPrice).ToList();
+                foreach (var item in listProduct)
+                {
+                    if (item.DiscountPrice > 0)
+                    {
+                        if (item.DiscountPrice >= minPrice && item.DiscountPrice <= maxPrice && item.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Price >= minPrice && item.Price <= maxPrice && item.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null)
+                        {
+                            listResult.Add(item);
+                        }
+                    }
+                }
             }
             else if (colorId != null && minPrice == null && maxPrice == null)
             {
                 //Chỉ tìm color
-                listProduct = listProduct.Where(p => p.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null).ToList();
+                listResult = listProduct.Where(p => p.ProductVariations.Where(pv => pv.ProColorID == colorId).FirstOrDefault() != null).ToList();
+            }
+            else
+            {
+                listResult = listProduct;
             }
 
-            listProduct = selectProduct(listProduct);
-            var pageData = Paggination.PagedResult(listProduct, pageNumber, pageSize);
+            listResult = selectProduct(listResult);
+            var pageData = Paggination.PagedResult(listResult, pageNumber, pageSize);
             var result = JsonConvert.SerializeObject(pageData);
             return Json(result, JsonRequestBehavior.AllowGet);
         }

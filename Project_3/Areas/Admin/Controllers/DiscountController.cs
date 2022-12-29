@@ -94,7 +94,8 @@ namespace Project_3.Areas.Admin.Controllers
                     {
                         ProId = d.Product.ProId,
                         ProName = d.Product.ProName,
-                        Price = d.Product.Price
+                        Price = d.Product.Price,
+                        firstImage = d.Product.ProductImages.First().Image
                     },
                     priceAfter = MethodCommnon.CountDiscountPrice(d.Product.Price.Value, d.Amount.Value, d.TypeAmount),
                     Amount = d.Amount,

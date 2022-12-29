@@ -4,8 +4,10 @@ using Project_3.common;
 using Project_3.Model;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace Project_3.Controllers
@@ -23,10 +25,6 @@ namespace Project_3.Controllers
         {
             var dao = new CustomerDAO();
             var message = "";
-            if (dao.CheckEmail(cus.Email))
-            {
-                message = "ExistEmail";
-            }
             if (dao.CheckPhone(cus.Phone))
             {
                 message = "ExistPhone";
@@ -49,18 +47,6 @@ namespace Project_3.Controllers
             {
                 message = message
             });
-        }
-
-        /// <summary>
-        /// View login sau khi lấy lại mk
-        /// </summary>
-        /// <returns></returns>  
-        public ActionResult LoginView(long id)
-        {
-            var c  = new CustomerDAO().getById(id);
-            ViewBag.Email = c.Email;
-            ViewBag.Password = EncryptorClient.Decrypt(c.Password);    
-            return View();
         }
 
 
@@ -88,7 +74,6 @@ namespace Project_3.Controllers
                     HttpCookie Cookie = new HttpCookie("CustomerId", id.ToString());
                     Cookie.Expires = DateTime.Now.AddYears(1);
                     Response.Cookies.Add(Cookie);
-
                 }
             }
             catch
@@ -110,34 +95,52 @@ namespace Project_3.Controllers
             return RedirectToAction("HomePage","Home");
         }
 
-        [HttpPost]
-        public ActionResult ForgotPassword(string Email)
+        /// <summary>
+        /// View login sau khi lấy lại mk
+        /// </summary>
+        /// <returns></returns>  
+        public ActionResult LoginView(long id)
         {
-            ClothesShopEntities db = new ClothesShopEntities();
-            string resetCode = Guid.NewGuid().ToString();
-            var verifyUrl = "/LoginClient/ResetPassword/" + resetCode;
-            var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
-            var getUser = db.Customers.Where(c=>c.Email==Email).FirstOrDefault();
-            if (getUser != null)
+            var c = new CustomerDAO().getById(id);
+            ViewBag.Phone = c.Phone;
+            ViewBag.Password = EncryptorClient.Decrypt(c.Password);
+            return View();
+        }
+
+        public ActionResult ConfirmPhone(string Phone)
+        {
+            try
             {
-                getUser.ResetPasswordCode = resetCode;
-                db.Configuration.ValidateOnSaveEnabled = false;
-                db.SaveChanges();
-
-                string content = System.IO.File.ReadAllText(Server.MapPath("~/Assets/Template/ResetPasssword.html"));
-                var subject = "Lấy lại mật khẩu đăng nhập";
-                content = content.Replace("{{Url}}", link);
-                var body = content;
-
-                MailHelper.SendMail(getUser.Email, subject, body);
-
-                return Json(true,JsonRequestBehavior.AllowGet);
+                ClothesShopEntities db = new ClothesShopEntities();
+                string resetCode = Guid.NewGuid().ToString();
+                var getUser = db.Customers.Where(c => c.Phone == Phone).FirstOrDefault();
+                if (getUser != null)
+                {
+                    getUser.ResetPasswordCode = resetCode;
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    db.SaveChanges();
+                    return Json(new
+                    {
+                        check = true,
+                        resetCode = resetCode
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        check = false
+                    }, JsonRequestBehavior.AllowGet);
+                }
             }
-            else
+            catch
             {
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    check = false
+                }, JsonRequestBehavior.AllowGet);
             }
-
+            
         }
 
         public ActionResult ResetPassword(string id)

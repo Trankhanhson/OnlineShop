@@ -51,9 +51,8 @@ namespace Project_3.Controllers
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public List<Product> getListDiscountAndLike(List<Product> list)
+        public List<Product> getListDiscountAndLike(List<Product> list, List<DiscountDetail> DiscountDetails)
         {
-            var DiscountDetails = new DiscountDetailDAO().getDiscountDetailNow(); //lấy danh sách discountDetail giảm dần thoe thời gian tạo
             if (Request.Cookies["CustomerId"] != null)
             {
                 int CusId = int.Parse(Request.Cookies["CustomerId"].Value);

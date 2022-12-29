@@ -192,7 +192,11 @@ namespace Project_3.Areas.Admin.Controllers
                     totalRating += item.Stars.Value;
                 }
                 int length = list.Count;
-                decimal ratingAverage = (decimal)totalRating/length;
+                decimal ratingAverage = 0;
+                if (totalRating > 0)
+                {
+                    ratingAverage = (decimal)totalRating / length;
+                }
                 return Json(new
                 {
                     check = true,

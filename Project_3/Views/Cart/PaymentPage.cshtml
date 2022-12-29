@@ -6,13 +6,14 @@
 
 @section styles{
     <link rel="stylesheet" href="/Assets/css/cart.css">
-    <link href="~/Assets/css/PaymentPage.css" rel="stylesheet" />
+    <link href="~/Assets/css/Payment.css" rel="stylesheet" />
 }
 
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
     <script src="~/Assets/js/Cart/UpdateCart.js"></script>
-    <script src="~/Assets/js/Cart/payment.js"></script>
+    <script src="~/Assets/js/Cart/Payment.js"></script>
 }
 
 <main class="border-top">
@@ -51,7 +52,7 @@
                         </div>
                         @if (ViewBag.Customer != null)
                         {
-                            <form action="" class="form-Payment account-setting-form mt-4" style="max-width:550px" data-cusid="">
+                            <form action="" class="form-Payment account-setting-form mt-4" style="max-width:550px" data-cusid="@ViewBag.Customer.CusID">
                                 <div class="form-group active mb-0">
                                     <label>Họ tên</label>
                                     <input type="text" value="@ViewBag.Customer.Name" name="name" id="name" class="form-control">
@@ -62,18 +63,13 @@
                                     <input type="text" name="phone" id="phone" value="@ViewBag.Customer.Phone" class="form-control ">
                                     <label id="phone-error" class="error" for="phone" style="display: none;"></label>
                                 </div>
-                                <div class="form-group active mt-4 mb-0">
-                                    <label>Email</label>
-                                    <input type="text" name="email" id="email" value="@ViewBag.Customer.Email" class="form-control ">
-                                    <label id="email-error" class="error" for="email" style="display: none;"></label>
-                                </div>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="city" name="city" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="city" name="city" aria-label="form-select-sm">
                                     <option value="" selected>Tỉnh / Thành phố</option>
                                 </select>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="district" name="district" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="district" name="district" aria-label="form-select-sm">
                                     <option value="" selected>Quận / Huyện</option>
                                 </select>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="ward" name="ward" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="ward" name="ward" aria-label="form-select-sm">
                                     <option value="" selected>Phường / Xã</option>
                                 </select>
                                 <div class="form-group active mt-4 mb-0">
@@ -84,7 +80,6 @@
                                     <label>Ghi chú</label>
                                     <input type="text" name="note" id="note" class="form-control">
                                 </div>
-                                <button></button>
                             </form>
                         }
                         else
@@ -100,13 +95,13 @@
                                     <input type="text" name="phone" id="phone" value="" class="form-control ">
                                     <label id="phone-error" class="error" for="phone" style="display: none;"></label>
                                 </div>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="city" name="city" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="city" name="city" aria-label="form-select-sm">
                                     <option value="" selected>Tỉnh / Thành phố</option>
                                 </select>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="district" name="district" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="district" name="district" aria-label="form-select-sm">
                                     <option value="" selected>Quận / Huyện</option>
                                 </select>
-                                <select class="form-select form-select-sm mt-4 mb-0" id="ward" name="ward" aria-label=".form-select-sm">
+                                <select class="form-select form-select-sm mt-4 mb-0" id="ward" name="ward" aria-label="form-select-sm">
                                     <option value="" selected>Phường / Xã</option>
                                 </select>
                                 <div class="form-group active mt-4 mb-0">
@@ -117,7 +112,6 @@
                                     <label>Ghi chú</label>
                                     <input type="text" name="note" id="note" class="form-control">
                                 </div>
-                                <button></button>
                             </form>
                         }
                     </div>
@@ -194,7 +188,7 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="confirmEmail()" class="btn-order">THANH TOÁN</button>
+                    <button onclick="confirmPhone()" class="btn-order">THANH TOÁN</button>
                 </div>
             </div>
 
@@ -205,27 +199,25 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div data-v-07844138="" class="block-content p-3">
-                <h4>Xác thực mua hàng</h4> 
+                <h4>Xác thực mua hàng</h4>
                 <div class="note">
-                    Mã xác thực vừa được gửi đến Email
-                    <span class="toEmail text-dark"></span>
-                    <div id="divOuter" class="pb-3 pt-5">
-                        <div id="divInner">
-                            <input id="partitioned" type="text" maxlength="4" />
-                        </div>
+                    Mã OTP vừa được gửi đến số điện thoại
+                    <span class="toPhone text-dark"></span>
+                    <div class="my-4 text-center">
+                        <input id="partitioned" class="border border-secondary p-2" placeholder="Nhập mã OTP" type="text" maxlength="6" />
                     </div>
                 </div>
                 <div class="otp-time">
                     <span>
-                        <!----><!---->
                         Thời gian hiệu lực
-                        <span class="time" id="timer">03 : 00</span><!---->
+                        <span class="time" id="timer">03 : 00</span>
                     </span>
                 </div>
                 <div class="actions">
-                    <h5 class="btn btn-confirm text-white" onclick="payment()">Xác thực</h5>
+                    <button class="btn btn-confirm text-white mb-2" onclick="codeverity()">Xác thực</button>
+                    <div class="d-none" id="Confirm"></div>
                 </div>
-                <div class="actions-secondary"><a href="#">Gửi lại Mã</a></div>
+                <div class="actions-secondary" onclick="Resend()"><a>Gửi lại Mã</a></div>
             </div>
         </div>
     </div>

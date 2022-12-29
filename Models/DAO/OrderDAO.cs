@@ -31,8 +31,7 @@ namespace Models.DAO
 
         public List<Order> getAll()
         {
-            db.Configuration.LazyLoadingEnabled = false;
-            return db.Orders.Include(o=>o.OrderDetails).Include(s=>s.StatusOrder).ToList();
+            return db.Orders.OrderByDescending(o=>o.OrderDate).ToList();
         }
 
         public List<Order> getOrderByCusId(int id, int statusId)
@@ -96,6 +95,7 @@ namespace Models.DAO
                 ProductVariation v = db.ProductVariations.Find(item.ProVariationID);
                 v.Quantity -= item.Quantity;
                 v.Ordered -= item.Quantity;
+                v.Product.Saled += item.Quantity;
             }
             db.SaveChanges();
         }

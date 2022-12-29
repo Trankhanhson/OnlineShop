@@ -98,5 +98,19 @@ namespace Project_3.Areas.Admin.Controllers
                 return Json(false);
             }
         }
+
+        public JsonResult CancelBill(long id)
+        {
+            try
+            {
+                ImportBillDAO importBillDAO = new ImportBillDAO();
+                importBillDAO.Delete(id);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

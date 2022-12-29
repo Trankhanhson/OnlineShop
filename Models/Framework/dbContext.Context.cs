@@ -34,7 +34,6 @@ namespace Models.Framework
         public virtual DbSet<ProductCat> ProductCats { get; set; }
         public virtual DbSet<New> News { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<StatusOrder> StatusOrders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<DiscountProduct> DiscountProducts { get; set; }
@@ -47,11 +46,13 @@ namespace Models.Framework
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<ProductVariation> ProductVariations { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductLike> ProductLikes { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
         public virtual DbSet<ProductSection> ProductSections { get; set; }
         public virtual DbSet<Slide> Slides { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Statistical> Statisticals { get; set; }
     }
 }

@@ -21,8 +21,32 @@ namespace Models
 
         public List<Product> getAll()
         {
-            List<Product> list = _dbContext.Products.ToList();
+            List<Product> list = _dbContext.Products.OrderByDescending(p=>p.ImportDate).ToList();
             return list;
+        }
+
+        public List<Product> getAllActive(string type)
+        {
+            if(type == "all")
+            {
+                return _dbContext.Products.Where(p => p.Status == true).OrderByDescending(p => p.ProId).ToList();
+            }
+            else
+            {
+                return _dbContext.Products.Where(p => p.Status == true && p.ProductCat.Category.type==type).OrderByDescending(p => p.ProId).ToList();
+            }
+        }
+
+        public List<Product> getBestSale(int count, string type)
+        {
+            if (type == "all")
+            {
+                return _dbContext.Products.OrderByDescending(p => p.Saled).Take(count).ToList();
+            }
+            else
+            {
+                return _dbContext.Products.Where(pt=>pt.ProductCat.Category.type==type).OrderByDescending(p => p.Saled).Take(count).ToList();
+            }
         }
 
         public IEnumerable<Product> getPage(string searchResult, int page, int pageSize)
@@ -45,8 +69,9 @@ namespace Models
 
         public List<Product> get10ByProCat(int? proCatId)
         {
-            return _dbContext.Products.Where(x => x.ProCatId == proCatId).Include(pi => pi.ProductImages).Include(pv => pv.ProductVariations).OrderByDescending(p=>p.ProId).Take(10).ToList();
+            return _dbContext.Products.Where(x => x.ProCatId == proCatId).OrderByDescending(p=>p.ProId).Take(10).ToList();
         }
+
         public bool Delete(long id)
         {
             try

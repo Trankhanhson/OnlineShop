@@ -31,7 +31,10 @@ namespace Models.DAO
         {
             return _dbContext.News.Where(n => n.Status == true).OrderByDescending(d => d.PublicDate).Take(10).ToList();
         }
-
+        public List<New> takeRecent(int count)
+        {
+            return _dbContext.News.Where(n => n.Status == true).OrderByDescending(d => d.PublicDate).Take(count).ToList();
+        }
         public New getById(int id)
         {
             return _dbContext.News.Find(id);
